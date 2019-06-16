@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Interpreter" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Interpreter" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Interpreter" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-std=c++14" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="include/binary_token_matcher.h" />
+		<Unit filename="include/comment_token_matcher.h" />
+		<Unit filename="include/console.h" />
+		<Unit filename="include/eof_token.h" />
+		<Unit filename="include/file_error.h" />
+		<Unit filename="include/float_token.h" />
+		<Unit filename="include/float_token_matcher.h" />
+		<Unit filename="include/global_token_matcher.h" />
+		<Unit filename="include/hex_read_util.h" />
+		<Unit filename="include/hex_token_matcher.h" />
+		<Unit filename="include/integer_token.h" />
+		<Unit filename="include/integer_token_matcher.h" />
+		<Unit filename="include/keyword_data.h" />
+		<Unit filename="include/keyword_token.h" />
+		<Unit filename="include/keyword_type.h" />
+		<Unit filename="include/keywords_token_matcher.h" />
+		<Unit filename="include/lexer.h" />
+		<Unit filename="include/list_token_matcher.h" />
+		<Unit filename="include/literals_token_matcher.h" />
+		<Unit filename="include/my_except.h" />
+		<Unit filename="include/no_match_exception.h" />
+		<Unit filename="include/octal_token_matcher.h" />
+		<Unit filename="include/parse_error.h" />
+		<Unit filename="include/parser.h" />
+		<Unit filename="include/parser_binary_operation.h" />
+		<Unit filename="include/parser_binary_operation_matcher.h" />
+		<Unit filename="include/parser_code_block.h" />
+		<Unit filename="include/parser_code_block_matcher.h" />
+		<Unit filename="include/parser_component.h" />
+		<Unit filename="include/parser_expression.h" />
+		<Unit filename="include/parser_expression_group.h" />
+		<Unit filename="include/parser_expression_group_matcher.h" />
+		<Unit filename="include/parser_expression_list.h" />
+		<Unit filename="include/parser_expression_list_matcher.h" />
+		<Unit filename="include/parser_expression_matcher.h" />
+		<Unit filename="include/parser_expression_term.h" />
+		<Unit filename="include/parser_expression_term_matcher.h" />
+		<Unit filename="include/parser_function_call.h" />
+		<Unit filename="include/parser_function_call_matcher.h" />
+		<Unit filename="include/parser_line.h" />
+		<Unit filename="include/parser_line_matcher.h" />
+		<Unit filename="include/parser_result_part.h" />
+		<Unit filename="include/parser_statement.h" />
+		<Unit filename="include/parser_statement_matcher.h" />
+		<Unit filename="include/parser_unary_operation.h" />
+		<Unit filename="include/parser_unary_operation_matcher.h" />
+		<Unit filename="include/read_file.h" />
+		<Unit filename="include/single_quote_string_token_matcher.h" />
+		<Unit filename="include/string_token.h" />
+		<Unit filename="include/string_token_matcher.h" />
+		<Unit filename="include/symbol_data.h" />
+		<Unit filename="include/symbol_token.h" />
+		<Unit filename="include/symbol_type.h" />
+		<Unit filename="include/symbols_keywords.h" />
+		<Unit filename="include/symbols_token_matcher.h" />
+		<Unit filename="include/token.h" />
+		<Unit filename="include/token_matcher.h" />
+		<Unit filename="include/token_type.h" />
+		<Unit filename="include/word_token.h" />
+		<Unit filename="include/word_token_matcher.h" />
+		<Unit filename="src/lexer/lexer.cpp" />
+		<Unit filename="src/lexer/matchers/binary_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/comment_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/float_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/global_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/hex_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/integer_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/keywords_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/list_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/literals_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/octal_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/single_quote_string_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/string_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/symbols_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/word_token_matcher.cpp" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/myexcept/file_error.cpp" />
+		<Unit filename="src/myexcept/no_match_exception.cpp" />
+		<Unit filename="src/myexcept/parse_error.cpp" />
+		<Unit filename="src/parser/component/parser_binary_operation_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_code_block_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_component.cpp" />
+		<Unit filename="src/parser/component/parser_expression_group_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_expression_list_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_expression_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_expression_term_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_function_call_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_line_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_statement_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_unary_operation_matcher.cpp" />
+		<Unit filename="src/parser/parser.cpp" />
+		<Unit filename="src/parser/result/parser_binary_operation.cpp" />
+		<Unit filename="src/parser/result/parser_code_block.cpp" />
+		<Unit filename="src/parser/result/parser_expression.cpp" />
+		<Unit filename="src/parser/result/parser_expression_group.cpp" />
+		<Unit filename="src/parser/result/parser_expression_list.cpp" />
+		<Unit filename="src/parser/result/parser_expression_term.cpp" />
+		<Unit filename="src/parser/result/parser_function_call.cpp" />
+		<Unit filename="src/parser/result/parser_line.cpp" />
+		<Unit filename="src/parser/result/parser_result_part.cpp" />
+		<Unit filename="src/parser/result/parser_statement.cpp" />
+		<Unit filename="src/parser/result/parser_unary_operation.cpp" />
+		<Unit filename="src/symbols_keywords.cpp" />
+		<Unit filename="src/token/eof_token.cpp" />
+		<Unit filename="src/token/float_token.cpp" />
+		<Unit filename="src/token/integer_token.cpp" />
+		<Unit filename="src/token/keyword_token.cpp" />
+		<Unit filename="src/token/string_token.cpp" />
+		<Unit filename="src/token/symbol_token.cpp" />
+		<Unit filename="src/token/token.cpp" />
+		<Unit filename="src/token/word_token.cpp" />
+		<Unit filename="src/util/console.cpp" />
+		<Unit filename="src/util/read_file.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general use_at_in_tags="1" />
+			</DoxyBlocks>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

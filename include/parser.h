@@ -1,0 +1,35 @@
+#ifndef PARSER_H
+#define PARSER_H
+
+#include <memory>
+#include <string>
+#include <vector>
+#include <token.h>
+#include <symbol_token.h>
+#include <keyword_token.h>
+
+namespace Parser{
+    struct parserProgress{
+        bool in_range(int offset);
+        bool peekType(Lexer::token_type_t id,int offset=0);//check if token is of type, don't change location
+        bool peekSymbol(int id,int offset=0);//check if current token is a specific symbol, don't change location
+        bool peekSymbol(std::vector<int> ids,int offset=0);//check if current token is one of the symbol inside vector, don't change location
+        bool peekKeyword(int id,int offset=0);//check if current token is a specific keyword, don't change location
+        bool peekKeyword(std::vector<int> ids,int offset=0);//check if current token is one of the keywords inside vector, don't change location
+        std::shared_ptr<Lexer::Token> isType(Lexer::token_type_t id);//check if token is of type, if yes advance location by 1 and return pointer, if not return nullptr
+        bool isSymbol(int id);//check if current token is a specific symbol, if yes advances location by 1
+        std::shared_ptr<Lexer::SymbolToken> isSymbol(std::vector<int> ids);//check if current token is one of the symbols inside vector, if yes advances location by 1
+        bool isKeyword(int id);//check if current token is a specific keyword, if yes advances location by 1
+        std::shared_ptr<Lexer::KeywordToken> isKeyword(std::vector<int> ids);//check if current token is one of the keywords inside vector, if yes advances location by 1{
+        std::shared_ptr<Lexer::Token> get(int offset=0);
+        std::shared_ptr<Lexer::Token> get_nothrow(int offset=0);//if index not available, return null
+        std::shared_ptr<Lexer::Token> get_nothrow_nonull(int offset=0);//if index not available, return a dummy token "EOF"
+        const std::vector<std::shared_ptr<Lexer::Token>> &data;
+        int location;
+    };
+    class Parser{
+        public:
+            void parse(const std::vector<std::shared_ptr<Lexer::Token>> &data);
+    };
+}
+#endif // PARSER_H

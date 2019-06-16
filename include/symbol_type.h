@@ -1,0 +1,68 @@
+#ifndef SYMBOL_TYPE_H_INCLUDED
+#define SYMBOL_TYPE_H_INCLUDED
+
+/** @file symbol_type.h */
+
+/**
+ * @namespace Lexer
+ * @brief Main Namespace for Lexer
+ */
+namespace Lexer {
+
+    /**
+     * @enum symbol_type_t
+     * @brief Symbol types 
+     */
+
+    enum symbol_type_t {
+        SYMBOL_HASHTAG,
+        SYMBOL_SEMICOLON,
+        SYMBOL_COLON,
+        SYMBOL_QUESTION_MARK,
+        SYMBOL_COMMA,
+        SYMBOL_PARENTHESIS_OPEN,
+        SYMBOL_PARENTHESIS_CLOSE,
+        SYMBOL_SQUARE_BRACKET_OPEN,
+        SYMBOL_SQUARE_BRACKET_CLOSE,
+        SYMBOL_CURLY_BRACKET_OPEN,
+        SYMBOL_CURLY_BRACKET_CLOSE,
+        SYMBOL_PLUS,
+        SYMBOL_MINUS,
+        SYMBOL_MULTIPLY,
+        SYMBOL_DIVIDE,
+        SYMBOL_PERCENT,
+        SYMBOL_INCREMENT,
+        SYMBOL_DECREMENT,
+        SYMBOL_EQUALS,
+        SYMBOL_NOT_EQUALS,
+        SYMBOL_GREATER,
+        SYMBOL_GREATER_EQUALS,
+        SYMBOL_LOWER,
+        SYMBOL_LOWER_EQUALS,
+        SYMBOL_LOGICAL_AND,
+        SYMBOL_LOGICAL_OR,
+        SYMBOL_LOGICAL_NOT,
+        SYMBOL_BITWISE_AND,
+        SYMBOL_BITWISE_OR,
+        SYMBOL_BITWISE_XOR,
+        SYMBOL_BITWISE_NOT,
+        SYMBOL_LEFT_SHIFT,
+        SYMBOL_RIGHT_SHIFT,
+        SYMBOL_ASSIGNMENT,
+        SYMBOL_PLUS_ASSIGNMENT,
+        SYMBOL_MINUS_ASSIGNMENT,
+        SYMBOL_MULTIPLY_ASSIGNMENT,
+        SYMBOL_DIVIDE_ASSIGNMENT,
+        SYMBOL_PERCENT_ASSIGNMENT,
+        SYMBOL_LEFT_SHIFT_ASSIGNMENT,
+        SYMBOL_RIGHT_SHIFT_ASSIGNMENT,
+        SYMBOL_BITWISE_AND_ASSIGNMENT,
+        SYMBOL_BITWISE_OR_ASSIGNMENT,
+        SYMBOL_BITWISE_XOR_ASSIGNMENT,
+        SYMBOL_DOT,
+        SYMBOL_ARROW,
+    };
+
+}
+
+#endif // SYMBOL_TYPE_H_INCLUDED

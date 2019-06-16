@@ -1,0 +1,16 @@
+#ifndef PARSER_EXPRESSION_GROUP_H
+#define PARSER_EXPRESSION_GROUP_H
+
+#include <memory>
+#include "parser_expression.h"
+
+namespace Parser{
+    class ExpressionGroup:public ParserResultPart {
+        public:
+            ExpressionGroup(std::shared_ptr<Expression>);
+            std::shared_ptr<Expression> contents;
+        protected:
+        private:
+    };
+}
+#endif // PARSER_EXPRESSION_GROUP_H
