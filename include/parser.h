@@ -21,9 +21,9 @@ namespace Parser{
         std::shared_ptr<Lexer::SymbolToken> isSymbol(std::vector<int> ids);//check if current token is one of the symbols inside vector, if yes advances location by 1
         bool isKeyword(int id);//check if current token is a specific keyword, if yes advances location by 1
         std::shared_ptr<Lexer::KeywordToken> isKeyword(std::vector<int> ids);//check if current token is one of the keywords inside vector, if yes advances location by 1{
-        std::shared_ptr<Lexer::Token> get(int offset=0);
-        std::shared_ptr<Lexer::Token> get_nothrow(int offset=0);//if index not available, return null
-        std::shared_ptr<Lexer::Token> get_nothrow_nonull(int offset=0);//if index not available, return a dummy token "EOF"
+        std::shared_ptr<Lexer::Token> get(int offset=0);//get index+offset,if not available throws
+        std::shared_ptr<Lexer::Token> get_nothrow(int offset=0);//if not available, returns null
+        std::shared_ptr<Lexer::Token> get_nothrow_nonull(int offset=0);//if not available, returns a dummy token "EOF"
         const std::vector<std::shared_ptr<Lexer::Token>> &data;
         int location;
     };
