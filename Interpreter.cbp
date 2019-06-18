@@ -72,6 +72,8 @@
 		<Unit filename="include/parser_expression_matcher.h" />
 		<Unit filename="include/parser_expression_term.h" />
 		<Unit filename="include/parser_expression_term_matcher.h" />
+		<Unit filename="include/parser_for_statement.h" />
+		<Unit filename="include/parser_for_statement_matcher.h" />
 		<Unit filename="include/parser_function_call.h" />
 		<Unit filename="include/parser_function_call_matcher.h" />
 		<Unit filename="include/parser_if_statement.h" />
@@ -125,6 +127,7 @@
 		<Unit filename="src/parser/component/parser_expression_list_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_expression_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_expression_term_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_for_statement_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_function_call_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_if_statment_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_line_matcher.cpp" />
@@ -138,6 +141,7 @@
 		<Unit filename="src/parser/result/parser_expression_group.cpp" />
 		<Unit filename="src/parser/result/parser_expression_list.cpp" />
 		<Unit filename="src/parser/result/parser_expression_term.cpp" />
+		<Unit filename="src/parser/result/parser_for_statement.cpp" />
 		<Unit filename="src/parser/result/parser_function_call.cpp" />
 		<Unit filename="src/parser/result/parser_if_statement.cpp" />
 		<Unit filename="src/parser/result/parser_line.cpp" />
