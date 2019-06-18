@@ -83,6 +83,8 @@
 		<Unit filename="include/parser_statement_matcher.h" />
 		<Unit filename="include/parser_unary_operation.h" />
 		<Unit filename="include/parser_unary_operation_matcher.h" />
+		<Unit filename="include/parser_while_statement.h" />
+		<Unit filename="include/parser_while_statement_matcher.h" />
 		<Unit filename="include/read_file.h" />
 		<Unit filename="include/single_quote_string_token_matcher.h" />
 		<Unit filename="include/string_token.h" />
@@ -128,6 +130,7 @@
 		<Unit filename="src/parser/component/parser_line_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_statement_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_unary_operation_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_while_statement_matcher.cpp" />
 		<Unit filename="src/parser/parser.cpp" />
 		<Unit filename="src/parser/result/parser_binary_operation.cpp" />
 		<Unit filename="src/parser/result/parser_code_block.cpp" />
@@ -141,6 +144,7 @@
 		<Unit filename="src/parser/result/parser_result_part.cpp" />
 		<Unit filename="src/parser/result/parser_statement.cpp" />
 		<Unit filename="src/parser/result/parser_unary_operation.cpp" />
+		<Unit filename="src/parser/result/parser_while_statement.cpp" />
 		<Unit filename="src/symbols_keywords.cpp" />
 		<Unit filename="src/token/eof_token.cpp" />
 		<Unit filename="src/token/float_token.cpp" />
