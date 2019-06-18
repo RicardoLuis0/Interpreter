@@ -5,6 +5,8 @@
 #include "symbols_keywords.h"
 #include "my_except.h"
 
+//ForStatement = keyword 'for' , symbol '(' , [ Expression ] , symbol ';' , [ Expression ] , symbol ';' , [ Expression ] , symbol ')' , CodeBlock ;
+
 std::shared_ptr<Parser::ForStatement> Parser::ForStatementMatcher::makeMatch(parserProgress &p){
     std::shared_ptr<Expression> pre,cond,inc;
     if(!p.isKeyword(KEYWORD_FOR))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected 'for', got '"+p.get_nothrow_nonull()->get_literal()+"'");
