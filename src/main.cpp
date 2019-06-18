@@ -8,13 +8,19 @@
 
 #include "parser.h"
 #include "parser_expression_matcher.h"
-#include "parser_expression_term_matcher.h"
+#include "parser_line_matcher.h"
 #include "parser_expression.h"
 #include "parser_expression_list.h"
 #include "parser_expression_group.h"
 #include "parser_expression_term.h"
 #include "parser_binary_operation.h"
 #include "parser_function_call.h"
+#include "parser_if_statement.h"
+#include "parser_for_statement.h"
+#include "parser_while_statement.h"
+#include "parser_statement.h"
+#include "parser_line.h"
+#include "parser_code_block.h"
 
 /**
  * @mainpage
@@ -26,20 +32,21 @@
  * @version 0.01
  */
 
-void test_lexer(),test_expressions();
-//void test_expressions();
+void test_lexer(),test_expressions(),test_lines();
 
 int main(){
     Console::init();
     while(true){
         Console::clear();
-        std::cout<<"0> test lexer\n1> test expression parser\n\nChoice: ";
+        std::cout<<"0> test lexer\n1> test expression parser\n2> test line parser\n\nChoice: ";
         std::string input;
         std::cin>>input;
         if(input.compare("0")==0){
             test_lexer();
         }else if(input.compare("1")==0){
             test_expressions();
+        }else if(input.compare("2")==0){
+            test_lines();
         }else{
             continue;
         }
@@ -79,7 +86,8 @@ std::string get_ident(int ident){
     return std::string(ident,' ')+std::string(ident,' ');//2 space ident
 }
 
-void print_expression(int ident,std::shared_ptr<Parser::Expression> expr);
+void print_expression(int,std::shared_ptr<Parser::Expression>);
+void print_line(int,std::shared_ptr<Parser::Line>);
 
 void print_expression_list(int ident,std::shared_ptr<Parser::ExpressionList> exprlist){
     std::cout<<get_ident(ident)<<">Expression List\n";
@@ -166,6 +174,79 @@ void print_expression(int ident,std::shared_ptr<Parser::Expression> expr){
     }
 }
 
+void print_code_block(int ident,std::shared_ptr<Parser::CodeBlock> block){
+    std::cout<<get_ident(ident)<<">Code Block\n";
+    size_t count=0;
+    for(std::shared_ptr<Parser::Line> line:block->lines){
+        std::cout<<get_ident(ident)<<".line["<<count<<"]:\n";
+        print_line(ident+1,line);
+        count++;
+    }
+}
+
+
+void print_if_statement(int ident,std::shared_ptr<Parser::IfStatement> stmt){
+    std::cout<<get_ident(ident)<<">IfStatement\n";
+    std::cout<<get_ident(ident)<<".condition:\n";
+    print_expression(ident+1,stmt->condition);
+    std::cout<<get_ident(ident)<<".code:\n";
+    print_line(ident+1,stmt->code);
+}
+
+void print_for_statement(int ident,std::shared_ptr<Parser::ForStatement> stmt){
+    std::cout<<get_ident(ident)<<">ForStatement\n";
+    std::cout<<get_ident(ident)<<".pre:\n";
+    print_expression(ident+1,stmt->pre);
+    std::cout<<get_ident(ident)<<".condition:\n";
+    print_expression(ident+1,stmt->condition);
+    std::cout<<get_ident(ident)<<".inc:\n";
+    print_expression(ident+1,stmt->inc);
+    std::cout<<get_ident(ident)<<".code:\n";
+    print_line(ident+1,stmt->code);
+}
+
+void print_while_statement(int ident,std::shared_ptr<Parser::WhileStatement> stmt){
+    std::cout<<get_ident(ident)<<">WhileStatement\n";
+    std::cout<<get_ident(ident)<<".condition:\n";
+    print_expression(ident+1,stmt->condition);
+    std::cout<<get_ident(ident)<<".code:\n";
+    print_line(ident+1,stmt->code);
+}
+
+void print_statement(int ident,std::shared_ptr<Parser::Statement> stmt){
+    std::cout<<get_ident(ident)<<">Statement\n";
+    switch(stmt->type){
+    case Parser::STATEMENT_IF:
+        print_if_statement(ident+1,std::static_pointer_cast<Parser::IfStatement>(stmt->statement));
+        break;
+    case Parser::STATEMENT_FOR:
+        print_for_statement(ident+1,std::static_pointer_cast<Parser::ForStatement>(stmt->statement));
+        break;
+    case Parser::STATEMENT_WHILE:
+        print_while_statement(ident+1,std::static_pointer_cast<Parser::WhileStatement>(stmt->statement));
+        break;
+    }
+}
+
+void print_line(int ident,std::shared_ptr<Parser::Line> line){
+    switch(line->type){
+    case Parser::LINE_CODE_BLOCK:
+        std::cout<<get_ident(ident)<<".code block:\n";
+        print_code_block(ident+1,std::static_pointer_cast<Parser::CodeBlock>(line->contents));
+        break;
+    case Parser::LINE_EXPRESSION:
+        std::cout<<get_ident(ident)<<".expression:\n";
+        print_expression(ident+1,std::static_pointer_cast<Parser::Expression>(line->contents));
+        break;
+    case Parser::LINE_STATEMENT:
+        std::cout<<get_ident(ident)<<".statement:\n";
+        print_statement(ident+1,std::static_pointer_cast<Parser::Statement>(line->contents));
+        break;
+    case Parser::LINE_EMPTY:
+        std::cout<<get_ident(ident)<<"Empty Line\n";
+    }
+}
+
 void test_expressions(){
     try{
         std::string filename;
@@ -179,12 +260,45 @@ void test_expressions(){
                 tokens=lexer.tokenize_from_file(filename);//split file into tokens
             }catch(MyExcept::FileError &e){
                 std::cout<<e.what()<<"\nTry Again, ";
+                continue;
             }
             break;
         }
         Parser::parserProgress p {data:tokens,location:0};
         std::shared_ptr<Parser::Expression> expr=Parser::ExpressionMatcher().makeMatch(p);
         print_expression(0,expr);
+    }catch(MyExcept::ParseError &e){
+        std::cout<<e.what();
+        return;
+    }catch(MyExcept::NoMatchException &e){
+        std::cout<<e.what();
+        return;
+    }catch(std::exception &e){
+        std::cout<<"uncaught exception: "<<e.what();
+        return;
+    }
+}
+
+void test_lines(){
+    try{
+        std::string filename;
+        std::vector<std::shared_ptr<Lexer::Token>> tokens;
+        Lexer::Lexer lexer(base_symbols,base_keywords);
+        while(true){
+            Console::clear();
+            std::cout<<"Filename: ";
+            std::cin>>filename;
+            try{
+                tokens=lexer.tokenize_from_file(filename);//split file into tokens
+            }catch(MyExcept::FileError &e){
+                std::cout<<e.what()<<"\nTry Again, ";
+                continue;
+            }
+            break;
+        }
+        Parser::parserProgress p {data:tokens,location:0};
+        std::shared_ptr<Parser::Line> line=Parser::LineMatcher().makeMatch(p);
+        print_line(0,line);
     }catch(MyExcept::ParseError &e){
         std::cout<<e.what();
         return;
