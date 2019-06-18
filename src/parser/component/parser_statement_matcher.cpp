@@ -24,7 +24,7 @@ std::shared_ptr<Parser::Statement> Parser::StatementMatcher::makeMatch(parserPro
             throw std::runtime_error("unreachable");
         }
     }else{
-        throw std::runtime_error("ignore_this");
+        throw MyExcept::NoMatchException(0,"ignore_this");
     }
     //TODO
 }

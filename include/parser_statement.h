@@ -1,8 +1,8 @@
 #ifndef PARSER_STATEMENT_H
 #define PARSER_STATEMENT_H
 
-#include "parser_result_part.h"
 #include <memory>
+#include "parser_result_part.h"
 
 namespace Parser{
     enum ParserStatementType_t{
