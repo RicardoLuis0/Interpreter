@@ -10,4 +10,5 @@ namespace Parser{
         std::shared_ptr<IfStatement> makeMatch(parserProgress&);
     };
 }
+
 #endif // PARSER_IF_STATMENT_MATCHER_H
