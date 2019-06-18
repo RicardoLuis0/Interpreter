@@ -7,7 +7,7 @@
 
 #include "my_except.h"
 
-//Line = CodeBlock | Statement | Expression , symbol ';' ;
+//Line = CodeBlock | Statement | Expression , symbol ';' | symbol ';' ;
 
 std::shared_ptr<Parser::Line> Parser::LineMatcher::makeMatch(parserProgress &p){
     int location_backup=p.location;
@@ -25,7 +25,17 @@ std::shared_ptr<Parser::Line> Parser::LineMatcher::makeMatch(parserProgress &p){
                 throw;//must be statement, rethrow
             }
             p.location=location_backup;
-            std::shared_ptr<Expression> expr=ExpressionMatcher().makeMatch(p);
+            std::shared_ptr<Expression> expr;
+            try{
+                expr=ExpressionMatcher().makeMatch(p);
+            }catch(MyExcept::NoMatchException &e){
+                p.location=location_backup;
+                if(p.isSymbol(SYMBOL_SEMICOLON)){//allow empty lines
+                    return std::make_shared<Line>(nullptr,LINE_EMPTY);
+                }else{
+                    throw;
+                }
+            }
             if(p.isSymbol(SYMBOL_SEMICOLON)){
                 return std::make_shared<Line>(expr,LINE_EXPRESSION);
             }else{

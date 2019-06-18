@@ -9,6 +9,7 @@ namespace Parser{
         LINE_CODE_BLOCK,
         LINE_STATEMENT,
         LINE_EXPRESSION,
+        LINE_EMPTY,
     };
     class Line : public ParserResultPart {
         public://TODO finish line
