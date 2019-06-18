@@ -4,3 +4,4 @@ bin/
 doxygen/
 *.depend
 *.layout
+*.bak
