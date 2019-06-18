@@ -1,5 +1,6 @@
 #include "parser_line_matcher.h"
 
+#include "symbols_keywords.h"
 #include "parser_code_block_matcher.h"
 #include "parser_statement_matcher.h"
 #include "parser_expression_matcher.h"
@@ -28,7 +29,7 @@ std::shared_ptr<Parser::Line> Parser::LineMatcher::makeMatch(parserProgress &p){
             if(p.isSymbol(SYMBOL_SEMICOLON)){
                 return std::make_shared<Line>(expr,LINE_EXPRESSION);
             }else{
-                throw
+                throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");//must end in semicolon
             }
         }
     }
