@@ -5,6 +5,8 @@
 #include "symbols_keywords.h"
 #include "my_except.h"
 
+//IfStatement = keyword 'if' , symbol '(' , Expression , symbol ')' , CodeBlock ;
+
 std::shared_ptr<Parser::IfStatement> Parser::IfStatementMatcher::makeMatch(parserProgress &p){
     if(!p.isKeyword(KEYWORD_IF))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected 'if', got '"+p.get_nothrow_nonull()->get_literal()+"'");
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '(', got '"+p.get_nothrow_nonull()->get_literal()+"'");
