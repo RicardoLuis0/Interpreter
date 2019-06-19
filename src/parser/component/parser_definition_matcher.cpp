@@ -1,11 +1,12 @@
 #include "parser_definition_matcher.h"
 
-#include "parser_var_type.h"
 #include "parser_var_type_matcher.h"
 #include "my_except.h"
 #include "symbols_keywords.h"
 #include "parser_function_definition_matcher.h"
 #include "parser_variable_definition_matcher.h"
+
+//Definition = FunctionDefinition | VariableDefinition , symbol ';' ;
 
 std::shared_ptr<Parser::Definition> Parser::DefinitionMatcher::makeMatch(parserProgress &p){
     int location_backup;
@@ -22,6 +23,8 @@ std::shared_ptr<Parser::Definition> Parser::DefinitionMatcher::makeMatch(parserP
         }
         if(vt&&p.peekType(Lexer::TOKEN_TYPE_WORD)&&p.peekSymbol(SYMBOL_PARENTHESIS_OPEN))throw;//if is function definition rethrow
         p.location=location_backup;
-        return std::make_shared<Definition>(DEFINITION_VAR,VariableDefinitionMatcher().makeMatch(p));
+        std::shared_ptr<VariableDefinition> vdef=VariableDefinitionMatcher().makeMatch(p);
+        if(!p.isSymbol(SYMBOL_SEMICOLON))MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");//variable definition must end in semicolon
+        return std::make_shared<Definition>(DEFINITION_VAR,vdef);
     }
 }

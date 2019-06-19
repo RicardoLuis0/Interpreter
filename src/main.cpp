@@ -318,6 +318,10 @@ void print_line(int indent,std::shared_ptr<Parser::Line> line){
         std::cout<<get_indent(indent)<<".statement:\n";
         print_statement(indent+1,std::static_pointer_cast<Parser::Statement>(line->contents));
         break;
+    case Parser::LINE_DEFINITION:
+        std::cout<<get_indent(indent)<<".definition:\n";
+        print_definition(indent+1,std::static_pointer_cast<Parser::Definition>(line->contents));
+        break;
     case Parser::LINE_EMPTY:
         std::cout<<get_indent(indent)<<"Empty Line\n";
     }
