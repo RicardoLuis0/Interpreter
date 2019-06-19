@@ -79,6 +79,8 @@
 		<Unit filename="include/parser_function_call_matcher.h" />
 		<Unit filename="include/parser_function_definition.h" />
 		<Unit filename="include/parser_function_definition_matcher.h" />
+		<Unit filename="include/parser_function_definition_parameter.h" />
+		<Unit filename="include/parser_function_definition_parameter_matcher.h" />
 		<Unit filename="include/parser_if_statement.h" />
 		<Unit filename="include/parser_if_statment_matcher.h" />
 		<Unit filename="include/parser_line.h" />
@@ -90,6 +92,8 @@
 		<Unit filename="include/parser_unary_operation_matcher.h" />
 		<Unit filename="include/parser_var_type.h" />
 		<Unit filename="include/parser_var_type_matcher.h" />
+		<Unit filename="include/parser_variable_definition.h" />
+		<Unit filename="include/parser_variable_definition_matcher.h" />
 		<Unit filename="include/parser_while_statement.h" />
 		<Unit filename="include/parser_while_statement_matcher.h" />
 		<Unit filename="include/read_file.h" />
@@ -136,11 +140,13 @@
 		<Unit filename="src/parser/component/parser_for_statement_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_function_call_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_function_definition_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_function_definition_parameter_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_if_statment_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_line_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_statement_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_unary_operation_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_var_type_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_variable_definition_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_while_statement_matcher.cpp" />
 		<Unit filename="src/parser/parser.cpp" />
 		<Unit filename="src/parser/result/parser_binary_operation.cpp" />
@@ -153,12 +159,14 @@
 		<Unit filename="src/parser/result/parser_for_statement.cpp" />
 		<Unit filename="src/parser/result/parser_function_call.cpp" />
 		<Unit filename="src/parser/result/parser_function_definition.cpp" />
+		<Unit filename="src/parser/result/parser_function_definition_parameter.cpp" />
 		<Unit filename="src/parser/result/parser_if_statement.cpp" />
 		<Unit filename="src/parser/result/parser_line.cpp" />
 		<Unit filename="src/parser/result/parser_result_part.cpp" />
 		<Unit filename="src/parser/result/parser_statement.cpp" />
 		<Unit filename="src/parser/result/parser_unary_operation.cpp" />
 		<Unit filename="src/parser/result/parser_var_type.cpp" />
+		<Unit filename="src/parser/result/parser_variable_definition.cpp" />
 		<Unit filename="src/parser/result/parser_while_statement.cpp" />
 		<Unit filename="src/symbols_keywords.cpp" />
 		<Unit filename="src/token/eof_token.cpp" />
