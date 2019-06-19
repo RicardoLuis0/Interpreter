@@ -14,9 +14,9 @@ namespace Parser{
     };
     class Definition : public ParserResultPart {
         public:
-            Definition(std::shared_ptr<VarType> type);
-            std::shared_ptr<VarType> type;
-            std::vector<std::pair<ParserDefinitionType_t,std::shared_ptr<ParserResultPart>>> definitions;
+            Definition(ParserDefinitionType_t type,std::shared_ptr<ParserResultPart> def);
+            ParserDefinitionType_t type;
+            std::shared_ptr<ParserResultPart> def;
         protected:
         private:
     };

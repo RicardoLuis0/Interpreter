@@ -5,22 +5,23 @@
 #include "my_except.h"
 #include "symbols_keywords.h"
 #include "parser_function_definition_matcher.h"
+#include "parser_variable_definition_matcher.h"
 
 std::shared_ptr<Parser::Definition> Parser::DefinitionMatcher::makeMatch(parserProgress &p){
-    std::shared_ptr<Definition> def=std::make_shared<Definition>(VarTypeMatcher().makeMatch(p));
-    while(1){
-        int location_backup;
+    int location_backup;
+    try{
+        location_backup=p.location;
+        return std::make_shared<Definition>(DEFINITION_FUNC,FunctionDefinitionMatcher().makeMatch(p));
+    }catch(MyExcept::NoMatchException &e){
+        p.location=location_backup;
+        std::shared_ptr<VarType> vt=nullptr;
         try{
-            location_backup=p.location;
-            def->definitions.push_back({DEFINITION_FUNC,FunctionDefinitionMatcher().makeMatch(p)});
+            vt=VarTypeMatcher().makeMatch(p);
         }catch(MyExcept::NoMatchException &e){
-            p.location=location_backup;
-            if(p.peekType(Lexer::TOKEN_TYPE_WORD)&&p.peekSymbol(SYMBOL_PARENTHESIS_OPEN))throw;//if is function definition rethrow
-            //try variable definition
+            vt=nullptr;
         }
-        if(!p.isSymbol(SYMBOL_COMMA)){
-            break;
-        }
+        if(vt&&p.peekType(Lexer::TOKEN_TYPE_WORD)&&p.peekSymbol(SYMBOL_PARENTHESIS_OPEN))throw;//if is function definition rethrow
+        p.location=location_backup;
+        return std::make_shared<Definition>(DEFINITION_VAR,VariableDefinitionMatcher().makeMatch(p));
     }
-    return def;
 }

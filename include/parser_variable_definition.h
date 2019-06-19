@@ -1,18 +1,18 @@
 #ifndef PARSER_VARIABLE_DEFINITION_H
 #define PARSER_VARIABLE_DEFINITION_H
 
-#include "word_token.h"
 #include "parser_result_part.h"
 #include "parser_expression.h"
+#include "parser_var_type.h"
+#include "parser_variable_definition_item.h"
+#include <vector>
 
 namespace Parser{
     class VariableDefinition : public ParserResultPart {
         public:
-            VariableDefinition(std::shared_ptr<Lexer::WordToken>,std::shared_ptr<Expression>);
-            std::shared_ptr<Lexer::WordToken> name;
-            std::shared_ptr<Expression> value;
-        protected:
-        private:
+            VariableDefinition(std::shared_ptr<VarType> type,std::vector<std::shared_ptr<VariableDefinitionItem>> variables);
+            std::shared_ptr<VarType> type;
+            std::vector<std::shared_ptr<VariableDefinitionItem>> variables;
     };
 }
 

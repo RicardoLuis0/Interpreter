@@ -256,6 +256,8 @@ void print_function_definition_parameter(int indent,std::shared_ptr<Parser::Func
 
 void print_function_definition(int indent,std::shared_ptr<Parser::FunctionDefinition> func){
     std::cout<<get_indent(indent)<<">Function Definition\n";
+    std::cout<<get_indent(indent)<<".return type:\n";
+    print_var_type(indent+1,func->return_type);
     std::cout<<get_indent(indent)<<".name:\n";
     print_token(indent+1,func->name);
     size_t count=0;
@@ -264,37 +266,42 @@ void print_function_definition(int indent,std::shared_ptr<Parser::FunctionDefini
         print_function_definition_parameter(indent+1,param);
         count++;
     }
-    
+    std::cout<<get_indent(indent)<<".code:\n";
+    print_code_block(indent+1,func->code);
+}
+
+void print_variable_definition_item(int indent,std::shared_ptr<Parser::VariableDefinitionItem> item){
+    std::cout<<get_indent(indent)<<">Variable\n";
+    std::cout<<get_indent(indent)<<".name:\n";
+    print_token(indent+1,item->name);
+    if(item->value){
+        std::cout<<get_indent(indent)<<".value:\n";
+        print_expression(indent+1,item->value);
+    }
 }
 
 void print_variable_definition(int indent,std::shared_ptr<Parser::VariableDefinition> def){
-    std::cout<<get_indent(indent)<<">Variable Definition\n";
-    std::cout<<get_indent(indent)<<".name:\n";
-    print_token(indent+1,def->name);
-    if(def->value){
-        std::cout<<get_indent(indent)<<".value:\n";
-        print_expression(indent+1,def->value);
+    std::cout<<get_indent(indent)<<">Variable Definition List\n";
+    std::cout<<get_indent(indent)<<".type:\n";
+    print_var_type(indent+1,def->type);
+    size_t count=0;
+    for(auto item:def->variables){
+        std::cout<<get_indent(indent)<<".variable["<<count<<"]:\n";
+        print_variable_definition_item(indent+1,item);
+        count++;
     }
 }
 
 void print_definition(int indent,std::shared_ptr<Parser::Definition> def){
-    std::cout<<get_indent(indent)<<">Definition List\n";
-    std::cout<<get_indent(indent)<<".type:\n";
-    print_var_type(indent+1,def->type);
-    size_t count=0;
-    for(auto defpair:def->definitions){
-        std::cout<<get_indent(indent)<<".definition["<<count<<"]:\n";
-        switch(defpair.first){
-        case Parser::DEFINITION_VAR:
-            print_variable_definition(indent+1,std::static_pointer_cast<Parser::VariableDefinition>(defpair.second));
-            break;
-        case Parser::DEFINITION_FUNC:
-            print_function_definition(indent+1,std::static_pointer_cast<Parser::FunctionDefinition>(defpair.second));
-            break;
-        }
-        count++;
+    std::cout<<get_indent(indent)<<">Definition\n";
+    switch(def->type){
+    case Parser::DEFINITION_VAR:
+        print_variable_definition(indent+1,std::static_pointer_cast<Parser::VariableDefinition>(def->def));
+        break;
+    case Parser::DEFINITION_FUNC:
+        print_function_definition(indent+1,std::static_pointer_cast<Parser::FunctionDefinition>(def->def));
+        break;
     }
-    
 }
 
 void print_line(int indent,std::shared_ptr<Parser::Line> line){
