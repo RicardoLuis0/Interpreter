@@ -5,7 +5,7 @@
 #include "symbols_keywords.h"
 #include "my_except.h"
 
-//ForStatement = keyword 'for' , symbol '(' , [ Expression ] , symbol ';' , [ Expression ] , symbol ';' , [ Expression ] , symbol ')' , CodeBlock ;
+//ForStatement = keyword 'for' , symbol '(' , [ Expression ] , symbol ';' , [ Expression ] , symbol ';' , [ Expression ] , symbol ')' , Line ;
 
 std::shared_ptr<Parser::ForStatement> Parser::ForStatementMatcher::makeMatch(parserProgress &p){
     std::shared_ptr<Expression> pre,cond,inc;

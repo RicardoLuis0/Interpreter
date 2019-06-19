@@ -7,7 +7,7 @@
 
 namespace Parser{
     class CodeBlock : public ParserResultPart {
-        public://TODO finish line
+        public:
             CodeBlock(std::vector<std::shared_ptr<Line>> lines);
             std::vector<std::shared_ptr<Line>> lines;
         protected:

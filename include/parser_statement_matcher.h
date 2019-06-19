@@ -11,4 +11,5 @@ namespace Parser{
             std::shared_ptr<Statement> makeMatch(parserProgress&);
     };
 }
+
 #endif // PARSER_STATEMENT_MATCHER_H
