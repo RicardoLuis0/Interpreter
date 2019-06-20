@@ -21,20 +21,17 @@ std::vector<std::shared_ptr<Lexer::Token>> Lexer::Lexer::tokenize_from_string(st
     std::string buffer;
     int line=1;
     for(char c:data){
+        if(c=='\n')line++;
         if(tokenMatcher.partialMatch(buffer+c)){
             buffer+=c;
         }else{
-            if(is_break(c)&&c=='\n'){
-                line++;
+            if(buffer.empty()){
+                if(!is_break(c)) throw MyExcept::ParseError(line,"unexpected "+(std::string()=c),filename);
             }else{
-                if(buffer.empty()){
-                    if(!is_break(c)) throw MyExcept::ParseError(line,"unexpected "+(std::string()=c),filename);
-                }else{
-                    if(tokenMatcher.fullMatch(buffer)){
-                        if(auto ptr=tokenMatcher.makeMatch(line,buffer))output.push_back(ptr);
-                        is_break(c)?buffer="":buffer=c;
-                    }else{ throw MyExcept::ParseError(line,"unexpected "+buffer,filename);};
-                }
+                if(tokenMatcher.fullMatch(buffer)){
+                    if(auto ptr=tokenMatcher.makeMatch(line,buffer))output.push_back(ptr);
+                    is_break(c)?buffer="":buffer=c;
+                }else{ throw MyExcept::ParseError(line,"unexpected "+buffer,filename);};
             }
         }
     }
