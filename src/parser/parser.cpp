@@ -50,18 +50,18 @@ bool Parser::parserProgress::peekKeyword(std::vector<int> ids,int offset){
 }
 
 std::shared_ptr<Lexer::Token> Parser::parserProgress::get(int offset){
-    if(location+offset>=data.size())throw std::out_of_range("token out of range");
-    return data[location];
+    if(!in_range(offset))throw std::out_of_range("token out of range");
+    return data[location+offset];
 }
 
 std::shared_ptr<Lexer::Token> Parser::parserProgress::get_nothrow(int offset){
-    if(location+offset>=data.size())return nullptr;
-    return data[location];
+    if(!in_range(offset))return nullptr;
+    return data[location+offset];
 }
 
 std::shared_ptr<Lexer::Token> Parser::parserProgress::get_nothrow_nonull(int offset){
-    if(location+offset>=data.size())return std::make_shared<Lexer::EOFToken>(data[data.size()-1]->line);
-    return data[location];
+    if(!in_range(offset))return std::make_shared<Lexer::EOFToken>(data[data.size()-1]->line);
+    return data[location+offset];
 }
 
 std::shared_ptr<Lexer::Token> Parser::parserProgress::isType(Lexer::token_type_t id){
