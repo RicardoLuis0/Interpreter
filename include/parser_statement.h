@@ -9,6 +9,7 @@ namespace Parser{
         STATEMENT_IF,
         STATEMENT_WHILE,
         STATEMENT_FOR,
+        STATEMENT_RETURN,
     };
     class Statement : public ParserResultPart {
         public:

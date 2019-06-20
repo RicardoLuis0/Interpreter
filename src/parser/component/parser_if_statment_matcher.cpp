@@ -4,8 +4,9 @@
 #include "parser_line_matcher.h"
 #include "symbols_keywords.h"
 #include "my_except.h"
+#include "parser_else_statement_matcher.h"
 
-//IfStatement = keyword 'if' , symbol '(' , Expression , symbol ')' , CodeBlock ;
+//IfStatement = keyword 'if' , symbol '(' , Expression , symbol ')' , Line , [ ElseStatement ] ;
 
 std::shared_ptr<Parser::IfStatement> Parser::IfStatementMatcher::makeMatch(parserProgress &p){
     if(!p.isKeyword(KEYWORD_IF))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected 'if', got '"+p.get_nothrow_nonull()->get_literal()+"'");
@@ -13,5 +14,14 @@ std::shared_ptr<Parser::IfStatement> Parser::IfStatementMatcher::makeMatch(parse
     std::shared_ptr<Expression> expr=ExpressionMatcher().makeMatch(p);
     if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ')', got '"+p.get_nothrow_nonull()->get_literal()+"'");
     std::shared_ptr<Line> line=LineMatcher().makeMatch(p);
-    return std::make_shared<IfStatement>(expr,line);
+    std::shared_ptr<ElseStatement> else_stmt=nullptr;
+    int location_backup=p.location;
+    try{
+        else_stmt=ElseStatementMatcher().makeMatch(p);
+    }catch(MyExcept::NoMatchException &e){
+        p.location=location_backup;
+        if(p.isKeyword(KEYWORD_ELSE))throw;
+        else_stmt=nullptr;
+    }
+    return std::make_shared<IfStatement>(expr,line,else_stmt);
 }

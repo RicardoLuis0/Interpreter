@@ -25,7 +25,7 @@ std::shared_ptr<Parser::Line> Parser::LineMatcher::makeMatch(parserProgress &p){
         }catch(MyExcept::NoMatchException &e){
             try{
                 p.location=location_backup;
-                if(p.isKeyword({KEYWORD_IF,KEYWORD_FOR,KEYWORD_WHILE})){
+                if(p.isKeyword({KEYWORD_IF,KEYWORD_FOR,KEYWORD_WHILE,KEYWORD_RETURN})){
                     throw;//must be statement, rethrow
                 }
                 return std::make_shared<Line>(DefinitionMatcher().makeMatch(p),LINE_DEFINITION);

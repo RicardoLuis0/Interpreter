@@ -26,6 +26,8 @@
 #include "parser_variable_definition.h"
 #include "parser_function_definition.h"
 #include "parser_function_definition_parameter.h"
+#include "parser_return_statement.h"
+#include "parser_definition_matcher.h"
 
 /**
  * @mainpage
@@ -37,13 +39,13 @@
  * @version 0.01
  */
 
-void test_lexer(),test_expressions(),test_lines();
+void test_lexer(),test_expressions(),test_lines(),test_definitions();
 
 int main(){
     Console::init();
     while(true){
         Console::clear();
-        std::cout<<"0> test lexer\n1> test expression parser\n2> test line parser\n\nChoice: ";
+        std::cout<<"0> test lexer\n1> test expression parser\n2> test line parser\n3> test code\n\nChoice: ";
         std::string input;
         std::cin>>input;
         if(input.compare("0")==0){
@@ -52,6 +54,8 @@ int main(){
             test_expressions();
         }else if(input.compare("2")==0){
             test_lines();
+        }else if(input.compare("3")==0){
+            test_definitions();
         }else{
             continue;
         }
@@ -190,17 +194,26 @@ void print_code_block(int indent,std::shared_ptr<Parser::CodeBlock> block){
     }
 }
 
-
-void print_if_statement(int indent,std::shared_ptr<Parser::IfStatement> stmt){
-    std::cout<<get_indent(indent)<<">IfStatement\n";
-    std::cout<<get_indent(indent)<<".condition:\n";
-    print_expression(indent+1,stmt->condition);
+void print_else_statement(int indent,std::shared_ptr<Parser::ElseStatement> stmt){
+    std::cout<<get_indent(indent)<<">Else Statement\n";
     std::cout<<get_indent(indent)<<".code:\n";
     print_line(indent+1,stmt->code);
 }
 
+void print_if_statement(int indent,std::shared_ptr<Parser::IfStatement> stmt){
+    std::cout<<get_indent(indent)<<">If Statement\n";
+    std::cout<<get_indent(indent)<<".condition:\n";
+    print_expression(indent+1,stmt->condition);
+    std::cout<<get_indent(indent)<<".code:\n";
+    print_line(indent+1,stmt->code);
+    if(stmt->else_stmt){
+        std::cout<<get_indent(indent)<<".else:\n";
+        print_else_statement(indent+1,stmt->else_stmt);
+    }
+}
+
 void print_for_statement(int indent,std::shared_ptr<Parser::ForStatement> stmt){
-    std::cout<<get_indent(indent)<<">ForStatement\n";
+    std::cout<<get_indent(indent)<<">For Statement\n";
     std::cout<<get_indent(indent)<<".pre:\n";
     print_expression(indent+1,stmt->pre);
     std::cout<<get_indent(indent)<<".condition:\n";
@@ -212,11 +225,17 @@ void print_for_statement(int indent,std::shared_ptr<Parser::ForStatement> stmt){
 }
 
 void print_while_statement(int indent,std::shared_ptr<Parser::WhileStatement> stmt){
-    std::cout<<get_indent(indent)<<">WhileStatement\n";
+    std::cout<<get_indent(indent)<<">While Statement\n";
     std::cout<<get_indent(indent)<<".condition:\n";
     print_expression(indent+1,stmt->condition);
     std::cout<<get_indent(indent)<<".code:\n";
     print_line(indent+1,stmt->code);
+}
+
+void print_return_statement(int indent,std::shared_ptr<Parser::ReturnStatement> stmt){
+    std::cout<<get_indent(indent)<<">Return Statement\n";
+    std::cout<<get_indent(indent)<<".value:\n";
+    print_expression(indent+1,stmt->value);
 }
 
 void print_statement(int indent,std::shared_ptr<Parser::Statement> stmt){
@@ -230,6 +249,8 @@ void print_statement(int indent,std::shared_ptr<Parser::Statement> stmt){
         break;
     case Parser::STATEMENT_WHILE:
         print_while_statement(indent+1,std::static_pointer_cast<Parser::WhileStatement>(stmt->statement));
+    case Parser::STATEMENT_RETURN:
+        print_return_statement(indent+1,std::static_pointer_cast<Parser::ReturnStatement>(stmt->statement));
         break;
     }
 }
@@ -379,6 +400,51 @@ void test_lines(){
         Parser::parserProgress p {data:tokens,location:0};
         std::shared_ptr<Parser::Line> line=Parser::LineMatcher().makeMatch(p);
         print_line(0,line);
+    }catch(MyExcept::ParseError &e){
+        std::cout<<e.what();
+        return;
+    }catch(MyExcept::NoMatchException &e){
+        std::cout<<e.what();
+        return;
+    }catch(std::exception &e){
+        std::cout<<"uncaught exception: "<<e.what();
+        return;
+    }
+}
+
+void print_deflist(std::vector<std::shared_ptr<Parser::Definition>> defs){
+    std::cout<<">Parser Result\n";
+    size_t count=0;
+    for(std::shared_ptr<Parser::Definition> def:defs){
+        std::cout<<".line["<<count<<"]:\n";
+        print_definition(1,def);
+        count++;
+    }
+}
+
+void test_definitions(){
+    try{
+        std::string filename;
+        std::vector<std::shared_ptr<Lexer::Token>> tokens;
+        std::vector<std::shared_ptr<Parser::Definition>> deflist;
+        Lexer::Lexer lexer(base_symbols,base_keywords);
+        while(true){
+            Console::clear();
+            std::cout<<"Filename: ";
+            std::cin>>filename;
+            try{
+                tokens=lexer.tokenize_from_file(filename);//split file into tokens
+            }catch(MyExcept::FileError &e){
+                std::cout<<e.what()<<"\nTry Again, ";
+                continue;
+            }
+            break;
+        }
+        Parser::parserProgress p {data:tokens,location:0};
+        while(p.get_nothrow()!=nullptr){
+            deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
+        }
+        print_deflist(deflist);
     }catch(MyExcept::ParseError &e){
         std::cout<<e.what();
         return;
