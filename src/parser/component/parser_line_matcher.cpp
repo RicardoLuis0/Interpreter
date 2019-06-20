@@ -17,17 +17,13 @@ std::shared_ptr<Parser::Line> Parser::LineMatcher::makeMatch(parserProgress &p){
         return std::make_shared<Line>(CodeBlockMatcher().makeMatch(p),LINE_CODE_BLOCK);
     }catch(MyExcept::NoMatchException &e){
         p.location=location_backup;
-        if(p.isSymbol(SYMBOL_CURLY_BRACKET_OPEN)){
-            throw;//must be codeblock, rethrow
-        }
+        if(p.isSymbol(SYMBOL_CURLY_BRACKET_OPEN))throw;//must be codeblock, rethrow
         try{
             return std::make_shared<Line>(StatementMatcher().makeMatch(p),LINE_STATEMENT);
         }catch(MyExcept::NoMatchException &e){
+            p.location=location_backup;
+            if(p.isKeyword({KEYWORD_IF,KEYWORD_FOR,KEYWORD_WHILE,KEYWORD_RETURN}))throw;//must be statement, rethrow
             try{
-                p.location=location_backup;
-                if(p.isKeyword({KEYWORD_IF,KEYWORD_FOR,KEYWORD_WHILE,KEYWORD_RETURN})){
-                    throw;//must be statement, rethrow
-                }
                 return std::make_shared<Line>(DefinitionMatcher().makeMatch(p),LINE_DEFINITION);
             }catch(MyExcept::NoMatchException &e){
                 p.location=location_backup;
