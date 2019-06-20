@@ -1,0 +1,20 @@
+int gt(int a,int b){
+	if(a>b){
+		return a;
+	}else{
+		return b;
+	}
+}
+
+int main(){
+	print("first number:");
+	int a=read_int();
+	print("second number:");
+	int b=read_int();
+	if(a==b){
+		print("a and b are both "+a);
+	}else{
+		int c=gt(a,b);
+		print("the greater number is "+c+"\n");
+	}
+}
