@@ -21,7 +21,7 @@ std::shared_ptr<Parser::Definition> Parser::DefinitionMatcher::makeMatch(parserP
         }catch(MyExcept::NoMatchException &e){
             vt=nullptr;
         }
-        if(vt&&p.peekType(Lexer::TOKEN_TYPE_WORD)&&p.peekSymbol(SYMBOL_PARENTHESIS_OPEN))throw;//if is function definition rethrow
+        if(vt&&p.peekType(Lexer::TOKEN_TYPE_WORD)&&p.peekSymbol(SYMBOL_PARENTHESIS_OPEN,1))throw;//if is function definition rethrow
         p.location=location_backup;
         std::shared_ptr<VariableDefinition> vdef=VariableDefinitionMatcher().makeMatch(p);
         if(!p.isSymbol(SYMBOL_SEMICOLON))MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");//variable definition must end in semicolon
