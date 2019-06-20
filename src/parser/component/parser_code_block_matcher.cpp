@@ -10,8 +10,11 @@
 std::shared_ptr<Parser::CodeBlock> Parser::CodeBlockMatcher::makeMatch(parserProgress &p){
     std::vector<std::shared_ptr<Line>> lines;
     if(p.isSymbol(SYMBOL_CURLY_BRACKET_OPEN)){
-        while(!p.isSymbol(SYMBOL_CURLY_BRACKET_CLOSE)){//TODO check for eof
+        while(p.in_range(0)&&!p.isSymbol(SYMBOL_CURLY_BRACKET_CLOSE)){
             lines.push_back(LineMatcher().makeMatch(p));
+        }
+        if(!p.in_range(0)){
+            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '}', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
         }
     }else{
         throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '{', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
