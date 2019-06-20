@@ -9,6 +9,8 @@
 
 static std::vector<int> binary_operators{
     SYMBOL_ASSIGNMENT,
+    SYMBOL_EQUALS,
+    SYMBOL_NOT_EQUALS,
     SYMBOL_GREATER,
     SYMBOL_GREATER_EQUALS,
     SYMBOL_LOWER,
