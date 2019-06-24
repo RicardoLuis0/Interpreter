@@ -81,6 +81,8 @@ enum symbol_type_t {
     SYMBOL_ARROW,
 };
 
+Lexer::symbol_data get_symbol_data(symbol_type_t);
+
 extern std::vector<Lexer::keyword_data> base_keywords;
 extern std::vector<Lexer::symbol_data> base_symbols;
 

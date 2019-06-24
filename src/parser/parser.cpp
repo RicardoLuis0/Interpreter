@@ -4,8 +4,10 @@
 #include "keyword_token.h"
 #include "eof_token.h"
 
+//TODO add line tracking to parser result
+
 bool Parser::parserProgress::in_range(int offset){
-    return !(location+offset>=data.size());
+    return !(int64_t(location+offset)>=int64_t(data.size()));//to fix signed with unsigned comparison error
 }
 
 bool Parser::parserProgress::peekType(Lexer::token_type_t id,int offset){
@@ -124,4 +126,6 @@ std::shared_ptr<Lexer::KeywordToken> Parser::parserProgress::isKeyword(std::vect
 
 void Parser::Parser::parse(const std::vector<std::shared_ptr<Lexer::Token>> &data){
     parserProgress progress {data:data,location:0};
+    //TODO Parser::parse
+    throw std::runtime_error("unimplemented");
 }

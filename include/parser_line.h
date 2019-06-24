@@ -13,7 +13,7 @@ namespace Parser{
         LINE_EMPTY,
     };
     class Line : public ParserResultPart {
-        public://TODO finish line
+        public:
             Line(std::shared_ptr<ParserResultPart>,ParserLineType_t);
             std::shared_ptr<ParserResultPart> contents;
             const ParserLineType_t type;

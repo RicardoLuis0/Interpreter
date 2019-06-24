@@ -1,4 +1,13 @@
 #include "symbols_keywords.h"
+#include <stdexcept>
+
+Lexer::symbol_data get_symbol_data(symbol_type_t s){
+    for(auto sd:base_symbols){
+        if(sd.type==s)return sd;
+    }
+    //unreachable
+    throw std::runtime_error("unreachable");
+}
 
 std::vector<Lexer::keyword_data> base_keywords{
     {"if","KEYWORD_IF",KEYWORD_IF},

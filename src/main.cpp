@@ -28,6 +28,7 @@
 #include "parser_function_definition_parameter.h"
 #include "parser_return_statement.h"
 #include "parser_definition_matcher.h"
+#include "parser_unary_operation.h"
 
 /**
  * @mainpage
@@ -98,6 +99,7 @@ std::string get_indent(int indent){
 
 void print_expression(int,std::shared_ptr<Parser::Expression>);
 void print_line(int,std::shared_ptr<Parser::Line>);
+void print_expression_term(int,std::shared_ptr<Parser::ExpressionTerm>);
 
 void print_expression_list(int indent,std::shared_ptr<Parser::ExpressionList> exprlist){
     std::cout<<get_indent(indent)<<">Expression List\n";
@@ -135,6 +137,14 @@ void print_expression_group(int indent,std::shared_ptr<Parser::ExpressionGroup> 
     print_expression(indent+1,group->contents);
 }
 
+void print_unary_operation(int indent,std::shared_ptr<Parser::UnaryOperation> op){
+    std::cout<<get_indent(indent)<<">Unary Operation\n";
+    std::cout<<get_indent(indent)<<".term:\n";
+    print_expression_term(indent+1,op->term);
+    std::cout<<get_indent(indent)<<".operator:\n";
+    print_token(indent+1,op->unary_operator);
+}
+
 void print_expression_term(int indent,std::shared_ptr<Parser::ExpressionTerm> term){
     std::cout<<get_indent(indent)<<">Expression Term\n";
     switch(term->type){
@@ -148,7 +158,7 @@ void print_expression_term(int indent,std::shared_ptr<Parser::ExpressionTerm> te
         break;
     case Parser::EXPRESSION_TERM_UNARY_OPERATION:
         std::cout<<get_indent(indent)<<".unary operation:\n";
-        //TODO print unary operation
+        print_unary_operation(indent+1,std::static_pointer_cast<Parser::UnaryOperation>(term->contents_p));
         break;
     case Parser::EXPRESSION_TERM_LITERAL_INT:
     case Parser::EXPRESSION_TERM_LITERAL_FLOAT:

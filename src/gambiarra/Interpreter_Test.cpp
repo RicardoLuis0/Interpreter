@@ -14,6 +14,10 @@
 #include "string_token.h"
 #include "integer_token.h"
 #include "float_token.h"
+#include "symbols_keywords.h"
+#include "parser_binary_operation.h"
+#include "word_token.h"
+#include "parser_statement.h"
 
 using namespace Interpreter;
 
@@ -31,7 +35,7 @@ class Print_Function : public Native_Function_Call{
         return {std::make_shared<Parser::FunctionDefinitionParameter>(std::make_shared<Parser::VarType>(Parser::VARTYPE_MIXED),"var")};
     }
 
-    std::shared_ptr<Interpreter_Variable> call(Interpreter_Frame * parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Variable>> args) override {
+    std::shared_ptr<Interpreter_Variable> call(std::shared_ptr<Interpreter_Frame> parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Variable>> args) override {
         std::shared_ptr<Interpreter_Variable> var=args["var"];
         if(IS(var,Int_Variable)){
             std::cout<<std::to_string(*std::static_pointer_cast<Int_Variable>(var));
@@ -44,19 +48,101 @@ class Print_Function : public Native_Function_Call{
     }
 };
 
+Interpreter_Block::Interpreter_Block(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::CodeBlock> b):code(std::make_shared<Interpreter_Code>(context,b)){}
 
-Interpreter_Code::Interpreter_Code(std::shared_ptr<Parser::CodeBlock> cb):default_frame(std::make_shared<Interpreter_Frame>()){
+Interpreter_Expression::Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression> e){
+    //TODO Interpreter_Expression
+    throw std::runtime_error("unimplemented");
+}
+
+Interpreter_IfStatement::Interpreter_IfStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::IfStatement> stmt){
+    //TODO Interpreter_IfStatement
+    throw std::runtime_error("unimplemented");
+}
+Interpreter_ForStatement::Interpreter_ForStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ForStatement> stmt){
+    //TODO Interpreter_ForStatement
+    throw std::runtime_error("unimplemented");
+}
+Interpreter_WhileStatement::Interpreter_WhileStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::WhileStatement> stmt){
+    //TODO Interpreter_WhileStatement
+    throw std::runtime_error("unimplemented");
+}
+Interpreter_ReturnStatement::Interpreter_ReturnStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ReturnStatement> stmt){
+    //TODO Interpreter_ReturnStatement
+    throw std::runtime_error("unimplemented");
+}
+
+Interpreter_Code::Interpreter_Code(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::CodeBlock> cb):default_frame(std::make_shared<Interpreter_Frame>()){
     for(auto l:cb->lines){
         readLine(l);
     }
 }
 
-Interpreter_Code::Interpreter_Code(std::shared_ptr<Parser::Line> l):default_frame(std::make_shared<Interpreter_Frame>()){
+Interpreter_Code::Interpreter_Code(std::shared_ptr<Interpreter_Frame> p,std::shared_ptr<Parser::Line> l):default_frame(std::make_shared<Interpreter_Frame>(p)){
     readLine(l);
 }
 
 void Interpreter_Code::readLine(std::shared_ptr<Parser::Line> l){
-    //TODO
+    switch(l->type){
+    case Parser::LINE_CODE_BLOCK:
+        code.push_back(std::make_shared<Interpreter_Block>(default_frame,std::static_pointer_cast<Parser::CodeBlock>(l->contents)));
+        break;
+    case Parser::LINE_STATEMENT:{
+            std::shared_ptr<Parser::Statement> stmt(std::static_pointer_cast<Parser::Statement>(l->contents));
+            switch(stmt->type){
+            case Parser::STATEMENT_IF:
+                code.push_back(std::make_shared<Interpreter_IfStatement>(default_frame,std::static_pointer_cast<Parser::IfStatement>(stmt->statement)));
+                break;
+            case Parser::STATEMENT_WHILE:
+                code.push_back(std::make_shared<Interpreter_WhileStatement>(default_frame,std::static_pointer_cast<Parser::WhileStatement>(stmt->statement)));
+                break;
+            case Parser::STATEMENT_FOR:
+                code.push_back(std::make_shared<Interpreter_ForStatement>(default_frame,std::static_pointer_cast<Parser::ForStatement>(stmt->statement)));
+                break;
+            case Parser::STATEMENT_RETURN:
+                code.push_back(std::make_shared<Interpreter_ReturnStatement>(default_frame,std::static_pointer_cast<Parser::ReturnStatement>(stmt->statement)));
+                break;
+            }
+        }
+        break;
+    case Parser::LINE_EXPRESSION:
+        code.push_back(std::make_shared<Interpreter_Expression>(default_frame,std::static_pointer_cast<Parser::Expression>(l->contents)));
+        break;
+    case Parser::LINE_DEFINITION:{
+            std::shared_ptr<Parser::Definition> def(std::static_pointer_cast<Parser::Definition>(l->contents));
+            switch(def->type){
+            case Parser::DEFINITION_VAR:{//special handling for variable definition lists
+                    std::shared_ptr<Parser::VariableDefinition> vdef(std::static_pointer_cast<Parser::VariableDefinition>(def->def));
+                    std::shared_ptr<Parser::VarType> vt(vdef->type);
+                    for(std::shared_ptr<Parser::VariableDefinitionItem> var:vdef->variables){
+                        if(var->value){
+                            if(var->value->type==Parser::EXPRESSION_TERM){
+                                switch(std::static_pointer_cast<Parser::ExpressionTerm>(var->value->contents)->type){
+                                case Parser::EXPRESSION_TERM_LITERAL_INT:
+                                case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
+                                case Parser::EXPRESSION_TERM_LITERAL_STRING:
+                                    continue;//don't add assignment if is literal, already handled by frame defaults
+                                default:
+                                    break;
+                                }
+                            }
+                            code.push_back(std::make_shared<Interpreter_Expression>(default_frame,std::make_shared<Parser::Expression>(
+                                    std::make_shared<Parser::BinaryOperation>(
+                                        std::make_shared<Parser::ExpressionTerm>(std::make_shared<Lexer::WordToken>(0,var->name),Parser::EXPRESSION_TERM_IDENTIFIER),
+                                        std::make_shared<Lexer::SymbolToken>(0,get_symbol_data(SYMBOL_ASSIGNMENT)),
+                                        var->value),Parser::EXPRESSION_BINARY_OPERATION)));//always add assignment unless literal
+                        }
+                    }
+                                }
+            default:
+                default_frame->add_definition(def);//always add definition to frame
+                break;
+            }
+        }
+        break;
+    case Parser::LINE_EMPTY://do nothing
+        break;
+    }
 }
 
 std::string Interpreter_Variable::get_name(){
@@ -113,29 +199,33 @@ std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> Interpreted_Fu
     return function->parameters;
 }
 
-std::shared_ptr<Interpreter_Variable> Interpreted_Function_Call::call(Interpreter_Frame * parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Variable>> args){
-    //TODO
-    return nullptr;
+std::shared_ptr<Interpreter_Variable> Interpreted_Function_Call::call(std::shared_ptr<Interpreter_Frame> parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Variable>> args){
+    //TODO Interpreted_Function_Call
+    throw std::runtime_error("unimplemented");
 }
 
 Interpreter_Frame::Interpreter_Frame(){}
 
-Interpreter_Frame::Interpreter_Frame(Interpreter_Frame * other_parent,std::shared_ptr<Interpreter_Frame> other):parent(other_parent?:other->parent){
-    //TODO
+Interpreter_Frame::Interpreter_Frame(std::shared_ptr<Interpreter_Frame> p):parent(p){
+}
+
+Interpreter_Frame::Interpreter_Frame(std::shared_ptr<Interpreter_Frame> other_parent,std::shared_ptr<Interpreter_Frame> other):parent(other_parent?:other->parent){
+    //TODO Interpreter_Frame copy
+    throw std::runtime_error("unimplemented");
 }
 
 Interpreter_Frame::Interpreter_Frame(std::vector<std::shared_ptr<Parser::Definition>> deflist){
     for(std::shared_ptr<Parser::Definition>def:deflist){
-        add_definition(def);
+        add_definition(def,true);
     }
 }
 
-void Interpreter_Frame::add_definition(std::shared_ptr<Parser::Definition> def){
+void Interpreter_Frame::add_definition(std::shared_ptr<Parser::Definition> def,bool global){
     switch(def->type){
     case Parser::DEFINITION_VAR:{
             std::shared_ptr<Parser::VariableDefinition> vars(std::static_pointer_cast<Parser::VariableDefinition>(def->def));
             for(std::shared_ptr<Parser::VariableDefinitionItem> var:vars->variables){
-                add_variable(vars->type,var);
+                add_variable(vars->type,var,global);
             }
         }
         break;
@@ -276,7 +366,7 @@ void Interpreter_Test::run(std::shared_ptr<Interpreter_Frame> frame,std::string 
     std::shared_ptr<Function_Call> entrypoint(frame->get_function(entrypoint_name));
     if(entrypoint){
         if(entrypoint->get_parameters().empty()){
-            entrypoint->call(frame.get(),std::map<std::string,std::shared_ptr<Interpreter_Variable>>());
+            entrypoint->call(frame,std::map<std::string,std::shared_ptr<Interpreter_Variable>>());
         }else{
             throw std::runtime_error(entrypoint_name+" cannot have parameters");
         }

@@ -22,8 +22,8 @@ namespace Interpreter {
 
     class Interpreter_Code {
         public:
-            Interpreter_Code(std::shared_ptr<Parser::CodeBlock>);
-            Interpreter_Code(std::shared_ptr<Parser::Line>);
+            Interpreter_Code(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::CodeBlock>);
+            Interpreter_Code(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::Line>);
             std::shared_ptr<Interpreter_Frame> default_frame;
             std::vector<std::shared_ptr<Interpreter_Line>> code;
         private:
@@ -32,35 +32,43 @@ namespace Interpreter {
 
     class Interpreter_Expression : public Interpreter_Line {
         public:
+            Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression>);
             std::shared_ptr<Parser::Expression> expr;
     };
 
     class Interpreter_Block : public Interpreter_Line {
         public:
+            Interpreter_Block(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::CodeBlock>);
             std::shared_ptr<Interpreter_Code> code;
     };
 
     class Interpreter_IfStatement : public Interpreter_Line {
         public:
-            std::shared_ptr<Parser::IfStatement> stmt;
+            Interpreter_IfStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::IfStatement>);
+            std::shared_ptr<Parser::Expression> condition;
             std::shared_ptr<Interpreter_Code> code;
     };
 
     class Interpreter_ForStatement : public Interpreter_Line {
         public:
-            std::shared_ptr<Parser::ForStatement> stmt;
+            Interpreter_ForStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ForStatement>);
+            std::shared_ptr<Parser::Expression> pre;
+            std::shared_ptr<Parser::Expression> condition;
+            std::shared_ptr<Parser::Expression> inc;
             std::shared_ptr<Interpreter_Code> code;
     };
 
     class Interpreter_WhileStatement : public Interpreter_Line {
         public:
-            std::shared_ptr<Parser::WhileStatement> stmt;
+            Interpreter_WhileStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::WhileStatement>);
+            std::shared_ptr<Parser::Expression> condition;
             std::shared_ptr<Interpreter_Code> code;
     };
 
     class Interpreter_ReturnStatement : public Interpreter_Line {
         public:
-            std::shared_ptr<Parser::ReturnStatement> stmt;
+            Interpreter_ReturnStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ReturnStatement>);
+            std::shared_ptr<Parser::Expression> value;
     };
 
     class Interpreter_Variable{
@@ -103,7 +111,7 @@ namespace Interpreter {
             virtual std::string get_name()=0;
             virtual std::shared_ptr<Parser::VarType> get_type()=0;
             virtual std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters()=0;
-            virtual std::shared_ptr<Interpreter_Variable> call(Interpreter_Frame * parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Variable>> args)=0;
+            virtual std::shared_ptr<Interpreter_Variable> call(std::shared_ptr<Interpreter_Frame> parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Variable>> args)=0;
     };
 
     class Interpreted_Function_Call;
@@ -118,8 +126,9 @@ namespace Interpreter {
             Interpreter_Frame(std::vector<std::shared_ptr<Parser::Definition>>);//make global scope
             //Interpreter_Frame(Interpreter_Frame * parent,std::shared_ptr<Parser::Line>);
             //Interpreter_Frame(Interpreter_Frame * parent,std::shared_ptr<Parser::CodeBlock>);
-            Interpreter_Frame(Interpreter_Frame * parent,std::shared_ptr<Interpreter_Frame>);//copy
-            Interpreter_Frame * parent;
+            Interpreter_Frame(std::shared_ptr<Interpreter_Frame> parent);
+            Interpreter_Frame(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Interpreter_Frame>);//copy
+            std::shared_ptr<Interpreter_Frame> parent;
             std::map<std::string,std::shared_ptr<Interpreted_Function_Call>> interpreted_functions;
             std::map<std::string,std::shared_ptr<Native_Function_Call>> native_functions;
             std::map<std::string,std::shared_ptr<Interpreter_Variable>> variable_defaults;
@@ -132,7 +141,7 @@ namespace Interpreter {
             void register_native_function(std::shared_ptr<Native_Function_Call> func);
             void add_variable(std::shared_ptr<Parser::VarType> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global=false);
             void add_function(std::shared_ptr<Parser::FunctionDefinition>);
-            void add_definition(std::shared_ptr<Parser::Definition>);
+            void add_definition(std::shared_ptr<Parser::Definition>,bool global=false);
     };
 
     class Interpreted_Function_Call : public Function_Call {
@@ -141,7 +150,7 @@ namespace Interpreter {
             std::string get_name() override;
             std::shared_ptr<Parser::VarType> get_type() override;
             std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override;
-            std::shared_ptr<Interpreter_Variable> call(Interpreter_Frame *,std::map<std::string,std::shared_ptr<Interpreter_Variable>> args) override;
+            std::shared_ptr<Interpreter_Variable> call(std::shared_ptr<Interpreter_Frame>,std::map<std::string,std::shared_ptr<Interpreter_Variable>> args) override;
         private:
             std::shared_ptr<Parser::FunctionDefinition> function;
     };
