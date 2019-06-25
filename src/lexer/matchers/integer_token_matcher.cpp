@@ -13,6 +13,7 @@ bool Lexer::IntegerTokenMatcher::fullMatch(std::string s){
         if(first?!((c>='0'&&c<='9')||c=='-'):!(c>='0'&&c<='9'))return false;
         first=false;
     }
+    if(s[0]=='-'&&s.size()==1)return false;
     return true;
 }
 

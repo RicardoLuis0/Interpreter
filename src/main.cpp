@@ -288,8 +288,10 @@ void print_var_type(int indent,std::shared_ptr<Parser::VarType> type){
     switch(type->type){
         case Parser::VARTYPE_PRIMITIVE:
             print_primitive(indent+1,type->primitive);
+            break;
         case Parser::VARTYPE_MIXED:
             std::cout<<get_indent(indent+1)<<"mixed\n";
+            break;
         default:
             //no more types, in the future TODO
             break;
@@ -301,7 +303,7 @@ void print_function_definition_parameter(int indent,std::shared_ptr<Parser::Func
     std::cout<<get_indent(indent)<<".type:\n";
     print_var_type(indent+1,param->type);
     std::cout<<get_indent(indent)<<".name:\n";
-    std::cout<<get_indent(indent+1)<<param->name;
+    std::cout<<get_indent(indent+1)<<param->name<<"\n";
 }
 
 void print_function_definition(int indent,std::shared_ptr<Parser::FunctionDefinition> func){
@@ -309,7 +311,7 @@ void print_function_definition(int indent,std::shared_ptr<Parser::FunctionDefini
     std::cout<<get_indent(indent)<<".return type:\n";
     print_var_type(indent+1,func->return_type);
     std::cout<<get_indent(indent)<<".name:\n";
-    std::cout<<get_indent(indent+1)<<func->name;
+    std::cout<<get_indent(indent+1)<<func->name<<"\n";
     size_t count=0;
     for(std::shared_ptr<Parser::FunctionDefinitionParameter> param:func->parameters){
         std::cout<<get_indent(indent)<<".parameter["<<count<<"]:\n";
@@ -323,7 +325,7 @@ void print_function_definition(int indent,std::shared_ptr<Parser::FunctionDefini
 void print_variable_definition_item(int indent,std::shared_ptr<Parser::VariableDefinitionItem> item){
     std::cout<<get_indent(indent)<<">Variable\n";
     std::cout<<get_indent(indent)<<".name:\n";
-    std::cout<<get_indent(indent+1)<<item->name;
+    std::cout<<get_indent(indent+1)<<item->name<<"\n";
     if(item->value){
         std::cout<<get_indent(indent)<<".value:\n";
         print_expression(indent+1,item->value);

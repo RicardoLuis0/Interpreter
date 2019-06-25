@@ -7,9 +7,9 @@
 
 
 Lexer::GlobalTokenMatcher::GlobalTokenMatcher(std::vector<symbol_data> &symbols,std::vector<keyword_data> &keywords){
+    list.push_back(std::make_unique<SymbolsTokenMatcher>(symbols));
     list.push_back(std::make_unique<LiteralsTokenMatcher>());
     list.push_back(std::make_unique<KeywordsTokenMatcher>(keywords));
     list.push_back(std::make_unique<WordTokenMatcher>());
-    list.push_back(std::make_unique<SymbolsTokenMatcher>(symbols));
     list.push_back(std::make_unique<CommentTokenMatcher>());
 }
