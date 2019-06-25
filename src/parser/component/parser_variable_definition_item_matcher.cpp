@@ -5,7 +5,7 @@
 #include "parser_expression_matcher.h"
 #include "my_except.h"
 
-//VariableDefinitionItem = identifier [ symbol '=' , Expression ] ;
+//VariableDefinitionItem = identifier , [ symbol '=' , Expression ] ;
 
 std::shared_ptr<Parser::VariableDefinitionItem> Parser::VariableDefinitionItemMatcher::makeMatch(parserProgress &p){
     std::shared_ptr<Lexer::Token> t;
