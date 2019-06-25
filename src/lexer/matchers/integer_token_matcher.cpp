@@ -8,31 +8,24 @@ bool Lexer::IntegerTokenMatcher::partialMatch(std::string s){
 }
 
 bool Lexer::IntegerTokenMatcher::fullMatch(std::string s){
-    bool first;
     for(char c:s){
-        if(first?!((c>='0'&&c<='9')||c=='-'):!(c>='0'&&c<='9'))return false;
-        first=false;
+        if(c<'0'||c>'9')return false;
     }
-    if(s[0]=='-'&&s.size()==1)return false;
     return true;
 }
 
 std::shared_ptr<Lexer::Token> Lexer::IntegerTokenMatcher::makeMatch(int line,std::string s){
     if(fullMatch(s)){
         int d=0;
-        bool first=true,negative=false;
+        bool first=true;
         for(char c:s){
             if(first){
                 first=false;
-                if(c=='-'){
-                    negative=true;
-                    continue;
-                }
             }
             d*=10;
             d+=c-'0';
         }
-        return std::make_unique<IntegerToken>(line,negative?-d:d);
+        return std::make_unique<IntegerToken>(line,d);
     }
     throw MyExcept::NoMatchException(line,s);
 }

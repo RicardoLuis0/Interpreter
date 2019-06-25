@@ -23,12 +23,12 @@ namespace Lexer{
              * @param line {@link Token#line}
              * @param value content of the Token
              */
-            IntegerToken(int line,int value);
+            IntegerToken(int line,uint32_t value);
             const std::string get_formatted() const override;
             const std::string get_literal() const override;
-            const int get_integer() const; /**< @brief get value from Token */
+            const uint32_t get_integer() const; /**< @brief get value from Token */
         private:
-            const int d; /**< @brief value */
+            const uint32_t d; /**< @brief value */
     };
 
 }
