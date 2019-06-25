@@ -3,7 +3,7 @@
 #include "parser_expression_term_matcher.h"
 #include "my_except.h"
 
-//PreUnaryOperation = pre_unary_operator , ExpressionTerm;
+//UnaryOperation = symbol 'any_unary_operator' , ExpressionTerm;
 
 static std::vector<int> pre_unary_operators{//these might also be binary operators
     SYMBOL_PLUS,

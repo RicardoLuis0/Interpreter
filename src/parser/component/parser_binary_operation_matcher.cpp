@@ -5,7 +5,7 @@
 #include "symbols_keywords.h"
 #include "my_except.h"
 
-//BinaryOperation = ExpressionTerm , binary_operator , Expression ;
+//BinaryOperation = ExpressionTerm , operator 'any_binary_operator' , Expression ;
 
 static std::vector<int> binary_operators{
     SYMBOL_ASSIGNMENT,
