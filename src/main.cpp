@@ -46,7 +46,7 @@ int main(){
     Console::init();
     while(true){
         Console::clear();
-        std::cout<<"0> test lexer\n1> test expression parser\n2> test line parser\n3> test code\n\nChoice: ";
+        std::cout<<"0> test lexer\n1> test expression parser\n2> test line parser\n3> test whole code parsing\n\nChoice: ";
         std::string input;
         std::cin>>input;
         if(input.compare("0")==0){
