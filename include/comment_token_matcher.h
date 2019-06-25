@@ -12,6 +12,8 @@ namespace Lexer{
     /**
      * @class CommentTokenMatcher comment_token_matcher.h "comment_token_matcher.h"
      * @brief Matches and Removes Comments (single and multi line)
+     * 
+     * regex /(\/\/.*$)|(/\/\*(\n|.)*\*\//)/
      */
 
     class CommentTokenMatcher : public TokenMatcher {

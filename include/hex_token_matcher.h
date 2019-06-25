@@ -13,7 +13,7 @@ namespace Lexer{
      * @class HexTokenMatcher hex_token_matcher.h "hex_token_matcher.h"
      * @brief Matches Hexadecimal Integers
      * 
-     * regex equivalent /-?0x[0-9A-Fa-f]+/
+     * regex /0x[0-9A-Fa-f]* /
      */
 
     class HexTokenMatcher : public IntegerTokenMatcher {

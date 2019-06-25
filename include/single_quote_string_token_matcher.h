@@ -12,6 +12,8 @@ namespace Lexer{
     /**
      * @class SingleQuoteStringTokenMatcher single_quote_string_token_matcher.h "single_quote_string_token_matcher.h"
      * @brief Matches Single Quote Strings (supports escape codes)
+     * 
+     * regex /\'.*(?<!\\)\'/
      */
 
     class SingleQuoteStringTokenMatcher : public StringTokenMatcher {

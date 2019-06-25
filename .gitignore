@@ -5,3 +5,4 @@ doxygen/
 *.depend
 *.layout
 *.bak
+.vscode/

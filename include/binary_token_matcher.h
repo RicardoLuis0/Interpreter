@@ -13,7 +13,7 @@ namespace Lexer {
      * @class BinaryTokenMatcher binary_token_matcher.h "binary_token_matcher.h"
      * @brief Matches Binary Integers
      * 
-     * regex equivalent /-?0b[01]+/
+     * regex / 0b[01]* /
      */
 
     class BinaryTokenMatcher : public IntegerTokenMatcher {

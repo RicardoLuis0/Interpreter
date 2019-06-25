@@ -13,7 +13,7 @@ namespace Lexer{
      * @class OctalTokenMatcher octal_token_matcher.h "octal_token_matcher.h"
      * @brief Matches Octal Integers
      * 
-     * regex equivalent /-?0[0-7]* /
+     * regex equivalent /0o[0-7]* /
      */
 
     class OctalTokenMatcher : public IntegerTokenMatcher {

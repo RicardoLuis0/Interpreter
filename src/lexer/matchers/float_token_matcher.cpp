@@ -49,6 +49,7 @@ bool Lexer::FloatTokenMatcher::partialMatch(std::string s){
 }
 
 bool Lexer::FloatTokenMatcher::fullMatch(std::string s){
+    if(s==".")return false;
     bool first=true;
     bool decimal=false;
     bool firstzero=false;

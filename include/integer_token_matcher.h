@@ -13,7 +13,7 @@ namespace Lexer{
      * @class IntegerTokenMatcher integer_token_matcher.h "integer_token_matcher.h"
      * @brief Matches Decimal Integers
      * 
-     * regex equivalent /-?[0-9]+/
+     * regex equivalent /[0-9]+/
      */
 
     class IntegerTokenMatcher : public TokenMatcher {

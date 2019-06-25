@@ -12,6 +12,7 @@ namespace Lexer {
     /**
      * @class FloatTokenMatcher float_token_matcher.h "float_token_matcher.h"
      * @brief Matches Floating Point Numbers ( Dobule precision )
+     * regex /([0-9]+f)|([0-9]*\.[0-9]+)/
      */
 
     class FloatTokenMatcher : public TokenMatcher {
