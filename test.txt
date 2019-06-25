@@ -1,20 +1,37 @@
-int gt(int a,int b){
-	if(a>b){
-		return a;
-	}else{
-		return b;
+int fibonacci (int n) {
+	if (n<=0) {
+		return 0;
+	} else if (n==1) {
+		return 1;
+	} else {
+		return (fibonacci(n-1)+fibonacci(n-2));
 	}
 }
 
-int main(){
-	print("first number:");
-	int a=read_int();
-	print("second number:");
-	int b=read_int();
-	if(a==b){
-		print("a and b are both "+a);
-	}else{
-		int c=gt(a,b);
-		print("the greater number is "+c+"\n");
+int factorial (int n) {
+	if (n<=0) {
+		return 0;
+	} else {
+		return n * factorial (n-1);
+	}
+}
+
+int main () {
+	while (1) {
+		print("0: Fibonacci\n1: Fatorial\n>");
+		int s=read_int();
+		if (s==0) {
+			print("\n\Fibonacci de: ");
+			int n=read_int();
+			print("\nResultado: "+fibonacci(n));
+			return 0;
+		} else if (s==1) {
+			print("\n\Fatorial de: ");
+			int n=read_int();
+			print("\nResultado: "+factorial(n));			
+			return 0;
+		} else {
+			cls();
+		}
 	}
 }
