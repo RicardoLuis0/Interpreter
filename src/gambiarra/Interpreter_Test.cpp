@@ -6,7 +6,7 @@
 
 #define MAP_SET(map,key,val,other) MAP_FIND(map,key){iter->second=val;}else{other;}
 
-#define IS(ptr,type) (typeid(*ptr)==typeid(type))
+#define IS(ptr,type) (typeid(*(ptr))==typeid(type))
 
 #include <iostream>
 
@@ -20,6 +20,27 @@
 #include "parser_statement.h"
 
 using namespace Interpreter;
+
+static bool is_int(std::shared_ptr<Parser::VarType> vt){
+    if(vt->type==Parser::VARTYPE_PRIMITIVE){
+        return (vt->primitive==Parser::PRIMITIVE_INT);
+    }
+    return false;
+}
+
+static bool is_float(std::shared_ptr<Parser::VarType> vt){
+    if(vt->type==Parser::VARTYPE_PRIMITIVE){
+        return (vt->primitive==Parser::PRIMITIVE_FLOAT);
+    }
+    return false;
+}
+
+static bool is_double(std::shared_ptr<Parser::VarType> vt){
+    if(vt->type==Parser::VARTYPE_PRIMITIVE){
+        return (vt->primitive==Parser::PRIMITIVE_STRING);
+    }
+    return false;
+}
 
 class Print_Function : public Native_Function_Call{
 
@@ -35,23 +56,104 @@ class Print_Function : public Native_Function_Call{
         return {std::make_shared<Parser::FunctionDefinitionParameter>(std::make_shared<Parser::VarType>(Parser::VARTYPE_MIXED),"var")};
     }
 
-    std::shared_ptr<Interpreter_Variable> call(std::shared_ptr<Interpreter_Frame> parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Variable>> args) override {
-        std::shared_ptr<Interpreter_Variable> var=args["var"];
-        if(IS(var,Int_Variable)){
-            std::cout<<std::to_string(*std::static_pointer_cast<Int_Variable>(var));
-        }else if(IS(var,Float_Variable)){
-            std::cout<<std::to_string(*std::static_pointer_cast<Float_Variable>(var));
-        }else if(IS(var,String_Variable)){
-            std::cout<<std::string(*std::static_pointer_cast<String_Variable>(var));
+    std::shared_ptr<Interpreter_Value> call(std::shared_ptr<Interpreter_ExecFrame> parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Value>> args) override {
+        std::shared_ptr<Interpreter_Value> var=args[0];
+        if(IS(var,Int_Value)){
+            std::cout<<std::to_string(*std::dynamic_pointer_cast<Int_Value>(var));
+        }else if(IS(var,Float_Value)){
+            std::cout<<std::to_string(*std::dynamic_pointer_cast<Float_Value>(var));
+        }else if(IS(var,String_Value)){
+            std::cout<<std::string(*std::dynamic_pointer_cast<String_Value>(var));
         }
         return nullptr;
     }
 };
 
+
+Interpreter_ExecFrame::Interpreter_ExecFrame(std::shared_ptr<Interpreter_ExecFrame> p,std::shared_ptr<Interpreter_Frame> d):parent(p),defaults(d){
+    for(auto vpair:defaults->variable_defaults){
+        if(IS(vpair.second,Int_Variable)){
+            std::shared_ptr<Int_Variable> var(std::dynamic_pointer_cast<Int_Variable>(vpair.second));
+            variables.insert({var->get_name(),std::make_shared<Int_Variable>(var->get())});
+        }else if(IS(vpair.second,Float_Variable)){
+            std::shared_ptr<Float_Variable> var(std::dynamic_pointer_cast<Float_Variable>(vpair.second));
+            variables.insert({var->get_name(),std::make_shared<Float_Variable>(var->get())});
+        }else if(IS(vpair.second,String_Variable)){
+            std::shared_ptr<String_Variable> var(std::dynamic_pointer_cast<String_Variable>(vpair.second));
+            variables.insert({var->get_name(),std::make_shared<String_Variable>(var->get())});
+        }else{
+            throw std::runtime_error("unknown variable type in defaults");
+        }
+    }
+}
+
+std::shared_ptr<Interpreter_Variable> Interpreter_ExecFrame::get_variable(std::string name){
+    MAP_GET(variables,name,parent?parent->get_variable(name):nullptr)
+}
+
+std::shared_ptr<Function_Call> Interpreter_ExecFrame::get_function(std::string name){
+    return defaults->get_function(name);
+}
+
 Interpreter_Block::Interpreter_Block(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::CodeBlock> b):code(std::make_shared<Interpreter_Code>(context,b)){}
 
+Interpreter_ExpressionPart_Expression::Interpreter_ExpressionPart_Expression(std::shared_ptr<Interpreter_Frame> c,std::shared_ptr<Parser::Expression> e):Interpreter_Expression(c,e){
+}
+
+Interpreter_ExpressionPart_Operator::Interpreter_ExpressionPart_Operator(int i):op(i){
+}
+
+//0=special operator (scope resolution, member access, etc) currently unused
+
+std::map<int,int> operator_precedence{
+    {SYMBOL_ASSIGNMENT,11},
+    {SYMBOL_EQUALS,5},
+    {SYMBOL_NOT_EQUALS,5},
+    {SYMBOL_GREATER,4},
+    {SYMBOL_GREATER_EQUALS,4},
+    {SYMBOL_LOWER,4},
+    {SYMBOL_LOWER_EQUALS,4},
+    {SYMBOL_PLUS,2},
+    {SYMBOL_PLUS_ASSIGNMENT,11},
+    {SYMBOL_MINUS,2},
+    {SYMBOL_MINUS_ASSIGNMENT,11},
+    {SYMBOL_MULTIPLY,1},
+    {SYMBOL_MULTIPLY_ASSIGNMENT,11},
+    {SYMBOL_DIVIDE,1},
+    {SYMBOL_DIVIDE_ASSIGNMENT,11},
+    {SYMBOL_LOGICAL_AND,9},
+    {SYMBOL_LOGICAL_OR,10},
+    {SYMBOL_BITWISE_AND,6},
+    {SYMBOL_BITWISE_AND_ASSIGNMENT,11},
+    {SYMBOL_BITWISE_OR,8},
+    {SYMBOL_BITWISE_OR_ASSIGNMENT,11},
+    {SYMBOL_BITWISE_XOR,7},
+    {SYMBOL_BITWISE_XOR_ASSIGNMENT,11},
+    {SYMBOL_LEFT_SHIFT,3},
+    {SYMBOL_LEFT_SHIFT_ASSIGNMENT,11},
+    {SYMBOL_RIGHT_SHIFT,3},
+    {SYMBOL_RIGHT_SHIFT_ASSIGNMENT,11},
+    {SYMBOL_PERCENT,1},
+    {SYMBOL_PERCENT_ASSIGNMENT,11},
+};
+
 Interpreter_Expression::Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression> e){
+    throw std::runtime_error("unimplemented");
     //TODO Interpreter_Expression
+    //parse operator precedence using shunting yard, check for undefined functions/variables
+    std::stack<int> operator_stack;
+    
+    check(context);
+}
+
+void Interpreter_Expression::check_op(std::shared_ptr<Interpreter_Frame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){
+    //TODO check operations
+    throw std::runtime_error("unimplemented");
+}
+
+void Interpreter_Expression::check(std::shared_ptr<Interpreter_Frame> context){
+    std::stack<std::shared_ptr<Interpreter_ExpressionPart>> temp_stack=expression;
+    //TODO check variable types and function returns
     throw std::runtime_error("unimplemented");
 }
 
@@ -59,14 +161,17 @@ Interpreter_IfStatement::Interpreter_IfStatement(std::shared_ptr<Interpreter_Fra
     //TODO Interpreter_IfStatement
     throw std::runtime_error("unimplemented");
 }
+
 Interpreter_ForStatement::Interpreter_ForStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ForStatement> stmt){
     //TODO Interpreter_ForStatement
     throw std::runtime_error("unimplemented");
 }
+
 Interpreter_WhileStatement::Interpreter_WhileStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::WhileStatement> stmt){
     //TODO Interpreter_WhileStatement
     throw std::runtime_error("unimplemented");
 }
+
 Interpreter_ReturnStatement::Interpreter_ReturnStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ReturnStatement> stmt){
     //TODO Interpreter_ReturnStatement
     throw std::runtime_error("unimplemented");
@@ -133,7 +238,7 @@ void Interpreter_Code::readLine(std::shared_ptr<Parser::Line> l){
                                         var->value),Parser::EXPRESSION_BINARY_OPERATION)));//always add assignment unless literal
                         }
                     }
-                                }
+                }
             default:
                 default_frame->add_definition(def);//always add definition to frame
                 break;
@@ -149,41 +254,50 @@ std::string Interpreter_Variable::get_name(){
     return name;
 }
 
-Int_Variable::operator int&(){
+Int_Value::Int_Value(int i):value(i){}
+Int_Value::operator int&(){
     return value;
 }
 
-int& Int_Variable::get(){
+int& Int_Value::get(){
     return value;
 }
 
-std::shared_ptr<Parser::VarType> Int_Variable::get_type(){
+std::shared_ptr<Parser::VarType> Int_Value::get_type(){
     return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT);
 }
 
-Float_Variable::operator double&(){
+Float_Value::Float_Value(double d):value(d){}
+
+Float_Value::operator double&(){
     return value;
 }
 
-double& Float_Variable::get(){
+double& Float_Value::get(){
     return value;
 }
 
-std::shared_ptr<Parser::VarType> Float_Variable::get_type(){
+std::shared_ptr<Parser::VarType> Float_Value::get_type(){
     return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_FLOAT);
 }
 
-String_Variable::operator std::string&(){
+String_Value::String_Value(std::string s):value(s){}
+
+String_Value::operator std::string&(){
     return value;
 }
 
-std::string& String_Variable::get(){
+std::string& String_Value::get(){
     return value;
 }
 
-std::shared_ptr<Parser::VarType> String_Variable::get_type(){
+std::shared_ptr<Parser::VarType> String_Value::get_type(){
     return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING);
 }
+
+Int_Variable::Int_Variable(int i):Int_Value(i){}
+Float_Variable::Float_Variable(double d):Float_Value(d){}
+String_Variable::String_Variable(std::string s):String_Value(s){}
 
 Interpreted_Function_Call::Interpreted_Function_Call(std::shared_ptr<Parser::FunctionDefinition> func):function(func){}
 
@@ -199,7 +313,7 @@ std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> Interpreted_Fu
     return function->parameters;
 }
 
-std::shared_ptr<Interpreter_Variable> Interpreted_Function_Call::call(std::shared_ptr<Interpreter_Frame> parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Variable>> args){
+std::shared_ptr<Interpreter_Value> Interpreted_Function_Call::call(std::shared_ptr<Interpreter_ExecFrame> parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Value>> args){
     //TODO Interpreted_Function_Call
     throw std::runtime_error("unimplemented");
 }
@@ -207,11 +321,6 @@ std::shared_ptr<Interpreter_Variable> Interpreted_Function_Call::call(std::share
 Interpreter_Frame::Interpreter_Frame(){}
 
 Interpreter_Frame::Interpreter_Frame(std::shared_ptr<Interpreter_Frame> p):parent(p){
-}
-
-Interpreter_Frame::Interpreter_Frame(std::shared_ptr<Interpreter_Frame> other_parent,std::shared_ptr<Interpreter_Frame> other):parent(other_parent?:other->parent){
-    //TODO Interpreter_Frame copy
-    throw std::runtime_error("unimplemented");
 }
 
 Interpreter_Frame::Interpreter_Frame(std::vector<std::shared_ptr<Parser::Definition>> deflist){
@@ -243,19 +352,6 @@ void Interpreter_Frame::add_variable(std::shared_ptr<Parser::VarType> type,std::
     if(type->type!=Parser::VARTYPE_PRIMITIVE){
         throw std::runtime_error("variables must be a primitive type");
     }
-    switch(type->primitive){
-    case Parser::PRIMITIVE_INT:
-        variables.insert({var->name,std::make_shared<Int_Variable>()});
-        break;
-    case Parser::PRIMITIVE_FLOAT:
-        variables.insert({var->name,std::make_shared<Float_Variable>()});
-        break;
-    case Parser::PRIMITIVE_STRING:
-        variables.insert({var->name,std::make_shared<String_Variable>()});
-        break;
-    case Parser::PRIMITIVE_INVALID:
-        throw std::runtime_error("invalid primitive type");
-    }
     if(var->value){
         if(var->value->type==Parser::EXPRESSION_TERM){
             std::shared_ptr<Parser::ExpressionTerm> term(std::static_pointer_cast<Parser::ExpressionTerm>(var->value->contents));
@@ -263,12 +359,10 @@ void Interpreter_Frame::add_variable(std::shared_ptr<Parser::VarType> type,std::
             case Parser::EXPRESSION_TERM_LITERAL_INT:
                 switch(type->primitive){
                 case Parser::PRIMITIVE_INT:
-                    std::static_pointer_cast<Int_Variable>(variables[var->name])->get()=std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer();
-                    variable_defaults.insert({var->name,std::make_shared<Int_Variable>(*std::static_pointer_cast<Int_Variable>(variables[var->name]))});
+                    variable_defaults.insert({var->name,std::make_shared<Int_Variable>(std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer())});
                     break;
                 case Parser::PRIMITIVE_FLOAT:
-                    std::static_pointer_cast<Float_Variable>(variables[var->name])->get()=std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer();
-                    variable_defaults.insert({var->name,std::make_shared<Float_Variable>(*std::static_pointer_cast<Float_Variable>(variables[var->name]))});
+                    variable_defaults.insert({var->name,std::make_shared<Float_Variable>(std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer())});
                     break;
                 case Parser::PRIMITIVE_STRING:
                     throw std::runtime_error("cannot assign string to number");
@@ -280,12 +374,10 @@ void Interpreter_Frame::add_variable(std::shared_ptr<Parser::VarType> type,std::
             case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
                 switch(type->primitive){
                 case Parser::PRIMITIVE_INT:
-                    std::static_pointer_cast<Int_Variable>(variables[var->name])->get()=std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float();
-                    variable_defaults.insert({var->name,std::make_shared<Int_Variable>(*std::static_pointer_cast<Int_Variable>(variables[var->name]))});
+                    variable_defaults.insert({var->name,std::make_shared<Int_Variable>(std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float())});
                     break;
                 case Parser::PRIMITIVE_FLOAT:
-                    std::static_pointer_cast<Float_Variable>(variables[var->name])->get()=std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float();
-                    variable_defaults.insert({var->name,std::make_shared<Float_Variable>(*std::static_pointer_cast<Float_Variable>(variables[var->name]))});
+                    variable_defaults.insert({var->name,std::make_shared<Float_Variable>(std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float())});
                     break;
                 case Parser::PRIMITIVE_STRING:
                     throw std::runtime_error("cannot assign string to number");
@@ -301,8 +393,7 @@ void Interpreter_Frame::add_variable(std::shared_ptr<Parser::VarType> type,std::
                     throw std::runtime_error("cannot assign number to string");
                     break;
                 case Parser::PRIMITIVE_STRING:
-                    std::static_pointer_cast<String_Variable>(variables[var->name])->get()=std::static_pointer_cast<Lexer::StringToken>(term->contents_t)->get_string();
-                    variable_defaults.insert({var->name,std::make_shared<String_Variable>(*std::static_pointer_cast<String_Variable>(variables[var->name]))});
+                    variable_defaults.insert({var->name,std::make_shared<String_Variable>(std::static_pointer_cast<Lexer::StringToken>(term->contents_t)->get_string())});
                     break;
                 case Parser::PRIMITIVE_INVALID:
                     throw std::runtime_error("invalid primitive type");
@@ -315,13 +406,13 @@ void Interpreter_Frame::add_variable(std::shared_ptr<Parser::VarType> type,std::
     }else{
         switch(type->primitive){
         case Parser::PRIMITIVE_INT:
-            variable_defaults.insert({var->name,std::make_shared<Int_Variable>(*std::static_pointer_cast<Int_Variable>(variables[var->name]))});
+            variable_defaults.insert({var->name,std::make_shared<Int_Variable>(0)});
             break;
         case Parser::PRIMITIVE_FLOAT:
-            variable_defaults.insert({var->name,std::make_shared<Float_Variable>(*std::static_pointer_cast<Float_Variable>(variables[var->name]))});
+            variable_defaults.insert({var->name,std::make_shared<Float_Variable>(0)});
             break;
         case Parser::PRIMITIVE_STRING:
-            variable_defaults.insert({var->name,std::make_shared<String_Variable>(*std::static_pointer_cast<String_Variable>(variables[var->name]))});
+            variable_defaults.insert({var->name,std::make_shared<String_Variable>("")});
             break;
         case Parser::PRIMITIVE_INVALID:
             throw std::runtime_error("invalid primitive type");
@@ -331,7 +422,7 @@ void Interpreter_Frame::add_variable(std::shared_ptr<Parser::VarType> type,std::
 
 
 std::shared_ptr<Interpreter_Variable> Interpreter_Frame::get_variable(std::string name){
-    MAP_GET(variables,name,parent?parent->get_variable(name):nullptr)
+    MAP_GET(variable_defaults,name,parent?parent->get_variable(name):nullptr)
 }
 
 std::shared_ptr<Function_Call> Interpreter_Frame::get_function(std::string name){
@@ -366,7 +457,7 @@ void Interpreter_Test::run(std::shared_ptr<Interpreter_Frame> frame,std::string 
     std::shared_ptr<Function_Call> entrypoint(frame->get_function(entrypoint_name));
     if(entrypoint){
         if(entrypoint->get_parameters().empty()){
-            entrypoint->call(frame,std::map<std::string,std::shared_ptr<Interpreter_Variable>>());
+            entrypoint->call(std::make_shared<Interpreter_ExecFrame>(nullptr,frame),std::map<std::string,std::shared_ptr<Interpreter_Value>>());
         }else{
             throw std::runtime_error(entrypoint_name+" cannot have parameters");
         }

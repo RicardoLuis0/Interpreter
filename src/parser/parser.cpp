@@ -125,7 +125,7 @@ std::shared_ptr<Lexer::KeywordToken> Parser::parserProgress::isKeyword(std::vect
 }
 
 void Parser::Parser::parse(const std::vector<std::shared_ptr<Lexer::Token>> &data){
-    parserProgress progress {data:data,location:0};
+    //parserProgress progress {data:data,location:0};
     //TODO Parser::parse
     throw std::runtime_error("unimplemented");
 }

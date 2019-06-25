@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include <stack>
 
 #include "parser_definition.h"
 #include "parser_function_definition.h"
@@ -30,10 +31,43 @@ namespace Interpreter {
             void readLine(std::shared_ptr<Parser::Line>);
     };
 
+    class Interpreter_ExpressionPart{
+        //base class
+    };
+
+    class Interpreter_ExpressionPart_Operator : public Interpreter_ExpressionPart{
+        public:
+            Interpreter_ExpressionPart_Operator(int);
+            int op;
+    };
+
+    class Interpreter_Value{
+        public:
+            virtual std::shared_ptr<Parser::VarType> get_type()=0;
+    };
+
+    class Interpreter_Variable : public virtual Interpreter_Value{
+        public:
+            std::string get_name();
+        protected:
+            std::string name;
+    };
+
+    class Interpreter_ExecFrame;
+
     class Interpreter_Expression : public Interpreter_Line {
         public:
             Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression>);
+            std::shared_ptr<Interpreter_Value> execute(std::shared_ptr<Interpreter_ExecFrame> parent_frame);//parent_frame's defauls must be the same as the context the expression was built with
+            void check_op(std::shared_ptr<Interpreter_Frame>,std::stack<std::shared_ptr<Interpreter_ExpressionPart>>&,std::shared_ptr<Interpreter_ExpressionPart_Operator>);
+            void check(std::shared_ptr<Interpreter_Frame>);//check for errors, validity
             std::shared_ptr<Parser::Expression> expr;
+            std::stack<std::shared_ptr<Interpreter_ExpressionPart>> expression;
+            std::shared_ptr<Parser::VarType> final_type;
+    };
+
+    class Interpreter_ExpressionPart_Expression : public Interpreter_ExpressionPart, public Interpreter_Expression {
+        Interpreter_ExpressionPart_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression>);
     };
 
     class Interpreter_Block : public Interpreter_Line {
@@ -71,16 +105,9 @@ namespace Interpreter {
             std::shared_ptr<Parser::Expression> value;
     };
 
-    class Interpreter_Variable{
+    class Int_Value : public virtual Interpreter_Value {
         public:
-            std::string get_name();
-            virtual std::shared_ptr<Parser::VarType> get_type()=0;
-        protected:
-            std::string name;
-    };
-
-    class Int_Variable : public Interpreter_Variable {
-        public:
+            Int_Value(int);
             operator int&();
             int &get();
             std::shared_ptr<Parser::VarType> get_type() override;
@@ -88,8 +115,14 @@ namespace Interpreter {
             int value;
     };
 
-    class Float_Variable : public Interpreter_Variable {
+    class Int_Variable : public virtual Int_Value , public virtual Interpreter_Variable {
         public:
+            Int_Variable(int);
+    };
+
+    class Float_Value : public virtual Interpreter_Value {
+        public:
+            Float_Value(double);
             operator double&();
             double &get();
             std::shared_ptr<Parser::VarType> get_type() override;
@@ -97,8 +130,14 @@ namespace Interpreter {
             double value;
     };
 
-    class String_Variable : public Interpreter_Variable {
+    class Float_Variable : public virtual Float_Value , public virtual Interpreter_Variable {
         public:
+            Float_Variable(double);
+    };
+
+    class String_Value : public virtual Interpreter_Value {
+        public:
+            String_Value(std::string);
             operator std::string&();
             std::string &get();
             std::shared_ptr<Parser::VarType> get_type() override;
@@ -106,12 +145,29 @@ namespace Interpreter {
             std::string value;
     };
 
+    class String_Variable : public virtual String_Value , public virtual Interpreter_Variable {
+        public:
+            String_Variable(std::string);
+    };
+
+    class Function_Call;
+
+    class Interpreter_ExecFrame{
+        public:
+            Interpreter_ExecFrame(std::shared_ptr<Interpreter_ExecFrame> parent,std::shared_ptr<Interpreter_Frame> defaults);
+            std::shared_ptr<Interpreter_ExecFrame> parent;
+            std::shared_ptr<Interpreter_Frame> defaults;
+            std::map<std::string,std::shared_ptr<Interpreter_Variable>> variables;
+            std::shared_ptr<Interpreter_Variable> get_variable(std::string);
+            std::shared_ptr<Function_Call> get_function(std::string);
+    };
+
     class Function_Call {
         public:
             virtual std::string get_name()=0;
             virtual std::shared_ptr<Parser::VarType> get_type()=0;
             virtual std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters()=0;
-            virtual std::shared_ptr<Interpreter_Variable> call(std::shared_ptr<Interpreter_Frame> parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Variable>> args)=0;
+            virtual std::shared_ptr<Interpreter_Value> call(std::shared_ptr<Interpreter_ExecFrame> parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Value>> args)=0;
     };
 
     class Interpreted_Function_Call;
@@ -125,14 +181,13 @@ namespace Interpreter {
             //Interpreter_Frame(std::shared_ptr<Parser::FunctionDefinition>);
             Interpreter_Frame(std::vector<std::shared_ptr<Parser::Definition>>);//make global scope
             //Interpreter_Frame(Interpreter_Frame * parent,std::shared_ptr<Parser::Line>);
-            //Interpreter_Frame(Interpreter_Frame * parent,std::shared_ptr<Parser::CodeBlock>);
+            Interpreter_Frame(Interpreted_Function_Call * call,std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::CodeBlock>);
+            Interpreter_Frame(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::CodeBlock>);
             Interpreter_Frame(std::shared_ptr<Interpreter_Frame> parent);
-            Interpreter_Frame(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Interpreter_Frame>);//copy
             std::shared_ptr<Interpreter_Frame> parent;
             std::map<std::string,std::shared_ptr<Interpreted_Function_Call>> interpreted_functions;
             std::map<std::string,std::shared_ptr<Native_Function_Call>> native_functions;
             std::map<std::string,std::shared_ptr<Interpreter_Variable>> variable_defaults;
-            std::map<std::string,std::shared_ptr<Interpreter_Variable>> variables;
             std::map<std::string,int> int_values;
             std::map<std::string,float> float_values;
             std::map<std::string,std::string> string_values;
@@ -150,7 +205,7 @@ namespace Interpreter {
             std::string get_name() override;
             std::shared_ptr<Parser::VarType> get_type() override;
             std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override;
-            std::shared_ptr<Interpreter_Variable> call(std::shared_ptr<Interpreter_Frame>,std::map<std::string,std::shared_ptr<Interpreter_Variable>> args) override;
+            std::shared_ptr<Interpreter_Value> call(std::shared_ptr<Interpreter_ExecFrame>,std::map<std::string,std::shared_ptr<Interpreter_Value>> args) override;
         private:
             std::shared_ptr<Parser::FunctionDefinition> function;
     };
@@ -167,5 +222,6 @@ namespace Interpreter {
             std::vector<std::shared_ptr<Parser::Definition>> deflist;
         private:
     };
+
 }
 #endif // INTERPRETER_TEST_H
