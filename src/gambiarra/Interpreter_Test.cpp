@@ -1,5 +1,7 @@
 #include "Interpreter_Test.h"
 
+#define MAP_HAS(map,key) (map.find(key)!=map.end())
+
 #define MAP_FIND(map,key)auto iter=map.find(key);if(iter!=map.end())
 
 #define MAP_GET(map,key,other) MAP_FIND(map,key){return iter->second;}else{return other;}
@@ -10,7 +12,6 @@
 
 #include <iostream>
 
-#include "parser_expression_term.h"
 #include "string_token.h"
 #include "integer_token.h"
 #include "float_token.h"
@@ -20,6 +21,13 @@
 #include "parser_statement.h"
 
 using namespace Interpreter;
+
+static bool is_num(std::shared_ptr<Parser::VarType> vt){
+    if(vt->type==Parser::VARTYPE_PRIMITIVE){
+        return (vt->primitive==Parser::PRIMITIVE_INT)||(vt->primitive==Parser::PRIMITIVE_FLOAT);
+    }
+    return false;
+}
 
 static bool is_int(std::shared_ptr<Parser::VarType> vt){
     if(vt->type==Parser::VARTYPE_PRIMITIVE){
@@ -45,7 +53,7 @@ static bool is_double(std::shared_ptr<Parser::VarType> vt){
 class Print_Function : public Native_Function_Call{
 
     std::string get_name() override {
-        return "print";
+    return "print";
     }
 
     std::shared_ptr<Parser::VarType> get_type(){
@@ -68,7 +76,6 @@ class Print_Function : public Native_Function_Call{
         return nullptr;
     }
 };
-
 
 Interpreter_ExecFrame::Interpreter_ExecFrame(std::shared_ptr<Interpreter_ExecFrame> p,std::shared_ptr<Interpreter_Frame> d):parent(p),defaults(d){
     for(auto vpair:defaults->variable_defaults){
@@ -97,10 +104,30 @@ std::shared_ptr<Function_Call> Interpreter_ExecFrame::get_function(std::string n
 
 Interpreter_Block::Interpreter_Block(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::CodeBlock> b):code(std::make_shared<Interpreter_Code>(context,b)){}
 
-Interpreter_ExpressionPart_Expression::Interpreter_ExpressionPart_Expression(std::shared_ptr<Interpreter_Frame> c,std::shared_ptr<Parser::Expression> e):Interpreter_Expression(c,e){
+Interpreter_ExpressionPart_FunctionCall::Interpreter_ExpressionPart_FunctionCall(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::FunctionCall>){
+    //TODO Interpreter_ExpressionPart_FunctionCall
+    throw std::runtime_error("unimplemented");
+}
+
+Interpreter_ExpressionPart_Value::Interpreter_ExpressionPart_Value(int i):value(std::make_shared<Int_Value>(i)){
+}
+
+Interpreter_ExpressionPart_Value::Interpreter_ExpressionPart_Value(double d):value(std::make_shared<Float_Value>(d)){
+}
+
+Interpreter_ExpressionPart_Value::Interpreter_ExpressionPart_Value(std::string s):value(std::make_shared<String_Value>(s)){
 }
 
 Interpreter_ExpressionPart_Operator::Interpreter_ExpressionPart_Operator(int i):op(i){
+}
+
+Interpreter_ExpressionPart_Variable::Interpreter_ExpressionPart_Variable(std::shared_ptr<Interpreter_Frame> context,std::string s):ident(s){
+    if(context->get_variable(ident)==nullptr)throw std::runtime_error("undefined variable "+ident);
+}
+
+
+std::shared_ptr<Interpreter_Variable> Interpreter_ExpressionPart_Variable::get_data(std::shared_ptr<Interpreter_Frame> context){
+    return context->get_variable(ident);
 }
 
 //0=special operator (scope resolution, member access, etc) currently unused
@@ -137,12 +164,59 @@ std::map<int,int> operator_precedence{
     {SYMBOL_PERCENT_ASSIGNMENT,11},
 };
 
-Interpreter_Expression::Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression> e){
+void Interpreter_Expression::add_group(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ExpressionGroup> grp){
+    //TODO Interpreter_Expression::add_paren
     throw std::runtime_error("unimplemented");
-    //TODO Interpreter_Expression
+}
+
+void Interpreter_Expression::add_term(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ExpressionTerm> term){
+    switch(term->type){
+    case Parser::EXPRESSION_TERM_EXPRESSION_GROUP:
+        add_group(context,std::static_pointer_cast<Parser::ExpressionGroup>(term->contents_p));
+        break;
+    case Parser::EXPRESSION_TERM_FUNCTION_CALL:
+        //TODO Interpreter_Expression::add_term ident
+        throw std::runtime_error("unimplemented");
+        break;
+    case Parser::EXPRESSION_TERM_IDENTIFIER:
+        expression.push();
+        break;
+    case Parser::EXPRESSION_TERM_LITERAL_INT:
+        expression.push(std::make_shared<Interpreter_ExpressionPart_Value>(int(std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer())));
+        break;
+    case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
+        expression.push(std::make_shared<Interpreter_ExpressionPart_Value>(std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float()));
+        break;
+    case Parser::EXPRESSION_TERM_LITERAL_STRING:
+        expression.push(std::make_shared<Interpreter_ExpressionPart_Value>(std::static_pointer_cast<Lexer::StringToken>(term->contents_t)->get_literal()));
+        break;
+    case Parser::EXPRESSION_TERM_UNARY_OPERATION:
+        //TODO Interpreter_Expression::add_term unary
+        throw std::runtime_error("unimplemented");
+        break;
+    }
+}
+
+Interpreter_Expression::Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression> e){
+    std::stack<int> op_stack;
     //parse operator precedence using shunting yard, check for undefined functions/variables
-    std::stack<int> operator_stack;
-    
+    while(1){
+        if(e->type==Parser::EXPRESSION_BINARY_OPERATION){
+            std::shared_ptr<Parser::BinaryOperation> op(std::static_pointer_cast<Parser::BinaryOperation>(e->contents));
+            add_term(context,op->term1);
+            int op_num=op->binary_operator->get_symbol_type();
+            if(!MAP_HAS(operator_precedence,op_num))throw std::runtime_error("unknown operator");
+            while(operator_precedence[op_stack.top()]>=operator_precedence[op_num]){
+                expression.push(std::make_shared<Interpreter_ExpressionPart_Operator>(op_stack.top()));
+                op_stack.pop();
+            }
+            op_stack.push(op_num);
+            e=op->term2;
+        }else if(e->type==Parser::EXPRESSION_TERM){
+            add_term(context,std::static_pointer_cast<Parser::ExpressionTerm>(e->contents));
+            break;
+        }
+    }
     check(context);
 }
 

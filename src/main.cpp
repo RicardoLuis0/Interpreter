@@ -94,7 +94,8 @@ void test_lexer(){
 }
 
 std::string get_indent(int indent){
-    return std::string(indent,' ')+std::string(indent,' ');//2 space indent
+    //return std::string(indent,' ')+std::string(indent,' ');//2 space indent
+    return indent>0?"| "+get_indent(indent-1):"";
 }
 
 void print_expression(int,std::shared_ptr<Parser::Expression>);

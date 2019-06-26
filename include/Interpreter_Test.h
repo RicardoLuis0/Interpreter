@@ -12,6 +12,9 @@
 #include "parser_for_statement.h"
 #include "parser_while_statement.h"
 #include "parser_return_statement.h"
+#include "parser_function_call.h"
+#include "parser_expression_group.h"
+#include "parser_expression_term.h"
 
 namespace Interpreter {
 
@@ -41,6 +44,34 @@ namespace Interpreter {
             int op;
     };
 
+    class Interpreter_Expression;
+
+    class Interpreter_ExpressionPart_FunctionCall : public Interpreter_ExpressionPart{
+        public:
+            Interpreter_ExpressionPart_FunctionCall(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::FunctionCall>);
+            std::string ident;
+            std::vector<std::shared_ptr<Interpreter_Expression>> arguments;
+    };
+
+    class Interpreter_Variable;
+
+    class Interpreter_ExpressionPart_Variable : public Interpreter_ExpressionPart{
+        public:
+            Interpreter_ExpressionPart_Variable(std::shared_ptr<Interpreter_Frame> context,std::string ident);
+            std::shared_ptr<Interpreter_Variable> get_data(std::shared_ptr<Interpreter_Frame> context);
+            std::string ident;
+    };
+
+    class Interpreter_Value;
+
+    class Interpreter_ExpressionPart_Value : public Interpreter_ExpressionPart{
+        public:
+            Interpreter_ExpressionPart_Value(int);
+            Interpreter_ExpressionPart_Value(double);
+            Interpreter_ExpressionPart_Value(std::string);
+            std::shared_ptr<Interpreter_Value> value;
+    };
+
     class Interpreter_Value{
         public:
             virtual std::shared_ptr<Parser::VarType> get_type()=0;
@@ -56,6 +87,8 @@ namespace Interpreter {
     class Interpreter_ExecFrame;
 
     class Interpreter_Expression : public Interpreter_Line {
+            void add_term(std::shared_ptr<Interpreter_Frame>,std::shared_ptr<Parser::ExpressionTerm>);
+            void add_group(std::shared_ptr<Interpreter_Frame>,std::shared_ptr<Parser::ExpressionGroup>);
         public:
             Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression>);
             std::shared_ptr<Interpreter_Value> execute(std::shared_ptr<Interpreter_ExecFrame> parent_frame);//parent_frame's defauls must be the same as the context the expression was built with
@@ -64,10 +97,6 @@ namespace Interpreter {
             std::shared_ptr<Parser::Expression> expr;
             std::stack<std::shared_ptr<Interpreter_ExpressionPart>> expression;
             std::shared_ptr<Parser::VarType> final_type;
-    };
-
-    class Interpreter_ExpressionPart_Expression : public Interpreter_ExpressionPart, public Interpreter_Expression {
-        Interpreter_ExpressionPart_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression>);
     };
 
     class Interpreter_Block : public Interpreter_Line {
