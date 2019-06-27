@@ -19,9 +19,19 @@
 namespace Interpreter {
 
     class Interpreter_Frame;
+    class Interpreter_Expression;
+    class Interpreter_Variable;
+    class Interpreter_Value;
+    class Interpreter_ExecFrame;
+    class Function_Call;
+    class Interpreted_Function_Call;
 
     class Interpreter_Line {
-        
+        //base class
+    };
+
+    class Interpreter_ExpressionPart{
+        //base class
     };
 
     class Interpreter_Code {
@@ -34,35 +44,27 @@ namespace Interpreter {
             void readLine(std::shared_ptr<Parser::Line>);
     };
 
-    class Interpreter_ExpressionPart{
-        //base class
-    };
-
     class Interpreter_ExpressionPart_Operator : public Interpreter_ExpressionPart{
         public:
             Interpreter_ExpressionPart_Operator(int);
             int op;
     };
 
-    class Interpreter_Expression;
-
     class Interpreter_ExpressionPart_FunctionCall : public Interpreter_ExpressionPart{
         public:
             Interpreter_ExpressionPart_FunctionCall(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::FunctionCall>);
+            std::shared_ptr<Interpreter_Value> call(std::shared_ptr<Interpreter_ExecFrame> context);
             std::string ident;
             std::vector<std::shared_ptr<Interpreter_Expression>> arguments;
     };
 
-    class Interpreter_Variable;
 
     class Interpreter_ExpressionPart_Variable : public Interpreter_ExpressionPart{
         public:
             Interpreter_ExpressionPart_Variable(std::shared_ptr<Interpreter_Frame> context,std::string ident);
-            std::shared_ptr<Interpreter_Variable> get_data(std::shared_ptr<Interpreter_Frame> context);
+            std::shared_ptr<Interpreter_Variable> get(std::shared_ptr<Interpreter_ExecFrame> context);
             std::string ident;
     };
-
-    class Interpreter_Value;
 
     class Interpreter_ExpressionPart_Value : public Interpreter_ExpressionPart{
         public:
@@ -84,17 +86,14 @@ namespace Interpreter {
             std::string name;
     };
 
-    class Interpreter_ExecFrame;
-
     class Interpreter_Expression : public Interpreter_Line {
             void add_term(std::shared_ptr<Interpreter_Frame>,std::shared_ptr<Parser::ExpressionTerm>);
-            void add_group(std::shared_ptr<Interpreter_Frame>,std::shared_ptr<Parser::ExpressionGroup>);
+            void add_expression(std::shared_ptr<Interpreter_Frame>,std::shared_ptr<Parser::Expression>);
         public:
             Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression>);
-            std::shared_ptr<Interpreter_Value> execute(std::shared_ptr<Interpreter_ExecFrame> parent_frame);//parent_frame's defauls must be the same as the context the expression was built with
+            std::shared_ptr<Interpreter_Value> eval(std::shared_ptr<Interpreter_ExecFrame> context);//parent_frame's defauls must be the same as the context the expression was built with
             void check_op(std::shared_ptr<Interpreter_Frame>,std::stack<std::shared_ptr<Interpreter_ExpressionPart>>&,std::shared_ptr<Interpreter_ExpressionPart_Operator>);
             void check(std::shared_ptr<Interpreter_Frame>);//check for errors, validity
-            std::shared_ptr<Parser::Expression> expr;
             std::stack<std::shared_ptr<Interpreter_ExpressionPart>> expression;
             std::shared_ptr<Parser::VarType> final_type;
     };
@@ -108,30 +107,30 @@ namespace Interpreter {
     class Interpreter_IfStatement : public Interpreter_Line {
         public:
             Interpreter_IfStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::IfStatement>);
-            std::shared_ptr<Parser::Expression> condition;
+            std::shared_ptr<Interpreter_Expression> condition;
             std::shared_ptr<Interpreter_Code> code;
     };
 
     class Interpreter_ForStatement : public Interpreter_Line {
         public:
             Interpreter_ForStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ForStatement>);
-            std::shared_ptr<Parser::Expression> pre;
-            std::shared_ptr<Parser::Expression> condition;
-            std::shared_ptr<Parser::Expression> inc;
+            std::shared_ptr<Interpreter_Expression> pre;
+            std::shared_ptr<Interpreter_Expression> condition;
+            std::shared_ptr<Interpreter_Expression> inc;
             std::shared_ptr<Interpreter_Code> code;
     };
 
     class Interpreter_WhileStatement : public Interpreter_Line {
         public:
             Interpreter_WhileStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::WhileStatement>);
-            std::shared_ptr<Parser::Expression> condition;
+            std::shared_ptr<Interpreter_Expression> condition;
             std::shared_ptr<Interpreter_Code> code;
     };
 
     class Interpreter_ReturnStatement : public Interpreter_Line {
         public:
             Interpreter_ReturnStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ReturnStatement>);
-            std::shared_ptr<Parser::Expression> value;
+            std::shared_ptr<Interpreter_Expression> value;
     };
 
     class Int_Value : public virtual Interpreter_Value {
@@ -179,8 +178,6 @@ namespace Interpreter {
             String_Variable(std::string);
     };
 
-    class Function_Call;
-
     class Interpreter_ExecFrame{
         public:
             Interpreter_ExecFrame(std::shared_ptr<Interpreter_ExecFrame> parent,std::shared_ptr<Interpreter_Frame> defaults);
@@ -198,8 +195,6 @@ namespace Interpreter {
             virtual std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters()=0;
             virtual std::shared_ptr<Interpreter_Value> call(std::shared_ptr<Interpreter_ExecFrame> parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Value>> args)=0;
     };
-
-    class Interpreted_Function_Call;
 
     class Native_Function_Call : public Function_Call {//to be inherited from
     };
@@ -242,13 +237,14 @@ namespace Interpreter {
     class Interpreter_Test{
         public:
             Interpreter_Test(std::vector<std::shared_ptr<Parser::Definition>> deflist);
-            static void run(std::shared_ptr<Interpreter_Frame> global_frame,std::string entrypoint="main");
-            std::shared_ptr<Interpreter_Frame> build_frame();
+            static void run(std::shared_ptr<Interpreter_ExecFrame> exframe,std::string entrypoint="main");
             void run(std::string entrypoint="main");
             void register_function(std::shared_ptr<Native_Function_Call>);
         protected:
+            void build_frame(std::vector<std::shared_ptr<Parser::Definition>>);
             //void enterFrame(std::shared_ptr<Interpreter_Frame>);
-            std::vector<std::shared_ptr<Parser::Definition>> deflist;
+            //std::vector<std::shared_ptr<Parser::Definition>> deflist;
+            std::shared_ptr<Interpreter_Frame> frame;
         private:
     };
 

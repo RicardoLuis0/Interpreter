@@ -123,7 +123,7 @@ void print_token(int indent,std::shared_ptr<Lexer::Token> token){
 void print_function_call(int indent,std::shared_ptr<Parser::FunctionCall> call){
     std::cout<<get_indent(indent)<<">Function Call\n";
     std::cout<<get_indent(indent)<<".identifier:\n";
-    print_token(indent+1,call->identifier);
+    std::cout<<get_indent(indent+1)<<call->identifier<<"\n";
     std::cout<<get_indent(indent)<<".arguments:\n";
     if(call->arguments==nullptr){
         std::cout<<get_indent(indent+1)<<"No Args\n";

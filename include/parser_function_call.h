@@ -10,7 +10,7 @@ namespace Parser{
     class FunctionCall:public ParserResultPart{
     public:
         FunctionCall(std::shared_ptr<Lexer::WordToken> identifier,std::shared_ptr<ExpressionList> arguments);
-        std::shared_ptr<Lexer::WordToken> identifier;
+        std::string identifier;
         std::shared_ptr<ExpressionList> arguments;
     };
 }
