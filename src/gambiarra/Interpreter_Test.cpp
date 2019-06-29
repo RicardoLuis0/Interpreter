@@ -300,7 +300,7 @@ void Interpreter_Expression::add_term(std::shared_ptr<Interpreter_Frame> context
 
 Interpreter_Expression::Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression> e){
     add_expression(context,e);
-    check(context);
+    final_type=check(context);
 }
 
 std::shared_ptr<Interpreter_Value> Interpreter_Expression::eval(std::shared_ptr<Interpreter_ExecFrame> context){
