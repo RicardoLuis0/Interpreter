@@ -22,7 +22,6 @@
 
 using namespace Interpreter;
 
-
 static bool is_int(std::shared_ptr<Parser::VarType> vt){
     if(vt->type==Parser::VARTYPE_PRIMITIVE){
         return (vt->primitive==Parser::PRIMITIVE_INT);
@@ -48,9 +47,16 @@ static bool is_string(std::shared_ptr<Parser::VarType> vt){
     return false;
 }
 
+static std::string get_name(std::shared_ptr<Parser::VarType> vt){
+    if(is_int(vt))return "int";
+    if(is_float(vt))return "float";
+    if(is_string(vt))return "string";
+    return "unknown";
+}
+
 static bool is_compatible(std::shared_ptr<Parser::VarType> vt1,std::shared_ptr<Parser::VarType> vt2){
     if(is_num(vt1)&&is_num(vt2))return true;
-    if(is_string(vt1)&&is_string(vt2))return true;
+    if(is_string(vt1)||is_string(vt2))return true;
     return false;
 }
 
@@ -135,15 +141,15 @@ Interpreter_ExpressionPart_FunctionCall::Interpreter_ExpressionPart_FunctionCall
     std::vector<std::shared_ptr<Parser::Expression>> args=fn->arguments->expression_list;
     if(params.size()!=args.size()){
         if(params.size()>args.size()){
-            throw std::runtime_error("too many arguments for function call");
+            throw std::runtime_error("too many arguments for function '"+fn->identifier+"'");
         }else{
-            throw std::runtime_error("too few arguments for function call");
+            throw std::runtime_error("too few arguments for function '"+fn->identifier+"'");
         }
     }
     for(size_t i=0;i<params.size();i++){
         arguments.push_back(std::make_shared<Interpreter_Expression>(context,args[i]));
         if(!is_compatible(arguments[i]->final_type,params[i]->type)){
-            throw std::runtime_error("incompatible argument type");
+            throw std::runtime_error("incompatible argument type of "+get_name(arguments[i]->final_type)+" for parameter of type "+get_name(params[i]->type));
         }
     }
 }
@@ -156,6 +162,14 @@ std::shared_ptr<Interpreter_Value> Interpreter_ExpressionPart_FunctionCall::call
         args.insert({params[i]->name,arguments[i]->eval(context)});
     }
     return fn->call(context,args);
+}
+
+std::shared_ptr<Function_Call> Interpreter_ExpressionPart_FunctionCall::get(std::shared_ptr<Interpreter_ExecFrame> context){
+    return context->get_function(ident);
+}
+
+std::shared_ptr<Function_Call> Interpreter_ExpressionPart_FunctionCall::get(std::shared_ptr<Interpreter_Frame> context){
+    return context->get_function(ident);
 }
 
 Interpreter_ExpressionPart_Value::Interpreter_ExpressionPart_Value(int i):value(std::make_shared<Int_Value>(i)){
@@ -174,9 +188,27 @@ Interpreter_ExpressionPart_Variable::Interpreter_ExpressionPart_Variable(std::sh
     if(context->get_variable(ident)==nullptr)throw std::runtime_error("undefined variable "+ident);
 }
 
+std::shared_ptr<Interpreter_Variable> Interpreter_ExpressionPart_Variable::get(std::shared_ptr<Interpreter_Frame> context){
+    return context->get_variable(ident);
+}
+
 std::shared_ptr<Interpreter_Variable> Interpreter_ExpressionPart_Variable::get(std::shared_ptr<Interpreter_ExecFrame> context){
     return context->get_variable(ident);
 }
+
+std::shared_ptr<Parser::VarType> Interpreter_ExpressionPart_FunctionCall::get_type(std::shared_ptr<Interpreter_Frame> context){
+    return get(context)->get_type();
+}
+std::shared_ptr<Parser::VarType> Interpreter_ExpressionPart_Variable::get_type(std::shared_ptr<Interpreter_Frame> context){
+    return get(context)->get_type();
+}
+std::shared_ptr<Parser::VarType> Interpreter_ExpressionPart_Value::get_type(std::shared_ptr<Interpreter_Frame> context){
+    return value->get_type();
+}
+std::shared_ptr<Parser::VarType> Interpreter_ExpressionPart_Operator::get_type(std::shared_ptr<Interpreter_Frame> context){
+    return nullptr;
+}
+
 
 //0=special operator (scope resolution, member access, etc) currently unused
 
@@ -245,7 +277,6 @@ void Interpreter_Expression::add_term(std::shared_ptr<Interpreter_Frame> context
         add_expression(context,std::static_pointer_cast<Parser::ExpressionGroup>(term->contents_p)->contents);
         break;
     case Parser::EXPRESSION_TERM_FUNCTION_CALL:
-        //TODO Interpreter_Expression::add_term func_call
         expression.push(std::make_shared<Interpreter_ExpressionPart_FunctionCall>(context,std::static_pointer_cast<Parser::FunctionCall>(term->contents_p)));
         break;
     case Parser::EXPRESSION_TERM_IDENTIFIER:
@@ -277,15 +308,51 @@ std::shared_ptr<Interpreter_Value> Interpreter_Expression::eval(std::shared_ptr<
     throw std::runtime_error("unimplemented");
 }
 
-void Interpreter_Expression::check_op(std::shared_ptr<Interpreter_Frame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){
-    //TODO Interpreter_Expression::check_op
-    throw std::runtime_error("unimplemented");
+std::shared_ptr<Parser::VarType> Interpreter_Expression::check_op(std::shared_ptr<Interpreter_Frame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){
+    std::shared_ptr<Interpreter_ExpressionPart> ex1=st.top();//right term
+    st.pop();
+    std::shared_ptr<Parser::VarType> t1;
+    if(IS(ex1,Interpreter_ExpressionPart_Operator)){
+        t1=check_op(context,st,std::static_pointer_cast<Interpreter_ExpressionPart_Operator>(ex1));
+    }else{
+        t1=ex1->get_type(context);
+    }
+    std::shared_ptr<Interpreter_ExpressionPart> ex2=st.top();//left term
+    st.pop();
+    std::shared_ptr<Parser::VarType> t2;
+    if(IS(ex2,Interpreter_ExpressionPart_Operator)){
+        t2=check_op(context,st,std::static_pointer_cast<Interpreter_ExpressionPart_Operator>(ex2));
+    }else{
+        t2=ex2->get_type(context);
+    }
+    if(is_string(t2)) return t2;
+    if(is_string(t1)) return t1;
+    if(is_int(t2)&&is_int(t1)) return t2;
+    if(is_float(t2)&&is_num(t1)) return t2;
+    if(is_num(t2)&&is_float(t1)) return t1;
+    throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2));
 }
 
-void Interpreter_Expression::check(std::shared_ptr<Interpreter_Frame> context){
+std::shared_ptr<Parser::VarType> Interpreter_Expression::get_type(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Interpreter_ExpressionPart> ex){
+    if(IS(ex,Interpreter_ExpressionPart_Operator))throw std::runtime_error("invalid object type Interpreter_ExpressionPart_Operator for Interpreter_Expression::get_type");
+    return ex->get_type(context);
+}
+
+std::shared_ptr<Parser::VarType> Interpreter_Expression::check(std::shared_ptr<Interpreter_Frame> context){
     std::stack<std::shared_ptr<Interpreter_ExpressionPart>> temp_stack=expression;
-    //TODO Interpreter_Expression::check
-    throw std::runtime_error("unimplemented");
+    std::shared_ptr<Interpreter_ExpressionPart> ex=temp_stack.top();
+    temp_stack.pop();
+    std::shared_ptr<Parser::VarType> temp_type;
+    if(IS(ex,Interpreter_ExpressionPart_Operator)){
+        std::shared_ptr<Interpreter_ExpressionPart_Operator> op(std::static_pointer_cast<Interpreter_ExpressionPart_Operator>(ex));
+        temp_type=check_op(context,temp_stack,op);
+    }else{
+        temp_type=get_type(context,ex);
+    }
+    if(temp_type&&temp_stack.size()!=0){//if the stack wasn't consumed to the end by check_op, or wasn't a single value
+        throw std::runtime_error("invalid object state for Interpreter_Expression");
+    }
+    return temp_type;
 }
 
 Interpreter_IfStatement::Interpreter_IfStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::IfStatement> stmt){
@@ -445,7 +512,7 @@ std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> Interpreted_Fu
 }
 
 std::shared_ptr<Interpreter_Value> Interpreted_Function_Call::call(std::shared_ptr<Interpreter_ExecFrame> parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Value>> args){
-    //TODO Interpreted_Function_Call
+    //TODO Interpreted_Function_Call::call
     throw std::runtime_error("unimplemented");
 }
 
