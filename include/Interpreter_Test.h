@@ -27,6 +27,7 @@ namespace Interpreter {
     class Interpreted_Function_Call;
 
     class Interpreter_Line {
+        virtual void run(std::shared_ptr<Interpreter_ExecFrame> context)=0;
         //base class
     };
 
@@ -109,6 +110,7 @@ namespace Interpreter {
         public:
             Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression>);
             std::shared_ptr<Interpreter_Value> eval(std::shared_ptr<Interpreter_ExecFrame> context);//parent_frame's defauls must be the same as the context the expression was built with
+            void run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::stack<std::shared_ptr<Interpreter_ExpressionPart>> expression;
             std::shared_ptr<Parser::VarType> final_type;
     };
@@ -116,12 +118,14 @@ namespace Interpreter {
     class Interpreter_Block : public Interpreter_Line {
         public:
             Interpreter_Block(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::CodeBlock>);
+            void run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::shared_ptr<Interpreter_Code> code;
     };
 
     class Interpreter_IfStatement : public Interpreter_Line {
         public:
             Interpreter_IfStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::IfStatement>);
+            void run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::shared_ptr<Interpreter_Expression> condition;
             std::shared_ptr<Interpreter_Code> code;
             std::shared_ptr<Interpreter_Code> else_stmt;
@@ -130,6 +134,7 @@ namespace Interpreter {
     class Interpreter_ForStatement : public Interpreter_Line {
         public:
             Interpreter_ForStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ForStatement>);
+            void run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::shared_ptr<Interpreter_Expression> pre;
             std::shared_ptr<Interpreter_Expression> condition;
             std::shared_ptr<Interpreter_Expression> inc;
@@ -139,6 +144,7 @@ namespace Interpreter {
     class Interpreter_WhileStatement : public Interpreter_Line {
         public:
             Interpreter_WhileStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::WhileStatement>);
+            void run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::shared_ptr<Interpreter_Expression> condition;
             std::shared_ptr<Interpreter_Code> code;
     };
@@ -146,6 +152,7 @@ namespace Interpreter {
     class Interpreter_ReturnStatement : public Interpreter_Line {
         public:
             Interpreter_ReturnStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ReturnStatement>);
+            void run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::shared_ptr<Interpreter_Expression> value;
     };
 

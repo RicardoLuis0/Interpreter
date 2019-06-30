@@ -135,6 +135,31 @@ std::shared_ptr<Function_Call> Interpreter_ExecFrame::get_function(std::string n
 
 Interpreter_Block::Interpreter_Block(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::CodeBlock> b):code(std::make_shared<Interpreter_Code>(context,b)){}
 
+void Interpreter_Block::run(std::shared_ptr<Interpreter_ExecFrame> context){
+    //TODO Interpreter_Block::run
+    throw std::runtime_error("unimplemented Interpreter_Block::run");
+}
+
+void Interpreter_IfStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
+    //TODO Interpreter_IfStatement::run
+    throw std::runtime_error("unimplemented Interpreter_IfStatement::run");
+}
+
+void Interpreter_ForStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
+    //TODO Interpreter_ForStatement::run
+    throw std::runtime_error("unimplemented Interpreter_ForStatement::run");
+}
+
+void Interpreter_WhileStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
+    //TODO Interpreter_WhileStatement::run
+    throw std::runtime_error("unimplemented Interpreter_WhileStatement::run");
+}
+
+void Interpreter_ReturnStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
+    //TODO Interpreter_ReturnStatement::run
+    throw std::runtime_error("unimplemented Interpreter_ReturnStatement::run");
+}
+
 Interpreter_ExpressionPart_FunctionCall::Interpreter_ExpressionPart_FunctionCall(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::FunctionCall> fn):ident(fn->identifier){
     std::shared_ptr<Function_Call> fnc=context->get_function(ident);
     std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> params=fnc->get_parameters();
@@ -313,6 +338,10 @@ void Interpreter_Expression::add_term(std::shared_ptr<Interpreter_Frame> context
 Interpreter_Expression::Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression> e){
     add_expression(context,e);
     final_type=check(context);
+}
+
+void Interpreter_Expression::run(std::shared_ptr<Interpreter_ExecFrame> context){
+    eval(context);
 }
 
 std::shared_ptr<Interpreter_Value> eval_op(std::shared_ptr<Interpreter_ExecFrame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){
