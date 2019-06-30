@@ -26,9 +26,32 @@ namespace Interpreter {
     class Function_Call;
     class Interpreted_Function_Call;
 
-    class Interpreter_Line {
-        virtual void run(std::shared_ptr<Interpreter_ExecFrame> context)=0;
+    class Interpreter_Line_Run_Result {
+        virtual void dummy_virtual(){};
         //base class
+    };
+
+    class Interpreter_Line {
+        public:
+            virtual std::shared_ptr<Interpreter_Line_Run_Result> run(std::shared_ptr<Interpreter_ExecFrame> context)=0;
+            //base class
+    };
+
+    class Interpreter_Line_Run_Result_None : public Interpreter_Line_Run_Result {
+        
+    };
+
+    class Interpreter_Line_Run_Result_Break : public Interpreter_Line_Run_Result {
+        
+    };
+
+    class Interpreter_Line_Run_Result_Continue : public Interpreter_Line_Run_Result {
+        
+    };
+
+    class Interpreter_Line_Run_Result_Return : public Interpreter_Line_Run_Result {
+        public:
+            std::shared_ptr<Interpreter_Value> value;
     };
 
     class Interpreter_ExpressionPart{
@@ -38,10 +61,11 @@ namespace Interpreter {
             virtual std::shared_ptr<Interpreter_Value> eval(std::shared_ptr<Interpreter_ExecFrame> context)=0;
     };
 
-    class Interpreter_Code {
+    class Interpreter_Code : public Interpreter_Line {
         public:
             Interpreter_Code(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::CodeBlock>);
             Interpreter_Code(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::Line>);
+            std::shared_ptr<Interpreter_Line_Run_Result> run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::shared_ptr<Interpreter_Frame> default_frame;
             std::vector<std::shared_ptr<Interpreter_Line>> code;
         private:
@@ -110,22 +134,15 @@ namespace Interpreter {
         public:
             Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression>);
             std::shared_ptr<Interpreter_Value> eval(std::shared_ptr<Interpreter_ExecFrame> context);//parent_frame's defauls must be the same as the context the expression was built with
-            void run(std::shared_ptr<Interpreter_ExecFrame> context) override;
+            std::shared_ptr<Interpreter_Line_Run_Result> run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::stack<std::shared_ptr<Interpreter_ExpressionPart>> expression;
             std::shared_ptr<Parser::VarType> final_type;
-    };
-
-    class Interpreter_Block : public Interpreter_Line {
-        public:
-            Interpreter_Block(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::CodeBlock>);
-            void run(std::shared_ptr<Interpreter_ExecFrame> context) override;
-            std::shared_ptr<Interpreter_Code> code;
     };
 
     class Interpreter_IfStatement : public Interpreter_Line {
         public:
             Interpreter_IfStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::IfStatement>);
-            void run(std::shared_ptr<Interpreter_ExecFrame> context) override;
+            std::shared_ptr<Interpreter_Line_Run_Result> run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::shared_ptr<Interpreter_Expression> condition;
             std::shared_ptr<Interpreter_Code> code;
             std::shared_ptr<Interpreter_Code> else_stmt;
@@ -134,7 +151,7 @@ namespace Interpreter {
     class Interpreter_ForStatement : public Interpreter_Line {
         public:
             Interpreter_ForStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ForStatement>);
-            void run(std::shared_ptr<Interpreter_ExecFrame> context) override;
+            std::shared_ptr<Interpreter_Line_Run_Result> run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::shared_ptr<Interpreter_Expression> pre;
             std::shared_ptr<Interpreter_Expression> condition;
             std::shared_ptr<Interpreter_Expression> inc;
@@ -144,7 +161,7 @@ namespace Interpreter {
     class Interpreter_WhileStatement : public Interpreter_Line {
         public:
             Interpreter_WhileStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::WhileStatement>);
-            void run(std::shared_ptr<Interpreter_ExecFrame> context) override;
+            std::shared_ptr<Interpreter_Line_Run_Result> run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::shared_ptr<Interpreter_Expression> condition;
             std::shared_ptr<Interpreter_Code> code;
     };
@@ -152,7 +169,7 @@ namespace Interpreter {
     class Interpreter_ReturnStatement : public Interpreter_Line {
         public:
             Interpreter_ReturnStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ReturnStatement>);
-            void run(std::shared_ptr<Interpreter_ExecFrame> context) override;
+            std::shared_ptr<Interpreter_Line_Run_Result> run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::shared_ptr<Interpreter_Expression> value;
     };
 

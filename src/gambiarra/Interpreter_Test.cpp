@@ -133,29 +133,22 @@ std::shared_ptr<Function_Call> Interpreter_ExecFrame::get_function(std::string n
     return defaults->get_function(name);
 }
 
-Interpreter_Block::Interpreter_Block(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::CodeBlock> b):code(std::make_shared<Interpreter_Code>(context,b)){}
-
-void Interpreter_Block::run(std::shared_ptr<Interpreter_ExecFrame> context){
-    //TODO Interpreter_Block::run
-    throw std::runtime_error("unimplemented Interpreter_Block::run");
-}
-
-void Interpreter_IfStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
+std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_IfStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
     //TODO Interpreter_IfStatement::run
     throw std::runtime_error("unimplemented Interpreter_IfStatement::run");
 }
 
-void Interpreter_ForStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
+std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_ForStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
     //TODO Interpreter_ForStatement::run
     throw std::runtime_error("unimplemented Interpreter_ForStatement::run");
 }
 
-void Interpreter_WhileStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
+std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_WhileStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
     //TODO Interpreter_WhileStatement::run
     throw std::runtime_error("unimplemented Interpreter_WhileStatement::run");
 }
 
-void Interpreter_ReturnStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
+std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_ReturnStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
     //TODO Interpreter_ReturnStatement::run
     throw std::runtime_error("unimplemented Interpreter_ReturnStatement::run");
 }
@@ -340,8 +333,9 @@ Interpreter_Expression::Interpreter_Expression(std::shared_ptr<Interpreter_Frame
     final_type=check(context);
 }
 
-void Interpreter_Expression::run(std::shared_ptr<Interpreter_ExecFrame> context){
+std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_Expression::run(std::shared_ptr<Interpreter_ExecFrame> context){
     eval(context);
+    return std::make_shared<Interpreter_Line_Run_Result_None>();
 }
 
 std::shared_ptr<Interpreter_Value> eval_op(std::shared_ptr<Interpreter_ExecFrame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){
@@ -434,6 +428,14 @@ Interpreter_Code::Interpreter_Code(std::shared_ptr<Interpreter_Frame> parent,std
     }
 }
 
+std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_Code::run(std::shared_ptr<Interpreter_ExecFrame> context){
+    for(std::shared_ptr<Interpreter_Line> l:code){
+        std::shared_ptr<Interpreter_Line_Run_Result> result=l->run(context);
+        if(!IS(result,Interpreter_Line_Run_Result_None))return result;
+    }
+    return std::make_shared<Interpreter_Line_Run_Result_None>();
+}
+
 Interpreter_Code::Interpreter_Code(std::shared_ptr<Interpreter_Frame> p,std::shared_ptr<Parser::Line> l):default_frame(std::make_shared<Interpreter_Frame>(p)){
     readLine(l);
 }
@@ -441,7 +443,7 @@ Interpreter_Code::Interpreter_Code(std::shared_ptr<Interpreter_Frame> p,std::sha
 void Interpreter_Code::readLine(std::shared_ptr<Parser::Line> l){
     switch(l->type){
     case Parser::LINE_CODE_BLOCK:
-        code.push_back(std::make_shared<Interpreter_Block>(default_frame,std::static_pointer_cast<Parser::CodeBlock>(l->contents)));
+        code.push_back(std::make_shared<Interpreter_Code>(default_frame,std::static_pointer_cast<Parser::CodeBlock>(l->contents)));
         break;
     case Parser::LINE_STATEMENT:{
             std::shared_ptr<Parser::Statement> stmt(std::static_pointer_cast<Parser::Statement>(l->contents));
