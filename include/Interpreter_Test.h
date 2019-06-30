@@ -34,6 +34,7 @@ namespace Interpreter {
             //base class
         public:
             virtual std::shared_ptr<Parser::VarType> get_type(std::shared_ptr<Interpreter_Frame> context)=0;
+            virtual std::shared_ptr<Interpreter_Value> eval(std::shared_ptr<Interpreter_ExecFrame> context)=0;
     };
 
     class Interpreter_Code {
@@ -50,6 +51,7 @@ namespace Interpreter {
         public:
             Interpreter_ExpressionPart_Operator(int);
             std::shared_ptr<Parser::VarType> get_type(std::shared_ptr<Interpreter_Frame> context) override;
+            std::shared_ptr<Interpreter_Value> eval(std::shared_ptr<Interpreter_ExecFrame> context) override;
             int op;
     };
 
@@ -60,6 +62,7 @@ namespace Interpreter {
             std::shared_ptr<Function_Call> get(std::shared_ptr<Interpreter_ExecFrame> context);
             std::shared_ptr<Function_Call> get(std::shared_ptr<Interpreter_Frame> context);
             std::shared_ptr<Parser::VarType> get_type(std::shared_ptr<Interpreter_Frame> context) override;
+            std::shared_ptr<Interpreter_Value> eval(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::string ident;
             std::vector<std::shared_ptr<Interpreter_Expression>> arguments;
     };
@@ -70,6 +73,7 @@ namespace Interpreter {
             std::shared_ptr<Interpreter_Variable> get(std::shared_ptr<Interpreter_Frame> context);
             std::shared_ptr<Interpreter_Variable> get(std::shared_ptr<Interpreter_ExecFrame> context);
             std::shared_ptr<Parser::VarType> get_type(std::shared_ptr<Interpreter_Frame> context) override;
+            std::shared_ptr<Interpreter_Value> eval(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::string ident;
     };
 
@@ -79,6 +83,7 @@ namespace Interpreter {
             Interpreter_ExpressionPart_Value(double);
             Interpreter_ExpressionPart_Value(std::string);
             std::shared_ptr<Parser::VarType> get_type(std::shared_ptr<Interpreter_Frame> context) override;
+            std::shared_ptr<Interpreter_Value> eval(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::shared_ptr<Interpreter_Value> value;
     };
 
@@ -87,7 +92,7 @@ namespace Interpreter {
             virtual std::shared_ptr<Parser::VarType> get_type()=0;
     };
 
-    class Interpreter_Variable : public virtual Interpreter_Value{
+    class Interpreter_Variable : public virtual Interpreter_Value {
         public:
             std::string get_name();
         protected:
@@ -98,11 +103,12 @@ namespace Interpreter {
             void add_term(std::shared_ptr<Interpreter_Frame>,std::shared_ptr<Parser::ExpressionTerm>);
             void add_expression(std::shared_ptr<Interpreter_Frame>,std::shared_ptr<Parser::Expression>);
             std::shared_ptr<Parser::VarType> get_type(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Interpreter_ExpressionPart>);
+            std::shared_ptr<Parser::VarType> check_op(std::shared_ptr<Interpreter_Frame>,std::stack<std::shared_ptr<Interpreter_ExpressionPart>>&,std::shared_ptr<Interpreter_ExpressionPart_Operator>);
+            std::shared_ptr<Parser::VarType> check(std::shared_ptr<Interpreter_Frame>);//check for errors, validity
+            std::shared_ptr<Interpreter_Value> eval_op(std::shared_ptr<Interpreter_ExecFrame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>>&,std::shared_ptr<Interpreter_ExpressionPart_Operator>);
         public:
             Interpreter_Expression(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::Expression>);
             std::shared_ptr<Interpreter_Value> eval(std::shared_ptr<Interpreter_ExecFrame> context);//parent_frame's defauls must be the same as the context the expression was built with
-            std::shared_ptr<Parser::VarType> check_op(std::shared_ptr<Interpreter_Frame>,std::stack<std::shared_ptr<Interpreter_ExpressionPart>>&,std::shared_ptr<Interpreter_ExpressionPart_Operator>);
-            std::shared_ptr<Parser::VarType> check(std::shared_ptr<Interpreter_Frame>);//check for errors, validity
             std::stack<std::shared_ptr<Interpreter_ExpressionPart>> expression;
             std::shared_ptr<Parser::VarType> final_type;
     };
@@ -118,6 +124,7 @@ namespace Interpreter {
             Interpreter_IfStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::IfStatement>);
             std::shared_ptr<Interpreter_Expression> condition;
             std::shared_ptr<Interpreter_Code> code;
+            std::shared_ptr<Interpreter_Code> else_stmt;
     };
 
     class Interpreter_ForStatement : public Interpreter_Line {

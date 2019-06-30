@@ -209,6 +209,18 @@ std::shared_ptr<Parser::VarType> Interpreter_ExpressionPart_Operator::get_type(s
     return nullptr;
 }
 
+std::shared_ptr<Interpreter_Value> Interpreter_ExpressionPart_FunctionCall::eval(std::shared_ptr<Interpreter_ExecFrame> context){
+    return call(context);
+}
+std::shared_ptr<Interpreter_Value> Interpreter_ExpressionPart_Variable::eval(std::shared_ptr<Interpreter_ExecFrame> context){
+    return get(context);
+}
+std::shared_ptr<Interpreter_Value> Interpreter_ExpressionPart_Value::eval(std::shared_ptr<Interpreter_ExecFrame> context){
+    return value;
+}
+std::shared_ptr<Interpreter_Value> Interpreter_ExpressionPart_Operator::eval(std::shared_ptr<Interpreter_ExecFrame> context){
+    return nullptr;
+}
 
 //0=special operator (scope resolution, member access, etc) currently unused
 
@@ -293,7 +305,7 @@ void Interpreter_Expression::add_term(std::shared_ptr<Interpreter_Frame> context
         break;
     case Parser::EXPRESSION_TERM_UNARY_OPERATION:
         //TODO Interpreter_Expression::add_term unary
-        throw std::runtime_error("unimplemented");
+        throw std::runtime_error("unimplemented Interpreter_Expression::add_term unary");
         break;
     }
 }
@@ -303,9 +315,17 @@ Interpreter_Expression::Interpreter_Expression(std::shared_ptr<Interpreter_Frame
     final_type=check(context);
 }
 
+std::shared_ptr<Interpreter_Value> eval_op(std::shared_ptr<Interpreter_ExecFrame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){
+    //TODO Interpreter_Expression::eval_op
+    throw std::runtime_error("unimplemented Interpreter_Expression::eval_op");
+}
+
 std::shared_ptr<Interpreter_Value> Interpreter_Expression::eval(std::shared_ptr<Interpreter_ExecFrame> context){
+    std::stack<std::shared_ptr<Interpreter_ExpressionPart>> temp_stack=expression;
+    std::shared_ptr<Interpreter_ExpressionPart> ex=temp_stack.top();
+    temp_stack.pop();
     //TODO Interpreter_Expression::eval
-    throw std::runtime_error("unimplemented");
+    throw std::runtime_error("unimplemented Interpreter_Expression::eval");
 }
 
 std::shared_ptr<Parser::VarType> Interpreter_Expression::check_op(std::shared_ptr<Interpreter_Frame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){
@@ -356,23 +376,27 @@ std::shared_ptr<Parser::VarType> Interpreter_Expression::check(std::shared_ptr<I
 }
 
 Interpreter_IfStatement::Interpreter_IfStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::IfStatement> stmt){
-    //TODO Interpreter_IfStatement
-    throw std::runtime_error("unimplemented");
+    condition=std::make_shared<Interpreter_Expression>(context,stmt->condition);
+    code=std::make_shared<Interpreter_Code>(context,stmt->code);
+    if(stmt->else_stmt){
+        else_stmt=std::make_shared<Interpreter_Code>(context,stmt->else_stmt->code);
+    }
 }
 
 Interpreter_ForStatement::Interpreter_ForStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ForStatement> stmt){
-    //TODO Interpreter_ForStatement
-    throw std::runtime_error("unimplemented");
+    pre=std::make_shared<Interpreter_Expression>(context,stmt->pre);
+    condition=std::make_shared<Interpreter_Expression>(context,stmt->condition);
+    inc=std::make_shared<Interpreter_Expression>(context,stmt->inc);
+    code=std::make_shared<Interpreter_Code>(context,stmt->code);
 }
 
 Interpreter_WhileStatement::Interpreter_WhileStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::WhileStatement> stmt){
-    //TODO Interpreter_WhileStatement
-    throw std::runtime_error("unimplemented");
+    condition=std::make_shared<Interpreter_Expression>(context,stmt->condition);
+    code=std::make_shared<Interpreter_Code>(context,stmt->code);
 }
 
 Interpreter_ReturnStatement::Interpreter_ReturnStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ReturnStatement> stmt){
-    //TODO Interpreter_ReturnStatement
-    throw std::runtime_error("unimplemented");
+    value=std::make_shared<Interpreter_Expression>(context,stmt->value);
 }
 
 Interpreter_Code::Interpreter_Code(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::CodeBlock> cb):default_frame(std::make_shared<Interpreter_Frame>()){
@@ -636,10 +660,10 @@ std::shared_ptr<Function_Call> Interpreter_Frame::get_function(std::string name)
 }
 
 void Interpreter_Frame::register_native_function(std::shared_ptr<Native_Function_Call> func){
-    MAP_FIND(native_functions,func->get_name()){
-        iter->second=func;
+    if(MAP_HAS(native_functions,func->get_name())){
+        throw std::runtime_error("Redefining Native Function "+func->get_name());
     }else{
-        throw std::runtime_error("Redefining Native Function");
+        native_functions.insert({func->get_name(),func});
     }
 }
 
