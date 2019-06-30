@@ -108,6 +108,9 @@ class ReadInt_Function : public Native_Function_Call{
     }
 };
 
+Interpreter_Line_Run_Result_Return::Interpreter_Line_Run_Result_Return(std::shared_ptr<Interpreter_Value> v):value(v){
+}
+
 Interpreter_ExecFrame::Interpreter_ExecFrame(std::shared_ptr<Interpreter_ExecFrame> p,std::shared_ptr<Interpreter_Frame> d):parent(p),defaults(d){
     for(auto vpair:defaults->variable_defaults){
         if(IS(vpair.second,Int_Variable)){
@@ -134,23 +137,57 @@ std::shared_ptr<Function_Call> Interpreter_ExecFrame::get_function(std::string n
 }
 
 std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_IfStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
-    //TODO Interpreter_IfStatement::run
-    throw std::runtime_error("unimplemented Interpreter_IfStatement::run");
+    std::shared_ptr<Interpreter_Value> val=condition->eval(context);
+    if(is_string(val->get_type()))throw std::runtime_error("string is not valid condition");
+    bool do_code=false;
+    if((is_int(val->get_type())&&std::dynamic_pointer_cast<Int_Value>(val)->get())||(is_float(val->get_type())&&std::dynamic_pointer_cast<Float_Value>(val)->get())){
+        do_code=true;
+    }
+    if(do_code){
+        return code->run(context);
+    }else{
+        return std::make_shared<Interpreter_Line_Run_Result_None>();
+    }
 }
 
 std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_ForStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
-    //TODO Interpreter_ForStatement::run
-    throw std::runtime_error("unimplemented Interpreter_ForStatement::run");
+    pre->run(context);
+    if(is_string(condition->final_type))throw std::runtime_error("string is not valid condition");
+    std::shared_ptr<Interpreter_Value> val;
+    while(1){
+        val=condition->eval(context);
+        bool do_code=false;
+        if((is_int(val->get_type())&&std::dynamic_pointer_cast<Int_Value>(val)->get())||(is_float(val->get_type())&&std::dynamic_pointer_cast<Float_Value>(val)->get())){
+            do_code=true;
+        }
+        if(do_code){
+            std::shared_ptr<Interpreter_Line_Run_Result> r=code->run(context);
+            if(!IS(r,Interpreter_Line_Run_Result_None))return r;
+        }
+        inc->run(context);
+    }
+    return std::make_shared<Interpreter_Line_Run_Result_None>();
 }
 
 std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_WhileStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
-    //TODO Interpreter_WhileStatement::run
-    throw std::runtime_error("unimplemented Interpreter_WhileStatement::run");
+    if(is_string(condition->final_type))throw std::runtime_error("string is not valid condition");
+    std::shared_ptr<Interpreter_Value> val;
+    while(1){
+        val=condition->eval(context);
+        bool do_code=false;
+        if((is_int(val->get_type())&&std::dynamic_pointer_cast<Int_Value>(val)->get())||(is_float(val->get_type())&&std::dynamic_pointer_cast<Float_Value>(val)->get())){
+            do_code=true;
+        }
+        if(do_code){
+            std::shared_ptr<Interpreter_Line_Run_Result> r=code->run(context);
+            if(!IS(r,Interpreter_Line_Run_Result_None))return r;
+        }
+    }
+    return std::make_shared<Interpreter_Line_Run_Result_None>();
 }
 
 std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_ReturnStatement::run(std::shared_ptr<Interpreter_ExecFrame> context){
-    //TODO Interpreter_ReturnStatement::run
-    throw std::runtime_error("unimplemented Interpreter_ReturnStatement::run");
+    return std::make_shared<Interpreter_Line_Run_Result_Return>(value->eval(context));
 }
 
 Interpreter_ExpressionPart_FunctionCall::Interpreter_ExpressionPart_FunctionCall(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::FunctionCall> fn):ident(fn->identifier){
@@ -338,7 +375,7 @@ std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_Expression::run(std::sh
     return std::make_shared<Interpreter_Line_Run_Result_None>();
 }
 
-std::shared_ptr<Interpreter_Value> eval_op(std::shared_ptr<Interpreter_ExecFrame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){
+std::shared_ptr<Interpreter_Value> Interpreter_Expression::eval_op(std::shared_ptr<Interpreter_ExecFrame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){
     //TODO Interpreter_Expression::eval_op
     throw std::runtime_error("unimplemented Interpreter_Expression::eval_op");
 }
@@ -347,8 +384,12 @@ std::shared_ptr<Interpreter_Value> Interpreter_Expression::eval(std::shared_ptr<
     std::stack<std::shared_ptr<Interpreter_ExpressionPart>> temp_stack=expression;
     std::shared_ptr<Interpreter_ExpressionPart> ex=temp_stack.top();
     temp_stack.pop();
-    //TODO Interpreter_Expression::eval
-    throw std::runtime_error("unimplemented Interpreter_Expression::eval");
+    if(IS(ex,Interpreter_ExpressionPart_Operator)){
+        std::shared_ptr<Interpreter_ExpressionPart_Operator> op(std::static_pointer_cast<Interpreter_ExpressionPart_Operator>(ex));
+        return eval_op(context,temp_stack,op);
+    }else{
+        return ex->eval(context);
+    }
 }
 
 std::shared_ptr<Parser::VarType> Interpreter_Expression::check_op(std::shared_ptr<Interpreter_Frame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){

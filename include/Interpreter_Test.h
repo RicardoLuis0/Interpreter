@@ -51,6 +51,7 @@ namespace Interpreter {
 
     class Interpreter_Line_Run_Result_Return : public Interpreter_Line_Run_Result {
         public:
+            Interpreter_Line_Run_Result_Return(std::shared_ptr<Interpreter_Value>);
             std::shared_ptr<Interpreter_Value> value;
     };
 
