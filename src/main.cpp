@@ -42,24 +42,53 @@
 
 void test_lexer(),test_expressions(),test_lines(),test_definitions();
 
-int main(){
+int main(int argc,char ** argv){
     Console::init();
-    while(true){
-        Console::clear();
-        std::cout<<"0> test lexer\n1> test expression parser\n2> test line parser\n3> test whole code parsing\n\nChoice: ";
-        std::string input;
-        std::cin>>input;
-        if(input.compare("0")==0){
-            test_lexer();
-        }else if(input.compare("1")==0){
-            test_expressions();
-        }else if(input.compare("2")==0){
-            test_lines();
-        }else if(input.compare("3")==0){
-            test_definitions();
-        }else{
-            continue;
+    if(argc<2){
+        while(true){
+            Console::clear();
+            std::cout<<"0> test lexer\n1> test expression parser\n2> test line parser\n3> test whole code parsing\n\nChoice: ";
+            std::string input;
+            std::cin>>input;
+            if(input.compare("0")==0){
+                test_lexer();
+            }else if(input.compare("1")==0){
+                test_expressions();
+            }else if(input.compare("2")==0){
+                test_lines();
+            }else if(input.compare("3")==0){
+                test_definitions();
+            }else{
+                continue;
+            }
+            return 0;
         }
+    }else if(argc==2){
+        try{
+            std::string filename(argv[1]);
+            std::vector<std::shared_ptr<Lexer::Token>> tokens;
+            Lexer::Lexer lexer(base_symbols,base_keywords);
+            try{
+                tokens=lexer.tokenize_from_file(filename);//split file into tokens
+            }catch(MyExcept::FileError &e){
+                std::cout<<e.what()<<"Could not open file '"+filename+"'";
+                return 1;
+            }
+            Parser::parserProgress p {data:tokens,location:0};
+            while(p.get_nothrow()!=nullptr){
+                Parser::DefinitionMatcher().makeMatch(p);
+            }
+        }catch(MyExcept::ParseError &e){
+            std::cout<<e.what();
+            return 1;
+        }catch(MyExcept::NoMatchException &e){
+            std::cout<<e.what();
+            return 1;
+        }catch(std::exception &e){
+            std::cout<<"uncaught exception: "<<e.what();
+            return 1;
+        }
+        std::cout<<"Parse OK";
         return 0;
     }
     return 0;
