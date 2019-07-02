@@ -113,8 +113,61 @@ namespace Interpreter {
             std::shared_ptr<Interpreter_Value> value;
     };
 
+    class Int_Value;
+
     class Interpreter_Value{
         public:
+            inline virtual std::shared_ptr<Int_Value> operator<(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '<'");
+            }
+            inline virtual std::shared_ptr<Int_Value> operator>(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '>'");
+            }
+            inline virtual std::shared_ptr<Int_Value> operator==(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '=='");
+            }
+            inline virtual std::shared_ptr<Int_Value> operator!=(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '!='");
+            }
+            inline virtual std::shared_ptr<Int_Value> operator>=(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '>='");
+            }
+            inline virtual std::shared_ptr<Int_Value> operator<=(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '<='");
+            }
+            inline virtual std::shared_ptr<Interpreter_Value> assignment(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '='");
+            }
+            inline virtual std::shared_ptr<Interpreter_Value> operator+(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '+'");
+            }
+            inline virtual std::shared_ptr<Interpreter_Value> operator+=(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '+='");
+            }
+            inline virtual std::shared_ptr<Interpreter_Value> operator-(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '-'");
+            }
+            inline virtual std::shared_ptr<Interpreter_Value> operator-=(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '-='");
+            }
+            inline virtual std::shared_ptr<Interpreter_Value> operator*(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '*'");
+            }
+            inline virtual std::shared_ptr<Interpreter_Value> operator*=(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '*='");
+            }
+            inline virtual std::shared_ptr<Interpreter_Value> operator/(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '/'");
+            }
+            inline virtual std::shared_ptr<Interpreter_Value> operator/=(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '/='");
+            }
+            inline virtual std::shared_ptr<Interpreter_Value> operator%(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '%'");
+            }
+            inline virtual std::shared_ptr<Interpreter_Value> operator%=(std::shared_ptr<Interpreter_Value>&){
+                throw std::runtime_error("unimplemented operator '%='");
+            }
             virtual std::shared_ptr<Parser::VarType> get_type()=0;
     };
 

@@ -17,23 +17,29 @@ std::vector<Lexer::keyword_data> base_keywords{
     {"for","KEYWORD_FOR",KEYWORD_FOR},
     {"do","KEYWORD_DO",KEYWORD_DO},
     {"while","KEYWORD_WHILE",KEYWORD_WHILE},
+    /*
     {"break","KEYWORD_BREAK",KEYWORD_BREAK},
     {"continue","KEYWORD_CONTINUE",KEYWORD_CONTINUE},
+    */
     {"return","KEYWORD_RETURN",KEYWORD_RETURN},
+    /*
     {"unsigned","KEYWORD_UNSIGNED",KEYWORD_UNSIGNED},
     {"null","KEYWORD_NULL",KEYWORD_NULL},
     {"true","KEYWORD_TRUE",KEYWORD_TRUE},
     {"false","KEYWORD_FALSE",KEYWORD_FALSE},
     {"static","KEYWORD_STATIC",KEYWORD_STATIC},
+    */
     {"void","KEYWORD_VOID",KEYWORD_VOID},
     {"char","KEYWORD_CHAR",KEYWORD_CHAR},
     {"int","KEYWORD_INT",KEYWORD_INT},
     {"float","KEYWORD_FLOAT",KEYWORD_FLOAT},
     {"string","KEYWORD_STRING",KEYWORD_STRING},
+    /*
     {"class","KEYWORD_CLASS",KEYWORD_CLASS},
     {"public","KEYWORD_PUBLIC",KEYWORD_PUBLIC},
     {"protected","KEYWORD_PROTECTED",KEYWORD_PROTECTED},
     {"private","KEYWORD_PRIVATE",KEYWORD_PRIVATE},
+    */
 };
 
 std::vector<Lexer::symbol_data> base_symbols{

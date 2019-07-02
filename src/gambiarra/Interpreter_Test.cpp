@@ -375,9 +375,79 @@ std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_Expression::run(std::sh
     return std::make_shared<Interpreter_Line_Run_Result_None>();
 }
 
+static std::string get_op_str(int op){
+    return get_symbol_data(symbol_type_t(op)).name;
+}
+
 std::shared_ptr<Interpreter_Value> Interpreter_Expression::eval_op(std::shared_ptr<Interpreter_ExecFrame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){
-    //TODO Interpreter_Expression::eval_op
-    throw std::runtime_error("unimplemented Interpreter_Expression::eval_op");
+    //TODO Interpreter_Expression::eval_op operators
+    std::shared_ptr<Interpreter_ExpressionPart> ex2=st.top();//right term
+    st.pop();
+    std::shared_ptr<Interpreter_Value> v2;
+    if(IS(ex2,Interpreter_ExpressionPart_Operator)){
+        v2=eval_op(context,st,std::static_pointer_cast<Interpreter_ExpressionPart_Operator>(ex2));
+    }else{
+        v2=ex2->eval(context);
+    }
+    std::shared_ptr<Interpreter_ExpressionPart> ex1=st.top();//left term
+    st.pop();
+    std::shared_ptr<Interpreter_Value> v1;
+    if(IS(ex1,Interpreter_ExpressionPart_Operator)){
+        v1=eval_op(context,st,std::static_pointer_cast<Interpreter_ExpressionPart_Operator>(ex1));
+    }else{
+        v1=ex1->eval(context);
+    }
+    switch(op->op){
+    case SYMBOL_RIGHT_SHIFT_ASSIGNMENT:
+    case SYMBOL_LEFT_SHIFT_ASSIGNMENT:
+    case SYMBOL_BITWISE_XOR_ASSIGNMENT:
+    case SYMBOL_BITWISE_OR_ASSIGNMENT:
+    case SYMBOL_BITWISE_AND_ASSIGNMENT:
+        break;
+    case SYMBOL_PLUS_ASSIGNMENT:
+        return v1->operator+=(v2);
+    case SYMBOL_MINUS_ASSIGNMENT:
+        return v1->operator-=(v2);
+    case SYMBOL_MULTIPLY_ASSIGNMENT:
+        return v1->operator*=(v2);
+    case SYMBOL_DIVIDE_ASSIGNMENT:
+        return v1->operator/=(v2);
+    case SYMBOL_PERCENT_ASSIGNMENT:
+        return v1->operator%=(v2);
+    case SYMBOL_ASSIGNMENT:
+        return v1->assignment(v2);
+    case SYMBOL_EQUALS:
+        return v1->operator==(v2);
+    case SYMBOL_NOT_EQUALS:
+        return v1->operator!=(v2);
+    case SYMBOL_GREATER:
+        return v1->operator>(v2);
+    case SYMBOL_GREATER_EQUALS:
+        return v1->operator>=(v2);
+    case SYMBOL_LOWER:
+        return v1->operator<(v2);
+    case SYMBOL_LOWER_EQUALS:
+        return v1->operator<=(v2);
+    case SYMBOL_PLUS:
+        return v1->operator+(v2);
+    case SYMBOL_MINUS:
+        return v1->operator-(v2);
+    case SYMBOL_MULTIPLY:
+        return v1->operator*(v2);
+    case SYMBOL_DIVIDE:
+        return v1->operator/(v2);
+    case SYMBOL_PERCENT:
+        return v1->operator%(v2);
+    case SYMBOL_LOGICAL_AND:
+    case SYMBOL_LOGICAL_OR:
+    case SYMBOL_BITWISE_AND:
+    case SYMBOL_BITWISE_OR:
+    case SYMBOL_BITWISE_XOR:
+    case SYMBOL_LEFT_SHIFT:
+    case SYMBOL_RIGHT_SHIFT:
+        break;
+    }
+    throw std::runtime_error("unimplemented operator '"+get_op_str(op->op)+"'");
 }
 
 std::shared_ptr<Interpreter_Value> Interpreter_Expression::eval(std::shared_ptr<Interpreter_ExecFrame> context){
@@ -392,16 +462,81 @@ std::shared_ptr<Interpreter_Value> Interpreter_Expression::eval(std::shared_ptr<
     }
 }
 
-std::shared_ptr<Parser::VarType> Interpreter_Expression::check_op(std::shared_ptr<Interpreter_Frame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){
-    std::shared_ptr<Interpreter_ExpressionPart> ex1=st.top();//right term
-    st.pop();
-    std::shared_ptr<Parser::VarType> t1;
-    if(IS(ex1,Interpreter_ExpressionPart_Operator)){
-        t1=check_op(context,st,std::static_pointer_cast<Interpreter_ExpressionPart_Operator>(ex1));
-    }else{
-        t1=ex1->get_type(context);
+enum operator_class_t{
+    OP_UNKNOWN,
+    OP_ASSIGNMENT,
+    OP_MATH,
+    OP_MATH_ASSIGNMENT,
+    OP_BITWISE,
+    OP_BITWISE_ASSIGNMENT,
+    OP_LOGICAL,
+    OP_EQUALITY,
+    OP_COMPARISON,
+};
+operator_class_t get_operator_class(int op){
+    switch(op){
+    case SYMBOL_PERCENT:
+    case SYMBOL_PLUS:
+    case SYMBOL_MINUS:
+    case SYMBOL_MULTIPLY:
+    case SYMBOL_DIVIDE:
+        
+        return OP_MATH;
+        
+    case SYMBOL_ASSIGNMENT:
+        
+        return OP_ASSIGNMENT;
+        
+    case SYMBOL_PERCENT_ASSIGNMENT:
+    case SYMBOL_PLUS_ASSIGNMENT:
+    case SYMBOL_MINUS_ASSIGNMENT:
+    case SYMBOL_MULTIPLY_ASSIGNMENT:
+    case SYMBOL_DIVIDE_ASSIGNMENT:
+        
+        return OP_MATH_ASSIGNMENT;
+        
+    case SYMBOL_NOT_EQUALS:
+    case SYMBOL_EQUALS:
+        
+        return OP_EQUALITY;
+        
+    case SYMBOL_GREATER:
+    case SYMBOL_GREATER_EQUALS:
+    case SYMBOL_LOWER:
+    case SYMBOL_LOWER_EQUALS:
+        
+        return OP_COMPARISON;
+        
+    case SYMBOL_LEFT_SHIFT:
+    case SYMBOL_RIGHT_SHIFT:
+    case SYMBOL_BITWISE_AND:
+    case SYMBOL_BITWISE_OR:
+    case SYMBOL_BITWISE_XOR:
+        
+        return OP_BITWISE;
+        
+    case SYMBOL_LEFT_SHIFT_ASSIGNMENT:
+    case SYMBOL_RIGHT_SHIFT_ASSIGNMENT:
+    case SYMBOL_BITWISE_AND_ASSIGNMENT:
+    case SYMBOL_BITWISE_OR_ASSIGNMENT:
+    case SYMBOL_BITWISE_XOR_ASSIGNMENT:
+        
+        return OP_BITWISE_ASSIGNMENT;
+        
+    case SYMBOL_LOGICAL_AND:
+    case SYMBOL_LOGICAL_OR:
+        
+        return OP_LOGICAL;
+        
+    default:
+        
+        return OP_UNKNOWN;
+        
     }
-    std::shared_ptr<Interpreter_ExpressionPart> ex2=st.top();//left term
+}
+
+std::shared_ptr<Parser::VarType> Interpreter_Expression::check_op(std::shared_ptr<Interpreter_Frame> context,std::stack<std::shared_ptr<Interpreter_ExpressionPart>> &st,std::shared_ptr<Interpreter_ExpressionPart_Operator> op){
+    std::shared_ptr<Interpreter_ExpressionPart> ex2=st.top();//right term
     st.pop();
     std::shared_ptr<Parser::VarType> t2;
     if(IS(ex2,Interpreter_ExpressionPart_Operator)){
@@ -409,12 +544,70 @@ std::shared_ptr<Parser::VarType> Interpreter_Expression::check_op(std::shared_pt
     }else{
         t2=ex2->get_type(context);
     }
-    if(is_string(t2)) return t2;
-    if(is_string(t1)) return t1;
-    if(is_int(t2)&&is_int(t1)) return t2;
-    if(is_float(t2)&&is_num(t1)) return t2;
-    if(is_num(t2)&&is_float(t1)) return t1;
-    throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2));
+    std::shared_ptr<Interpreter_ExpressionPart> ex1=st.top();//left term
+    st.pop();
+    std::shared_ptr<Parser::VarType> t1;
+    if(IS(ex1,Interpreter_ExpressionPart_Operator)){
+        t1=check_op(context,st,std::static_pointer_cast<Interpreter_ExpressionPart_Operator>(ex1));
+    }else{
+        t1=ex1->get_type(context);
+    }
+    operator_class_t op_type=get_operator_class(op->op);
+    switch(op_type){//string only allows '=', '+', '+=' and '=='
+    case OP_BITWISE_ASSIGNMENT:
+        if(!(is_int(t1)&&is_int(t2))){
+            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for assignment operator '"+get_op_str(op->op)+"'");
+        }
+        goto assign_varcheck;
+    case OP_MATH_ASSIGNMENT:
+        if(is_string(t1)||is_string(t2)){
+            if(op->op!=SYMBOL_PLUS_ASSIGNMENT||!(is_string(t1)&&is_string(t2))){//if one isn't a string or the operator isn't +=
+                throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for assignment operator '"+get_op_str(op->op)+"'");
+            }
+        }
+        goto assign_varcheck;
+    case OP_ASSIGNMENT:
+        if(!(is_num(t1)&&is_num(t2))&&!(is_string(t1)&&is_string(t2))){
+            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for assignment operator '"+get_op_str(op->op)+"'");
+        }
+assign_varcheck:
+        if(!IS(ex1,Interpreter_ExpressionPart_Variable)){
+            throw std::runtime_error("can't assign to non-variable type");
+        }
+        return t1;
+    case OP_MATH:
+        if(is_string(t1)||is_string(t2)){
+            if(op->op==SYMBOL_PLUS){
+                return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING);
+            }
+        }
+        if(is_int(t2)&&is_int(t1)) return t2;
+        if(is_float(t2)&&is_num(t1)) return t2;
+        if(is_num(t2)&&is_float(t1)) return t1;
+        throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for math operator '"+get_op_str(op->op)+"'");
+    case OP_BITWISE:
+        if(!(is_int(t1)&&is_int(t2))){
+            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for bitwise operator '"+get_op_str(op->op)+"'");
+        }
+        return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT);//bitwise always returns int
+    case OP_LOGICAL:
+        if(!(is_int(t1)&&is_int(t2))){
+            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for logical operator '"+get_op_str(op->op)+"'");
+        }
+        return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT);//logical always returns int
+    case OP_EQUALITY:
+        if(is_string(t1)!=is_string(t2)){//if one is a string and the other isn't, throw
+            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for equality operator '"+get_op_str(op->op)+"'");
+        }
+    case OP_COMPARISON:
+        if(is_compatible(t1,t2)){
+            return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT);//comparison always returns int
+        }
+        throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for comparison operator '"+get_op_str(op->op)+"'");
+    default:
+        break;
+    }
+    throw std::runtime_error("unknown operator '"+get_op_str(op->op)+"'");
 }
 
 std::shared_ptr<Parser::VarType> Interpreter_Expression::get_type(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Interpreter_ExpressionPart> ex){
