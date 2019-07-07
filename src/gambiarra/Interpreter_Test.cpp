@@ -22,6 +22,102 @@
 
 using namespace Interpreter;
 
+std::shared_ptr<Int_Value> Interpreter_Value::lt(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '<'");
+}
+std::shared_ptr<Int_Value> Interpreter_Value::gt(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '>'");
+}
+std::shared_ptr<Int_Value> Interpreter_Value::eq(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '=='");
+}
+std::shared_ptr<Int_Value> Interpreter_Value::neq(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '!='");
+}
+std::shared_ptr<Int_Value> Interpreter_Value::gt_eq(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '>='");
+}
+std::shared_ptr<Int_Value> Interpreter_Value::lt_eq(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '<='");
+}
+std::shared_ptr<Int_Value> Interpreter_Value::mod(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '%'");
+}
+ std::shared_ptr<Int_Value> Interpreter_Value::bitwise_and(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '&'");
+}
+std::shared_ptr<Int_Value> Interpreter_Value::bitwise_or(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '|'");
+}
+std::shared_ptr<Int_Value> Interpreter_Value::bitwise_xor(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '^'");
+}
+std::shared_ptr<Int_Value> Interpreter_Value::logical_and(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '&&'");
+}
+std::shared_ptr<Int_Value> Interpreter_Value::logical_or(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '||'");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::add(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '+'");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::sub(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '-'");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::mul(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '*'");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::div(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '/'");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::assign(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '='");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::assign_add(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '+='");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::assign_sub(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '-='");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::assign_mul(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '*='");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::assign_div(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '/='");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::assign_mod(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '%='");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::assign_bitwise_and(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '&='");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::assign_bitwise_or(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '|='");
+}
+std::shared_ptr<Interpreter_Value> Interpreter_Value::assign_bitwise_xor(std::shared_ptr<Interpreter_Value>&){
+    throw std::runtime_error("unimplemented operator '^='");
+}
+
+std::shared_ptr<Interpreter_Value> String_Value::assign(std::shared_ptr<Interpreter_Value> &other){//other can only be string
+    value=std::dynamic_pointer_cast<String_Value>(other)->get();
+    return std::make_shared<String_Value>(value);
+}
+
+std::shared_ptr<Interpreter_Value> String_Value::assign_add(std::shared_ptr<Interpreter_Value> &other){//other can only be string
+    value+=std::dynamic_pointer_cast<String_Value>(other)->get();
+    return std::make_shared<String_Value>(value);
+}
+
+std::shared_ptr<Interpreter_Value> String_Value::add(std::shared_ptr<Interpreter_Value> &other){//other can only be string
+    return std::make_shared<String_Value>(std::dynamic_pointer_cast<String_Value>(other)->get()+value);
+}
+std::shared_ptr<Int_Value> String_Value::eq(std::shared_ptr<Interpreter_Value> &other){//other can only be string
+    return std::make_shared<Int_Value>(std::dynamic_pointer_cast<String_Value>(other)->get()==value);
+}
+std::shared_ptr<Int_Value> String_Value::neq(std::shared_ptr<Interpreter_Value> &other){//other can only be string
+    return std::make_shared<Int_Value>(std::dynamic_pointer_cast<String_Value>(other)->get()!=value);
+}
+
 static bool is_int(std::shared_ptr<Parser::VarType> vt){
     if(vt->type==Parser::VARTYPE_PRIMITIVE){
         return (vt->primitive==Parser::PRIMITIVE_INT);
@@ -400,52 +496,60 @@ std::shared_ptr<Interpreter_Value> Interpreter_Expression::eval_op(std::shared_p
     switch(op->op){
     case SYMBOL_RIGHT_SHIFT_ASSIGNMENT:
     case SYMBOL_LEFT_SHIFT_ASSIGNMENT:
-    case SYMBOL_BITWISE_XOR_ASSIGNMENT:
-    case SYMBOL_BITWISE_OR_ASSIGNMENT:
-    case SYMBOL_BITWISE_AND_ASSIGNMENT:
-        break;
-    case SYMBOL_PLUS_ASSIGNMENT:
-        return v1->operator+=(v2);
-    case SYMBOL_MINUS_ASSIGNMENT:
-        return v1->operator-=(v2);
-    case SYMBOL_MULTIPLY_ASSIGNMENT:
-        return v1->operator*=(v2);
-    case SYMBOL_DIVIDE_ASSIGNMENT:
-        return v1->operator/=(v2);
-    case SYMBOL_PERCENT_ASSIGNMENT:
-        return v1->operator%=(v2);
-    case SYMBOL_ASSIGNMENT:
-        return v1->assignment(v2);
-    case SYMBOL_EQUALS:
-        return v1->operator==(v2);
-    case SYMBOL_NOT_EQUALS:
-        return v1->operator!=(v2);
-    case SYMBOL_GREATER:
-        return v1->operator>(v2);
-    case SYMBOL_GREATER_EQUALS:
-        return v1->operator>=(v2);
-    case SYMBOL_LOWER:
-        return v1->operator<(v2);
-    case SYMBOL_LOWER_EQUALS:
-        return v1->operator<=(v2);
-    case SYMBOL_PLUS:
-        return v1->operator+(v2);
-    case SYMBOL_MINUS:
-        return v1->operator-(v2);
-    case SYMBOL_MULTIPLY:
-        return v1->operator*(v2);
-    case SYMBOL_DIVIDE:
-        return v1->operator/(v2);
-    case SYMBOL_PERCENT:
-        return v1->operator%(v2);
-    case SYMBOL_LOGICAL_AND:
-    case SYMBOL_LOGICAL_OR:
-    case SYMBOL_BITWISE_AND:
-    case SYMBOL_BITWISE_OR:
-    case SYMBOL_BITWISE_XOR:
     case SYMBOL_LEFT_SHIFT:
     case SYMBOL_RIGHT_SHIFT:
+        //TODO left,right shift + their assignments
         break;
+    case SYMBOL_LOGICAL_AND:
+        return v1->logical_and(v2);
+    case SYMBOL_LOGICAL_OR:
+        return v1->logical_or(v2);
+    case SYMBOL_BITWISE_AND:
+        return v1->bitwise_and(v2);
+    case SYMBOL_BITWISE_OR:
+        return v1->bitwise_or(v2);
+    case SYMBOL_BITWISE_XOR:
+        return v1->bitwise_xor(v2);
+    case SYMBOL_BITWISE_XOR_ASSIGNMENT:
+        return v1->assign_bitwise_xor(v2);
+    case SYMBOL_BITWISE_OR_ASSIGNMENT:
+        return v1->assign_bitwise_or(v2);
+    case SYMBOL_BITWISE_AND_ASSIGNMENT:
+        return v1->assign_bitwise_and(v2);
+    case SYMBOL_PLUS_ASSIGNMENT:
+        return v1->assign_add(v2);
+    case SYMBOL_MINUS_ASSIGNMENT:
+        return v1->assign_sub(v2);
+    case SYMBOL_MULTIPLY_ASSIGNMENT:
+        return v1->assign_mul(v2);
+    case SYMBOL_DIVIDE_ASSIGNMENT:
+        return v1->assign_div(v2);
+    case SYMBOL_PERCENT_ASSIGNMENT:
+        return v1->assign_mod(v2);
+    case SYMBOL_ASSIGNMENT:
+        return v1->assign(v2);
+    case SYMBOL_EQUALS:
+        return v1->eq(v2);
+    case SYMBOL_NOT_EQUALS:
+        return v1->neq(v2);
+    case SYMBOL_GREATER:
+        return v1->gt(v2);
+    case SYMBOL_GREATER_EQUALS:
+        return v1->gt_eq(v2);
+    case SYMBOL_LOWER:
+        return v1->lt(v2);
+    case SYMBOL_LOWER_EQUALS:
+        return v1->lt_eq(v2);
+    case SYMBOL_PLUS:
+        return v1->add(v2);
+    case SYMBOL_MINUS:
+        return v1->sub(v2);
+    case SYMBOL_MULTIPLY:
+        return v1->mul(v2);
+    case SYMBOL_DIVIDE:
+        return v1->div(v2);
+    case SYMBOL_PERCENT:
+        return v1->mod(v2);
     }
     throw std::runtime_error("unimplemented operator '"+get_op_str(op->op)+"'");
 }
@@ -472,10 +576,19 @@ enum operator_class_t{
     OP_LOGICAL,
     OP_EQUALITY,
     OP_COMPARISON,
+    OP_MOD,
+    OP_MOD_ASSIGNMENT,
 };
 operator_class_t get_operator_class(int op){
     switch(op){
     case SYMBOL_PERCENT:
+        
+        return OP_MOD;
+        
+    case SYMBOL_PERCENT_ASSIGNMENT:
+        
+        return OP_MOD_ASSIGNMENT;
+        
     case SYMBOL_PLUS:
     case SYMBOL_MINUS:
     case SYMBOL_MULTIPLY:
@@ -487,7 +600,6 @@ operator_class_t get_operator_class(int op){
         
         return OP_ASSIGNMENT;
         
-    case SYMBOL_PERCENT_ASSIGNMENT:
     case SYMBOL_PLUS_ASSIGNMENT:
     case SYMBOL_MINUS_ASSIGNMENT:
     case SYMBOL_MULTIPLY_ASSIGNMENT:
@@ -554,6 +666,16 @@ std::shared_ptr<Parser::VarType> Interpreter_Expression::check_op(std::shared_pt
     }
     operator_class_t op_type=get_operator_class(op->op);
     switch(op_type){//string only allows '=', '+', '+=' and '=='
+    case OP_MOD:
+        if(!(is_int(t1)&&is_int(t2))){
+            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for modulus operator '"+get_op_str(op->op)+"'");
+        }
+        return t1;
+    case OP_MOD_ASSIGNMENT:
+        if(!(is_int(t1)&&is_int(t2))){
+            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for assignment operator '"+get_op_str(op->op)+"'");
+        }
+        goto assign_varcheck;
     case OP_BITWISE_ASSIGNMENT:
         if(!(is_int(t1)&&is_int(t2))){
             throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for assignment operator '"+get_op_str(op->op)+"'");
@@ -561,7 +683,7 @@ std::shared_ptr<Parser::VarType> Interpreter_Expression::check_op(std::shared_pt
         goto assign_varcheck;
     case OP_MATH_ASSIGNMENT:
         if(is_string(t1)||is_string(t2)){
-            if(op->op!=SYMBOL_PLUS_ASSIGNMENT||!(is_string(t1)&&is_string(t2))){//if one isn't a string or the operator isn't +=
+            if(op->op!=SYMBOL_PLUS_ASSIGNMENT||!(is_string(t1)&&is_string(t2))){//if both aren't strings or the operator isn't +=
                 throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for assignment operator '"+get_op_str(op->op)+"'");
             }
         }
@@ -577,9 +699,10 @@ assign_varcheck:
         return t1;
     case OP_MATH:
         if(is_string(t1)||is_string(t2)){
-            if(op->op==SYMBOL_PLUS){
+            if(op->op==SYMBOL_PLUS&&is_string(t1)&&is_string(t2)){//if both are strings and the operator is +
                 return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING);
             }
+            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for math operator '"+get_op_str(op->op)+"'");
         }
         if(is_int(t2)&&is_int(t1)) return t2;
         if(is_float(t2)&&is_num(t1)) return t2;
@@ -634,9 +757,9 @@ std::shared_ptr<Parser::VarType> Interpreter_Expression::check(std::shared_ptr<I
 
 Interpreter_IfStatement::Interpreter_IfStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::IfStatement> stmt){
     condition=std::make_shared<Interpreter_Expression>(context,stmt->condition);
-    code=std::make_shared<Interpreter_Code>(context,stmt->code);
+    code=std::make_shared<Interpreter_Code>(context.get(),stmt->code);
     if(stmt->else_stmt){
-        else_stmt=std::make_shared<Interpreter_Code>(context,stmt->else_stmt->code);
+        else_stmt=std::make_shared<Interpreter_Code>(context.get(),stmt->else_stmt->code);
     }
 }
 
@@ -644,19 +767,19 @@ Interpreter_ForStatement::Interpreter_ForStatement(std::shared_ptr<Interpreter_F
     pre=std::make_shared<Interpreter_Expression>(context,stmt->pre);
     condition=std::make_shared<Interpreter_Expression>(context,stmt->condition);
     inc=std::make_shared<Interpreter_Expression>(context,stmt->inc);
-    code=std::make_shared<Interpreter_Code>(context,stmt->code);
+    code=std::make_shared<Interpreter_Code>(context.get(),stmt->code);
 }
 
 Interpreter_WhileStatement::Interpreter_WhileStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::WhileStatement> stmt){
     condition=std::make_shared<Interpreter_Expression>(context,stmt->condition);
-    code=std::make_shared<Interpreter_Code>(context,stmt->code);
+    code=std::make_shared<Interpreter_Code>(context.get(),stmt->code);
 }
 
 Interpreter_ReturnStatement::Interpreter_ReturnStatement(std::shared_ptr<Interpreter_Frame> context,std::shared_ptr<Parser::ReturnStatement> stmt){
     value=std::make_shared<Interpreter_Expression>(context,stmt->value);
 }
 
-Interpreter_Code::Interpreter_Code(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::CodeBlock> cb):default_frame(std::make_shared<Interpreter_Frame>()){
+Interpreter_Code::Interpreter_Code(Interpreter_Frame * p,std::shared_ptr<Parser::CodeBlock> cb):default_frame(std::make_shared<Interpreter_Frame>(p)){
     for(auto l:cb->lines){
         readLine(l);
     }
@@ -670,14 +793,14 @@ std::shared_ptr<Interpreter_Line_Run_Result> Interpreter_Code::run(std::shared_p
     return std::make_shared<Interpreter_Line_Run_Result_None>();
 }
 
-Interpreter_Code::Interpreter_Code(std::shared_ptr<Interpreter_Frame> p,std::shared_ptr<Parser::Line> l):default_frame(std::make_shared<Interpreter_Frame>(p)){
+Interpreter_Code::Interpreter_Code(Interpreter_Frame * p,std::shared_ptr<Parser::Line> l):default_frame(std::make_shared<Interpreter_Frame>(p)){
     readLine(l);
 }
 
 void Interpreter_Code::readLine(std::shared_ptr<Parser::Line> l){
     switch(l->type){
     case Parser::LINE_CODE_BLOCK:
-        code.push_back(std::make_shared<Interpreter_Code>(default_frame,std::static_pointer_cast<Parser::CodeBlock>(l->contents)));
+        code.push_back(std::make_shared<Interpreter_Code>(default_frame.get(),std::static_pointer_cast<Parser::CodeBlock>(l->contents)));
         break;
     case Parser::LINE_STATEMENT:{
             std::shared_ptr<Parser::Statement> stmt(std::static_pointer_cast<Parser::Statement>(l->contents));
@@ -786,7 +909,8 @@ Int_Variable::Int_Variable(int i):Int_Value(i){}
 Float_Variable::Float_Variable(double d):Float_Value(d){}
 String_Variable::String_Variable(std::string s):String_Value(s){}
 
-Interpreted_Function_Call::Interpreted_Function_Call(std::shared_ptr<Parser::FunctionDefinition> func):function(func){}
+Interpreted_Function_Call::Interpreted_Function_Call(Interpreter_Frame * p,std::shared_ptr<Parser::FunctionDefinition> func):function(func),frame(std::make_shared<Interpreter_Frame>(p,this,func->code)){
+}
 
 std::string Interpreted_Function_Call::get_name(){
     return function->name;
@@ -800,14 +924,31 @@ std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> Interpreted_Fu
     return function->parameters;
 }
 
+void Interpreter_ExecFrame::add_args(std::map<std::string,std::shared_ptr<Interpreter_Value>> args){
+    
+}
+
 std::shared_ptr<Interpreter_Value> Interpreted_Function_Call::call(std::shared_ptr<Interpreter_ExecFrame> parent_frame,std::map<std::string,std::shared_ptr<Interpreter_Value>> args){
+    
     //TODO Interpreted_Function_Call::call
     throw std::runtime_error("unimplemented");
 }
 
 Interpreter_Frame::Interpreter_Frame(){}
 
-Interpreter_Frame::Interpreter_Frame(std::shared_ptr<Interpreter_Frame> p):parent(p){
+Interpreter_Frame::Interpreter_Frame(Interpreter_Frame * p):parent(p){
+}
+
+Interpreter_Frame::Interpreter_Frame(Interpreter_Frame * p,Interpreted_Function_Call * call,std::shared_ptr<Parser::CodeBlock>):parent(p){
+    if(call)read_parameters(call->get_parameters());
+    //TODO Interpreter_Frame constructor
+}
+
+void Interpreter_Frame::read_parameters(std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>>){
+    //TODO read parameters
+}
+
+Interpreter_Frame::Interpreter_Frame(Interpreter_Frame * p,std::shared_ptr<Parser::CodeBlock> b):Interpreter_Frame(p,nullptr,b){
 }
 
 Interpreter_Frame::Interpreter_Frame(std::vector<std::shared_ptr<Parser::Definition>> deflist){
@@ -832,7 +973,8 @@ void Interpreter_Frame::add_definition(std::shared_ptr<Parser::Definition> def,b
 }
 
 void Interpreter_Frame::add_function(std::shared_ptr<Parser::FunctionDefinition> func){
-    interpreted_functions.insert({func->name,std::make_shared<Interpreted_Function_Call>(func)});
+    //fixme
+    //interpreted_functions.insert({func->name,std::make_shared<Interpreted_Function_Call>(func)});
 }
 
 void Interpreter_Frame::add_variable(std::shared_ptr<Parser::VarType> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global){

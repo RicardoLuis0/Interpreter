@@ -64,8 +64,8 @@ namespace Interpreter {
 
     class Interpreter_Code : public Interpreter_Line {
         public:
-            Interpreter_Code(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::CodeBlock>);
-            Interpreter_Code(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::Line>);
+            Interpreter_Code(Interpreter_Frame * parent,std::shared_ptr<Parser::CodeBlock>);
+            Interpreter_Code(Interpreter_Frame * parent,std::shared_ptr<Parser::Line>);
             std::shared_ptr<Interpreter_Line_Run_Result> run(std::shared_ptr<Interpreter_ExecFrame> context) override;
             std::shared_ptr<Interpreter_Frame> default_frame;
             std::vector<std::shared_ptr<Interpreter_Line>> code;
@@ -117,57 +117,31 @@ namespace Interpreter {
 
     class Interpreter_Value{
         public:
-            inline virtual std::shared_ptr<Int_Value> operator<(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '<'");
-            }
-            inline virtual std::shared_ptr<Int_Value> operator>(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '>'");
-            }
-            inline virtual std::shared_ptr<Int_Value> operator==(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '=='");
-            }
-            inline virtual std::shared_ptr<Int_Value> operator!=(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '!='");
-            }
-            inline virtual std::shared_ptr<Int_Value> operator>=(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '>='");
-            }
-            inline virtual std::shared_ptr<Int_Value> operator<=(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '<='");
-            }
-            inline virtual std::shared_ptr<Interpreter_Value> assignment(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '='");
-            }
-            inline virtual std::shared_ptr<Interpreter_Value> operator+(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '+'");
-            }
-            inline virtual std::shared_ptr<Interpreter_Value> operator+=(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '+='");
-            }
-            inline virtual std::shared_ptr<Interpreter_Value> operator-(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '-'");
-            }
-            inline virtual std::shared_ptr<Interpreter_Value> operator-=(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '-='");
-            }
-            inline virtual std::shared_ptr<Interpreter_Value> operator*(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '*'");
-            }
-            inline virtual std::shared_ptr<Interpreter_Value> operator*=(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '*='");
-            }
-            inline virtual std::shared_ptr<Interpreter_Value> operator/(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '/'");
-            }
-            inline virtual std::shared_ptr<Interpreter_Value> operator/=(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '/='");
-            }
-            inline virtual std::shared_ptr<Interpreter_Value> operator%(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '%'");
-            }
-            inline virtual std::shared_ptr<Interpreter_Value> operator%=(std::shared_ptr<Interpreter_Value>&){
-                throw std::runtime_error("unimplemented operator '%='");
-            }
+            virtual std::shared_ptr<Int_Value> gt(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Int_Value> lt(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Int_Value> eq(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Int_Value> neq(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Int_Value> gt_eq(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Int_Value> lt_eq(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Int_Value> mod(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Int_Value> bitwise_and(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Int_Value> bitwise_or(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Int_Value> bitwise_xor(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Int_Value> logical_and(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Int_Value> logical_or(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> add(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> sub(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> mul(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> div(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> assign(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> assign_add(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> assign_sub(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> assign_mul(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> assign_div(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> assign_mod(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> assign_bitwise_and(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> assign_bitwise_or(std::shared_ptr<Interpreter_Value>&);
+            virtual std::shared_ptr<Interpreter_Value> assign_bitwise_xor(std::shared_ptr<Interpreter_Value>&);
             virtual std::shared_ptr<Parser::VarType> get_type()=0;
     };
 
@@ -232,7 +206,18 @@ namespace Interpreter {
             Int_Value(int);
             operator int&();
             int &get();
-            std::shared_ptr<Parser::VarType> get_type() override;
+            virtual std::shared_ptr<Parser::VarType> get_type() override;
+            /*
+            virtual std::shared_ptr<Interpreter_Value> add(std::shared_ptr<Interpreter_Value>&) override;
+            virtual std::shared_ptr<Interpreter_Value> sub(std::shared_ptr<Interpreter_Value>&) override;
+            virtual std::shared_ptr<Interpreter_Value> mul(std::shared_ptr<Interpreter_Value>&) override;
+            virtual std::shared_ptr<Interpreter_Value> div(std::shared_ptr<Interpreter_Value>&) override;
+            virtual std::shared_ptr<Interpreter_Value> assign(std::shared_ptr<Interpreter_Value>&) override;
+            virtual std::shared_ptr<Interpreter_Value> assign_add(std::shared_ptr<Interpreter_Value>&) override;
+            virtual std::shared_ptr<Interpreter_Value> assign_sub(std::shared_ptr<Interpreter_Value>&) override;
+            virtual std::shared_ptr<Interpreter_Value> assign_mul(std::shared_ptr<Interpreter_Value>&) override;
+            virtual std::shared_ptr<Interpreter_Value> assign_div(std::shared_ptr<Interpreter_Value>&) override;
+            */
         protected:
             int value;
     };
@@ -247,7 +232,7 @@ namespace Interpreter {
             Float_Value(double);
             operator double&();
             double &get();
-            std::shared_ptr<Parser::VarType> get_type() override;
+            virtual std::shared_ptr<Parser::VarType> get_type() override;
         protected:
             double value;
     };
@@ -262,7 +247,12 @@ namespace Interpreter {
             String_Value(std::string);
             operator std::string&();
             std::string &get();
-            std::shared_ptr<Parser::VarType> get_type() override;
+            virtual std::shared_ptr<Parser::VarType> get_type() override;
+            virtual std::shared_ptr<Int_Value> eq(std::shared_ptr<Interpreter_Value>&) override;
+            virtual std::shared_ptr<Int_Value> neq(std::shared_ptr<Interpreter_Value>&) override;
+            virtual std::shared_ptr<Interpreter_Value> assign(std::shared_ptr<Interpreter_Value>&) override;
+            virtual std::shared_ptr<Interpreter_Value> assign_add(std::shared_ptr<Interpreter_Value>&) override;
+            virtual std::shared_ptr<Interpreter_Value> add(std::shared_ptr<Interpreter_Value>&) override;
         protected:
             std::string value;
     };
@@ -279,6 +269,7 @@ namespace Interpreter {
             std::shared_ptr<Interpreter_Frame> defaults;
             std::map<std::string,std::shared_ptr<Interpreter_Variable>> variables;
             std::shared_ptr<Interpreter_Variable> get_variable(std::string);
+            void add_args(std::map<std::string,std::shared_ptr<Interpreter_Value>>);
             std::shared_ptr<Function_Call> get_function(std::string);
     };
 
@@ -299,10 +290,10 @@ namespace Interpreter {
             //Interpreter_Frame(std::shared_ptr<Parser::FunctionDefinition>);
             Interpreter_Frame(std::vector<std::shared_ptr<Parser::Definition>>);//make global scope
             //Interpreter_Frame(Interpreter_Frame * parent,std::shared_ptr<Parser::Line>);
-            Interpreter_Frame(Interpreted_Function_Call * call,std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::CodeBlock>);
-            Interpreter_Frame(std::shared_ptr<Interpreter_Frame> parent,std::shared_ptr<Parser::CodeBlock>);
-            Interpreter_Frame(std::shared_ptr<Interpreter_Frame> parent);
-            std::shared_ptr<Interpreter_Frame> parent;
+            Interpreter_Frame(Interpreter_Frame * parent,Interpreted_Function_Call * call,std::shared_ptr<Parser::CodeBlock>);
+            Interpreter_Frame(Interpreter_Frame * parent,std::shared_ptr<Parser::CodeBlock>);
+            Interpreter_Frame(Interpreter_Frame * parent);
+            Interpreter_Frame * parent;
             std::map<std::string,std::shared_ptr<Interpreted_Function_Call>> interpreted_functions;
             std::map<std::string,std::shared_ptr<Native_Function_Call>> native_functions;
             std::map<std::string,std::shared_ptr<Interpreter_Variable>> variable_defaults;
@@ -311,6 +302,7 @@ namespace Interpreter {
             std::map<std::string,std::string> string_values;
             std::shared_ptr<Interpreter_Variable> get_variable(std::string);
             std::shared_ptr<Function_Call> get_function(std::string);
+            void read_parameters(std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>>);
             void register_native_function(std::shared_ptr<Native_Function_Call> func);
             void add_variable(std::shared_ptr<Parser::VarType> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global=false);
             void add_function(std::shared_ptr<Parser::FunctionDefinition>);
@@ -319,13 +311,14 @@ namespace Interpreter {
 
     class Interpreted_Function_Call : public Function_Call {
         public:
-            Interpreted_Function_Call(std::shared_ptr<Parser::FunctionDefinition>);
+            Interpreted_Function_Call(Interpreter_Frame * parent,std::shared_ptr<Parser::FunctionDefinition>);
             std::string get_name() override;
             std::shared_ptr<Parser::VarType> get_type() override;
             std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override;
             std::shared_ptr<Interpreter_Value> call(std::shared_ptr<Interpreter_ExecFrame>,std::map<std::string,std::shared_ptr<Interpreter_Value>> args) override;
         private:
             std::shared_ptr<Parser::FunctionDefinition> function;
+            std::shared_ptr<Interpreter_Frame> frame;
     };
 
     class Interpreter_Test{
