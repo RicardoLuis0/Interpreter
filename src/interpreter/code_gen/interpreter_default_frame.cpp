@@ -124,9 +124,11 @@ void DefaultFrame::add_variable(std::shared_ptr<Parser::VarType> type,std::share
                 break;
             default:
                 if(global)throw std::runtime_error("global variables can only be initiated to literals");
+                else goto default_val;
             }
         }
     }else{
+    default_val:
         switch(type->primitive){
         case Parser::PRIMITIVE_INT:
             variable_defaults.insert({var->name,std::make_shared<IntVariable>(var->name,0)});
