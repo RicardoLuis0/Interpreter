@@ -83,64 +83,55 @@ void DefaultFrame::add_variable(std::shared_ptr<Parser::VarType> type,std::share
                 switch(type->primitive){
                 case Parser::PRIMITIVE_INT:
                     variable_defaults.insert({var->name,std::make_shared<IntVariable>(var->name,std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer())});
-                    break;
+                    return;
                 case Parser::PRIMITIVE_FLOAT:
                     variable_defaults.insert({var->name,std::make_shared<FloatVariable>(var->name,std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer())});
-                    break;
+                    return;
                 case Parser::PRIMITIVE_STRING:
                     throw std::runtime_error("cannot assign string to number");
-                    break;
                 case Parser::PRIMITIVE_INVALID:
                     throw std::runtime_error("invalid primitive type");
                 }
-                break;
             case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
                 switch(type->primitive){
                 case Parser::PRIMITIVE_INT:
                     variable_defaults.insert({var->name,std::make_shared<IntVariable>(var->name,std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float())});
-                    break;
+                    return;
                 case Parser::PRIMITIVE_FLOAT:
                     variable_defaults.insert({var->name,std::make_shared<FloatVariable>(var->name,std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float())});
-                    break;
+                    return;
                 case Parser::PRIMITIVE_STRING:
                     throw std::runtime_error("cannot assign string to number");
-                    break;
                 case Parser::PRIMITIVE_INVALID:
                     throw std::runtime_error("invalid primitive type");
                 }
-                break;
             case Parser::EXPRESSION_TERM_LITERAL_STRING:
                 switch(type->primitive){
                 case Parser::PRIMITIVE_INT:
                 case Parser::PRIMITIVE_FLOAT:
                     throw std::runtime_error("cannot assign number to string");
-                    break;
                 case Parser::PRIMITIVE_STRING:
                     variable_defaults.insert({var->name,std::make_shared<StringVariable>(var->name,std::static_pointer_cast<Lexer::StringToken>(term->contents_t)->get_string())});
-                    break;
+                    return;
                 case Parser::PRIMITIVE_INVALID:
                     throw std::runtime_error("invalid primitive type");
                 }
-                break;
             default:
                 if(global)throw std::runtime_error("global variables can only be initiated to literals");
-                else goto default_val;
             }
         }
-    }else{
-    default_val:
-        switch(type->primitive){
-        case Parser::PRIMITIVE_INT:
-            variable_defaults.insert({var->name,std::make_shared<IntVariable>(var->name,0)});
-            break;
-        case Parser::PRIMITIVE_FLOAT:
-            variable_defaults.insert({var->name,std::make_shared<FloatVariable>(var->name,0)});
-            break;
-        case Parser::PRIMITIVE_STRING:
-            variable_defaults.insert({var->name,std::make_shared<StringVariable>(var->name,"")});
-            break;
-        case Parser::PRIMITIVE_INVALID:
-            throw std::runtime_error("invalid primitive type");
-        }
+    }
+    switch(type->primitive){
+    case Parser::PRIMITIVE_INT:
+        variable_defaults.insert({var->name,std::make_shared<IntVariable>(var->name,0)});
+        break;
+    case Parser::PRIMITIVE_FLOAT:
+        variable_defaults.insert({var->name,std::make_shared<FloatVariable>(var->name,0)});
+        break;
+    case Parser::PRIMITIVE_STRING:
+        variable_defaults.insert({var->name,std::make_shared<StringVariable>(var->name,"")});
+        break;
+    case Parser::PRIMITIVE_INVALID:
+        throw std::runtime_error("invalid primitive type");
     }
 }
