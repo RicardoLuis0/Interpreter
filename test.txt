@@ -2,6 +2,8 @@
 int main(){
 	puts("What's your name?\n");
 	string name=getline();
-	puts("Hello, "+name+"!");
+	puts("Hello, ");
+	puts(name);
+	puts("!");
 	return 0;
 }
