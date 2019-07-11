@@ -5,6 +5,16 @@
 #include "interpreter_string_value.h"
 #include "interpreter_int_value.h"
 
+//NOTE native functions to make later
+//void printf(string format,mixed ... args)
+//void puts(string) DONE
+//void putc(int) 
+//string getline() DONE
+//int stoi(string) DONE
+//float stof(string)
+//string itos(int) DONE
+//string ftos(float)
+
 namespace Interpreter {
     class puts : public Function {
 
