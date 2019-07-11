@@ -20,10 +20,10 @@ std::shared_ptr<LineResult> IfStatement::run(std::shared_ptr<ExecFrame> context)
         do_code=true;
     }
     if(do_code){
-        return code->run(context);
+        return code->run(code->getContext(context.get()));
     }else{
         if(else_stmt){
-            return else_stmt->run(context);
+            return else_stmt->run(else_stmt->getContext(context.get()));
         }else{
             return std::make_shared<LineResultSimple>(ACTION_NONE);
         }

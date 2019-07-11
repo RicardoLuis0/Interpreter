@@ -17,7 +17,7 @@ std::shared_ptr<LineResult> ForStatement::run(std::shared_ptr<ExecFrame> context
     while(1){
         val=condition->eval(context);
         if((is_int(val->get_type())&&std::dynamic_pointer_cast<IntValue>(val)->get())||(is_float(val->get_type())&&std::dynamic_pointer_cast<FloatValue>(val)->get())){
-            std::shared_ptr<LineResult> r=code->run(context);
+            std::shared_ptr<LineResult> r=code->run(code->getContext(context.get()));
             switch(r->getAction()){
             case ACTION_BREAK:
                 return std::make_shared<LineResultSimple>(ACTION_NONE);

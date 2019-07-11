@@ -11,7 +11,7 @@
 
 #define MAP_SET(map,key,val,other) MAP_FIND(map,key){iter->second=val;}else{other;}
 
-#define CHECKPTR(ptr,type) (std::dynamic_pointer_cast<type>(ptr)!=nullptr)
+#define CHECKPTR(ptr,type) (std::dynamic_pointer_cast<type>(ptr))
 
 inline bool is_int(std::shared_ptr<Parser::VarType> vt){
     if(vt->type==Parser::VARTYPE_PRIMITIVE){

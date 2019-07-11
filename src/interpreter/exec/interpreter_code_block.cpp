@@ -84,6 +84,9 @@ void CodeBlock::addStatement(std::shared_ptr<Parser::Statement> stmt){
         break;
     }
 }
+std::shared_ptr<ExecFrame> CodeBlock::getContext(ExecFrame * parent){
+    return std::make_shared<ExecFrame>(parent,default_frame.get());
+}
 
 void CodeBlock::varDefCallback(std::shared_ptr<Parser::VariableDefinitionItem> var){
     std::string name=var->name;

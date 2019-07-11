@@ -26,6 +26,8 @@ std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> UserFunction::
     return function->parameters;
 }
 
+#include <iostream>
+
 std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args){
     std::map<std::string,std::shared_ptr<Value>> args_o;
     int i=0;
@@ -35,7 +37,7 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
     for(std::shared_ptr<Parser::FunctionDefinitionParameter> param:function->parameters){
         args_o.insert({param->name,args[i++]});
     }
-    std::shared_ptr<ExecFrame> f(std::make_shared<ExecFrame>(parent_frame,frame.get()));
+    std::shared_ptr<ExecFrame> f(code->getContext(parent_frame));
     f->set_args(args_o);
     std::shared_ptr<LineResult> result=code->run(f);
     switch(result->getAction()){

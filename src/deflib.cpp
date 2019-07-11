@@ -43,7 +43,7 @@ namespace Interpreter {
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
             std::string temp;
-            std::cin.ignore();
+            while(std::cin.peek()=='\n')std::cin.ignore();
             std::getline(std::cin,temp,'\n');
             return std::make_shared<StringValue>(temp);
         }
