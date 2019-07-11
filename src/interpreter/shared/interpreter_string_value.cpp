@@ -29,7 +29,7 @@ std::shared_ptr<Value> StringValue::assign_add(std::shared_ptr<Value> &other){//
 }
 
 std::shared_ptr<Value> StringValue::add(std::shared_ptr<Value> &other){//other can only be string
-    return std::make_shared<StringValue>(std::dynamic_pointer_cast<StringValue>(other)->get()+value);
+    return std::make_shared<StringValue>(value+std::dynamic_pointer_cast<StringValue>(other)->get());
 }
 
 std::shared_ptr<Value> StringValue::eq(std::shared_ptr<Value> &other){//other can only be string

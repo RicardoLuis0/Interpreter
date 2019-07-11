@@ -159,7 +159,7 @@ void Expression::add_expression(std::shared_ptr<DefaultFrame> context,std::share
             }else{
                 add_term(context,op->term1);
                 if(!MAP_HAS(operator_precedence,op_num))throw std::runtime_error("unknown operator");
-                while(operator_precedence[op_stack.top()]>=operator_precedence[op_num]){
+                while(!op_stack.empty()&&operator_precedence[op_stack.top()]>=operator_precedence[op_num]){
                     expression.push(std::make_shared<ExprPartOp>(op_stack.top()));
                     op_stack.pop();
                 }
@@ -168,6 +168,10 @@ void Expression::add_expression(std::shared_ptr<DefaultFrame> context,std::share
             }
         }else if(e->type==Parser::EXPRESSION_TERM){
             add_term(context,std::static_pointer_cast<Parser::ExpressionTerm>(e->contents));
+            while(!op_stack.empty()){
+                expression.push(std::make_shared<ExprPartOp>(op_stack.top()));
+                op_stack.pop();
+            }
             break;
         }
     }
@@ -267,7 +271,6 @@ assign_varcheck:
         if(typeid(*ex1)!=typeid(ExprPartVar)){
             throw std::runtime_error("can't assign to non-variable type");
         }
-        throw std::runtime_error("unimplemented Interpreter_ExpressionPart_Variable");
         return t1;
     case OP_MATH:
         if(is_string(t1)||is_string(t2)){

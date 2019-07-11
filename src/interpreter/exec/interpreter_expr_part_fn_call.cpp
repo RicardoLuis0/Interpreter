@@ -5,8 +5,9 @@ using namespace Interpreter;
 
 ExprPartFnCall::ExprPartFnCall(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::FunctionCall> fn):ident(fn->identifier){
     std::shared_ptr<Function> fnc=context->get_function(ident);
-    std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> params=fnc->get_parameters();
-    std::vector<std::shared_ptr<Parser::Expression>> args=fn->arguments->expression_list;
+    std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> params(fnc->get_parameters());
+    std::vector<std::shared_ptr<Parser::Expression>> args;
+    if(fn->arguments)args=fn->arguments->expression_list;
     if(params.size()!=args.size()){
         if(params.size()>args.size()){
             throw std::runtime_error("too many arguments for function '"+fn->identifier+"'");
