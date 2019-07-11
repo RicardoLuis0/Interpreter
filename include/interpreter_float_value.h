@@ -5,11 +5,11 @@
 #include "parser_var_type.h"
 
 namespace Interpreter {
-    class Float_Value : public virtual Value {
+    class FloatValue : public virtual Value {
         protected:
             double value;
         public:
-            Float_Value(double);
+            FloatValue(double);
             operator double&();
             double &get();
             virtual std::shared_ptr<Parser::VarType> get_type() override;

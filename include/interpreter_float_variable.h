@@ -5,9 +5,9 @@
 #include "interpreter_variable.h"
 
 namespace Interpreter {
-    class Float_Variable : public virtual Variable , public virtual Float_Value {
+    class FloatVariable : public virtual Variable , public virtual FloatValue {
         public:
-            Float_Variable(std::string,double);
+            FloatVariable(std::string,double);
     };
 }
 

@@ -5,9 +5,9 @@
 #include "interpreter_variable.h"
 
 namespace Interpreter {
-    class Int_Variable : public virtual Variable , public virtual Int_Value {
+    class IntVariable : public virtual Variable , public virtual IntValue {
         public:
-            Int_Variable(std::string,int);
+            IntVariable(std::string,int);
     };
 }
 

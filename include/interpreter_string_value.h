@@ -5,9 +5,9 @@
 #include "parser_var_type.h"
 
 namespace Interpreter {
-    class String_Value : public virtual Value {
+    class StringValue : public virtual Value {
         public:
-            String_Value(std::string);
+            StringValue(std::string);
             operator std::string&();
             std::string &get();
             virtual std::shared_ptr<Parser::VarType> get_type() override;

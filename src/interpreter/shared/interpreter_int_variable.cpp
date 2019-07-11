@@ -2,6 +2,6 @@
 
 using namespace Interpreter;
 
-Int_Variable::Int_Variable(std::string n,int i):Variable(n),Int_Value(i){
+IntVariable::IntVariable(std::string n,int i):Variable(n),IntValue(i){
     
 }
