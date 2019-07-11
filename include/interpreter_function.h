@@ -3,8 +3,8 @@
 
 #include "parser_var_type.h"
 #include "interpreter_value.h"
-//#include "interpreter_exec_frame.h"
 #include "parser_function_definition_parameter.h"
+#include "interpreter_line_result.h"
 
 namespace Interpreter {
     class Function {
@@ -12,7 +12,7 @@ namespace Interpreter {
             virtual std::string get_name()=0;
             virtual std::shared_ptr<Parser::VarType> get_type()=0;
             virtual std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters()=0;
-            //virtual std::shared_ptr<Value> call(std::shared_ptr<ExecFrame> parent_frame,std::vector<std::shared_ptr<Value>> args)=0;
+            virtual std::shared_ptr<Value> call(class ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args)=0;
     };
 }
 

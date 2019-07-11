@@ -5,6 +5,8 @@
 #include "interpreter_int_variable.h"
 #include "interpreter_float_variable.h"
 #include "interpreter_string_variable.h"
+#include "interpreter_native_function.h"
+#include "interpreter_user_function.h"
 
 using namespace Interpreter;
 
@@ -33,11 +35,26 @@ std::shared_ptr<Function> ExecFrame::get_function(std::string name){
     return defaults->get_function(name);
 }
 
-void ExecFrame::set_args(std::map<std::string,std::shared_ptr<Value>> args){
-    //TODO ExecFrame::set_args
+void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val){
+    if(typeid(*val)==typeid(IntValue)){
+        variables[s]=std::make_shared<IntVariable>(s,std::dynamic_pointer_cast<IntValue>(val)->get());
+    }else if(typeid(*val)==typeid(FloatValue)){
+        variables[s]=std::make_shared<FloatVariable>(s,std::dynamic_pointer_cast<FloatValue>(val)->get());
+    }else if(typeid(*val)==typeid(StringValue)){
+        variables[s]=std::make_shared<StringVariable>(s,std::dynamic_pointer_cast<StringValue>(val)->get());
+    }
 }
 
-std::shared_ptr<Value> ExecFrame::fn_call(std::shared_ptr<Function>,std::vector<std::shared_ptr<Value>>){
-    //TODO ExecFrame::fn_call
-    throw std::runtime_error("unimplemented");
+void ExecFrame::set_args(std::map<std::string,std::shared_ptr<Value>> args){
+   for(std::pair<std::string,std::shared_ptr<Value>> arg:args){
+        set_variable(arg.first,arg.second);
+    }
+}
+
+std::shared_ptr<Value> ExecFrame::fn_call(std::shared_ptr<Function> fn,std::vector<std::shared_ptr<Value>> args){
+    if(MAP_HAS(defaults->functions,fn->get_name())&&defaults->functions[fn->get_name()]==fn){
+        return fn->call(this,args);
+    }else{
+        return parent->fn_call(fn,args);
+    }
 }

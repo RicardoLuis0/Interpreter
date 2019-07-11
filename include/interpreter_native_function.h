@@ -10,9 +10,11 @@
 //to_string(mixed<int,float>)
 
 #include "interpreter_function.h"
+#include "interpreter_exec_frame.h"
 
 namespace Interpreter {
     class NativeFunction : public Function {//base class
+        public:
     };
 }
 

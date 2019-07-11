@@ -29,6 +29,8 @@
 #include "parser_return_statement.h"
 #include "parser_definition_matcher.h"
 #include "parser_unary_operation.h"
+#include "interpreter_default_frame.h"
+#include "interpreter_exec_frame.h"
 
 /**
  * @mainpage
@@ -42,12 +44,54 @@
 
 void test_lexer(),test_expressions(),test_lines(),test_definitions();
 
+void test_exec(){
+    try{
+        std::string filename;
+        std::vector<std::shared_ptr<Lexer::Token>> tokens;
+        std::vector<std::shared_ptr<Parser::Definition>> deflist;
+        Lexer::Lexer lexer(base_symbols,base_keywords);
+        while(true){
+            Console::clear();
+            std::cout<<"Filename: ";
+            std::cin>>filename;
+            try{
+                tokens=lexer.tokenize_from_file(filename);//split file into tokens
+            }catch(MyExcept::FileError &e){
+                std::cout<<e.what()<<"\nTry Again, ";
+                continue;
+            }
+            break;
+        }
+        Parser::parserProgress p {data:tokens,location:0};
+        while(p.get_nothrow()!=nullptr){
+            deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
+        }
+        Interpreter::DefaultFrame dframe(deflist);
+        std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
+        std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main"));
+        if(!entrypoint){
+            std::cout<<"no main function";
+        }else{
+            eframe->fn_call(entrypoint,{});
+        }
+    }catch(MyExcept::ParseError &e){
+        std::cout<<e.what();
+        return;
+    }catch(MyExcept::NoMatchException &e){
+        std::cout<<e.what();
+        return;
+    }catch(std::exception &e){
+        std::cout<<"uncaught exception: "<<e.what();
+        return;
+    }
+}
+
 int main(int argc,char ** argv){
     Console::init();
     if(argc<2){
         while(true){
             Console::clear();
-            std::cout<<"0> test lexer\n1> test expression parser\n2> test line parser\n3> test whole code parsing\n\nChoice: ";
+            std::cout<<"0> test lexer\n1> test expression parser\n2> test line parser\n3> test whole code parsing\n4> test execution\n\nChoice: ";
             std::string input;
             std::cin>>input;
             if(input.compare("0")==0){
@@ -58,6 +102,8 @@ int main(int argc,char ** argv){
                 test_lines();
             }else if(input.compare("3")==0){
                 test_definitions();
+            }else if(input.compare("4")==0){
+                test_exec();
             }else{
                 continue;
             }

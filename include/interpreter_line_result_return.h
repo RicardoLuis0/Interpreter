@@ -8,10 +8,10 @@ namespace Interpreter {
 
     class LineResultReturn : public LineResultSimple {
         public:
-            LineResultReturn(std::shared_ptr<Expression> value);
-            std::shared_ptr<Value> eval(std::shared_ptr<ExecFrame>);
+            LineResultReturn(std::shared_ptr<Value> value);
+            std::shared_ptr<Value> get();
         protected:
-            std::shared_ptr<Expression> value;
+            std::shared_ptr<Value> value;
     };
 }
 

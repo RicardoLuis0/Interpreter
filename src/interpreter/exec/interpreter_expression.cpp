@@ -137,53 +137,13 @@ Expression::Expression(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Par
     type=check(context);
 }
 
-std::shared_ptr<Value> Expression::eval(std::shared_ptr<ExecFrame> context){
-    std::stack<std::shared_ptr<ExprPart>> temp_stack=expression;
-    std::shared_ptr<ExprPart> ex=temp_stack.top();
-    temp_stack.pop();
-    if(typeid(*ex)==typeid(ExprPartOp)){
-        std::shared_ptr<ExprPartOp> op(std::static_pointer_cast<ExprPartOp>(ex));
-        return eval_op(context,temp_stack,op);
-    }else{
-        return ex->eval(context);
-    }
-}
-
-std::shared_ptr<LineResult> Expression::run(std::shared_ptr<ExecFrame> context){
-    eval(context);
-    return std::make_shared<LineResultSimple>(ACTION_NONE);
-}
-
 std::shared_ptr<Parser::VarType> Expression::get_type(){
     return type;
 }
 
-void Expression::add_term(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::ExpressionTerm> term){
-    switch(term->type){
-    case Parser::EXPRESSION_TERM_EXPRESSION_GROUP:
-        add_expression(context,std::static_pointer_cast<Parser::ExpressionGroup>(term->contents_p)->contents);
-        break;
-    case Parser::EXPRESSION_TERM_FUNCTION_CALL:
-        expression.push(std::make_shared<ExprPartFnCall>(context,std::static_pointer_cast<Parser::FunctionCall>(term->contents_p)));
-        break;
-    case Parser::EXPRESSION_TERM_IDENTIFIER:
-        expression.push(std::make_shared<ExprPartVar>(context,std::static_pointer_cast<Lexer::WordToken>(term->contents_t)->get_literal()));
-        break;
-    case Parser::EXPRESSION_TERM_LITERAL_INT:
-        expression.push(std::make_shared<ExprPartValue>(int(std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer())));
-        break;
-    case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
-        expression.push(std::make_shared<ExprPartValue>(std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float()));
-        break;
-    case Parser::EXPRESSION_TERM_LITERAL_STRING:
-        expression.push(std::make_shared<ExprPartValue>(std::static_pointer_cast<Lexer::StringToken>(term->contents_t)->get_literal()));
-        break;
-    case Parser::EXPRESSION_TERM_UNARY_OPERATION:
-        //TODO Expression::add_term unary
-        throw std::runtime_error("unimplemented Expression::add_term unary");
-        break;
-    }
-    throw std::runtime_error("unimplemented Expression term");
+std::shared_ptr<Parser::VarType> Expression::get_type(std::shared_ptr<DefaultFrame> context,std::shared_ptr<ExprPart> ex){
+    if(typeid(*ex)==typeid(ExprPartOp))throw std::runtime_error("invalid object type ExprPartOp for Expression::get_type");
+    return ex->get_type(context);
 }
 
 void Expression::add_expression(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::Expression> e){
@@ -213,9 +173,49 @@ void Expression::add_expression(std::shared_ptr<DefaultFrame> context,std::share
     }
 }
 
-std::shared_ptr<Parser::VarType> Expression::get_type(std::shared_ptr<DefaultFrame> context,std::shared_ptr<ExprPart> ex){
-    if(typeid(*ex)==typeid(ExprPartOp))throw std::runtime_error("invalid object type ExprPartOp for Expression::get_type");
-    return ex->get_type(context);
+void Expression::add_term(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::ExpressionTerm> term){
+    switch(term->type){
+    case Parser::EXPRESSION_TERM_EXPRESSION_GROUP:
+        add_expression(context,std::static_pointer_cast<Parser::ExpressionGroup>(term->contents_p)->contents);
+        break;
+    case Parser::EXPRESSION_TERM_FUNCTION_CALL:
+        expression.push(std::make_shared<ExprPartFnCall>(context,std::static_pointer_cast<Parser::FunctionCall>(term->contents_p)));
+        break;
+    case Parser::EXPRESSION_TERM_IDENTIFIER:
+        expression.push(std::make_shared<ExprPartVar>(context,std::static_pointer_cast<Lexer::WordToken>(term->contents_t)->get_literal()));
+        break;
+    case Parser::EXPRESSION_TERM_LITERAL_INT:
+        expression.push(std::make_shared<ExprPartValue>(int(std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer())));
+        break;
+    case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
+        expression.push(std::make_shared<ExprPartValue>(std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float()));
+        break;
+    case Parser::EXPRESSION_TERM_LITERAL_STRING:
+        expression.push(std::make_shared<ExprPartValue>(std::static_pointer_cast<Lexer::StringToken>(term->contents_t)->get_string()));
+        break;
+    case Parser::EXPRESSION_TERM_UNARY_OPERATION:
+        //TODO Expression::add_term unary
+        throw std::runtime_error("unimplemented Expression::add_term unary");
+        break;
+    }
+    //throw std::runtime_error("unimplemented Expression term");
+}
+
+std::shared_ptr<Parser::VarType> Expression::check(std::shared_ptr<DefaultFrame> context){
+    std::stack<std::shared_ptr<ExprPart>> temp_stack=expression;
+    std::shared_ptr<ExprPart> ex=temp_stack.top();
+    temp_stack.pop();
+    std::shared_ptr<Parser::VarType> temp_type;
+    if(typeid(*ex)==typeid(ExprPartOp)){
+        std::shared_ptr<ExprPartOp> op(std::static_pointer_cast<ExprPartOp>(ex));
+        temp_type=check_op(context,temp_stack,op);
+    }else{
+        temp_type=get_type(context,ex);
+    }
+    if(temp_type&&temp_stack.size()!=0){//if the stack wasn't consumed to the end by check_op, or wasn't a single value
+        throw std::runtime_error("invalid object state for Interpreter_Expression");
+    }
+    return temp_type;
 }
 
 std::shared_ptr<Parser::VarType> Expression::check_op(std::shared_ptr<DefaultFrame> context,std::stack<std::shared_ptr<ExprPart>> &st,std::shared_ptr<ExprPartOp> op){
@@ -305,25 +305,24 @@ assign_varcheck:
     throw std::runtime_error("unknown operator '"+get_op_str(op->op)+"'");
 }
 
-std::shared_ptr<Parser::VarType> Expression::check(std::shared_ptr<DefaultFrame> context){
+std::shared_ptr<LineResult> Expression::run(std::shared_ptr<ExecFrame> context){
+    eval(context);
+    return std::make_shared<LineResultSimple>(ACTION_NONE);
+}
+
+std::shared_ptr<Value> Expression::eval(std::shared_ptr<ExecFrame> context){
     std::stack<std::shared_ptr<ExprPart>> temp_stack=expression;
     std::shared_ptr<ExprPart> ex=temp_stack.top();
     temp_stack.pop();
-    std::shared_ptr<Parser::VarType> temp_type;
     if(typeid(*ex)==typeid(ExprPartOp)){
         std::shared_ptr<ExprPartOp> op(std::static_pointer_cast<ExprPartOp>(ex));
-        temp_type=check_op(context,temp_stack,op);
+        return eval_op(context,temp_stack,op);
     }else{
-        temp_type=get_type(context,ex);
+        return ex->eval(context);
     }
-    if(temp_type&&temp_stack.size()!=0){//if the stack wasn't consumed to the end by check_op, or wasn't a single value
-        throw std::runtime_error("invalid object state for Interpreter_Expression");
-    }
-    return temp_type;
 }
 
 std::shared_ptr<Value> Expression::eval_op(std::shared_ptr<ExecFrame> context,std::stack<std::shared_ptr<ExprPart>> &st,std::shared_ptr<ExprPartOp> op){
-    //TODO Interpreter_Expression::eval_op operators
     std::shared_ptr<ExprPart> ex2=st.top();//right term
     st.pop();
     std::shared_ptr<Value> v2;
@@ -345,7 +344,7 @@ std::shared_ptr<Value> Expression::eval_op(std::shared_ptr<ExecFrame> context,st
     case SYMBOL_LEFT_SHIFT_ASSIGNMENT:
     case SYMBOL_LEFT_SHIFT:
     case SYMBOL_RIGHT_SHIFT:
-        //TODO left,right shift + their assignments
+        //TODO left,right shift operators and their assignments
         break;
     case SYMBOL_LOGICAL_AND:
         return v1->logical_and(v2);

@@ -4,6 +4,11 @@
 #include "parser_binary_operation.h"
 #include "symbols_keywords.h"
 #include "interpreter_line_result_simple.h"
+#include "interpreter_return_statement.h"
+#include "interpreter_if_statement.h"
+#include "interpreter_while_statement.h"
+#include "interpreter_for_statement.h"
+#include "interpreter_user_function.h"
 
 using namespace Interpreter;
 
@@ -26,7 +31,13 @@ CodeBlock::CodeBlock(DefaultFrame * p,std::shared_ptr<Parser::CodeBlock> b):Code
 }
 
 CodeBlock::CodeBlock(DefaultFrame * p,std::shared_ptr<Parser::Line> l):default_frame(std::make_shared<DefaultFrame>(p)){
-    addLine(l);
+    if(l->type==Parser::LINE_CODE_BLOCK){
+        for(std::shared_ptr<Parser::Line> l : std::static_pointer_cast<Parser::CodeBlock>(l->contents)->lines){
+            addLine(l);
+        }
+    }else{
+        addLine(l);
+    }
 }
 
 std::shared_ptr<LineResult> CodeBlock::run(std::shared_ptr<ExecFrame> context){
@@ -42,26 +53,8 @@ void CodeBlock::addLine(std::shared_ptr<Parser::Line> l){
     case Parser::LINE_CODE_BLOCK:
         code.push_back(std::make_shared<CodeBlock>(default_frame.get(),std::static_pointer_cast<Parser::CodeBlock>(l->contents)));
         break;
-    case Parser::LINE_STATEMENT:{
-            /*
-            std::shared_ptr<Parser::Statement> stmt(std::static_pointer_cast<Parser::Statement>(l->contents));
-            switch(stmt->type){
-            case Parser::STATEMENT_IF:
-                code.push_back(std::make_shared<Interpreter_IfStatement>(default_frame,std::static_pointer_cast<Parser::IfStatement>(stmt->statement)));
-                break;
-            case Parser::STATEMENT_WHILE:
-                code.push_back(std::make_shared<Interpreter_WhileStatement>(default_frame,std::static_pointer_cast<Parser::WhileStatement>(stmt->statement)));
-                break;
-            case Parser::STATEMENT_FOR:
-                code.push_back(std::make_shared<Interpreter_ForStatement>(default_frame,std::static_pointer_cast<Parser::ForStatement>(stmt->statement)));
-                break;
-            case Parser::STATEMENT_RETURN:
-                code.push_back(std::make_shared<Interpreter_ReturnStatement>(default_frame,std::static_pointer_cast<Parser::ReturnStatement>(stmt->statement)));
-                break;std::static_pointer_cast<Parser::Definition>(l->contents)
-            }*/
-            //TODO CodeBlock::addLine LINE_STATEMENT
-            throw std::runtime_error("unimplemented");
-        }
+    case Parser::LINE_STATEMENT:
+        addStatement(std::static_pointer_cast<Parser::Statement>(l->contents));
         break;
     case Parser::LINE_EXPRESSION:
         code.push_back(std::make_shared<Expression>(default_frame,std::static_pointer_cast<Parser::Expression>(l->contents)));
@@ -74,7 +67,25 @@ void CodeBlock::addLine(std::shared_ptr<Parser::Line> l){
     }
 }
 
+void CodeBlock::addStatement(std::shared_ptr<Parser::Statement> stmt){
+    switch(stmt->type){
+    case Parser::STATEMENT_IF:
+        code.push_back(std::make_shared<IfStatement>(default_frame,std::static_pointer_cast<Parser::IfStatement>(stmt->statement)));
+        break;
+    case Parser::STATEMENT_WHILE:
+        code.push_back(std::make_shared<WhileStatement>(default_frame,std::static_pointer_cast<Parser::WhileStatement>(stmt->statement)));
+        break;
+    case Parser::STATEMENT_FOR:
+        code.push_back(std::make_shared<ForStatement>(default_frame,std::static_pointer_cast<Parser::ForStatement>(stmt->statement)));
+        break;
+    case Parser::STATEMENT_RETURN:
+        code.push_back(std::make_shared<ReturnStatement>(default_frame,std::static_pointer_cast<Parser::ReturnStatement>(stmt->statement)));
+        break;
+    }
+}
+
 void CodeBlock::varDefCallback(std::shared_ptr<Parser::VariableDefinitionItem> var){
+    std::string name=var->name;
     if(var->value->type==Parser::EXPRESSION_TERM){
         switch(std::static_pointer_cast<Parser::ExpressionTerm>(var->value->contents)->type){
         case Parser::EXPRESSION_TERM_LITERAL_INT:

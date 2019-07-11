@@ -8,8 +8,6 @@
 #include "parser_function_definition.h"
 
 #include "interpreter_function.h"
-//#include "interpreter_user_function.h"
-#include "interpreter_native_function.h"
 #include "interpreter_value.h"
 #include "interpreter_variable.h"
 
@@ -19,6 +17,7 @@
 namespace Interpreter{
     class DefaultFrame{
         protected:
+            friend class ExecFrame;
         public:
             DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>>);//make global scope
             DefaultFrame(DefaultFrame * parent,Function * func);//Function func must be of type UserFunction
@@ -31,7 +30,7 @@ namespace Interpreter{
             std::map<std::string,std::string> string_values;
             std::shared_ptr<Variable> get_variable(std::string);
             std::shared_ptr<Function> get_function(std::string);
-            void register_native_function(std::shared_ptr<NativeFunction> func);
+            void register_function(std::shared_ptr<Function> func);
             void add_parameters(std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>>);
             void add_variable(std::shared_ptr<Parser::VarType> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global=false);
             void add_function(std::shared_ptr<Parser::FunctionDefinition>);

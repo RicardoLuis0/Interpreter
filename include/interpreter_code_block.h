@@ -4,13 +4,12 @@
 #include "parser_code_block.h"
 #include "parser_line.h"
 #include "interpreter_line.h"
-#include "interpreter_user_function.h"
 #include "parser_statement.h"
 
 namespace Interpreter {
     class CodeBlock : public Line {
         public:
-            CodeBlock(UserFunction * func,std::shared_ptr<Parser::CodeBlock>);//function constructor
+            CodeBlock(class UserFunction * func,std::shared_ptr<Parser::CodeBlock>);//function constructor
             CodeBlock(DefaultFrame * parent,std::shared_ptr<Parser::CodeBlock>);//codeblock constructor
             CodeBlock(DefaultFrame * parent,std::shared_ptr<Parser::Line>);//single line block constructor (eg. IF statement with single line instead of block, etc)
             virtual std::shared_ptr<LineResult> run(std::shared_ptr<ExecFrame> context) override;

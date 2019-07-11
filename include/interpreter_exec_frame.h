@@ -4,13 +4,17 @@
 #include <map>
 #include <memory>
 #include "interpreter_default_frame.h"
+#include "interpreter_variable.h"
+#include "interpreter_function.h"
 
 namespace Interpreter {
     class ExecFrame{
+        protected:
+            void set_variable(std::string,std::shared_ptr<Value>);
         public:
-            ExecFrame(ExecFrame * parent,DefaultFrame * defaults);
+            ExecFrame(ExecFrame * parent,class DefaultFrame * defaults);
             ExecFrame * parent;
-            DefaultFrame * defaults;
+            class DefaultFrame * defaults;
             std::map<std::string,std::shared_ptr<Variable>> variables;
             std::shared_ptr<Variable> get_variable(std::string);
             std::shared_ptr<Function> get_function(std::string);

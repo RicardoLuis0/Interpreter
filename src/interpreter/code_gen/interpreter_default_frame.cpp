@@ -11,10 +11,12 @@
 #include "float_token.h"
 #include "string_token.h"
 #include "interpreter_user_function.h"
+#include "deflib.h"
 
 using namespace Interpreter;
 
-DefaultFrame::DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>> defs){
+DefaultFrame::DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>> defs):parent(nullptr){
+    init_deflib(this);
     for(std::shared_ptr<Parser::Definition> def:defs){
         add_definition(def,true);
     }
@@ -35,12 +37,13 @@ std::shared_ptr<Function> DefaultFrame::get_function(std::string name){
     MAP_GET(functions,name,parent?parent->get_function(name):nullptr)
 }
 
-void DefaultFrame::add_parameters(std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>>){
-    //TODO DefaultFrame::read_parameters
-    throw std::runtime_error("unimplemented");
+void DefaultFrame::add_parameters(std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> params){
+    for(std::shared_ptr<Parser::FunctionDefinitionParameter> p:params){
+        add_variable(p->type,std::make_shared<Parser::VariableDefinitionItem>(p->name));
+    }
 }
 
-void DefaultFrame::register_native_function(std::shared_ptr<NativeFunction> func){
+void DefaultFrame::register_function(std::shared_ptr<Function> func){
     if(MAP_HAS(functions,func->get_name())){
         throw std::runtime_error("Redefining Function "+func->get_name());
     }else{
@@ -49,7 +52,7 @@ void DefaultFrame::register_native_function(std::shared_ptr<NativeFunction> func
 }
 
 void DefaultFrame::add_function(std::shared_ptr<Parser::FunctionDefinition> func){
-    functions.insert({func->name,std::make_shared<UserFunction>(this,func)});
+    register_function(std::make_shared<UserFunction>(this,func));
 }
 
 void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool global,void(*cb)(void*,std::shared_ptr<Parser::VariableDefinitionItem>),void * arg){

@@ -8,6 +8,7 @@
 namespace Parser{
     class VariableDefinitionItem : public ParserResultPart {
         public:
+            VariableDefinitionItem(std::string);
             VariableDefinitionItem(std::shared_ptr<Lexer::WordToken>,std::shared_ptr<Expression>);
             std::string name;
             std::shared_ptr<Expression> value;
