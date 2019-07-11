@@ -20,12 +20,12 @@ std::shared_ptr<Parser::VarType> StringValue::get_type(){
 
 std::shared_ptr<Value> StringValue::assign(std::shared_ptr<Value> &other){//other can only be string
     value=std::dynamic_pointer_cast<StringValue>(other)->get();
-    return std::make_shared<StringValue>(value);
+    return nullptr;
 }
 
 std::shared_ptr<Value> StringValue::assign_add(std::shared_ptr<Value> &other){//other can only be string
     value+=std::dynamic_pointer_cast<StringValue>(other)->get();
-    return std::make_shared<StringValue>(value);
+    return nullptr;
 }
 
 std::shared_ptr<Value> StringValue::add(std::shared_ptr<Value> &other){//other can only be string

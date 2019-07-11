@@ -360,23 +360,32 @@ std::shared_ptr<Value> Expression::eval_op(std::shared_ptr<ExecFrame> context,st
     case SYMBOL_BITWISE_XOR:
         return v1->bitwise_xor(v2);
     case SYMBOL_BITWISE_XOR_ASSIGNMENT:
-        return v1->assign_bitwise_xor(v2);
+        v1->assign_bitwise_xor(v2);
+        return v1;
     case SYMBOL_BITWISE_OR_ASSIGNMENT:
-        return v1->assign_bitwise_or(v2);
+        v1->assign_bitwise_or(v2);
+        return v1;
     case SYMBOL_BITWISE_AND_ASSIGNMENT:
-        return v1->assign_bitwise_and(v2);
+        v1->assign_bitwise_and(v2);
+        return v1;
     case SYMBOL_PLUS_ASSIGNMENT:
-        return v1->assign_add(v2);
+        v1->assign_add(v2);
+        return v1;
     case SYMBOL_MINUS_ASSIGNMENT:
-        return v1->assign_sub(v2);
+        v1->assign_sub(v2);
+        return v1;
     case SYMBOL_MULTIPLY_ASSIGNMENT:
-        return v1->assign_mul(v2);
+        v1->assign_mul(v2);
+        return v1;
     case SYMBOL_DIVIDE_ASSIGNMENT:
-        return v1->assign_div(v2);
+        v1->assign_div(v2);
+        return v1;
     case SYMBOL_PERCENT_ASSIGNMENT:
-        return v1->assign_mod(v2);
+        v1->assign_mod(v2);
+        return v1;
     case SYMBOL_ASSIGNMENT:
-        return v1->assign(v2);
+        v1->assign(v2);
+        return v1;
     case SYMBOL_EQUALS:
         return v1->eq(v2);
     case SYMBOL_NOT_EQUALS:
