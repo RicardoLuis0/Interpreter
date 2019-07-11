@@ -9,7 +9,8 @@
 namespace Interpreter {
     class UserFunction : public Function {
         public:
-            UserFunction(DefaultFrame * parent,std::shared_ptr<Parser::FunctionDefinition>);
+            UserFunction(DefaultFrame * parent,std::shared_ptr<Parser::FunctionDefinition>,bool delay=false);
+            void proccess_delayed();
             std::string get_name() override;
             std::shared_ptr<Parser::VarType> get_type() override;
             std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override;

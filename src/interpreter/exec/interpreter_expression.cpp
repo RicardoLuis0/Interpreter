@@ -189,10 +189,10 @@ void Expression::add_term(std::shared_ptr<DefaultFrame> context,std::shared_ptr<
         expression.push(std::make_shared<ExprPartVar>(context,std::static_pointer_cast<Lexer::WordToken>(term->contents_t)->get_literal()));
         break;
     case Parser::EXPRESSION_TERM_LITERAL_INT:
-        expression.push(std::make_shared<ExprPartValue>(int(std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer())));
+        expression.push(ExprPartValue::from_int(int(std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer())));
         break;
     case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
-        expression.push(std::make_shared<ExprPartValue>(std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float()));
+        expression.push(ExprPartValue::from_double(std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float()));
         break;
     case Parser::EXPRESSION_TERM_LITERAL_STRING:
         expression.push(std::make_shared<ExprPartValue>(std::static_pointer_cast<Lexer::StringToken>(term->contents_t)->get_string()));

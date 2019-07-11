@@ -4,8 +4,14 @@
 
 using namespace Interpreter;
 
-UserFunction::UserFunction(DefaultFrame * p,std::shared_ptr<Parser::FunctionDefinition> func):function(func),frame(std::make_shared<DefaultFrame>(p,this)),code(std::make_shared<CodeBlock>(this,func->code)){
+UserFunction::UserFunction(DefaultFrame * p,std::shared_ptr<Parser::FunctionDefinition> func,bool delay):function(func),frame(std::make_shared<DefaultFrame>(p,this)),code(delay?nullptr:std::make_shared<CodeBlock>(this,func->code)){
     
+}
+
+void UserFunction::proccess_delayed(){
+    if(!code){
+        code=std::make_shared<CodeBlock>(this,function->code);
+    }
 }
 
 std::string UserFunction::get_name(){

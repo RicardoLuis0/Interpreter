@@ -1,6 +1,5 @@
 #include "integer_token.h"
 
-
 Lexer::IntegerToken::IntegerToken(int n,uint32_t n2):
     Token(n,TOKEN_TYPE_INTEGER),
     d(n2){

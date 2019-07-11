@@ -36,11 +36,11 @@ std::shared_ptr<Function> ExecFrame::get_function(std::string name){
 }
 
 void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val){
-    if(typeid(*val)==typeid(IntValue)){
+    if(CHECKPTR(val,IntValue)){
         variables[s]=std::make_shared<IntVariable>(s,std::dynamic_pointer_cast<IntValue>(val)->get());
-    }else if(typeid(*val)==typeid(FloatValue)){
+    }else if(CHECKPTR(val,FloatValue)){
         variables[s]=std::make_shared<FloatVariable>(s,std::dynamic_pointer_cast<FloatValue>(val)->get());
-    }else if(typeid(*val)==typeid(StringValue)){
+    }else if(CHECKPTR(val,StringValue)){
         variables[s]=std::make_shared<StringVariable>(s,std::dynamic_pointer_cast<StringValue>(val)->get());
     }
 }

@@ -32,7 +32,8 @@ CodeBlock::CodeBlock(DefaultFrame * p,std::shared_ptr<Parser::CodeBlock> b):Code
 
 CodeBlock::CodeBlock(DefaultFrame * p,std::shared_ptr<Parser::Line> l):default_frame(std::make_shared<DefaultFrame>(p)){
     if(l->type==Parser::LINE_CODE_BLOCK){
-        for(std::shared_ptr<Parser::Line> l : std::static_pointer_cast<Parser::CodeBlock>(l->contents)->lines){
+        std::shared_ptr<Parser::CodeBlock> b(std::static_pointer_cast<Parser::CodeBlock>(l->contents));
+        for(std::shared_ptr<Parser::Line> l : b->lines){
             addLine(l);
         }
     }else{

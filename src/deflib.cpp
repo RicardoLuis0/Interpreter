@@ -3,6 +3,7 @@
 #include "interpreter_function.h"
 #include "parser_var_type.h"
 #include "interpreter_string_value.h"
+#include "interpreter_int_value.h"
 
 namespace Interpreter {
     class puts : public Function {
@@ -47,9 +48,50 @@ namespace Interpreter {
             return std::make_shared<StringValue>(temp);
         }
     };
+
+    class stoi : public Function{
+
+        std::string get_name() override {
+            return "stoi";
+        }
+
+        std::shared_ptr<Parser::VarType> get_type(){
+            return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT);
+        }
+
+        std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override {
+            return {std::make_shared<Parser::FunctionDefinitionParameter>(std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING),"str")};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            return std::make_shared<IntValue>(std::stoi(std::dynamic_pointer_cast<StringValue>(args[0])->get()));
+        }
+    };
+
+    class itos : public Function{
+
+        std::string get_name() override {
+            return "itos";
+        }
+
+        std::shared_ptr<Parser::VarType> get_type(){
+            return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING);
+        }
+
+        std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override {
+            return {std::make_shared<Parser::FunctionDefinitionParameter>(std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT),"int")};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<IntValue>(args[0])->get()));
+        }
+    };
+
 }
 
 void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::puts>());
     d->register_function(std::make_shared<Interpreter::getline>());
+    d->register_function(std::make_shared<Interpreter::stoi>());
+    d->register_function(std::make_shared<Interpreter::itos>());
 }

@@ -5,6 +5,19 @@
 
 using namespace Interpreter;
 
+ExprPartValue::ExprPartValue(std::shared_ptr<Value> v):value(v){
+    
+}
+
+std::shared_ptr<ExprPartValue> ExprPartValue::from_int(int i){
+    return std::make_shared<ExprPartValue>(std::make_shared<IntValue>(i));
+}
+
+std::shared_ptr<ExprPartValue> ExprPartValue::from_double(double d){
+    return std::make_shared<ExprPartValue>(std::make_shared<FloatValue>(d));
+}
+
+/*
 ExprPartValue::ExprPartValue(int i):value(std::make_shared<IntValue>(i)){
     
 }
@@ -12,7 +25,7 @@ ExprPartValue::ExprPartValue(int i):value(std::make_shared<IntValue>(i)){
 ExprPartValue::ExprPartValue(double d):value(std::make_shared<FloatValue>(d)){
     
 }
-
+*/
 ExprPartValue::ExprPartValue(std::string s):value(std::make_shared<StringValue>(s)){
     
 }

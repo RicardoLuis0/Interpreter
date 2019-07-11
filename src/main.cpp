@@ -237,9 +237,15 @@ void print_expression_term(int indent,std::shared_ptr<Parser::ExpressionTerm> te
         print_unary_operation(indent+1,std::static_pointer_cast<Parser::UnaryOperation>(term->contents_p));
         break;
     case Parser::EXPRESSION_TERM_LITERAL_INT:
+        std::cout<<get_indent(indent)<<".literal (int):\n";
+        print_token(indent+1,term->contents_t);
+        break;
     case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
+        std::cout<<get_indent(indent)<<".literal (float):\n";
+        print_token(indent+1,term->contents_t);
+        break;
     case Parser::EXPRESSION_TERM_LITERAL_STRING:
-        std::cout<<get_indent(indent)<<".literal:\n";
+        std::cout<<get_indent(indent)<<".literal (string):\n";
         print_token(indent+1,term->contents_t);
         break;
     case Parser::EXPRESSION_TERM_IDENTIFIER:

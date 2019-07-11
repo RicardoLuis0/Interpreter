@@ -52,7 +52,9 @@ void DefaultFrame::register_function(std::shared_ptr<Function> func){
 }
 
 void DefaultFrame::add_function(std::shared_ptr<Parser::FunctionDefinition> func){
-    register_function(std::make_shared<UserFunction>(this,func));
+    std::shared_ptr<UserFunction> temp(std::make_shared<UserFunction>(this,func,true));
+    register_function(temp);
+    temp->proccess_delayed();//delay code processing until function is registered, fixes recursion
 }
 
 void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool global,void(*cb)(void*,std::shared_ptr<Parser::VariableDefinitionItem>),void * arg){
