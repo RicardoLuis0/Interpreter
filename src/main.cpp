@@ -31,7 +31,10 @@
 #include "parser_unary_operation.h"
 #include "interpreter_default_frame.h"
 #include "interpreter_exec_frame.h"
-
+#include "interpreter_util_defines_misc.h"
+#include "interpreter_int_value.h"
+#include <cstring>
+//TODO update docs
 /**
  * @mainpage
  * 
@@ -43,6 +46,32 @@
  */
 
 void test_lexer(),test_expressions(),test_lines(),test_definitions();
+
+int exec(std::string filename){
+    Lexer::Lexer lexer(base_symbols,base_keywords);
+    std::vector<std::shared_ptr<Lexer::Token>> tokens(lexer.tokenize_from_file(filename));
+    std::vector<std::shared_ptr<Parser::Definition>> deflist;
+    Parser::parserProgress p {data:tokens,location:0};
+    while(p.get_nothrow()!=nullptr){
+        deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
+    }
+    Interpreter::DefaultFrame dframe(deflist);
+    std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
+    std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main"));
+    if(!entrypoint){
+        throw std::runtime_error("missing 'main' function");
+    }else{
+        if(entrypoint->get_type()->type==Parser::VARTYPE_VOID){
+            eframe->fn_call(entrypoint,{});
+            return 0;
+        }else{
+            if(!is_int(entrypoint->get_type())){
+                throw std::runtime_error("'main' function must return 'int' or 'void'");
+            }
+            return std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,{}))->get();
+        }
+    }
+}
 
 void test_exec(){
     try{
@@ -110,6 +139,8 @@ int main(int argc,char ** argv){
             return 0;
         }
     }else if(argc==2){
+        return exec(argv[1]);
+    }else if(argc==3&&strcmp(argv[1],"-checkparse")==0){
         try{
             std::string filename(argv[1]);
             std::vector<std::shared_ptr<Lexer::Token>> tokens;

@@ -25,8 +25,9 @@ int main () {
 	int i1=2;
 	while(i1!=0&&i1!=1){
 		cls();
-		puts("Method:\n\n0 - Recursive\n1 - Loop\n>");
+		puts("Method:\n\n0 - Recursive\n1 - Loop\n99 - Cancelar\n>");
 		i1=stoi(getline());
+		if(i1==99)return 0;
 	}
 	puts("\nFibonacci de: ");
 	int i2=stoi(getline());

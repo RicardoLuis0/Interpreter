@@ -1,0 +1,5 @@
+void puts(string); write to terminal
+string getline(); get line from terminal
+int stoi(string); convert string to integer
+string itos(int); convert integer to string
+void cls(); clear screen
