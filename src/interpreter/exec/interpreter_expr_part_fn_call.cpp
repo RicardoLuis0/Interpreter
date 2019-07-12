@@ -22,11 +22,11 @@ ExprPartFnCall::ExprPartFnCall(std::shared_ptr<DefaultFrame> context,std::shared
             throw std::runtime_error("incompatible argument type of "+get_name(arguments[i]->get_type())+" for parameter of type "+get_name(params[i]->type));
         }
     }
-
+    type=context->get_function(ident)->get_type();
 }
 
-std::shared_ptr<Parser::VarType> ExprPartFnCall::get_type(std::shared_ptr<DefaultFrame> context){
-    return context->get_function(ident)->get_type();
+std::shared_ptr<Parser::VarType> ExprPartFnCall::get_type(){
+    return type;
 }
 
 std::shared_ptr<Value> ExprPartFnCall::eval(std::shared_ptr<ExecFrame> context){

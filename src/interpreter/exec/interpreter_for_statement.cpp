@@ -6,17 +6,19 @@
 
 using namespace Interpreter;
 
-ForStatement::ForStatement(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::ForStatement> stmt):pre(std::make_shared<Expression>(context,stmt->pre)),condition(std::make_shared<Expression>(context,stmt->condition)),inc(std::make_shared<Expression>(context,stmt->inc)),code(std::make_shared<CodeBlock>(context.get(),stmt->code)){
-    
+ForStatement::ForStatement(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::ForStatement> stmt):pre(nullptr),condition(nullptr),inc(nullptr),code(std::make_shared<CodeBlock>(context.get(),stmt->code)){
+    if(stmt->pre)pre=std::make_shared<Expression>(context,stmt->pre);
+    if(stmt->condition)condition=std::make_shared<Expression>(context,stmt->condition);
+    if(stmt->inc)inc=std::make_shared<Expression>(context,stmt->inc);
 }
 
 std::shared_ptr<LineResult> ForStatement::run(std::shared_ptr<ExecFrame> context){
     if(is_string(condition->get_type()))throw std::runtime_error("string is not valid condition");
     std::shared_ptr<Value> val;
-    pre->run(context);
+    if(pre)pre->run(context);
     while(1){
-        val=condition->eval(context);
-        if((is_int(val->get_type())&&std::dynamic_pointer_cast<IntValue>(val)->get())||(is_float(val->get_type())&&std::dynamic_pointer_cast<FloatValue>(val)->get())){
+        if(condition)val=condition->eval(context);
+        if(!(condition)||(is_int(val->get_type())&&std::dynamic_pointer_cast<IntValue>(val)->get()!=0)||(is_float(val->get_type())&&std::dynamic_pointer_cast<FloatValue>(val)->get()!=0)){
             std::shared_ptr<LineResult> r=code->run(code->getContext(context.get()));
             switch(r->getAction()){
             case ACTION_BREAK:
@@ -31,6 +33,6 @@ std::shared_ptr<LineResult> ForStatement::run(std::shared_ptr<ExecFrame> context
         }else{
             return std::make_shared<LineResultSimple>(ACTION_NONE);
         }
-        inc->run(context);
+        if(inc)inc->run(context);
     }
 }

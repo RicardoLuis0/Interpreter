@@ -1,6 +1,39 @@
-int main(){
-	puts("What's your name?\n");
-	string name=getline();
-	puts("Hello, "+name+"!");
+int fibonacci_loop(int n) {
+	if(n<=0)return 0;
+	if(n==1)return 1;
+	n-=2;
+	int i1=1,i2=1,i3=1;
+	for(;n>0;n-=1){
+		i3=i1;
+		i1+=i2;
+		i2=i3;
+	}
+	return i1;
+}
+
+int fibonacci_rec (int n) {
+	if (n<=0) {
+		return 0;
+	} else if (n==1) {
+		return 1;
+	} else {
+		return (fibonacci_rec(n-1)+fibonacci_rec(n-2));
+	}
+}
+
+int main () {
+	int i1=2;
+	while(i1!=0&&i1!=1){
+		cls();
+		puts("Method:\n\n0 - Recursive\n1 - Loop\n>");
+		i1=stoi(getline());
+	}
+	puts("\nFibonacci de: ");
+	int i2=stoi(getline());
+	if(i1==0){
+		puts("\nResultado: "+itos(fibonacci_rec(i2)));
+	}else if(i1==1){
+		puts("\nResultado: "+itos(fibonacci_loop(i2)));
+	}
 	return 0;
 }

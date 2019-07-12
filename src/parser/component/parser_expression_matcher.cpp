@@ -4,12 +4,14 @@
 #include "parser_expression_group_matcher.h"
 #include "parser_binary_operation_matcher.h"
 
+#include "parser_expression_operator_precedence.h"
+
 //Expression = BinaryOperation |  ExpressionTerm ;
 
 std::shared_ptr<Parser::Expression> Parser::ExpressionMatcher::makeMatch(parserProgress &p){
     int location_backup=p.location;
     try{
-        return std::make_shared<Expression>(BinaryOperationMatcher().makeMatch(p),EXPRESSION_BINARY_OPERATION);
+        return order_expression(std::make_shared<Expression>(BinaryOperationMatcher().makeMatch(p),EXPRESSION_BINARY_OPERATION));//order with operator precedence, WIP?
     }catch(MyExcept::NoMatchException &e){
         p.location=location_backup;
         auto term=std::make_shared<Expression>(ExpressionTermMatcher().makeMatch(p),EXPRESSION_TERM);

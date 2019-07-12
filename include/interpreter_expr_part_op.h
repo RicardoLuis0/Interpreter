@@ -6,10 +6,13 @@
 namespace Interpreter {
     class ExprPartOp : public ExprPart {
         public:
-            ExprPartOp(int);
-            std::shared_ptr<Parser::VarType> get_type(std::shared_ptr<DefaultFrame> context) override;
+            ExprPartOp(std::shared_ptr<ExprPart> left,int op,std::shared_ptr<ExprPart> right);
+            std::shared_ptr<Parser::VarType> get_type() override;
             std::shared_ptr<Value> eval(std::shared_ptr<ExecFrame> context) override;
+            std::shared_ptr<ExprPart> left;
+            std::shared_ptr<ExprPart> right;
             int op;
+            std::shared_ptr<Parser::VarType> type;
     };
 }
 

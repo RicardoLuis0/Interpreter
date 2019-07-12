@@ -306,12 +306,18 @@ void print_if_statement(int indent,std::shared_ptr<Parser::IfStatement> stmt){
 
 void print_for_statement(int indent,std::shared_ptr<Parser::ForStatement> stmt){
     std::cout<<get_indent(indent)<<">For Statement\n";
-    std::cout<<get_indent(indent)<<".pre:\n";
-    print_expression(indent+1,stmt->pre);
-    std::cout<<get_indent(indent)<<".condition:\n";
-    print_expression(indent+1,stmt->condition);
-    std::cout<<get_indent(indent)<<".inc:\n";
-    print_expression(indent+1,stmt->inc);
+    if(stmt->pre){
+        std::cout<<get_indent(indent)<<".pre:\n";
+        print_expression(indent+1,stmt->pre);
+    }
+    if(stmt->condition){
+        std::cout<<get_indent(indent)<<".condition:\n";
+        print_expression(indent+1,stmt->condition);
+    }
+    if(stmt->inc){
+        std::cout<<get_indent(indent)<<".inc:\n";
+        print_expression(indent+1,stmt->inc);
+    }
     std::cout<<get_indent(indent)<<".code:\n";
     print_line(indent+1,stmt->code);
 }

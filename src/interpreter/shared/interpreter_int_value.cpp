@@ -30,7 +30,7 @@ std::shared_ptr<Value> IntValue::eq(std::shared_ptr<Value> &other){
 }
 
 std::shared_ptr<Value> IntValue::neq(std::shared_ptr<Value> &other){
-    return std::make_shared<IntValue>(value==((!CHECKPTR(other,IntValue))?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get()));
+    return std::make_shared<IntValue>(value!=((CHECKPTR(other,IntValue))?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get()));
 }
 
 std::shared_ptr<Value> IntValue::gt_eq(std::shared_ptr<Value> &other){

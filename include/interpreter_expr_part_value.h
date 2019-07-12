@@ -10,7 +10,7 @@ namespace Interpreter {
             ExprPartValue(std::string);
             static std::shared_ptr<ExprPartValue> from_int(int);
             static std::shared_ptr<ExprPartValue> from_double(double);
-            std::shared_ptr<Parser::VarType> get_type(std::shared_ptr<DefaultFrame> context) override;
+            std::shared_ptr<Parser::VarType> get_type() override;
             std::shared_ptr<Value> eval(std::shared_ptr<ExecFrame> context) override;
             std::shared_ptr<Value> value;
     };

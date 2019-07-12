@@ -104,6 +104,7 @@
 		<Unit filename="include/parser_expression_list.h" />
 		<Unit filename="include/parser_expression_list_matcher.h" />
 		<Unit filename="include/parser_expression_matcher.h" />
+		<Unit filename="include/parser_expression_operator_precedence.h" />
 		<Unit filename="include/parser_expression_term.h" />
 		<Unit filename="include/parser_expression_term_matcher.h" />
 		<Unit filename="include/parser_for_statement.h" />
@@ -235,6 +236,7 @@
 		<Unit filename="src/parser/result/parser_variable_definition.cpp" />
 		<Unit filename="src/parser/result/parser_variable_definition_item.cpp" />
 		<Unit filename="src/parser/result/parser_while_statement.cpp" />
+		<Unit filename="src/parser/util/parser_expression_operator_precedence.cpp" />
 		<Unit filename="src/symbols_keywords.cpp" />
 		<Unit filename="src/token/eof_token.cpp" />
 		<Unit filename="src/token/float_token.cpp" />

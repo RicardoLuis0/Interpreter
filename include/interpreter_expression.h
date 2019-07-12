@@ -19,14 +19,10 @@ namespace Interpreter {
             std::shared_ptr<Parser::VarType> get_type();
         protected:
             static std::map<int,int> operator_precedence;
-            std::stack<std::shared_ptr<ExprPart>> expression;
+            std::shared_ptr<ExprPart> expression;
             std::shared_ptr<Parser::VarType> type;
-            void add_term(std::shared_ptr<DefaultFrame>,std::shared_ptr<Parser::ExpressionTerm>);
-            void add_expression(std::shared_ptr<DefaultFrame>,std::shared_ptr<Parser::Expression>);
-            std::shared_ptr<Parser::VarType> get_type(std::shared_ptr<DefaultFrame> context,std::shared_ptr<ExprPart>);
-            std::shared_ptr<Parser::VarType> check_op(std::shared_ptr<DefaultFrame> context,std::stack<std::shared_ptr<ExprPart>>&,std::shared_ptr<ExprPartOp>);
-            std::shared_ptr<Parser::VarType> check(std::shared_ptr<DefaultFrame> context);//check for errors, validity
-            std::shared_ptr<Value> eval_op(std::shared_ptr<ExecFrame> context,std::stack<std::shared_ptr<ExprPart>>&,std::shared_ptr<ExprPartOp>);
+            std::shared_ptr<ExprPart> get_term(std::shared_ptr<DefaultFrame>,std::shared_ptr<Parser::ExpressionTerm>);
+            std::shared_ptr<ExprPart> get_expression(std::shared_ptr<DefaultFrame>,std::shared_ptr<Parser::Expression>);
     };
 }
 

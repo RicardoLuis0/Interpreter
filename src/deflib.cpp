@@ -14,6 +14,7 @@
 //float stof(string)
 //string itos(int) DONE
 //string ftos(float)
+//void cls() DONE
 
 namespace Interpreter {
     class puts : public Function {
@@ -97,6 +98,26 @@ namespace Interpreter {
         }
     };
 
+    class cls : public Function{
+
+        std::string get_name() override {
+            return "cls";
+        }
+
+        std::shared_ptr<Parser::VarType> get_type(){
+            return std::make_shared<Parser::VarType>(Parser::VARTYPE_VOID);
+        }
+
+        std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override {
+            return {};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            system("cls");
+            return nullptr;
+        }
+    };
+
 }
 
 void Interpreter::init_deflib(DefaultFrame * d){
@@ -104,4 +125,5 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::getline>());
     d->register_function(std::make_shared<Interpreter::stoi>());
     d->register_function(std::make_shared<Interpreter::itos>());
+    d->register_function(std::make_shared<Interpreter::cls>());
 }
