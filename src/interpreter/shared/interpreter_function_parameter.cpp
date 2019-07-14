@@ -1,0 +1,41 @@
+#include "interpreter_function_parameter.h"
+#include "interpreter_util_defines_misc.h"
+
+using namespace Interpreter;
+
+FunctionParameter::FunctionParameter(std::shared_ptr<Parser::VarType> t):type(t),name("undefined"),is_reference(false){
+    
+}
+
+FunctionParameter::FunctionParameter(std::shared_ptr<Parser::VarType> t,std::string name,bool ref):type(t),name(name),is_reference(ref){
+    
+}
+
+std::vector<FunctionParameter> FunctionParameter::from_pfdp(std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> params){
+    std::vector<FunctionParameter> temp;
+    for(std::shared_ptr<Parser::FunctionDefinitionParameter> param:params){
+        temp.emplace_back(param->type,param->name,param->is_reference);
+    }
+    return temp;
+}
+
+bool FunctionParameter::operator==(const FunctionParameter &other)const{
+    return type_eq(type,other.type);
+}
+
+std::string FunctionParameter::get_typelist(std::vector<FunctionParameter> params,bool print_ref){
+    std::string temp;
+    bool first=true;
+    for(FunctionParameter param:params){
+        if(!first){
+            temp+=',';
+        }else{
+            first=false;
+        }
+        temp+=get_name(param.type);
+        if(print_ref&&param.is_reference){
+            temp+=" &";
+        }
+    }
+    return temp;
+}

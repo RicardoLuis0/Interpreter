@@ -27,8 +27,8 @@ namespace Interpreter {
             return std::make_shared<Parser::VarType>(Parser::VARTYPE_VOID);
         }
 
-        std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override {
-            return {std::make_shared<Parser::FunctionDefinitionParameter>(std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING),"str",false)};
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING),"str",false}};
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
@@ -48,7 +48,7 @@ namespace Interpreter {
             return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING);
         }
 
-        std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override {
+        std::vector<FunctionParameter> get_parameters() override {
             return {};
         }
 
@@ -70,8 +70,8 @@ namespace Interpreter {
             return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT);
         }
 
-        std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override {
-            return {std::make_shared<Parser::FunctionDefinitionParameter>(std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING),"str",false)};
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING),"str",false}};
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
@@ -89,8 +89,8 @@ namespace Interpreter {
             return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING);
         }
 
-        std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override {
-            return {std::make_shared<Parser::FunctionDefinitionParameter>(std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT),"int",false)};
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT),"int",false}};
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
@@ -108,7 +108,7 @@ namespace Interpreter {
             return std::make_shared<Parser::VarType>(Parser::VARTYPE_VOID);
         }
 
-        std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override {
+        std::vector<FunctionParameter> get_parameters() override {
             return {};
         }
 

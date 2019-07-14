@@ -13,7 +13,7 @@ namespace Interpreter {
             void proccess_delayed();
             std::string get_name() override;
             std::shared_ptr<Parser::VarType> get_type() override;
-            std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> get_parameters() override;
+            std::vector<FunctionParameter> get_parameters() override;
             std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override;
             //std::shared_ptr<ExecFrame> getFrame
         private:

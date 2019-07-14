@@ -1,5 +1,7 @@
 #include "interpreter_default_frame.h"
 
+#include <algorithm>
+
 #include "interpreter_util_defines_misc.h"
 
 #include "parser_variable_definition.h"
@@ -33,21 +35,62 @@ std::shared_ptr<Variable> DefaultFrame::get_variable(std::string name){
     MAP_GET(variable_defaults,name,parent?parent->get_variable(name):nullptr)
 }
 
-std::shared_ptr<Function> DefaultFrame::get_function(std::string name){
-    MAP_GET(functions,name,parent?parent->get_function(name):nullptr)
+std::vector<std::vector<FunctionParameter>> DefaultFrame::get_function_variants(std::string name){
+    auto iter=functions.find(name);
+    if(iter!=functions.end()){
+        std::vector<std::vector<FunctionParameter>> out;
+        for(auto p:iter->second){
+            out.push_back(p.first);
+        }
+        return out;
+    }else{
+        return parent?parent->get_function_variants(name):std::vector<std::vector<FunctionParameter>>();
+    }
 }
 
-void DefaultFrame::add_parameters(std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> params){
-    for(std::shared_ptr<Parser::FunctionDefinitionParameter> p:params){
-        add_variable(p->type,std::make_shared<Parser::VariableDefinitionItem>(p->name));
+std::shared_ptr<Function> DefaultFrame::get_function_local(std::string name,std::vector<FunctionParameter> param_types){
+    auto iter1=functions.find(name);
+    if(iter1!=functions.end()){
+        auto iter2=iter1->second.find(param_types);//strict search
+        if(iter2!=iter1->second.end()){
+            return iter2->second;
+        }else{
+            iter2=std::find_if(iter1->second.begin(),iter1->second.end(),[param_types](const std::pair<std::vector<FunctionParameter>,std::shared_ptr<Function>> &p)->bool{//loose search
+                if(param_types.size()!=p.first.size())return false;
+                for(size_t i=0;i<p.first.size();i++){
+                    if(!is_compatible(p.first[i].type,param_types[i].type))return false;
+                }
+                return true;
+            });
+            if(iter2!=iter1->second.end()){
+                return iter2->second;
+            }
+        }
+    }
+    return nullptr;
+}
+
+std::shared_ptr<Function> DefaultFrame::get_function(std::string name,std::vector<FunctionParameter> param_types){
+    std::shared_ptr<Function> func=get_function_local(name,param_types);
+    return func?func:parent?parent->get_function(name,param_types):nullptr;
+}
+
+void DefaultFrame::add_parameters(std::vector<FunctionParameter> params){
+    for(FunctionParameter &p:params){
+        add_variable(p.type,std::make_shared<Parser::VariableDefinitionItem>(p.name));
     }
 }
 
 void DefaultFrame::register_function(std::shared_ptr<Function> func){
-    if(MAP_HAS(functions,func->get_name())){
-        throw std::runtime_error("Redefining Function "+func->get_name());
+    if(MAP_HAS(functions,{func->get_name()})){
+        auto &m2=functions[func->get_name()];
+        if(MAP_HAS(m2,func->get_parameters())){
+            throw std::runtime_error("Redefining Function "+func->get_name());
+        }else{
+            m2.insert({func->get_parameters(),func});
+        }
     }else{
-        functions.insert({func->get_name(),func});
+        functions.insert({func->get_name(),{{func->get_parameters(),func}}});
     }
 }
 

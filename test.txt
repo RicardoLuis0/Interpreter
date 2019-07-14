@@ -1,12 +1,15 @@
-void increment(int &n){
-	n+=1;
+void append(string &one,int other){
+	one+=itos(other);
+}
+
+void append(string &one,string other){
+	one+=other;
 }
 
 int main () {
-	int n=0;
-	increment(n);
-	increment(n);
-	increment(n);
-	puts(itos(n));
+	string s="test";
+	append(s," ");
+	append(s,2.5);
+	puts(s);
 	return 0;
 }

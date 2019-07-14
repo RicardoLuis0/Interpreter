@@ -57,9 +57,9 @@ int exec(std::string filename){
     }
     Interpreter::DefaultFrame dframe(deflist);
     std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
-    std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main"));
+    std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
     if(!entrypoint){
-        throw std::runtime_error("missing 'main' function");
+        throw std::runtime_error("missing 'main()' function");
     }else{
         if(entrypoint->get_type()->type==Parser::VARTYPE_VOID){
             eframe->fn_call(entrypoint,{});
@@ -97,7 +97,7 @@ void test_exec(){
         }
         Interpreter::DefaultFrame dframe(deflist);
         std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
-        std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main"));
+        std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
         if(!entrypoint){
             std::cout<<"no main function";
         }else{

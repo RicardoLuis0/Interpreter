@@ -22,20 +22,20 @@ std::shared_ptr<Parser::VarType> UserFunction::get_type(){
     return function->return_type;
 }
 
-std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> UserFunction::get_parameters(){
-    return function->parameters;
+std::vector<FunctionParameter> UserFunction::get_parameters(){
+    return FunctionParameter::from_pfdp(function->parameters);
 }
 
 #include <iostream>
 
 std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args){
-    std::map<std::string,std::pair<std::shared_ptr<Value>,bool>> args_o;
+    std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Parser::VarType>>>> args_o;
     int i=0;
     if(function->parameters.size()!=args.size()){
         throw std::runtime_error("wrong parameter count");
     }
     for(std::shared_ptr<Parser::FunctionDefinitionParameter> param:function->parameters){
-        args_o.insert({param->name,{args[i++],param->is_reference}});
+        args_o.insert({param->name,{args[i++],{param->is_reference,param->type}}});
     }
     std::shared_ptr<ExecFrame> f(code->getContext(parent_frame));
     f->set_args(args_o);

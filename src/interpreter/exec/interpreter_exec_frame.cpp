@@ -30,35 +30,43 @@ std::shared_ptr<Variable> ExecFrame::get_variable(std::string name){
     MAP_GET(variables,name,parent?parent->get_variable(name):nullptr)
 }
 
-std::shared_ptr<Function> ExecFrame::get_function(std::string name){
-    return defaults->get_function(name);
+std::shared_ptr<Function> ExecFrame::get_function(std::string name,std::vector<FunctionParameter> param_types){
+    return defaults->get_function(name,param_types);
 }
 
-void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val){
+void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::shared_ptr<Parser::VarType> vt){
     if(CHECKPTR(val,IntValue)){
-        variables[s]=std::make_shared<IntVariable>(s,std::dynamic_pointer_cast<IntValue>(val)->get());
+        if(is_float(vt)){
+            variables[s]=std::make_shared<FloatVariable>(s,std::dynamic_pointer_cast<IntValue>(val)->get());
+        }else{
+            variables[s]=std::make_shared<IntVariable>(s,std::dynamic_pointer_cast<IntValue>(val)->get());
+        }
     }else if(CHECKPTR(val,FloatValue)){
-        variables[s]=std::make_shared<FloatVariable>(s,std::dynamic_pointer_cast<FloatValue>(val)->get());
+        if(is_int(vt)){
+            variables[s]=std::make_shared<IntVariable>(s,std::dynamic_pointer_cast<FloatValue>(val)->get());
+        }else{
+            variables[s]=std::make_shared<FloatVariable>(s,std::dynamic_pointer_cast<FloatValue>(val)->get());
+        }
     }else if(CHECKPTR(val,StringValue)){
         variables[s]=std::make_shared<StringVariable>(s,std::dynamic_pointer_cast<StringValue>(val)->get());
     }
 }
 
-void ExecFrame::set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,bool>> args){
-   for(std::pair<std::string,std::pair<std::shared_ptr<Value>,bool>> arg:args){
-        if(arg.second.second){
+void ExecFrame::set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Parser::VarType>>>> args){
+   for(std::pair<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Parser::VarType>>>> arg:args){
+        if(arg.second.second.first){
             if(CHECKPTR(arg.second.first,Variable)){
                 variables[arg.first]=std::dynamic_pointer_cast<Variable>(arg.second.first);
                 continue;
             }
             //intentional fallthrough
         }
-        set_variable(arg.first,arg.second.first);
+        set_variable(arg.first,arg.second.first,arg.second.second.second);
     }
 }
 
 std::shared_ptr<Value> ExecFrame::fn_call(std::shared_ptr<Function> fn,std::vector<std::shared_ptr<Value>> args){
-    if(MAP_HAS(defaults->functions,fn->get_name())&&defaults->functions[fn->get_name()]==fn){
+    if(defaults->get_function_local(fn->get_name(),fn->get_parameters())){
         return fn->call(this,args);
     }else{
         return parent->fn_call(fn,args);

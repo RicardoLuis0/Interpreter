@@ -47,7 +47,20 @@ inline std::string get_name(std::shared_ptr<Parser::VarType> vt){
 
 inline bool is_compatible(std::shared_ptr<Parser::VarType> vt1,std::shared_ptr<Parser::VarType> vt2){
     if(is_num(vt1)&&is_num(vt2))return true;
-    if(is_string(vt1)||is_string(vt2))return true;
+    if(is_string(vt1)&&is_string(vt2))return true;
+    return false;
+}
+
+inline bool type_eq(std::shared_ptr<Parser::VarType> vt1,std::shared_ptr<Parser::VarType> vt2){
+    if(vt1->type==vt2->type){
+        if(vt1->type==Parser::VARTYPE_PRIMITIVE){
+            if(is_int(vt1)&&is_int(vt2))return true;
+            if(is_float(vt1)&&is_float(vt2))return true;
+            if(is_string(vt1)&&is_string(vt2))return true;
+        }else{
+            return true;
+        }
+    }
     return false;
 }
 

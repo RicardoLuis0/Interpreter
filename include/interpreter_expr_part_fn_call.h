@@ -13,6 +13,7 @@ namespace Interpreter {
             std::shared_ptr<Value> eval(std::shared_ptr<ExecFrame> context) override;
         protected:
             std::string ident;
+            std::vector<FunctionParameter> param_types;
             std::vector<std::shared_ptr<Expression>> arguments;
             std::shared_ptr<Parser::VarType> type;
     };
