@@ -1,40 +1,12 @@
-int fibonacci_loop(int n) {
-	if(n<=0)return 0;
-	if(n==1)return 1;
-	n-=2;
-	int i1=1,i2=1,i3=1;
-	for(;n>0;n-=1){
-		i3=i1;
-		i1+=i2;
-		i2=i3;
-	}
-	return i1;
-}
-
-int fibonacci_rec (int n) {
-	if (n<=0) {
-		return 0;
-	} else if (n==1) {
-		return 1;
-	} else {
-		return (fibonacci_rec(n-1)+fibonacci_rec(n-2));
-	}
+void increment(int &n){
+	n+=1;
 }
 
 int main () {
-	int i1=2;
-	while(i1!=0&&i1!=1){
-		cls();
-		puts("Method:\n\n0 - Recursive\n1 - Loop\n99 - Cancelar\n>");
-		i1=stoi(getline());
-		if(i1==99)return 0;
-	}
-	puts("\nFibonacci de: ");
-	int i2=stoi(getline());
-	if(i1==0){
-		puts("\nResultado: "+itos(fibonacci_rec(i2)));
-	}else if(i1==1){
-		puts("\nResultado: "+itos(fibonacci_loop(i2)));
-	}
+	int n=0;
+	increment(n);
+	increment(n);
+	increment(n);
+	puts(itos(n));
 	return 0;
 }
