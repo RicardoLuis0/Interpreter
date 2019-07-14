@@ -9,10 +9,11 @@
 namespace Parser{
     class FunctionDefinitionParameter : public ParserResultPart {
         public:
-            FunctionDefinitionParameter(std::shared_ptr<VarType>,std::shared_ptr<Lexer::WordToken>);
-            FunctionDefinitionParameter(std::shared_ptr<VarType>,std::string);
+            FunctionDefinitionParameter(std::shared_ptr<VarType>,std::shared_ptr<Lexer::WordToken>,bool is_reference);
+            FunctionDefinitionParameter(std::shared_ptr<VarType>,std::string,bool is_reference);
             std::shared_ptr<VarType> type;
             std::string name;
+            bool is_reference;
         protected:
         private:
     };

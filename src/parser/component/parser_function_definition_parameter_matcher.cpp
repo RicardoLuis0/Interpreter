@@ -6,11 +6,12 @@
 #include "symbols_keywords.h"
 #include "token_type.h"
 
-//FunctionDefinitionParameter = VarType , identifier ;
+//FunctionDefinitionParameter = VarType , [ symbol '&' ] , identifier ;
 
 std::shared_ptr<Parser::FunctionDefinitionParameter> Parser::FunctionDefinitionParameterMatcher::makeMatch(parserProgress &p){
     std::shared_ptr<VarType> vt=VarTypeMatcher().makeMatch(p);
+    bool ref=p.isSymbol(SYMBOL_BITWISE_AND);
     std::shared_ptr<Lexer::Token> t;
     if(!(t=p.isType(Lexer::TOKEN_TYPE_WORD)))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected identifier, got '"+p.get_nothrow_nonull()->get_literal()+"'");
-    return std::make_shared<FunctionDefinitionParameter>(vt,std::static_pointer_cast<Lexer::WordToken>(t));
+    return std::make_shared<FunctionDefinitionParameter>(vt,std::static_pointer_cast<Lexer::WordToken>(t),ref);
 }
