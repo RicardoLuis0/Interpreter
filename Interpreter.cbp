@@ -62,6 +62,7 @@
 		<Unit filename="include/interpreter_float_variable.h" />
 		<Unit filename="include/interpreter_for_statement.h" />
 		<Unit filename="include/interpreter_function.h" />
+		<Unit filename="include/interpreter_function_parameter.h" />
 		<Unit filename="include/interpreter_if_statement.h" />
 		<Unit filename="include/interpreter_int_value.h" />
 		<Unit filename="include/interpreter_int_variable.h" />
@@ -164,6 +165,7 @@
 		<Unit filename="src/interpreter/exec/interpreter_while_statement.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_float_value.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_float_variable.cpp" />
+		<Unit filename="src/interpreter/shared/interpreter_function_parameter.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_int_value.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_int_variable.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_string_value.cpp" />
