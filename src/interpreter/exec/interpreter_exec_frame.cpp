@@ -5,7 +5,6 @@
 #include "interpreter_int_variable.h"
 #include "interpreter_float_variable.h"
 #include "interpreter_string_variable.h"
-#include "interpreter_native_function.h"
 #include "interpreter_user_function.h"
 
 using namespace Interpreter;

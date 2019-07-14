@@ -69,7 +69,6 @@
 		<Unit filename="include/interpreter_line_result.h" />
 		<Unit filename="include/interpreter_line_result_return.h" />
 		<Unit filename="include/interpreter_line_result_simple.h" />
-		<Unit filename="include/interpreter_native_function.h" />
 		<Unit filename="include/interpreter_return_statement.h" />
 		<Unit filename="include/interpreter_string_value.h" />
 		<Unit filename="include/interpreter_string_variable.h" />
