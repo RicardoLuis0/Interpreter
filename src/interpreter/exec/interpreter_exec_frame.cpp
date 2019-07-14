@@ -45,9 +45,16 @@ void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val){
     }
 }
 
-void ExecFrame::set_args(std::map<std::string,std::shared_ptr<Value>> args){
-   for(std::pair<std::string,std::shared_ptr<Value>> arg:args){
-        set_variable(arg.first,arg.second);
+void ExecFrame::set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,bool>> args){
+   for(std::pair<std::string,std::pair<std::shared_ptr<Value>,bool>> arg:args){
+        if(arg.second.second){
+            if(CHECKPTR(arg.second.first,Variable)){
+                variables[arg.first]=std::dynamic_pointer_cast<Variable>(arg.second.first);
+                continue;
+            }
+            //intentional fallthrough
+        }
+        set_variable(arg.first,arg.second.first);
     }
 }
 
