@@ -103,7 +103,7 @@ std::shared_ptr<Lexer::Token> Lexer::FloatTokenMatcher::makeMatch(int line,std::
             partial*=10;
             partial+=c-'0';
         }
-        return std::make_unique<FloatToken>(line,partial/double(ipow(10,decimal_t)));
+        return std::make_shared<FloatToken>(line,partial/double(ipow(10,decimal_t)));
     }
     throw MyExcept::NoMatchException(line,s);
 }

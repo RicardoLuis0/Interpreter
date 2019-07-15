@@ -43,7 +43,7 @@ std::shared_ptr<Lexer::Token> Lexer::OctalTokenMatcher::makeMatch(int line,std::
             d*=8;
             d+=c-'0';
         }
-        return std::make_unique<IntegerToken>(line,d);
+        return std::make_shared<IntegerToken>(line,d);
     }
     throw MyExcept::NoMatchException(line,s);
 }

@@ -25,7 +25,7 @@ std::shared_ptr<Lexer::Token> Lexer::IntegerTokenMatcher::makeMatch(int line,std
             d*=10;
             d+=c-'0';
         }
-        return std::make_unique<IntegerToken>(line,d);
+        return std::make_shared<IntegerToken>(line,d);
     }
     throw MyExcept::NoMatchException(line,s);
 }

@@ -43,7 +43,7 @@ std::shared_ptr<Lexer::Token> Lexer::HexTokenMatcher::makeMatch(int line,std::st
             d*=16;
             d+=get_hex(c);
         }
-        return std::make_unique<IntegerToken>(line,d);
+        return std::make_shared<IntegerToken>(line,d);
     }
     throw MyExcept::NoMatchException(line,s);
 }

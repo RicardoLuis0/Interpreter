@@ -42,7 +42,7 @@ std::shared_ptr<Lexer::Token> Lexer::BinaryTokenMatcher::makeMatch(int line,std:
             d*=2;
             d+=c-'0';
         }
-        return std::make_unique<IntegerToken>(line,d);
+        return std::make_shared<IntegerToken>(line,d);
     }
     throw MyExcept::NoMatchException(line,s);
 }

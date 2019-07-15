@@ -23,7 +23,7 @@ bool Lexer::KeywordsTokenMatcher::fullMatch(std::string s){
 std::shared_ptr<Lexer::Token> Lexer::KeywordsTokenMatcher::makeMatch(int line,std::string s){
     if(fullMatch(s)){
         for(keyword_data d:keyword_list){
-            if(s==d.str) return std::make_unique<KeywordToken>(line,d);
+            if(s==d.str) return std::make_shared<KeywordToken>(line,d);
         }
     }
     throw MyExcept::NoMatchException(line,s);

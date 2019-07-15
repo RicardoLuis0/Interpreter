@@ -20,7 +20,7 @@ bool Lexer::WordTokenMatcher::fullMatch(std::string s){
 
 std::shared_ptr<Lexer::Token> Lexer::WordTokenMatcher::makeMatch(int line,std::string s){
     if(fullMatch(s)){
-        return std::make_unique<WordToken>(line,s);
+        return std::make_shared<WordToken>(line,s);
     }
     throw MyExcept::NoMatchException(line,s);
 }

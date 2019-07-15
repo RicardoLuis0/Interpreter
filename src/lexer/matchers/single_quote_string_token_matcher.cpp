@@ -132,7 +132,7 @@ std::shared_ptr<Lexer::Token> Lexer::SingleQuoteStringTokenMatcher::makeMatch(in
             reading_escape=false;
         }else{
             if(s[i]=='\''){
-                return std::make_unique<StringToken>(line,formatted,unformatted);
+                return std::make_shared<StringToken>(line,formatted,unformatted);
             }else if(s[i]=='\\'){
                 reading_escape=true;
             }else{
