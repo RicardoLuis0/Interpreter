@@ -8,11 +8,11 @@
 #include "binary_token_matcher.h"
 
 Lexer::LiteralsTokenMatcher::LiteralsTokenMatcher(){
-    list.push_back(std::make_unique<StringTokenMatcher>());
-    list.push_back(std::make_unique<SingleQuoteStringTokenMatcher>());
-    list.push_back(std::make_unique<OctalTokenMatcher>());
-    list.push_back(std::make_unique<HexTokenMatcher>());
-    list.push_back(std::make_unique<BinaryTokenMatcher>());
-    list.push_back(std::make_unique<IntegerTokenMatcher>());
-    list.push_back(std::make_unique<FloatTokenMatcher>());
+    list.push_back(std::make_shared<StringTokenMatcher>());
+    list.push_back(std::make_shared<SingleQuoteStringTokenMatcher>());
+    list.push_back(std::make_shared<OctalTokenMatcher>());
+    list.push_back(std::make_shared<HexTokenMatcher>());
+    list.push_back(std::make_shared<BinaryTokenMatcher>());
+    list.push_back(std::make_shared<IntegerTokenMatcher>());
+    list.push_back(std::make_shared<FloatTokenMatcher>());
 }

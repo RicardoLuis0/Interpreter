@@ -21,7 +21,7 @@ namespace Lexer {
             bool fullMatch(std::string s) override;
             std::shared_ptr<Token> makeMatch(int line,std::string s) override;
         protected:
-            std::vector<std::unique_ptr<TokenMatcher>> list;/**< @brief TokenMatchers to match */
+            std::vector<std::shared_ptr<TokenMatcher>> list;/**< @brief TokenMatchers to match */
             virtual ~ListTokenMatcher()=0;/**< @brief Pure virtual destructor */
     };
 
