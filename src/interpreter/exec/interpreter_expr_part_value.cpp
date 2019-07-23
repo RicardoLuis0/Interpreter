@@ -30,7 +30,7 @@ ExprPartValue::ExprPartValue(std::string s):value(std::make_shared<StringValue>(
     
 }
 
-std::shared_ptr<Parser::VarType> ExprPartValue::get_type(){
+std::shared_ptr<Type> ExprPartValue::get_type(){
     return value->get_type();
 }
 

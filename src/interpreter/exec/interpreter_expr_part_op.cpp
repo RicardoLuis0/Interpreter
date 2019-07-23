@@ -92,36 +92,36 @@ static operator_class_t get_operator_class(int op){
 }
 
 ExprPartOp::ExprPartOp(std::shared_ptr<ExprPart> l,int i,std::shared_ptr<ExprPart> r):left(l),right(r),op(i){
-    std::shared_ptr<Parser::VarType> t1(left->get_type());
-    std::shared_ptr<Parser::VarType> t2(right->get_type());
+    std::shared_ptr<Type> t1(left->get_type());
+    std::shared_ptr<Type> t2(right->get_type());
     operator_class_t op_type=get_operator_class(op);
     switch(op_type){//string only allows '=', '+', '+=' and '=='
     case OP_MOD:
-        if(!(is_int(t1)&&is_int(t2))){
-            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for modulus operator '"+get_op_str(op)+"'");
+        if(!(t1->is_int()&&t2->is_int())){
+            throw std::runtime_error("incompatible types "+t1->get_name()+" and "+t2->get_name()+" for modulus operator '"+get_op_str(op)+"'");
         }
         type=t1;
         break;
     case OP_MOD_ASSIGNMENT:
-        if(!(is_int(t1)&&is_int(t2))){
-            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for assignment operator '"+get_op_str(op)+"'");
+        if(!(t1->is_int()&&t2->is_int())){
+            throw std::runtime_error("incompatible types "+t1->get_name()+" and "+t2->get_name()+" for assignment operator '"+get_op_str(op)+"'");
         }
         goto assign_varcheck;
     case OP_BITWISE_ASSIGNMENT:
-        if(!(is_int(t1)&&is_int(t2))){
-            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for assignment operator '"+get_op_str(op)+"'");
+        if(!(t2->is_int()&&t2->is_int())){
+            throw std::runtime_error("incompatible types "+t1->get_name()+" and "+t2->get_name()+" for assignment operator '"+get_op_str(op)+"'");
         }
         goto assign_varcheck;
     case OP_MATH_ASSIGNMENT:
-        if(is_string(t1)||is_string(t2)){
-            if(op!=SYMBOL_PLUS_ASSIGNMENT||!(is_string(t1)&&is_string(t2))){//if both aren't strings or the operator isn't +=
-                throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for assignment operator '"+get_op_str(op)+"'");
+        if(t1->is_string()||t2->is_string()){
+            if(op!=SYMBOL_PLUS_ASSIGNMENT||!(t1->is_string()&&t2->is_string())){//if both aren't strings or the operator isn't +=
+                throw std::runtime_error("incompatible types "+t1->get_name()+" and "+t2->get_name()+" for assignment operator '"+get_op_str(op)+"'");
             }
         }
         goto assign_varcheck;
     case OP_ASSIGNMENT:
-        if(!(is_num(t1)&&is_num(t2))&&!(is_string(t1)&&is_string(t2))){
-            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for assignment operator '"+get_op_str(op)+"'");
+        if(!(t1->is_num()&&t2->is_num())&&!(t1->is_string()&&t2->is_string())){
+            throw std::runtime_error("incompatible types "+t1->get_name()+" and "+t2->get_name()+" for assignment operator '"+get_op_str(op)+"'");
         }
 assign_varcheck:
         if(typeid(*left)!=typeid(ExprPartVar)){
@@ -130,55 +130,55 @@ assign_varcheck:
         type=t1;
         break;
     case OP_MATH:
-        if(is_string(t1)||is_string(t2)){
-            if(op==SYMBOL_PLUS&&is_string(t1)&&is_string(t2)){//if both are strings and the operator is +
-                type=std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING);
+        if(t1->is_string()||t2->is_string()){
+            if(op==SYMBOL_PLUS&&t1->is_string()&&t2->is_string()){//if both are strings and the operator is +
+                type=Type::primitive_type(PRIMITIVE_STRING);
                 break;
             }
-            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for math operator '"+get_op_str(op)+"'");
+            throw std::runtime_error("incompatible types "+t1->get_name()+" and "+t2->get_name()+" for math operator '"+get_op_str(op)+"'");
         }
-        if(is_int(t2)&&is_int(t1)){
+        if(t2->is_int()&&t1->is_int()){
             type=t2;
             break;
         }
-        if(is_float(t2)&&is_num(t1)){
+        if(t2->is_float()&&t1->is_num()){
             type=t2;
             break;
         }
-        if(is_num(t2)&&is_float(t1)){
+        if(t2->is_num()&&t1->is_float()){
             type=t1;
             break;
         }
-        throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for math operator '"+get_op_str(op)+"'");
+        throw std::runtime_error("incompatible types "+t1->get_name()+" and "+t2->get_name()+" for math operator '"+get_op_str(op)+"'");
     case OP_BITWISE:
-        if(!(is_int(t1)&&is_int(t2))){
-            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for bitwise operator '"+get_op_str(op)+"'");
+        if(!(t1->is_int()&&t2->is_int())){
+            throw std::runtime_error("incompatible types "+t1->get_name()+" and "+t2->get_name()+" for bitwise operator '"+get_op_str(op)+"'");
         }
-        type=std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT);//bitwise always returns int
+        type=Type::primitive_type(PRIMITIVE_INT);//bitwise always returns int
         break;
     case OP_LOGICAL:
-        if(!(is_int(t1)&&is_int(t2))){
-            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for logical operator '"+get_op_str(op)+"'");
+        if(!(t1->is_int()&&t2->is_int())){
+            throw std::runtime_error("incompatible types "+t1->get_name()+" and "+t2->get_name()+" for logical operator '"+get_op_str(op)+"'");
         }
-        type=std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT);//logical always returns int
+        type=Type::primitive_type(PRIMITIVE_INT);//logical always returns int
         break;
     case OP_EQUALITY:
-        if(is_string(t1)!=is_string(t2)){//if one is a string and the other isn't, throw
-            throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for equality operator '"+get_op_str(op)+"'");
+        if(t1->is_string()!=t2->is_string()){//if one is a string and the other isn't, throw
+            throw std::runtime_error("incompatible types "+t1->get_name()+" and "+t2->get_name()+" for equality operator '"+get_op_str(op)+"'");
         }
         /* fall through */
     case OP_COMPARISON:
-        if(is_compatible(t1,t2)){
-            type=std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT);//comparison always returns int
+        if(t1->is_compatible(t2)){
+            type=Type::primitive_type(PRIMITIVE_INT);//comparison always returns int
             break;
         }
-        throw std::runtime_error("incompatible types "+get_name(t1)+" and "+get_name(t2)+" for comparison operator '"+get_op_str(op)+"'");
+        throw std::runtime_error("incompatible types "+t1->get_name()+" and "+t2->get_name()+" for comparison operator '"+get_op_str(op)+"'");
     default:
         throw std::runtime_error("unknown operator '"+get_op_str(op)+"'");
     }
 }
 
-std::shared_ptr<Parser::VarType> ExprPartOp::get_type(){
+std::shared_ptr<Type> ExprPartOp::get_type(){
     return type;
 }
 
@@ -186,12 +186,13 @@ std::shared_ptr<Value> ExprPartOp::eval(std::shared_ptr<ExecFrame> context){
     std::shared_ptr<Value> v1=left->eval(context);
     std::shared_ptr<Value> v2=right->eval(context);
     switch(op){
+    default:
     case SYMBOL_RIGHT_SHIFT_ASSIGNMENT:
     case SYMBOL_LEFT_SHIFT_ASSIGNMENT:
     case SYMBOL_LEFT_SHIFT:
     case SYMBOL_RIGHT_SHIFT:
         //TODO left,right shift operators and their assignments
-        break;
+        throw std::runtime_error("unimplemented operator '"+get_op_str(op)+"'");
     case SYMBOL_LOGICAL_AND:
         return v1->logical_and(v2);
     case SYMBOL_LOGICAL_OR:
@@ -252,5 +253,4 @@ std::shared_ptr<Value> ExprPartOp::eval(std::shared_ptr<ExecFrame> context){
     case SYMBOL_PERCENT:
         return v1->mod(v2);
     }
-    throw std::runtime_error("unimplemented operator '"+get_op_str(op)+"'");
 }

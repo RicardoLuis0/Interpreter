@@ -12,7 +12,7 @@ namespace Interpreter {
             UserFunction(DefaultFrame * parent,std::shared_ptr<Parser::FunctionDefinition>,bool delay=false);
             void proccess_delayed();
             std::string get_name() override;
-            std::shared_ptr<Parser::VarType> get_type() override;
+            std::shared_ptr<Type> get_type() override;
             std::vector<FunctionParameter> get_parameters() override;
             std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override;
             //std::shared_ptr<ExecFrame> getFrame
@@ -21,6 +21,7 @@ namespace Interpreter {
             std::shared_ptr<Parser::FunctionDefinition> function;
             std::shared_ptr<DefaultFrame> frame;
             std::shared_ptr<CodeBlock> code;
+            std::shared_ptr<Type> return_type;
     };
 }
 

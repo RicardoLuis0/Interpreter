@@ -13,8 +13,8 @@ int& IntValue::get(){
     return value;
 }
 
-std::shared_ptr<Parser::VarType> IntValue::get_type(){
-    return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_INT);
+std::shared_ptr<Type> IntValue::get_type(){
+    return Type::primitive_type(PRIMITIVE_INT);
 }
 
 std::shared_ptr<Value> IntValue::lt(std::shared_ptr<Value> &other){

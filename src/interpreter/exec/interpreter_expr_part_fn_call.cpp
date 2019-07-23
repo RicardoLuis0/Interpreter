@@ -29,12 +29,12 @@ ExprPartFnCall::ExprPartFnCall(std::shared_ptr<DefaultFrame> context,std::shared
     }
     std::vector<FunctionParameter> params2=fnc->get_parameters();
     for(size_t i=0;i<params.size();i++){//check reference types
-        if(params2[i].is_reference&&!type_eq(params[i].type,params2[i].type))throw std::runtime_error("types "+get_name(params[i].type)+"and"+get_name(params2[i].type)+"don't match for reference argument");
+        if(params2[i].is_reference&&!params[i].type->is_equal(params2[i].type))throw std::runtime_error("types "+params[i].type->get_name()+" and "+params2[i].type->get_name()+" don't match for reference argument");
     }
     type=fnc->get_type();
 }
 
-std::shared_ptr<Parser::VarType> ExprPartFnCall::get_type(){
+std::shared_ptr<Type> ExprPartFnCall::get_type(){
     return type;
 }
 

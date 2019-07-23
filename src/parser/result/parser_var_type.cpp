@@ -19,6 +19,3 @@ Parser::VarType::VarType(std::shared_ptr<Lexer::KeywordToken> tk):VarType(
 
 Parser::VarType::VarType(ParserPrimitiveType_t p):primitive(p),type(VARTYPE_PRIMITIVE){
 }
-
-Parser::VarType::VarType(ParserVarTypeType_t vt):primitive(PRIMITIVE_INVALID),type(vt){
-}

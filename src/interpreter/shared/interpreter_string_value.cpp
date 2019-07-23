@@ -14,8 +14,8 @@ std::string& StringValue::get(){
     return value;
 }
 
-std::shared_ptr<Parser::VarType> StringValue::get_type(){
-    return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_STRING);
+std::shared_ptr<Type> StringValue::get_type(){
+    return Type::primitive_type(PRIMITIVE_STRING);
 }
 
 std::shared_ptr<Value> StringValue::assign(std::shared_ptr<Value> &other){//other can only be string

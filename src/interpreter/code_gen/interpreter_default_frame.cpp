@@ -58,7 +58,7 @@ std::shared_ptr<Function> DefaultFrame::get_function_local(std::string name,std:
             iter2=std::find_if(iter1->second.begin(),iter1->second.end(),[param_types](const std::pair<std::vector<FunctionParameter>,std::shared_ptr<Function>> &p)->bool{//loose search
                 if(param_types.size()!=p.first.size())return false;
                 for(size_t i=0;i<p.first.size();i++){
-                    if(!is_compatible(p.first[i].type,param_types[i].type))return false;
+                    if(!p.first[i].type->is_compatible(param_types[i].type))return false;
                 }
                 return true;
             });
@@ -103,9 +103,10 @@ void DefaultFrame::add_function(std::shared_ptr<Parser::FunctionDefinition> func
 void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool global,void(*cb)(void*,std::shared_ptr<Parser::VariableDefinitionItem>),void * arg){
     switch(def->type){
     case Parser::DEFINITION_VAR:{
-            std::shared_ptr<Parser::VariableDefinition> vars(std::static_pointer_cast<Parser::VariableDefinition>(def->def));
-            for(std::shared_ptr<Parser::VariableDefinitionItem> var:vars->variables){
-                add_variable(vars->type,var,global);
+            std::shared_ptr<Parser::VariableDefinition> vardef(std::static_pointer_cast<Parser::VariableDefinition>(def->def));
+            std::shared_ptr<Type> type = Type::from_vartype(vardef->type);
+            for(std::shared_ptr<Parser::VariableDefinitionItem> var:vardef->variables){
+                add_variable(type,var,global);
                 if(cb&&var->value)cb(arg,var);
             }
         }
@@ -116,9 +117,9 @@ void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool g
     }
 }
 
-void DefaultFrame::add_variable(std::shared_ptr<Parser::VarType> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global){
-    if(type->type!=Parser::VARTYPE_PRIMITIVE){
-        throw std::runtime_error("variables must be a primitive type");
+void DefaultFrame::add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global){
+    if(!type->is_primitive()){
+        throw std::runtime_error("variables must be a primitive type");//TODO non-primitives (class)
     }
     if(var->value){
         if(var->value->type==Parser::EXPRESSION_TERM){
@@ -167,16 +168,16 @@ void DefaultFrame::add_variable(std::shared_ptr<Parser::VarType> type,std::share
         }
     }
     switch(type->primitive){
-    case Parser::PRIMITIVE_INT:
+    case PRIMITIVE_INT:
         variable_defaults.insert({var->name,std::make_shared<IntVariable>(var->name,0)});
         break;
-    case Parser::PRIMITIVE_FLOAT:
+    case PRIMITIVE_FLOAT:
         variable_defaults.insert({var->name,std::make_shared<FloatVariable>(var->name,0)});
         break;
-    case Parser::PRIMITIVE_STRING:
+    case PRIMITIVE_STRING:
         variable_defaults.insert({var->name,std::make_shared<StringVariable>(var->name,"")});
         break;
-    case Parser::PRIMITIVE_INVALID:
+    case PRIMITIVE_INVALID:
         throw std::runtime_error("invalid primitive type");
     }
 }

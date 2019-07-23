@@ -7,7 +7,7 @@ ExprPartVar::ExprPartVar(std::shared_ptr<DefaultFrame> context,std::string s):id
     type=context->get_variable(ident)->get_type();
 }
 
-std::shared_ptr<Parser::VarType> ExprPartVar::get_type(){
+std::shared_ptr<Type> ExprPartVar::get_type(){
     return type;
 }
 

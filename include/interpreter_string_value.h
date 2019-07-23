@@ -10,7 +10,7 @@ namespace Interpreter {
             StringValue(std::string);
             operator std::string&();
             std::string &get();
-            virtual std::shared_ptr<Parser::VarType> get_type() override;
+            virtual std::shared_ptr<Type> get_type() override;
             virtual std::shared_ptr<Value> eq(std::shared_ptr<Value>&) override;
             virtual std::shared_ptr<Value> neq(std::shared_ptr<Value>&) override;
             virtual std::shared_ptr<Value> assign(std::shared_ptr<Value>&) override;

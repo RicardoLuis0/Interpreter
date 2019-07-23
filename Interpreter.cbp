@@ -73,6 +73,7 @@
 		<Unit filename="include/interpreter_return_statement.h" />
 		<Unit filename="include/interpreter_string_value.h" />
 		<Unit filename="include/interpreter_string_variable.h" />
+		<Unit filename="include/interpreter_type.h" />
 		<Unit filename="include/interpreter_user_function.h" />
 		<Unit filename="include/interpreter_util_defines_misc.h" />
 		<Unit filename="include/interpreter_value.h" />
@@ -170,6 +171,7 @@
 		<Unit filename="src/interpreter/shared/interpreter_int_variable.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_string_value.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_string_variable.cpp" />
+		<Unit filename="src/interpreter/shared/interpreter_type.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_user_function.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_value.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_variable.cpp" />

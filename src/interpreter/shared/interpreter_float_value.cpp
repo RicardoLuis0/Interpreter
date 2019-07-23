@@ -14,8 +14,8 @@ double& FloatValue::get(){
     return value;
 }
 
-std::shared_ptr<Parser::VarType> FloatValue::get_type(){
-    return std::make_shared<Parser::VarType>(Parser::PRIMITIVE_FLOAT);
+std::shared_ptr<Type> FloatValue::get_type(){
+    return Type::primitive_type(PRIMITIVE_FLOAT);
 }
 
 std::shared_ptr<Value> FloatValue::lt(std::shared_ptr<Value> &other){

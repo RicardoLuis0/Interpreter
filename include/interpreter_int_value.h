@@ -12,7 +12,7 @@ namespace Interpreter {
             IntValue(int);
             operator int&();
             int &get();
-            virtual std::shared_ptr<Parser::VarType> get_type() override;
+            virtual std::shared_ptr<Type> get_type() override;
             //operators
             
             //comparison

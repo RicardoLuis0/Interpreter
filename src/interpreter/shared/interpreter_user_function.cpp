@@ -4,7 +4,7 @@
 
 using namespace Interpreter;
 
-UserFunction::UserFunction(DefaultFrame * p,std::shared_ptr<Parser::FunctionDefinition> func,bool delay):function(func),frame(std::make_shared<DefaultFrame>(p,this)),code(delay?nullptr:std::make_shared<CodeBlock>(this,func->code)){
+UserFunction::UserFunction(DefaultFrame * p,std::shared_ptr<Parser::FunctionDefinition> func,bool delay):function(func),frame(std::make_shared<DefaultFrame>(p,this)),code(delay?nullptr:std::make_shared<CodeBlock>(this,func->code)),return_type(Type::from_vartype(func->return_type)){
     
 }
 
@@ -18,15 +18,13 @@ std::string UserFunction::get_name(){
     return function->name;
 }
 
-std::shared_ptr<Parser::VarType> UserFunction::get_type(){
-    return function->return_type;
+std::shared_ptr<Type> UserFunction::get_type(){
+    return return_type;
 }
 
 std::vector<FunctionParameter> UserFunction::get_parameters(){
     return FunctionParameter::from_pfdp(function->parameters);
 }
-
-#include <iostream>
 
 std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args){
     std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Parser::VarType>>>> args_o;
@@ -44,12 +42,12 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
     case ACTION_RETURN:
         {
             std::shared_ptr<Value> retval(std::dynamic_pointer_cast<LineResultReturn>(result)->get());
-            if(is_compatible(retval->get_type(),function->return_type)){
+            if(retval->get_type()->is_compatible(return_type)){
                 return retval;
             }
         }
     default:
-        if(function->return_type->type==Parser::VARTYPE_VOID){
+        if(return_type->is_void()){
             return nullptr;
         }else{
             throw std::runtime_error("function "+function->name+" missing return");

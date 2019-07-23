@@ -13,12 +13,12 @@ ForStatement::ForStatement(std::shared_ptr<DefaultFrame> context,std::shared_ptr
 }
 
 std::shared_ptr<LineResult> ForStatement::run(std::shared_ptr<ExecFrame> context){
-    if(is_string(condition->get_type()))throw std::runtime_error("string is not valid condition");
+    if(condition->get_type()->is_string())throw std::runtime_error("string is not valid condition");
     std::shared_ptr<Value> val;
     if(pre)pre->run(context);
     while(1){
         if(condition)val=condition->eval(context);
-        if(!(condition)||(is_int(val->get_type())&&std::dynamic_pointer_cast<IntValue>(val)->get()!=0)||(is_float(val->get_type())&&std::dynamic_pointer_cast<FloatValue>(val)->get()!=0)){
+        if(!(condition)||(val->get_type()->is_int()&&std::dynamic_pointer_cast<IntValue>(val)->get()!=0)||(val->get_type()->is_float()&&std::dynamic_pointer_cast<FloatValue>(val)->get()!=0)){
             std::shared_ptr<LineResult> r=code->run(code->getContext(context.get()));
             switch(r->getAction()){
             case ACTION_BREAK:

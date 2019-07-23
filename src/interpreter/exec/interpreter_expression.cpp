@@ -18,11 +18,11 @@ Expression::Expression(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Par
     expression=get_expression(context,e);
 }
 
-std::shared_ptr<Parser::VarType> Expression::get_type(){
+std::shared_ptr<Type> Expression::get_type(){
     return expression->get_type();
 }
 
-std::shared_ptr<ExprPart> Expression::get_expression(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::Expression> e){//NOTE maybe move this to parser and order the AST instead
+std::shared_ptr<ExprPart> Expression::get_expression(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::Expression> e){
     if(e->type==Parser::EXPRESSION_BINARY_OPERATION){
         std::shared_ptr<Parser::BinaryOperation> op(std::static_pointer_cast<Parser::BinaryOperation>(e->contents));
         return std::make_shared<ExprPartOp>(get_term(context,op->term1),op->binary_operator->get_symbol_type(),get_expression(context,op->term2));

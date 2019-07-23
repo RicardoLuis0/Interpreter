@@ -61,11 +61,11 @@ int exec(std::string filename){
     if(!entrypoint){
         throw std::runtime_error("missing 'main()' function");
     }else{
-        if(entrypoint->get_type()->type==Parser::VARTYPE_VOID){
+        if(entrypoint->get_type()->is_void()){
             eframe->fn_call(entrypoint,{});
             return 0;
         }else{
-            if(!is_int(entrypoint->get_type())){
+            if(!entrypoint->get_type()->is_int()){
                 throw std::runtime_error("'main' function must return 'int' or 'void'");
             }
             return std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,{}))->get();
@@ -407,9 +407,6 @@ void print_var_type(int indent,std::shared_ptr<Parser::VarType> type){
     switch(type->type){
         case Parser::VARTYPE_PRIMITIVE:
             print_primitive(indent+1,type->primitive);
-            break;
-        case Parser::VARTYPE_MIXED:
-            std::cout<<get_indent(indent+1)<<"mixed\n";
             break;
         default:
             //no more types, in the future TODO
