@@ -20,7 +20,7 @@ std::vector<FunctionParameter> FunctionParameter::from_pfdp(std::vector<std::sha
 }
 
 bool FunctionParameter::operator==(const FunctionParameter &other)const{
-    return typeid(type)==typeid(other.type);
+    return typeid(*type)==typeid(*(other.type));
 }
 
 std::string FunctionParameter::get_typelist(std::vector<FunctionParameter> params,bool print_ref){

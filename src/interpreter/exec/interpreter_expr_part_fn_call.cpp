@@ -29,7 +29,7 @@ ExprPartFnCall::ExprPartFnCall(DefaultFrame * context,std::shared_ptr<Parser::Fu
     }
     std::vector<FunctionParameter> params2=fnc->get_parameters();
     for(size_t i=0;i<params.size();i++){//check reference types
-        if(params2[i].is_reference&&!(typeid(params[i].type)==typeid(params2[i].type)))throw std::runtime_error("types "+params[i].type->get_name()+" and "+params2[i].type->get_name()+" don't match for reference argument");
+        if(params2[i].is_reference&&!(typeid(*(params[i].type))==typeid(*(params2[i].type))))throw std::runtime_error("types "+params[i].type->get_name()+" and "+params2[i].type->get_name()+" don't match for reference argument");
     }
     type=fnc->get_type();
 }
