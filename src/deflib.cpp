@@ -4,6 +4,7 @@
 #include "parser_var_type.h"
 #include "interpreter_string_value.h"
 #include "interpreter_int_value.h"
+#include "conio.h"
 
 //NOTE native functions to make later
 //void printf(string format,mixed ... args)
@@ -15,6 +16,7 @@
 //string itos(int) DONE
 //string ftos(float)
 //void cls() DONE
+//int getch() DONE
 
 namespace Interpreter {
     class puts : public Function {
@@ -118,6 +120,24 @@ namespace Interpreter {
         }
     };
 
+    class getch : public Function{
+
+        std::string get_name() override {
+            return "getch";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::int_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            return std::make_shared<IntValue>(::getch());
+        }
+    };
 }
 
 void Interpreter::init_deflib(DefaultFrame * d){
@@ -126,4 +146,5 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::stoi>());
     d->register_function(std::make_shared<Interpreter::itos>());
     d->register_function(std::make_shared<Interpreter::cls>());
+    d->register_function(std::make_shared<Interpreter::getch>());
 }
