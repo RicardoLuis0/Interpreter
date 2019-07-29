@@ -2,5 +2,5 @@
 
 using namespace Interpreter;
 
-DummyVariable::DummyVariable(std::shared_ptr<Type> t):DummyValue(t),Variable("dummy_variable"){
+DummyVariable::DummyVariable(std::shared_ptr<Type> t):Variable("dummy_variable"),DummyValue(t){
 }
