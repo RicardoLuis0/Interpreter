@@ -3,6 +3,7 @@
 
 #include "interpreter_value.h"
 #include "parser_var_type.h"
+#include "interpreter_type.h"
 
 namespace Interpreter {
     class FloatValue : public virtual Value {

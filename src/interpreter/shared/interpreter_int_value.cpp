@@ -14,7 +14,7 @@ int& IntValue::get(){
 }
 
 std::shared_ptr<Type> IntValue::get_type(){
-    return Type::primitive_type(PRIMITIVE_INT);
+    return Type::int_type();
 }
 
 std::shared_ptr<Value> IntValue::lt(std::shared_ptr<Value> &other){

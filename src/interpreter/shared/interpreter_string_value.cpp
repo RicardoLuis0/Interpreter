@@ -15,7 +15,7 @@ std::string& StringValue::get(){
 }
 
 std::shared_ptr<Type> StringValue::get_type(){
-    return Type::primitive_type(PRIMITIVE_STRING);
+    return Type::string_type();
 }
 
 std::shared_ptr<Value> StringValue::assign(std::shared_ptr<Value> &other){//other can only be string

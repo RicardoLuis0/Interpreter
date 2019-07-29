@@ -24,6 +24,7 @@ namespace Interpreter{
     };
     class DefaultFrame{
         public:
+            std::vector<std::shared_ptr<class Expression>> initialize_globals;
             DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>>);//make global scope
             DefaultFrame(DefaultFrame * parent,Function * func);//Function func must be of type UserFunction
             DefaultFrame(DefaultFrame * parent);

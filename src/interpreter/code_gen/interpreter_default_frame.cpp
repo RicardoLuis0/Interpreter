@@ -14,6 +14,11 @@
 #include "string_token.h"
 #include "interpreter_user_function.h"
 #include "deflib.h"
+#include "interpreter_primitive_type.h"
+#include "parser_binary_operation.h"
+#include "symbol_token.h"
+#include "interpreter_void_type.h"
+#include "interpreter_expression.h"
 
 using namespace Interpreter;
 
@@ -58,7 +63,7 @@ std::shared_ptr<Function> DefaultFrame::get_function_local(std::string name,std:
             iter2=std::find_if(iter1->second.begin(),iter1->second.end(),[param_types](const std::pair<std::vector<FunctionParameter>,std::shared_ptr<Function>> &p)->bool{//loose search
                 if(param_types.size()!=p.first.size())return false;
                 for(size_t i=0;i<p.first.size();i++){
-                    if(!p.first[i].type->is_compatible(param_types[i].type))return false;
+                    if(!p.first[i].type->allows_implicit_cast(param_types[i].type))return false;
                 }
                 return true;
             });
@@ -118,66 +123,16 @@ void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool g
 }
 
 void DefaultFrame::add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global){
-    if(!type->is_primitive()){
-        throw std::runtime_error("variables must be a primitive type");//TODO non-primitives (class)
-    }
-    if(var->value){
+    if(CHECKPTR(type,VoidType))throw std::runtime_error("variable type can't be void");
+    if(global&&var->value){
         if(var->value->type==Parser::EXPRESSION_TERM){
             std::shared_ptr<Parser::ExpressionTerm> term(std::static_pointer_cast<Parser::ExpressionTerm>(var->value->contents));
-            switch(term->type){
-            case Parser::EXPRESSION_TERM_LITERAL_INT:
-                switch(type->primitive){
-                case Parser::PRIMITIVE_INT:
-                    variable_defaults.insert({var->name,std::make_shared<IntVariable>(var->name,std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer())});
-                    return;
-                case Parser::PRIMITIVE_FLOAT:
-                    variable_defaults.insert({var->name,std::make_shared<FloatVariable>(var->name,std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer())});
-                    return;
-                case Parser::PRIMITIVE_STRING:
-                    throw std::runtime_error("cannot assign string to number");
-                case Parser::PRIMITIVE_INVALID:
-                    throw std::runtime_error("invalid primitive type");
-                }
-            case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
-                switch(type->primitive){
-                case Parser::PRIMITIVE_INT:
-                    variable_defaults.insert({var->name,std::make_shared<IntVariable>(var->name,std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float())});
-                    return;
-                case Parser::PRIMITIVE_FLOAT:
-                    variable_defaults.insert({var->name,std::make_shared<FloatVariable>(var->name,std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float())});
-                    return;
-                case Parser::PRIMITIVE_STRING:
-                    throw std::runtime_error("cannot assign string to number");
-                case Parser::PRIMITIVE_INVALID:
-                    throw std::runtime_error("invalid primitive type");
-                }
-            case Parser::EXPRESSION_TERM_LITERAL_STRING:
-                switch(type->primitive){
-                case Parser::PRIMITIVE_INT:
-                case Parser::PRIMITIVE_FLOAT:
-                    throw std::runtime_error("cannot assign number to string");
-                case Parser::PRIMITIVE_STRING:
-                    variable_defaults.insert({var->name,std::make_shared<StringVariable>(var->name,std::static_pointer_cast<Lexer::StringToken>(term->contents_t)->get_string())});
-                    return;
-                case Parser::PRIMITIVE_INVALID:
-                    throw std::runtime_error("invalid primitive type");
-                }
-            default:
-                if(global)throw std::runtime_error("global variables can only be initiated to literals");
-            }
+            initialize_globals.push_back(std::make_shared<Expression>(this,std::make_shared<Parser::Expression>(
+            std::make_shared<Parser::BinaryOperation>(
+                std::make_shared<Parser::ExpressionTerm>(std::make_shared<Lexer::WordToken>(0,var->name),Parser::EXPRESSION_TERM_IDENTIFIER),
+                std::make_shared<Lexer::SymbolToken>(0,get_symbol_data(SYMBOL_ASSIGNMENT)),
+                var->value),Parser::EXPRESSION_BINARY_OPERATION)));
         }
     }
-    switch(type->primitive){
-    case PRIMITIVE_INT:
-        variable_defaults.insert({var->name,std::make_shared<IntVariable>(var->name,0)});
-        break;
-    case PRIMITIVE_FLOAT:
-        variable_defaults.insert({var->name,std::make_shared<FloatVariable>(var->name,0)});
-        break;
-    case PRIMITIVE_STRING:
-        variable_defaults.insert({var->name,std::make_shared<StringVariable>(var->name,"")});
-        break;
-    case PRIMITIVE_INVALID:
-        throw std::runtime_error("invalid primitive type");
-    }
+    variable_defaults.insert({var->name,type->make_variable(var->name)});
 }

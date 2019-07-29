@@ -8,7 +8,7 @@
 namespace Interpreter {
     class Line {
         public:
-            virtual std::shared_ptr<LineResult> run(std::shared_ptr<ExecFrame> context)=0;
+            virtual std::shared_ptr<LineResult> run(ExecFrame * context)=0;
     };
 }
 

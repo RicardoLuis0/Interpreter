@@ -14,7 +14,7 @@
 
 using namespace Interpreter;
 
-Expression::Expression(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::Expression> e){
+Expression::Expression(DefaultFrame * context,std::shared_ptr<Parser::Expression> e){
     expression=get_expression(context,e);
 }
 
@@ -22,7 +22,7 @@ std::shared_ptr<Type> Expression::get_type(){
     return expression->get_type();
 }
 
-std::shared_ptr<ExprPart> Expression::get_expression(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::Expression> e){
+std::shared_ptr<ExprPart> Expression::get_expression(DefaultFrame * context,std::shared_ptr<Parser::Expression> e){
     if(e->type==Parser::EXPRESSION_BINARY_OPERATION){
         std::shared_ptr<Parser::BinaryOperation> op(std::static_pointer_cast<Parser::BinaryOperation>(e->contents));
         return std::make_shared<ExprPartOp>(get_term(context,op->term1),op->binary_operator->get_symbol_type(),get_expression(context,op->term2));
@@ -31,7 +31,7 @@ std::shared_ptr<ExprPart> Expression::get_expression(std::shared_ptr<DefaultFram
     }
 }
 
-std::shared_ptr<ExprPart> Expression::get_term(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::ExpressionTerm> term){
+std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::shared_ptr<Parser::ExpressionTerm> term){
     switch(term->type){
     case Parser::EXPRESSION_TERM_EXPRESSION_GROUP:
         return get_expression(context,std::static_pointer_cast<Parser::ExpressionGroup>(term->contents_p)->contents);
@@ -53,11 +53,11 @@ std::shared_ptr<ExprPart> Expression::get_term(std::shared_ptr<DefaultFrame> con
     }
 }
 
-std::shared_ptr<LineResult> Expression::run(std::shared_ptr<ExecFrame> context){
+std::shared_ptr<LineResult> Expression::run(ExecFrame * context){
     eval(context);
     return std::make_shared<LineResultSimple>(ACTION_NONE);
 }
 
-std::shared_ptr<Value> Expression::eval(std::shared_ptr<ExecFrame> context){
+std::shared_ptr<Value> Expression::eval(ExecFrame * context){
     return expression->eval(context);
 }

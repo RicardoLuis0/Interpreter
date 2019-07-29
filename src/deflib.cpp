@@ -28,7 +28,7 @@ namespace Interpreter {
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{Type::primitive_type(PRIMITIVE_STRING),"str",false}};
+            return {{Type::string_type(),"str",false}};
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
@@ -45,7 +45,7 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_type(){
-            return Type::primitive_type(PRIMITIVE_STRING);
+            return Type::string_type();
         }
 
         std::vector<FunctionParameter> get_parameters() override {
@@ -67,11 +67,11 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_type(){
-            return Type::primitive_type(PRIMITIVE_INT);
+            return Type::int_type();
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{Type::primitive_type(PRIMITIVE_STRING),"str",false}};
+            return {{Type::string_type(),"str",false}};
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
@@ -86,11 +86,11 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_type(){
-            return Type::primitive_type(PRIMITIVE_STRING);
+            return Type::string_type();
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{Type::primitive_type(PRIMITIVE_INT),"int",false}};
+            return {{Type::int_type(),"int",false}};
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {

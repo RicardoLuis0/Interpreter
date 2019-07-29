@@ -9,8 +9,8 @@
 namespace Interpreter {
     class ForStatement : public Line {
         public:
-            ForStatement(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::ForStatement>);
-            std::shared_ptr<LineResult> run(std::shared_ptr<ExecFrame> context) override;
+            ForStatement(DefaultFrame * context,std::shared_ptr<Parser::ForStatement>);
+            std::shared_ptr<LineResult> run(ExecFrame * context) override;
             std::shared_ptr<Expression> pre;
             std::shared_ptr<Expression> condition;
             std::shared_ptr<Expression> inc;

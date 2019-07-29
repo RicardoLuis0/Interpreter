@@ -10,8 +10,8 @@
 namespace Interpreter {
     class IfStatement : public Line {
         public:
-            IfStatement(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::IfStatement>);
-            std::shared_ptr<LineResult> run(std::shared_ptr<ExecFrame> context) override;
+            IfStatement(DefaultFrame * context,std::shared_ptr<Parser::IfStatement>);
+            std::shared_ptr<LineResult> run(ExecFrame * context) override;
             std::shared_ptr<Expression> condition;
             std::shared_ptr<CodeBlock> code;
             std::shared_ptr<CodeBlock> else_stmt;

@@ -41,7 +41,7 @@ CodeBlock::CodeBlock(DefaultFrame * p,std::shared_ptr<Parser::Line> l):default_f
     }
 }
 
-std::shared_ptr<LineResult> CodeBlock::run(std::shared_ptr<ExecFrame> context){
+std::shared_ptr<LineResult> CodeBlock::run(ExecFrame * context){
     for(std::shared_ptr<Line> l:code){
         std::shared_ptr<LineResult> result=l->run(context);
         if(result->getAction()!=ACTION_NONE)return result;
@@ -58,7 +58,7 @@ void CodeBlock::addLine(std::shared_ptr<Parser::Line> l){
         addStatement(std::static_pointer_cast<Parser::Statement>(l->contents));
         break;
     case Parser::LINE_EXPRESSION:
-        code.push_back(std::make_shared<Expression>(default_frame,std::static_pointer_cast<Parser::Expression>(l->contents)));
+        code.push_back(std::make_shared<Expression>(default_frame.get(),std::static_pointer_cast<Parser::Expression>(l->contents)));
         break;
     case Parser::LINE_DEFINITION:
         default_frame->add_definition(std::static_pointer_cast<Parser::Definition>(l->contents),false,varDefCallbackCaller,this);
@@ -71,16 +71,16 @@ void CodeBlock::addLine(std::shared_ptr<Parser::Line> l){
 void CodeBlock::addStatement(std::shared_ptr<Parser::Statement> stmt){
     switch(stmt->type){
     case Parser::STATEMENT_IF:
-        code.push_back(std::make_shared<IfStatement>(default_frame,std::static_pointer_cast<Parser::IfStatement>(stmt->statement)));
+        code.push_back(std::make_shared<IfStatement>(default_frame.get(),std::static_pointer_cast<Parser::IfStatement>(stmt->statement)));
         break;
     case Parser::STATEMENT_WHILE:
-        code.push_back(std::make_shared<WhileStatement>(default_frame,std::static_pointer_cast<Parser::WhileStatement>(stmt->statement)));
+        code.push_back(std::make_shared<WhileStatement>(default_frame.get(),std::static_pointer_cast<Parser::WhileStatement>(stmt->statement)));
         break;
     case Parser::STATEMENT_FOR:
-        code.push_back(std::make_shared<ForStatement>(default_frame,std::static_pointer_cast<Parser::ForStatement>(stmt->statement)));
+        code.push_back(std::make_shared<ForStatement>(default_frame.get(),std::static_pointer_cast<Parser::ForStatement>(stmt->statement)));
         break;
     case Parser::STATEMENT_RETURN:
-        code.push_back(std::make_shared<ReturnStatement>(default_frame,std::static_pointer_cast<Parser::ReturnStatement>(stmt->statement)));
+        code.push_back(std::make_shared<ReturnStatement>(default_frame.get(),std::static_pointer_cast<Parser::ReturnStatement>(stmt->statement)));
         break;
     }
 }
@@ -90,19 +90,9 @@ std::shared_ptr<ExecFrame> CodeBlock::getContext(ExecFrame * parent){
 
 void CodeBlock::varDefCallback(std::shared_ptr<Parser::VariableDefinitionItem> var){
     std::string name=var->name;
-    if(var->value->type==Parser::EXPRESSION_TERM){
-        switch(std::static_pointer_cast<Parser::ExpressionTerm>(var->value->contents)->type){
-        case Parser::EXPRESSION_TERM_LITERAL_INT:
-        case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
-        case Parser::EXPRESSION_TERM_LITERAL_STRING:
-            return;//don't add assignment if is literal, already handled by frame defaults
-        default:
-            break;
-        }
-    }
-    code.push_back(std::make_shared<Expression>(default_frame,std::make_shared<Parser::Expression>(
+    code.push_back(std::make_shared<Expression>(default_frame.get(),std::make_shared<Parser::Expression>(
             std::make_shared<Parser::BinaryOperation>(
                 std::make_shared<Parser::ExpressionTerm>(std::make_shared<Lexer::WordToken>(0,var->name),Parser::EXPRESSION_TERM_IDENTIFIER),
                 std::make_shared<Lexer::SymbolToken>(0,get_symbol_data(SYMBOL_ASSIGNMENT)),
-                var->value),Parser::EXPRESSION_BINARY_OPERATION)));//add assignment operation if not a literal
+                var->value),Parser::EXPRESSION_BINARY_OPERATION)));
 }

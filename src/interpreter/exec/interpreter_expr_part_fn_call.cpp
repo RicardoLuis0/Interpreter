@@ -5,7 +5,7 @@
 
 using namespace Interpreter;
 
-ExprPartFnCall::ExprPartFnCall(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::FunctionCall> fn):ident(fn->identifier){
+ExprPartFnCall::ExprPartFnCall(DefaultFrame * context,std::shared_ptr<Parser::FunctionCall> fn):ident(fn->identifier){
     std::vector<FunctionParameter> params;
     if(fn->arguments){
         for(std::shared_ptr<Parser::Expression> arg:fn->arguments->expression_list){
@@ -29,7 +29,7 @@ ExprPartFnCall::ExprPartFnCall(std::shared_ptr<DefaultFrame> context,std::shared
     }
     std::vector<FunctionParameter> params2=fnc->get_parameters();
     for(size_t i=0;i<params.size();i++){//check reference types
-        if(params2[i].is_reference&&!params[i].type->is_equal(params2[i].type))throw std::runtime_error("types "+params[i].type->get_name()+" and "+params2[i].type->get_name()+" don't match for reference argument");
+        if(params2[i].is_reference&&!(typeid(params[i].type)==typeid(params2[i].type)))throw std::runtime_error("types "+params[i].type->get_name()+" and "+params2[i].type->get_name()+" don't match for reference argument");
     }
     type=fnc->get_type();
 }
@@ -38,7 +38,7 @@ std::shared_ptr<Type> ExprPartFnCall::get_type(){
     return type;
 }
 
-std::shared_ptr<Value> ExprPartFnCall::eval(std::shared_ptr<ExecFrame> context){
+std::shared_ptr<Value> ExprPartFnCall::eval(ExecFrame * context){
     std::vector<std::shared_ptr<Value>> args;
     std::shared_ptr<Function> fn=context->get_function(ident,param_types);
     for(size_t i=0;i<param_types.size();i++){

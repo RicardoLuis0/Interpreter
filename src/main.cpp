@@ -33,6 +33,8 @@
 #include "interpreter_exec_frame.h"
 #include "interpreter_util_defines_misc.h"
 #include "interpreter_int_value.h"
+#include "interpreter_void_type.h"
+#include "interpreter_int_type.h"
 #include <cstring>
 //TODO update docs
 /**
@@ -61,11 +63,11 @@ int exec(std::string filename){
     if(!entrypoint){
         throw std::runtime_error("missing 'main()' function");
     }else{
-        if(entrypoint->get_type()->is_void()){
+        if(CHECKPTR(entrypoint->get_type(),Interpreter::VoidType)){
             eframe->fn_call(entrypoint,{});
             return 0;
         }else{
-            if(!entrypoint->get_type()->is_int()){
+            if(!CHECKPTR(entrypoint->get_type(),Interpreter::IntType)){
                 throw std::runtime_error("'main' function must return 'int' or 'void'");
             }
             return std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,{}))->get();

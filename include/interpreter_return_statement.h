@@ -10,8 +10,8 @@
 namespace Interpreter {
     class ReturnStatement : public Line {
         public:
-            ReturnStatement(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::ReturnStatement>);
-            std::shared_ptr<LineResult> run(std::shared_ptr<ExecFrame> context) override;
+            ReturnStatement(DefaultFrame * context,std::shared_ptr<Parser::ReturnStatement>);
+            std::shared_ptr<LineResult> run(ExecFrame * context) override;
             std::shared_ptr<Expression> value;
     };
 }

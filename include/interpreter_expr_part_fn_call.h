@@ -8,9 +8,9 @@
 namespace Interpreter {
     class ExprPartFnCall : public ExprPart {
         public:
-            ExprPartFnCall(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::FunctionCall>);
+            ExprPartFnCall(DefaultFrame * context,std::shared_ptr<Parser::FunctionCall>);
             std::shared_ptr<Type> get_type() override;
-            std::shared_ptr<Value> eval(std::shared_ptr<ExecFrame> context) override;
+            std::shared_ptr<Value> eval(ExecFrame * context) override;
         protected:
             std::string ident;
             std::vector<FunctionParameter> param_types;

@@ -1,102 +1,62 @@
 #include "interpreter_type.h"
+#include "interpreter_void_type.h"
+#include "interpreter_int_type.h"
+#include "interpreter_float_type.h"
+#include "interpreter_string_type.h"
 
 using namespace Interpreter;
 
-Type::Type(type_type_t t1,type_primitive_type_t t2):type(t1),primitive(t2){
-}
+std::shared_ptr<Type> Type::void_type_instance(std::make_shared<VoidType>());
+std::shared_ptr<Type> Type::int_type_instance(std::make_shared<IntType>());
+std::shared_ptr<Type> Type::float_type_instance(std::make_shared<FloatType>());
+std::shared_ptr<Type> Type::string_type_instance(std::make_shared<StringType>());
 
 std::shared_ptr<Type> Type::void_type(){
-    return std::make_shared<Type>(TYPE_VOID);
+    return void_type_instance;
 }
-
-std::shared_ptr<Type> Type::primitive_type(type_primitive_type_t t){
-    return std::make_shared<Type>(TYPE_PRIMITIVE,t);
+std::shared_ptr<Type> Type::int_type(){
+    return int_type_instance;
 }
-
-std::shared_ptr<Type> Type::class_type(){
-        throw std::runtime_error("classes/structs/typedefs not implemented yet");
+std::shared_ptr<Type> Type::float_type(){
+    return float_type_instance;
 }
-
-bool Type::is_void(){
-    return (type==TYPE_VOID);
+std::shared_ptr<Type> Type::string_type(){
+    return string_type_instance;
 }
-
-bool Type::is_primitive(){
-    return (type==TYPE_PRIMITIVE);
+std::shared_ptr<Type> Type::class_type(class DefaultFrame * context,std::string name){
+    throw std::runtime_error("classes/structs/typedefs not implemented yet");
 }
-
-bool Type::is_int(){
-    return (is_primitive()&&primitive==PRIMITIVE_INT);
-}
-
-bool Type::is_float(){
-    return (is_primitive()&&primitive==PRIMITIVE_FLOAT);
-}
-
-bool Type::is_num(){
-    return (is_int()||is_float());
-}
-
-bool Type::is_string(){
-    return (is_primitive()&&primitive==PRIMITIVE_STRING);
-}
-
-bool Type::is_compatible(std::shared_ptr<Type> other){
-    return (is_num()&&other->is_num())||(is_string()&&other->is_string());
-}
-
-bool Type::is_equal(std::shared_ptr<Type> other){
-    if(type==other->type){
-        if(type==TYPE_PRIMITIVE){
-            return primitive==other->primitive;
-        }
-        return true;
-    }
-    return false;
-}
-
 std::string Type::get_name(){
-    switch(type){
-    default:
-    case TYPE_INVALID:
-        return "invalid";
-    case TYPE_VOID:
-        return "void";
-    case TYPE_PRIMITIVE:
-        switch(primitive){
-        default:
-        case PRIMITIVE_INVALID:
-            return "invalid";
-        case PRIMITIVE_INT:
-            return "int";
-        case PRIMITIVE_FLOAT:
-            return "float";
-        case PRIMITIVE_STRING:
-            return "string";
-        }
-    case TYPE_CLASS:
-        return "class";
-    }
+    return "invalid";
 }
-
 std::shared_ptr<Type> Type::from_vartype(std::shared_ptr<Parser::VarType> t){
     switch(t->type){
     default:
         throw std::runtime_error("invalid type");
     case Parser::VARTYPE_VOID:
-        return void_type();
+        return void_type_instance;
     case Parser::VARTYPE_PRIMITIVE:
         switch(t->primitive){
         case Parser::PRIMITIVE_INVALID:
             throw std::runtime_error("invalid primitive value 'PRIMITIVE_INVALID'");
         case Parser::PRIMITIVE_INT:
-            return primitive_type(PRIMITIVE_INT);
+            return int_type_instance;
         case Parser::PRIMITIVE_FLOAT:
-            return primitive_type(PRIMITIVE_FLOAT);
+            return float_type_instance;
         case Parser::PRIMITIVE_STRING:
-            return primitive_type(PRIMITIVE_STRING);
+            return string_type_instance;
         }
     case Parser::VARTYPE_IDENTIFIER:
-        return class_type();//throws
+        return class_type(nullptr,"");//throws
     }
+}
+
+bool Type::allows_implicit_cast(std::shared_ptr<Type> other){
+    return false;
+}
+bool Type::has_cast(std::shared_ptr<Type> other){
+    return allows_implicit_cast(other);
+}
+std::shared_ptr<Value> Type::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
+    throw std::runtime_error("illegal cast");
 }

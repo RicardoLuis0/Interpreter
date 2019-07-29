@@ -1,6 +1,7 @@
 #include "interpreter_user_function.h"
 #include "interpreter_line_result_return.h"
 #include "interpreter_util_defines_misc.h"
+#include "interpreter_void_type.h"
 
 using namespace Interpreter;
 
@@ -27,27 +28,27 @@ std::vector<FunctionParameter> UserFunction::get_parameters(){
 }
 
 std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args){
-    std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Parser::VarType>>>> args_o;
+    std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>> args_o;
     int i=0;
     if(function->parameters.size()!=args.size()){
         throw std::runtime_error("wrong parameter count");
     }
     for(std::shared_ptr<Parser::FunctionDefinitionParameter> param:function->parameters){
-        args_o.insert({param->name,{args[i++],{param->is_reference,param->type}}});
+        args_o.insert({param->name,{args[i++],{param->is_reference,Type::from_vartype(param->type)}}});
     }
     std::shared_ptr<ExecFrame> f(code->getContext(parent_frame));
     f->set_args(args_o);
-    std::shared_ptr<LineResult> result=code->run(f);
+    std::shared_ptr<LineResult> result=code->run(f.get());
     switch(result->getAction()){
     case ACTION_RETURN:
         {
             std::shared_ptr<Value> retval(std::dynamic_pointer_cast<LineResultReturn>(result)->get());
-            if(retval->get_type()->is_compatible(return_type)){
+            if(retval->get_type()->allows_implicit_cast(return_type)){
                 return retval;
             }
         }
     default:
-        if(return_type->is_void()){
+        if(CHECKPTR(return_type,VoidType)){
             return nullptr;
         }else{
             throw std::runtime_error("function "+function->name+" missing return");

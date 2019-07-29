@@ -12,7 +12,7 @@ namespace Interpreter {
             CodeBlock(class UserFunction * func,std::shared_ptr<Parser::CodeBlock>);//function constructor
             CodeBlock(DefaultFrame * parent,std::shared_ptr<Parser::CodeBlock>);//codeblock constructor
             CodeBlock(DefaultFrame * parent,std::shared_ptr<Parser::Line>);//single line block constructor (eg. IF statement with single line instead of block, etc)
-            virtual std::shared_ptr<LineResult> run(std::shared_ptr<ExecFrame> context) override;
+            virtual std::shared_ptr<LineResult> run(ExecFrame * context) override;
             std::shared_ptr<ExecFrame> getContext(ExecFrame * parent);
             void varDefCallback(std::shared_ptr<Parser::VariableDefinitionItem>);
         protected:

@@ -9,8 +9,8 @@
 namespace Interpreter {
     class WhileStatement : public Line {
         public:
-            WhileStatement(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::WhileStatement>);
-            std::shared_ptr<LineResult> run(std::shared_ptr<ExecFrame> context) override;
+            WhileStatement(DefaultFrame * context,std::shared_ptr<Parser::WhileStatement>);
+            std::shared_ptr<LineResult> run(ExecFrame * context) override;
             std::shared_ptr<Expression> condition;
             std::shared_ptr<CodeBlock> code;
     };

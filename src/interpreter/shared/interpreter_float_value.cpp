@@ -15,7 +15,7 @@ double& FloatValue::get(){
 }
 
 std::shared_ptr<Type> FloatValue::get_type(){
-    return Type::primitive_type(PRIMITIVE_FLOAT);
+    return Type::float_type();
 }
 
 std::shared_ptr<Value> FloatValue::lt(std::shared_ptr<Value> &other){

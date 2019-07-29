@@ -3,9 +3,9 @@
 
 using namespace Interpreter;
 
-ReturnStatement::ReturnStatement(std::shared_ptr<DefaultFrame> context,std::shared_ptr<Parser::ReturnStatement> stmt):value(std::make_shared<Expression>(context,stmt->value)){
+ReturnStatement::ReturnStatement(DefaultFrame * context,std::shared_ptr<Parser::ReturnStatement> stmt):value(std::make_shared<Expression>(context,stmt->value)){
 }
 
-std::shared_ptr<LineResult> ReturnStatement::run(std::shared_ptr<ExecFrame> context){
+std::shared_ptr<LineResult> ReturnStatement::run(ExecFrame * context){
     return std::make_shared<LineResultReturn>(value->eval(context));
 }

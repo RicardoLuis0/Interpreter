@@ -3,12 +3,12 @@
 
 #include <memory>
 #include "parser_var_type.h"
-#include "interpreter_type.h"
+//#include "interpreter_type.h"
 
 namespace Interpreter {
     class Value {
         public:
-            virtual std::shared_ptr<Type> get_type()=0;
+            virtual std::shared_ptr<class Type> get_type()=0;
             //operators
             
             //comparison

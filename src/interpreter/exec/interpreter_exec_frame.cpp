@@ -6,6 +6,8 @@
 #include "interpreter_float_variable.h"
 #include "interpreter_string_variable.h"
 #include "interpreter_user_function.h"
+#include "interpreter_int_type.h"
+#include "interpreter_expression.h"
 
 using namespace Interpreter;
 
@@ -24,6 +26,9 @@ ExecFrame::ExecFrame(ExecFrame * p,DefaultFrame * d):parent(p),defaults(d){
             throw std::runtime_error("unknown variable type in defaults");
         }
     }
+    for(std::shared_ptr<Expression> e:defaults->initialize_globals){
+        e->run(this);
+    }
 }
 
 std::shared_ptr<Variable> ExecFrame::get_variable(std::string name){
@@ -34,15 +39,15 @@ std::shared_ptr<Function> ExecFrame::get_function(std::string name,std::vector<F
     return defaults->get_function(name,param_types);
 }
 
-void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::shared_ptr<Parser::VarType> vt){
+void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::shared_ptr<Type> t){
     if(CHECKPTR(val,IntValue)){
-        if(is_float(vt)){
-            variables[s]=std::make_shared<FloatVariable>(s,std::dynamic_pointer_cast<IntValue>(val)->get());
-        }else{
+        if(CHECKPTR(t,IntType)){
             variables[s]=std::make_shared<IntVariable>(s,std::dynamic_pointer_cast<IntValue>(val)->get());
+        }else{
+            variables[s]=std::make_shared<FloatVariable>(s,std::dynamic_pointer_cast<IntValue>(val)->get());
         }
     }else if(CHECKPTR(val,FloatValue)){
-        if(is_int(vt)){
+        if(CHECKPTR(t,IntType)){
             variables[s]=std::make_shared<IntVariable>(s,std::dynamic_pointer_cast<FloatValue>(val)->get());
         }else{
             variables[s]=std::make_shared<FloatVariable>(s,std::dynamic_pointer_cast<FloatValue>(val)->get());
@@ -52,8 +57,8 @@ void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::share
     }
 }
 
-void ExecFrame::set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Parser::VarType>>>> args){
-   for(std::pair<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Parser::VarType>>>> arg:args){
+void ExecFrame::set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>> args){
+   for(std::pair<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>> arg:args){
         if(arg.second.second.first){
             if(CHECKPTR(arg.second.first,Variable)){
                 variables[arg.first]=std::dynamic_pointer_cast<Variable>(arg.second.first);

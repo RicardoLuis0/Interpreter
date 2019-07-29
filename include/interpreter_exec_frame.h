@@ -10,7 +10,7 @@
 namespace Interpreter {
     class ExecFrame{
         protected:
-            void set_variable(std::string,std::shared_ptr<Value>,std::shared_ptr<Parser::VarType>);
+            void set_variable(std::string,std::shared_ptr<Value>,std::shared_ptr<Type>);
         public:
             ExecFrame(ExecFrame * parent,class DefaultFrame * defaults);
             ExecFrame * parent;
@@ -18,7 +18,7 @@ namespace Interpreter {
             std::map<std::string,std::shared_ptr<Variable>> variables;
             std::shared_ptr<Variable> get_variable(std::string);
             std::shared_ptr<Function> get_function(std::string,std::vector<FunctionParameter>);
-            void set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Parser::VarType>>>>);
+            void set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>>);
             std::shared_ptr<Value> fn_call(std::shared_ptr<Function>,std::vector<std::shared_ptr<Value>>);
     };
 }
