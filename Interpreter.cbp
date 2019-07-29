@@ -49,6 +49,10 @@
 		<Unit filename="include/hex_token_matcher.h" />
 		<Unit filename="include/integer_token.h" />
 		<Unit filename="include/integer_token_matcher.h" />
+		<Unit filename="include/interpreter_class.h" />
+		<Unit filename="include/interpreter_class_reference_variable.h" />
+		<Unit filename="include/interpreter_class_value.h" />
+		<Unit filename="include/interpreter_class_variable.h" />
 		<Unit filename="include/interpreter_code_block.h" />
 		<Unit filename="include/interpreter_default_frame.h" />
 		<Unit filename="include/interpreter_dummy_value.h" />
@@ -173,6 +177,10 @@
 		<Unit filename="src/interpreter/exec/interpreter_line_result_simple.cpp" />
 		<Unit filename="src/interpreter/exec/interpreter_return_statement.cpp" />
 		<Unit filename="src/interpreter/exec/interpreter_while_statement.cpp" />
+		<Unit filename="src/interpreter/shared/interpreter_class.cpp" />
+		<Unit filename="src/interpreter/shared/interpreter_class_reference_variable.cpp" />
+		<Unit filename="src/interpreter/shared/interpreter_class_value.cpp" />
+		<Unit filename="src/interpreter/shared/interpreter_class_variable.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_dummy_value.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_dummy_variable.cpp" />
 		<Unit filename="src/interpreter/shared/interpreter_float_type.cpp" />
