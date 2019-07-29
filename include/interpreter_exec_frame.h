@@ -10,7 +10,7 @@
 namespace Interpreter {
     class ExecFrame{
         protected:
-            void set_variable(std::string,std::shared_ptr<Value>,std::shared_ptr<Type>);
+            void set_variable(std::string,std::shared_ptr<Value>,std::shared_ptr<Type>,bool reference=false);
         public:
             ExecFrame(ExecFrame * parent,class DefaultFrame * defaults);
             ExecFrame * parent;

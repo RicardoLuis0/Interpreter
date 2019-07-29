@@ -38,13 +38,13 @@ std::shared_ptr<Function> ExecFrame::get_function(std::string name,std::vector<F
     return defaults->get_function(name,param_types);
 }
 
-void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::shared_ptr<Type> t){
+void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::shared_ptr<Type> t,bool reference){
     if(CHECKPTR(t,IntType)){
-        variables[s]=std::make_shared<IntVariable>(s,std::dynamic_pointer_cast<IntValue>(val->get_type()->cast(val,t))->get());
+        variables[s]=(reference&&CHECKPTR(val,IntVariable))?std::dynamic_pointer_cast<IntVariable>(val):std::make_shared<IntVariable>(s,std::dynamic_pointer_cast<IntValue>(val->get_type()->cast(val,t))->get());
     }else if(CHECKPTR(t,FloatType)){
-        variables[s]=std::make_shared<FloatVariable>(s,std::dynamic_pointer_cast<FloatValue>(val->get_type()->cast(val,t))->get());
+        variables[s]=(reference&&CHECKPTR(val,FloatVariable))?std::dynamic_pointer_cast<FloatVariable>(val):std::make_shared<FloatVariable>(s,std::dynamic_pointer_cast<FloatValue>(val->get_type()->cast(val,t))->get());
     }else if(CHECKPTR(t,StringType)){
-        variables[s]=std::make_shared<StringVariable>(s,std::dynamic_pointer_cast<StringValue>(val->get_type()->cast(val,t))->get());
+        variables[s]=(reference&&CHECKPTR(val,StringVariable))?std::dynamic_pointer_cast<StringVariable>(val):std::make_shared<StringVariable>(s,std::dynamic_pointer_cast<StringValue>(val->get_type()->cast(val,t))->get());
     }else{
         throw std::runtime_error("classes not implemented");
     }
@@ -52,11 +52,7 @@ void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::share
 
 void ExecFrame::set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>> args){
    for(std::pair<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>> arg:args){
-        if(arg.second.second.first&&CHECKPTR(arg.second.first,Variable)){
-            variables[arg.first]=std::dynamic_pointer_cast<Variable>(arg.second.first);
-        }else{
-            set_variable(arg.first,arg.second.first,arg.second.second.second);
-        }
+        set_variable(arg.first,arg.second.first,arg.second.second.second,arg.second.second.first);
     }
 }
 
