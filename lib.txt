@@ -1,0 +1,23 @@
+void puts(string) DONE
+	write string to stdout
+
+void putchar(int) DONE
+	write char to stdout
+
+string getline() DONE
+	get line from stdin
+
+int getch() DONE
+	get char from stdin
+
+void cls() DONE
+	clear screen
+
+int stoi(string) DONE
+	convert string to int
+
+string itos(int) DONE
+	convert int to string
+
+string ftos(float) DONE
+	convert float to string
