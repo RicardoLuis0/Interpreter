@@ -90,21 +90,21 @@ void render(){
 }
 
 int checkwin(){
-	if(b00==b01&&b01==b02){
+	if(b00!=0&&b00==b01&&b01==b02){
 		return b00;
-	}else if(b10==b11&&b11==b12){
+	}else if(b10!=0&&b10==b11&&b11==b12){
 		return b10;
-	}else if(b20==b21&&b21==b22){
+	}else if(b20!=0&&b20==b21&&b21==b22){
 		return b20;
-	}else if(b00==b10&&b10==b20){
+	}else if(b00!=0&&b00==b10&&b10==b20){
 		return b00;
-	}else if(b01==b11&&b11==b21){
+	}else if(b01!=0&&b01==b11&&b11==b21){
 		return b01;
-	}else if(b02==b12&&b12==b22){
+	}else if(b02!=0&&b02==b12&&b12==b22){
 		return b02;
-	}else if(b00==b11&&b11==b22){
+	}else if(b00!=0&&b00==b11&&b11==b22){
 		return b00;
-	}else if(b02==b11&&b11==b20){
+	}else if(b02!=0&&b02==b11&&b11==b20){
 		return b02;
 	}else{
 		int is_tie=1,i,j;
