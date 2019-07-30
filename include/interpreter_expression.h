@@ -17,8 +17,8 @@ namespace Interpreter {
             std::shared_ptr<Value> eval(ExecFrame * context);//parent_frame's defauls must be the same as the context the expression was built with
             std::shared_ptr<LineResult> run(ExecFrame * context) override;
             std::shared_ptr<Type> get_type();
+            std::shared_ptr<Value> get_dummy_type();
         protected:
-            static std::map<int,int> operator_precedence;
             std::shared_ptr<ExprPart> expression;
             std::shared_ptr<ExprPart> get_term(DefaultFrame *,std::shared_ptr<Parser::ExpressionTerm>);
             std::shared_ptr<ExprPart> get_expression(DefaultFrame *,std::shared_ptr<Parser::Expression>);

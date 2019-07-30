@@ -22,6 +22,10 @@ std::shared_ptr<Type> Expression::get_type(){
     return expression->get_type();
 }
 
+std::shared_ptr<Value> Expression::get_dummy_type(){
+    return expression->get_dummy_type();
+}
+
 std::shared_ptr<ExprPart> Expression::get_expression(DefaultFrame * context,std::shared_ptr<Parser::Expression> e){
     if(e->type==Parser::EXPRESSION_BINARY_OPERATION){
         std::shared_ptr<Parser::BinaryOperation> op(std::static_pointer_cast<Parser::BinaryOperation>(e->contents));
