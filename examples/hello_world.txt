@@ -1,0 +1,6 @@
+int main(){
+	cls();
+	puts("Hello World!\nPress Any Key...");
+	getch();
+	return 0;
+}

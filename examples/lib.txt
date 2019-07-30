@@ -1,23 +1,23 @@
-void puts(string) DONE
+void puts(string)
 	write string to stdout
 
-void putchar(int) DONE
+void putchar(int)
 	write char to stdout
 
-string getline() DONE
+string getline()
 	get line from stdin
 
-int getch() DONE
+int getch()
 	get char from stdin
 
-void cls() DONE
+void cls()
 	clear screen
 
-int stoi(string) DONE
+int stoi(string)
 	convert string to int
 
-string itos(int) DONE
+string itos(int)
 	convert int to string
 
-string ftos(float) DONE
+string ftos(float)
 	convert float to string
