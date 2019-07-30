@@ -78,7 +78,11 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
-            return std::make_shared<IntValue>(std::stoi(std::dynamic_pointer_cast<StringValue>(args[0])->get()));
+            try{
+                return std::make_shared<IntValue>(std::stoi(std::dynamic_pointer_cast<StringValue>(args[0])->get()));
+            }catch(...){
+                return std::make_shared<IntValue>(-1);
+            }
         }
     };
 
