@@ -75,7 +75,7 @@ int exec(std::string filename){
     }
 }
 
-void test_exec(){
+int test_exec(){
     try{
         std::string filename;
         std::vector<std::shared_ptr<Lexer::Token>> tokens;
@@ -103,18 +103,27 @@ void test_exec(){
         if(!entrypoint){
             std::cout<<"no main function";
         }else{
-            eframe->fn_call(entrypoint,{});
+            if(CHECKPTR(entrypoint->get_type(),Interpreter::VoidType)){
+                eframe->fn_call(entrypoint,{});
+                return 0;
+            }else{
+                if(!CHECKPTR(entrypoint->get_type(),Interpreter::IntType)){
+                    throw std::runtime_error("'main' function must return 'int' or 'void'");
+                }
+                return std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,{}))->get();
+            }
         }
     }catch(MyExcept::ParseError &e){
         std::cout<<e.what();
-        return;
+        return 0;
     }catch(MyExcept::NoMatchException &e){
         std::cout<<e.what();
-        return;
+        return 0;
     }catch(std::exception &e){
         std::cout<<"uncaught exception: "<<e.what();
-        return;
+        return 1;
     }
+    return 1;
 }
 
 int main(int argc,char ** argv){
@@ -134,7 +143,7 @@ int main(int argc,char ** argv){
             }else if(input.compare("3")==0){
                 test_definitions();
             }else if(input.compare("4")==0){
-                test_exec();
+                return test_exec();
             }else{
                 continue;
             }
