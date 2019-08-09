@@ -247,7 +247,7 @@ void print_expression_group(int indent,std::shared_ptr<Parser::ExpressionGroup> 
 }
 
 void print_unary_operation(int indent,std::shared_ptr<Parser::UnaryOperation> op){
-    std::cout<<get_indent(indent)<<">Unary Operation\n";
+    std::cout<<get_indent(indent)<<">Pre Unary Operation\n";
     std::cout<<get_indent(indent)<<".term:\n";
     print_expression_term(indent+1,op->term);
     std::cout<<get_indent(indent)<<".operator:\n";
@@ -285,6 +285,13 @@ void print_expression_term(int indent,std::shared_ptr<Parser::ExpressionTerm> te
         std::cout<<get_indent(indent)<<".identifier:\n";
         print_token(indent+1,term->contents_t);
         break;
+    }
+    if(!term->unary_post_operators.empty()){
+        std::cout<<get_indent(indent)<<".unary post operators:\n";
+        for(size_t i=0;i<term->unary_post_operators.size();i++){
+            std::cout<<get_indent(indent+1)<<".operator["<<std::to_string(i)<<"]:\n";
+            print_token(indent+2,term->unary_post_operators[i]);
+        }
     }
 }
 

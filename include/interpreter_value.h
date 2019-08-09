@@ -41,6 +41,15 @@ namespace Interpreter {
             virtual std::shared_ptr<Value> assign_bitwise_and(std::shared_ptr<Value>&);
             virtual std::shared_ptr<Value> assign_bitwise_or(std::shared_ptr<Value>&);
             virtual std::shared_ptr<Value> assign_bitwise_xor(std::shared_ptr<Value>&);
+            
+            //unary
+            
+            virtual std::shared_ptr<Value> unary_pre_plus();
+            virtual std::shared_ptr<Value> unary_pre_minus();
+            virtual std::shared_ptr<Value> unary_pre_increment();
+            virtual std::shared_ptr<Value> unary_pre_decrement();
+            virtual std::shared_ptr<Value> unary_post_increment();
+            virtual std::shared_ptr<Value> unary_post_decrement();
     };
 }
 

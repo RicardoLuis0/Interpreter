@@ -36,6 +36,10 @@ namespace Interpreter {
             virtual std::shared_ptr<Value> assign_sub(std::shared_ptr<Value>&) override;
             virtual std::shared_ptr<Value> assign_mul(std::shared_ptr<Value>&) override;
             virtual std::shared_ptr<Value> assign_div(std::shared_ptr<Value>&) override;
+            
+            //unary
+            virtual std::shared_ptr<Value> unary_pre_plus() override;
+            virtual std::shared_ptr<Value> unary_pre_minus() override;
     };
 }
 

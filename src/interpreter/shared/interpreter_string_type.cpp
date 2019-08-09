@@ -66,6 +66,10 @@ std::shared_ptr<Value> StringType::get_operator_result(int op,std::shared_ptr<Va
     }
 }
 
+std::shared_ptr<Value> StringType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
+    throw std::runtime_error("operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+}
+
 std::shared_ptr<Value> StringType::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
     switch(op){
     default:
@@ -83,4 +87,8 @@ std::shared_ptr<Value> StringType::call_operator(int op,std::shared_ptr<Value> s
     case SYMBOL_PLUS:
         return self->add(other);
     }
+}
+
+std::shared_ptr<Value> StringType::call_unary_operator(int op,std::shared_ptr<Value> self,bool pre){
+    throw std::runtime_error("invalid unary post operator '"+get_op_str(op)+"'");\
 }

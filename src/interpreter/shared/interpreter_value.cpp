@@ -77,3 +77,27 @@ std::shared_ptr<Value> Value::assign_bitwise_or(std::shared_ptr<Value>&){
 std::shared_ptr<Value> Value::assign_bitwise_xor(std::shared_ptr<Value>&){
     throw std::runtime_error("unimplemented operator '^='");
 }
+
+std::shared_ptr<Value> Value::unary_pre_plus(){
+    throw std::runtime_error("unimplemented unary pre operator '+'");
+}
+
+std::shared_ptr<Value> Value::unary_pre_minus(){
+    throw std::runtime_error("unimplemented unary pre operator '-'");
+}
+
+std::shared_ptr<Value> Value::unary_pre_increment(){
+    throw std::runtime_error("unimplemented unary pre operator '++'");
+}
+
+std::shared_ptr<Value> Value::unary_pre_decrement(){
+    throw std::runtime_error("unimplemented unary pre operator '--'");
+}
+
+std::shared_ptr<Value> Value::unary_post_increment(){
+    throw std::runtime_error("unimplemented unary post operator '++'");
+}
+
+std::shared_ptr<Value> Value::unary_post_decrement(){
+    throw std::runtime_error("unimplemented unary post operator '--'");
+}

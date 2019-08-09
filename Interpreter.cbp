@@ -61,6 +61,7 @@
 		<Unit filename="include/interpreter_expr_part.h" />
 		<Unit filename="include/interpreter_expr_part_fn_call.h" />
 		<Unit filename="include/interpreter_expr_part_op.h" />
+		<Unit filename="include/interpreter_expr_part_unary_op.h" />
 		<Unit filename="include/interpreter_expr_part_value.h" />
 		<Unit filename="include/interpreter_expr_part_var.h" />
 		<Unit filename="include/interpreter_expression.h" />
@@ -168,6 +169,7 @@
 		<Unit filename="src/interpreter/exec/interpreter_expr_part.cpp" />
 		<Unit filename="src/interpreter/exec/interpreter_expr_part_fn_call.cpp" />
 		<Unit filename="src/interpreter/exec/interpreter_expr_part_op.cpp" />
+		<Unit filename="src/interpreter/exec/interpreter_expr_part_unary_op.cpp" />
 		<Unit filename="src/interpreter/exec/interpreter_expr_part_value.cpp" />
 		<Unit filename="src/interpreter/exec/interpreter_expr_part_var.cpp" />
 		<Unit filename="src/interpreter/exec/interpreter_expression.cpp" />

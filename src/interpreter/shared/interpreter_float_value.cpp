@@ -81,3 +81,11 @@ std::shared_ptr<Value> FloatValue::assign_div(std::shared_ptr<Value> &other){
     value/=(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get());
     return nullptr;
 }
+
+std::shared_ptr<Value> FloatValue::unary_pre_plus(){
+    return std::make_shared<FloatValue>(value);
+}
+
+std::shared_ptr<Value> FloatValue::unary_pre_minus(){
+    return std::make_shared<FloatValue>(-value);
+}

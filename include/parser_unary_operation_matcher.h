@@ -10,6 +10,8 @@ namespace Parser{
             bool checkIsPreUnaryOperator(parserProgress&);
             bool checkIsPostUnaryOperator(parserProgress&);
             std::shared_ptr<UnaryOperation> makeMatch(parserProgress&);
+            static std::vector<int> post_unary_operators;
+            static std::vector<int> pre_unary_operators;
         protected:
         private:
     };

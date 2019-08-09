@@ -81,6 +81,14 @@ std::shared_ptr<Value> FloatType::get_operator_result(int op,std::shared_ptr<Val
     }
 }
 
+std::shared_ptr<Value> FloatType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
+    if(pre&&(op==SYMBOL_PLUS||op==SYMBOL_MINUS)){
+        return std::make_shared<DummyValue>(self->get_type());
+    }else{
+        throw std::runtime_error("operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+    }
+}
+
 std::shared_ptr<Value> FloatType::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
     switch(op){
     default:
@@ -122,5 +130,20 @@ std::shared_ptr<Value> FloatType::call_operator(int op,std::shared_ptr<Value> se
         return self->div(other);
     case SYMBOL_PERCENT:
         return self->mod(other);
+    }
+}
+
+std::shared_ptr<Value> FloatType::call_unary_operator(int op,std::shared_ptr<Value> self,bool pre){
+    if(pre){
+        switch(op){
+        default:
+            throw std::runtime_error("invalid unary pre operator '"+get_op_str(op)+"'");\
+        case SYMBOL_PLUS:
+            return self->unary_pre_plus();
+        case SYMBOL_MINUS:
+            return self->unary_pre_minus();
+        }
+    }else{
+        throw std::runtime_error("invalid unary post operator '"+get_op_str(op)+"'");\
     }
 }

@@ -11,6 +11,8 @@
 #include "string_token.h"
 #include "integer_token.h"
 #include "float_token.h"
+#include "parser_unary_operation.h"
+#include "interpreter_expr_part_unary_op.h"
 
 using namespace Interpreter;
 
@@ -36,25 +38,36 @@ std::shared_ptr<ExprPart> Expression::get_expression(DefaultFrame * context,std:
 }
 
 std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::shared_ptr<Parser::ExpressionTerm> term){
+    std::shared_ptr<ExprPart> expr=nullptr;
     switch(term->type){
     case Parser::EXPRESSION_TERM_EXPRESSION_GROUP:
-        return get_expression(context,std::static_pointer_cast<Parser::ExpressionGroup>(term->contents_p)->contents);
+        expr=get_expression(context,std::static_pointer_cast<Parser::ExpressionGroup>(term->contents_p)->contents);
+        break;
     case Parser::EXPRESSION_TERM_FUNCTION_CALL:
-        return std::make_shared<ExprPartFnCall>(context,std::static_pointer_cast<Parser::FunctionCall>(term->contents_p));
+        expr=std::make_shared<ExprPartFnCall>(context,std::static_pointer_cast<Parser::FunctionCall>(term->contents_p));
+        break;
     case Parser::EXPRESSION_TERM_IDENTIFIER:
-        return std::make_shared<ExprPartVar>(context,std::static_pointer_cast<Lexer::WordToken>(term->contents_t)->get_literal());
+        expr=std::make_shared<ExprPartVar>(context,std::static_pointer_cast<Lexer::WordToken>(term->contents_t)->get_literal());
+        break;
     case Parser::EXPRESSION_TERM_LITERAL_INT:
-        return ExprPartValue::from_int(int(std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer()));
+        expr=ExprPartValue::from_int(int(std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer()));
+        break;
     case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
-        return ExprPartValue::from_double(std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float());
+        expr=ExprPartValue::from_double(std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float());
+        break;
     case Parser::EXPRESSION_TERM_LITERAL_STRING:
-        return std::make_shared<ExprPartValue>(std::static_pointer_cast<Lexer::StringToken>(term->contents_t)->get_string());
+        expr=std::make_shared<ExprPartValue>(std::static_pointer_cast<Lexer::StringToken>(term->contents_t)->get_string());
+        break;
     case Parser::EXPRESSION_TERM_UNARY_OPERATION:
-        //TODO Expression::add_term unary
-        throw std::runtime_error("unimplemented Expression::add_term unary");
+        expr=std::make_shared<ExprPartUnaryOp>(get_term(context,std::static_pointer_cast<Parser::UnaryOperation>(term->contents_p)->term),std::static_pointer_cast<Parser::UnaryOperation>(term->contents_p)->unary_operator->get_symbol_type(),true);
+        break;
     default:
         throw std::runtime_error("unimplemented Expression term");
     }
+    for(std::shared_ptr<Lexer::SymbolToken> t:term->unary_post_operators){
+        expr=std::make_shared<ExprPartUnaryOp>(expr,t->get_symbol_type(),false);
+    }
+    return expr;
 }
 
 std::shared_ptr<LineResult> Expression::run(ExecFrame * context){

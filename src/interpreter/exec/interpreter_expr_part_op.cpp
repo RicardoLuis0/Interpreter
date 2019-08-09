@@ -5,7 +5,6 @@
 
 using namespace Interpreter;
 
-
 ExprPartOp::ExprPartOp(std::shared_ptr<ExprPart> l,int i,std::shared_ptr<ExprPart> r):left(l),right(r),op(i){
     std::shared_ptr<Value> v1(left->get_dummy_type());
     std::shared_ptr<Value> v2(right->get_dummy_type());

@@ -1,9 +1,11 @@
 #ifndef PARSER_EXPRESSION_TERM_H
 #define PARSER_EXPRESSION_TERM_H
 
+#include <vector>
 #include <memory>
 #include "parser_result_part.h"
 #include "token.h"
+#include "symbol_token.h"
 
 namespace Parser {
     enum ExpressionTermType_t{
@@ -21,6 +23,7 @@ namespace Parser {
             ExpressionTerm(std::shared_ptr<Lexer::Token>,ExpressionTermType_t type);
             std::shared_ptr<ParserResultPart> contents_p;
             std::shared_ptr<Lexer::Token> contents_t;
+            std::vector<std::shared_ptr<Lexer::SymbolToken>> unary_post_operators;
             const ExpressionTermType_t type;
         protected:
         private:

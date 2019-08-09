@@ -126,3 +126,28 @@ std::shared_ptr<Value> IntValue::assign_bitwise_xor(std::shared_ptr<Value> &othe
     return nullptr;
 }
 
+std::shared_ptr<Value> IntValue::unary_pre_plus(){
+    return std::make_shared<IntValue>(value);
+}
+
+std::shared_ptr<Value> IntValue::unary_pre_minus(){
+    return std::make_shared<IntValue>(-value);
+}
+
+std::shared_ptr<Value> IntValue::unary_pre_increment(){
+    ++value;
+    return nullptr;
+}
+
+std::shared_ptr<Value> IntValue::unary_pre_decrement(){
+    --value;
+    return nullptr;
+}
+
+std::shared_ptr<Value> IntValue::unary_post_increment(){
+    return std::make_shared<IntValue>(value++);
+}
+
+std::shared_ptr<Value> IntValue::unary_post_decrement(){
+    return std::make_shared<IntValue>(value--);
+}

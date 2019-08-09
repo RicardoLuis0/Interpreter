@@ -103,6 +103,19 @@ std::shared_ptr<Value> IntType::get_operator_result(int op,std::shared_ptr<Value
     }
 }
 
+std::shared_ptr<Value> IntType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
+    if(pre){
+        if(op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT){
+            return std::make_shared<DummyVariable>(self->get_type());
+        }else if(op==SYMBOL_PLUS||op==SYMBOL_MINUS){
+            return std::make_shared<DummyValue>(self->get_type());
+        }
+    }else if(op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT){
+        return std::make_shared<DummyValue>(self->get_type());
+    }
+    throw std::runtime_error("operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+}
+
 std::shared_ptr<Value> IntType::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
     switch(op){
     default:
@@ -172,5 +185,33 @@ std::shared_ptr<Value> IntType::call_operator(int op,std::shared_ptr<Value> self
         return self->div(other);
     case SYMBOL_PERCENT:
         return self->mod(other);
+    }
+}
+
+std::shared_ptr<Value> IntType::call_unary_operator(int op,std::shared_ptr<Value> self,bool pre){
+    if(pre){
+        switch(op){
+        default:
+            throw std::runtime_error("invalid unary pre operator '"+get_op_str(op)+"'");
+        case SYMBOL_INCREMENT:
+            self->unary_pre_increment();
+            return self;
+        case SYMBOL_DECREMENT:
+            self->unary_pre_decrement();
+            return self;
+        case SYMBOL_PLUS:
+            return self->unary_pre_plus();
+        case SYMBOL_MINUS:
+            return self->unary_pre_minus();
+        }
+    }else{
+        switch(op){
+        default:
+            throw std::runtime_error("invalid unary post operator '"+get_op_str(op)+"'");
+        case SYMBOL_INCREMENT:
+            return self->unary_post_increment();
+        case SYMBOL_DECREMENT:
+            return self->unary_post_decrement();
+        }
     }
 }
