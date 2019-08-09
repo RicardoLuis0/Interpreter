@@ -302,6 +302,13 @@ void print_expression_term(int indent,std::shared_ptr<Parser::ExpressionTerm> te
             print_token(indent+2,term->unary_post_operators[i]);
         }
     }
+    if(!term->array_access.empty()){
+        std::cout<<get_indent(indent)<<".array access:\n";
+        for(size_t i=0;i<term->array_access.size();i++){
+            std::cout<<get_indent(indent+1)<<".depth["<<std::to_string(i)<<"]:\n";
+            print_expression(indent+2,std::static_pointer_cast<Parser::Expression>(term->array_access[i]));
+        }
+    }
 }
 
 void print_binary_operation(int indent,std::shared_ptr<Parser::BinaryOperation> bin_op){
@@ -429,6 +436,13 @@ void print_var_type(int indent,std::shared_ptr<Parser::VarType> type){
         default:
             //no more types, in the future TODO
             break;
+    }
+    if(type->array_sizes.size()>0){
+        std::cout<<get_indent(indent)<<".array type:\n";
+        for(size_t i=0;i<type->array_sizes.size();i++){
+            std::cout<<get_indent(indent+1)<<".layer["<<std::to_string(i)<<"]:\n";
+            print_expression(indent+2,std::static_pointer_cast<Parser::Expression>(type->array_sizes[i]));
+        }
     }
 }
 

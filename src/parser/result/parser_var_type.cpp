@@ -3,11 +3,11 @@
 #include "symbols_keywords.h"
 #include "my_except.h"
 
-Parser::VarType::VarType(std::shared_ptr<Lexer::KeywordToken> tk):VarType(
+Parser::VarType::VarType(std::shared_ptr<Lexer::KeywordToken> tk,bool h,bool s):VarType(
     (tk->get_keyword_type()==KEYWORD_INT)?PRIMITIVE_INT
     :((tk->get_keyword_type()==KEYWORD_FLOAT)?PRIMITIVE_FLOAT
     :((tk->get_keyword_type()==KEYWORD_STRING)?PRIMITIVE_STRING
-    :PRIMITIVE_INVALID))){
+    :PRIMITIVE_INVALID)),h,s){
     if(primitive==PRIMITIVE_INVALID){
         if(tk->get_keyword_type()==KEYWORD_VOID){
             type=VARTYPE_VOID;
@@ -17,5 +17,5 @@ Parser::VarType::VarType(std::shared_ptr<Lexer::KeywordToken> tk):VarType(
     }
 }
 
-Parser::VarType::VarType(ParserPrimitiveType_t p):primitive(p),type(VARTYPE_PRIMITIVE){
+Parser::VarType::VarType(ParserPrimitiveType_t p,bool h,bool s):primitive(p),type(VARTYPE_PRIMITIVE),has_sign(h),sign(s){
 }

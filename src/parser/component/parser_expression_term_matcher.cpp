@@ -5,8 +5,9 @@
 #include "my_except.h"
 #include "parser_unary_operation_matcher.h"
 #include "symbols_keywords.h"
+#include "parser_expression_matcher.h"
 
-//ExpressionTerm = ( ExpressionGroup | FunctionCall | UnaryOperation | literal | identifier ) , { symbol 'unary_post_operator' };
+//ExpressionTerm = ( ExpressionGroup | FunctionCall | UnaryOperation | literal | identifier ) , { symbol 'unary_post_operator' } , { symbol '[' , Expression , symbol ']' };
 
 std::shared_ptr<Parser::ExpressionTerm> Parser::ExpressionTermMatcher::makeMatch(parserProgress &p){
     int location_backup=p.location;
@@ -60,6 +61,12 @@ std::shared_ptr<Parser::ExpressionTerm> Parser::ExpressionTermMatcher::makeMatch
     std::shared_ptr<Lexer::SymbolToken> ptr;
     while(ptr=p.isSymbol(UnaryOperationMatcher::post_unary_operators)){
         term->unary_post_operators.push_back(ptr);
+    }
+    while(p.isSymbol(SYMBOL_SQUARE_BRACKET_OPEN)){
+        term->array_access.push_back(ExpressionMatcher().makeMatch(p));
+        if(!p.isSymbol(SYMBOL_SQUARE_BRACKET_CLOSE)){
+            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ']', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+        }
     }
     return term;
 }
