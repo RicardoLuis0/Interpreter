@@ -104,13 +104,14 @@ std::shared_ptr<Value> IntType::get_operator_result(int op,std::shared_ptr<Value
 }
 
 std::shared_ptr<Value> IntType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
+    if((op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT)&&!CHECKPTR(self,Variable))throw std::runtime_error("operator '"+get_op_str(op)+"' only available for variables");
     if(pre){
         if(op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT){
             return std::make_shared<DummyVariable>(self->get_type());
         }else if(op==SYMBOL_PLUS||op==SYMBOL_MINUS){
             return std::make_shared<DummyValue>(self->get_type());
         }
-    }else if(op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT){
+    }else if(op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT||op==SYMBOL_LOGICAL_NOT){
         return std::make_shared<DummyValue>(self->get_type());
     }
     throw std::runtime_error("operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
@@ -203,6 +204,8 @@ std::shared_ptr<Value> IntType::call_unary_operator(int op,std::shared_ptr<Value
             return self->unary_pre_plus();
         case SYMBOL_MINUS:
             return self->unary_pre_minus();
+        case SYMBOL_LOGICAL_NOT:
+            return self->unary_pre_logical_not();
         }
     }else{
         switch(op){

@@ -10,6 +10,7 @@ std::vector<int> Parser::UnaryOperationMatcher::pre_unary_operators{//these migh
     SYMBOL_MINUS,
     SYMBOL_INCREMENT,
     SYMBOL_DECREMENT,
+    SYMBOL_LOGICAL_NOT,
 };
 
 std::vector<int> Parser::UnaryOperationMatcher::post_unary_operators{//these must not be binary operators

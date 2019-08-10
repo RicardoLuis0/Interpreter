@@ -86,6 +86,10 @@ std::shared_ptr<Value> Value::unary_pre_minus(){
     throw std::runtime_error("unimplemented unary pre operator '-'");
 }
 
+std::shared_ptr<Value> Value::unary_pre_logical_not(){
+    throw std::runtime_error("unimplemented unary pre operator '-'");
+}
+
 std::shared_ptr<Value> Value::unary_pre_increment(){
     throw std::runtime_error("unimplemented unary pre operator '++'");
 }

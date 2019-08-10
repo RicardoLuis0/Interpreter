@@ -46,6 +46,7 @@ namespace Interpreter {
             
             virtual std::shared_ptr<Value> unary_pre_plus();
             virtual std::shared_ptr<Value> unary_pre_minus();
+            virtual std::shared_ptr<Value> unary_pre_logical_not();
             virtual std::shared_ptr<Value> unary_pre_increment();
             virtual std::shared_ptr<Value> unary_pre_decrement();
             virtual std::shared_ptr<Value> unary_post_increment();

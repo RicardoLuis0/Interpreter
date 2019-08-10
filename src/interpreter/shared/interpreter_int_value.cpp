@@ -134,6 +134,10 @@ std::shared_ptr<Value> IntValue::unary_pre_minus(){
     return std::make_shared<IntValue>(-value);
 }
 
+std::shared_ptr<Value> IntValue::unary_pre_logical_not(){
+    return std::make_shared<IntValue>(!value);
+}
+
 std::shared_ptr<Value> IntValue::unary_pre_increment(){
     ++value;
     return nullptr;
