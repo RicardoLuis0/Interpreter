@@ -26,6 +26,8 @@ namespace Parser{
         std::shared_ptr<Lexer::Token> get_nothrow_nonull(int offset=0);//if not available, returns a dummy token "EOF"
         const std::vector<std::shared_ptr<Lexer::Token>> &data;
         int location;
+        parserProgress& operator--();
+        parserProgress& operator--(int);
     };
     class Parser{
         public:

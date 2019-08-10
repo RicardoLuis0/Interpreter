@@ -1,0 +1,6 @@
+int[15] arr_test;//default initalized to 0
+int main(){
+	arr_test[12]=5;
+	puts(itos(arr_test[12]));
+	return arr_test[1];
+}

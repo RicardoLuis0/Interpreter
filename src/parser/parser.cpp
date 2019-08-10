@@ -129,3 +129,13 @@ void Parser::Parser::parse(const std::vector<std::shared_ptr<Lexer::Token>> &dat
     //TODO Parser::parse
     throw std::runtime_error("unimplemented");
 }
+
+Parser::parserProgress& Parser::parserProgress::operator--(){
+    location--;
+    return *this;
+}
+
+Parser::parserProgress& Parser::parserProgress::operator--(int){
+    location--;
+    return *this;
+}

@@ -17,16 +17,15 @@ std::vector<Lexer::keyword_data> base_keywords{
     {"for","KEYWORD_FOR",KEYWORD_FOR},
     {"do","KEYWORD_DO",KEYWORD_DO},
     {"while","KEYWORD_WHILE",KEYWORD_WHILE},
-    /*
     {"break","KEYWORD_BREAK",KEYWORD_BREAK},
     {"continue","KEYWORD_CONTINUE",KEYWORD_CONTINUE},
-    */
     {"return","KEYWORD_RETURN",KEYWORD_RETURN},
-    /*
+    {"signed","KEYWORD_SIGNED",KEYWORD_SIGNED},
     {"unsigned","KEYWORD_UNSIGNED",KEYWORD_UNSIGNED},
-    {"null","KEYWORD_NULL",KEYWORD_NULL},
     {"true","KEYWORD_TRUE",KEYWORD_TRUE},
     {"false","KEYWORD_FALSE",KEYWORD_FALSE},
+    /*
+    {"null","KEYWORD_NULL",KEYWORD_NULL},
     {"static","KEYWORD_STATIC",KEYWORD_STATIC},
     */
     {"void","KEYWORD_VOID",KEYWORD_VOID},

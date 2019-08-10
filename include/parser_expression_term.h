@@ -24,6 +24,7 @@ namespace Parser {
             std::shared_ptr<ParserResultPart> contents_p;
             std::shared_ptr<Lexer::Token> contents_t;
             std::vector<std::shared_ptr<Lexer::SymbolToken>> unary_post_operators;
+            std::vector<std::shared_ptr<ParserResultPart>> array_access;//std::shared_ptr<Expression>
             const ExpressionTermType_t type;
         protected:
         private:
