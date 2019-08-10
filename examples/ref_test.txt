@@ -1,0 +1,24 @@
+void setvar(string &var,string val){
+	var=val;
+}
+
+void setvar(int &var,int val){
+	var=val;
+}
+
+void setvar(float &var,float val){
+	var=val;
+}
+
+int main(){
+	int i;
+	float f;
+	string s;
+	setvar(i,10);
+	setvar(f,5);
+	setvar(s,"Teste");
+	puts("i="+itos(i));
+	puts("f="+ftos(f));
+	puts("s="+s);
+	return 0;
+}
