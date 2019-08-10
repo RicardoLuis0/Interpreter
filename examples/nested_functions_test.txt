@@ -1,0 +1,6 @@
+void main(){
+	void test_func(){
+		puts("This is a nested function!");
+	}
+	test_func();
+}
