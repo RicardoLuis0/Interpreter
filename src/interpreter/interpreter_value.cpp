@@ -2,6 +2,10 @@
 
 using namespace Interpreter;
 
+std::shared_ptr<Value> Value::access_array(std::shared_ptr<Value>&){
+    throw std::runtime_error("unimplemented operator '[]'");
+}
+
 std::shared_ptr<Value> Value::lt(std::shared_ptr<Value>&){
     throw std::runtime_error("unimplemented operator '<'");
 }

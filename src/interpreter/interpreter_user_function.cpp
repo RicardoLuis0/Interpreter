@@ -5,7 +5,7 @@
 
 using namespace Interpreter;
 
-UserFunction::UserFunction(DefaultFrame * p,std::shared_ptr<Parser::FunctionDefinition> func,bool delay):function(func),frame(std::make_shared<DefaultFrame>(p,this)),code(delay?nullptr:std::make_shared<CodeBlock>(this,func->code)),return_type(Type::from_vartype(func->return_type)){
+UserFunction::UserFunction(DefaultFrame * p,std::shared_ptr<Parser::FunctionDefinition> func,bool delay):function(func),parameters(build_parameters(p)),frame(std::make_shared<DefaultFrame>(p,this)),code(delay?nullptr:std::make_shared<CodeBlock>(this,func->code)),return_type(Type::from_vartype(p,func->return_type)){
     
 }
 
@@ -24,7 +24,11 @@ std::shared_ptr<Type> UserFunction::get_type(){
 }
 
 std::vector<FunctionParameter> UserFunction::get_parameters(){
-    return FunctionParameter::from_pfdp(function->parameters);
+    return parameters;
+}
+
+std::vector<FunctionParameter> UserFunction::build_parameters(DefaultFrame * context){
+    return FunctionParameter::from_pfdp(context,function->parameters);
 }
 
 std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args){
@@ -34,7 +38,7 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
         throw std::runtime_error("wrong parameter count");
     }
     for(std::shared_ptr<Parser::FunctionDefinitionParameter> param:function->parameters){
-        args_o.insert({param->name,{args[i++],{param->is_reference,Type::from_vartype(param->type)}}});
+        args_o.insert({param->name,{args[i++],{param->is_reference,Type::from_vartype(frame->parent,param->type)}}});
     }
     std::shared_ptr<ExecFrame> f(code->getContext(parent_frame));
     f->set_args(args_o);

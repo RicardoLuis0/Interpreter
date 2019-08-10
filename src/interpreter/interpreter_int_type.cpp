@@ -15,11 +15,11 @@ std::string IntType::get_name(){
     return "int";
 }
 
-std::shared_ptr<Value> IntType::make_value(){
+std::shared_ptr<Value> IntType::make_value(std::shared_ptr<Type> self){
     return std::make_shared<IntValue>(0);
 }
 
-std::shared_ptr<Variable> IntType::make_variable(std::string name){
+std::shared_ptr<Variable> IntType::make_variable(std::shared_ptr<Type> self,std::string name){
     return std::make_shared<IntVariable>(name,0);
 }
 

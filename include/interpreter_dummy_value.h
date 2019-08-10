@@ -9,6 +9,7 @@ namespace Interpreter {
         public:
             DummyValue(std::shared_ptr<Type>);
             std::shared_ptr<class Type> get_type() override;
+            virtual std::shared_ptr<Value> clone() override;
             
     };
 }

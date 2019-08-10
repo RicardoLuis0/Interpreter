@@ -9,7 +9,11 @@ namespace Interpreter {
     class Value {
         public:
             virtual std::shared_ptr<class Type> get_type()=0;
+            virtual std::shared_ptr<Value> clone()=0;
             //operators
+            
+            //special
+            virtual std::shared_ptr<Value> access_array(std::shared_ptr<Value>&);
             
             //comparison
             virtual std::shared_ptr<Value> gt(std::shared_ptr<Value>&);

@@ -8,6 +8,7 @@ namespace Interpreter {
     class FloatVariable : public virtual Variable , public virtual FloatValue {
         public:
             FloatVariable(std::string,double);
+            virtual std::shared_ptr<Value> clone() override;
     };
 }
 

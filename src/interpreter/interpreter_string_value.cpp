@@ -18,6 +18,10 @@ std::shared_ptr<Type> StringValue::get_type(){
     return Type::string_type();
 }
 
+std::shared_ptr<Value> StringValue::clone(){
+    return std::make_shared<StringValue>(value);
+}
+
 std::shared_ptr<Value> StringValue::assign(std::shared_ptr<Value> &other){//other can only be string
     value=std::dynamic_pointer_cast<StringValue>(other)->get();
     return nullptr;

@@ -15,15 +15,9 @@ using namespace Interpreter;
 
 ExecFrame::ExecFrame(ExecFrame * p,DefaultFrame * d):parent(p),defaults(d){
     for(auto vpair:defaults->variable_defaults){
-        if(typeid(*vpair.second)==typeid(IntVariable)){
-            variables.insert({vpair.second->get_name(),std::make_shared<IntVariable>(vpair.second->get_name(),std::dynamic_pointer_cast<IntVariable>(vpair.second)->get())});
-        }else if(typeid(*vpair.second)==typeid(FloatVariable)){
-            variables.insert({vpair.second->get_name(),std::make_shared<FloatVariable>(vpair.second->get_name(),std::dynamic_pointer_cast<FloatVariable>(vpair.second)->get())});
-        }else if(typeid(*vpair.second)==typeid(StringVariable)){
-            variables.insert({vpair.second->get_name(),std::make_shared<StringVariable>(vpair.second->get_name(),std::dynamic_pointer_cast<StringVariable>(vpair.second)->get())});
-        }else{
-            throw std::runtime_error("unknown variable type in defaults");
-        }
+        std::shared_ptr<Variable> var=std::dynamic_pointer_cast<Variable>(vpair.second->clone());
+        if(!var)throw std::runtime_error("unexpected nullptr");
+        variables.insert({vpair.first,var});
     }
     for(std::shared_ptr<Expression> e:defaults->initialize_globals){
         e->run(this);

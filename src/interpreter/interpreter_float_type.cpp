@@ -13,11 +13,11 @@ std::string FloatType::get_name(){
     return "float";
 }
 
-std::shared_ptr<Value> FloatType::make_value(){
+std::shared_ptr<Value> FloatType::make_value(std::shared_ptr<Type> self){
     return std::make_shared<FloatValue>(0);
 }
 
-std::shared_ptr<Variable> FloatType::make_variable(std::string name){
+std::shared_ptr<Variable> FloatType::make_variable(std::shared_ptr<Type> self,std::string name){
     return std::make_shared<FloatVariable>(name,0);
 }
 

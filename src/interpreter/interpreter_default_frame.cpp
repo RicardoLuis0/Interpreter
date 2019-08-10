@@ -109,7 +109,7 @@ void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool g
     switch(def->type){
     case Parser::DEFINITION_VAR:{
             std::shared_ptr<Parser::VariableDefinition> vardef(std::static_pointer_cast<Parser::VariableDefinition>(def->def));
-            std::shared_ptr<Type> type = Type::from_vartype(vardef->type);
+            std::shared_ptr<Type> type = Type::from_vartype(this,vardef->type);
             for(std::shared_ptr<Parser::VariableDefinitionItem> var:vardef->variables){
                 add_variable(type,var,global);
                 if(cb&&var->value)cb(arg,var);
@@ -134,5 +134,5 @@ void DefaultFrame::add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parse
                 var->value),Parser::EXPRESSION_BINARY_OPERATION)));
         }
     }
-    variable_defaults.insert({var->name,type->make_variable(var->name)});
+    variable_defaults.insert({var->name,type->make_variable(type,var->name)});
 }

@@ -14,6 +14,7 @@ namespace Interpreter {
             operator int&();
             int &get();
             virtual std::shared_ptr<Type> get_type() override;
+            virtual std::shared_ptr<Value> clone() override;
             //operators
             
             //comparison

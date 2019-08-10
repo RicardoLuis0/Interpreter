@@ -49,6 +49,9 @@
 		<Unit filename="include/hex_token_matcher.h" />
 		<Unit filename="include/integer_token.h" />
 		<Unit filename="include/integer_token_matcher.h" />
+		<Unit filename="include/interpreter_array_type.h" />
+		<Unit filename="include/interpreter_array_value.h" />
+		<Unit filename="include/interpreter_array_variable.h" />
 		<Unit filename="include/interpreter_class.h" />
 		<Unit filename="include/interpreter_class_reference_variable.h" />
 		<Unit filename="include/interpreter_class_value.h" />
@@ -163,6 +166,9 @@
 		<Unit filename="include/word_token.h" />
 		<Unit filename="include/word_token_matcher.h" />
 		<Unit filename="src/deflib.cpp" />
+		<Unit filename="src/interpreter/interpreter_array_type.cpp" />
+		<Unit filename="src/interpreter/interpreter_array_value.cpp" />
+		<Unit filename="src/interpreter/interpreter_array_variable.cpp" />
 		<Unit filename="src/interpreter/interpreter_class.cpp" />
 		<Unit filename="src/interpreter/interpreter_class_reference_variable.cpp" />
 		<Unit filename="src/interpreter/interpreter_class_value.cpp" />

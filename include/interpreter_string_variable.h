@@ -8,6 +8,7 @@ namespace Interpreter {
     class StringVariable : public virtual Variable , public virtual StringValue {
         public:
             StringVariable(std::string,std::string);
+            virtual std::shared_ptr<Value> clone() override;
     };
 }
 

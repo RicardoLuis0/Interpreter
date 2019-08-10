@@ -8,3 +8,7 @@ DummyValue::DummyValue(std::shared_ptr<Type> t2):t(t2){
 std::shared_ptr<class Type> DummyValue::get_type(){
     return t;
 }
+
+std::shared_ptr<Value> DummyValue::clone(){
+    throw std::runtime_error("Cannot clone DummyValue");
+}

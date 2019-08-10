@@ -19,10 +19,10 @@ std::shared_ptr<Value> VoidType::call_unary_operator(int op,std::shared_ptr<Valu
     throw std::runtime_error("invalid unary post operator '"+get_op_str(op)+"'");\
 }
 
-std::shared_ptr<Value> VoidType::make_value(){
+std::shared_ptr<Value> VoidType::make_value(std::shared_ptr<Type> self){
     throw std::runtime_error("cannot make void value");
 }
 
-std::shared_ptr<Variable> VoidType::make_variable(std::string name){
+std::shared_ptr<Variable> VoidType::make_variable(std::shared_ptr<Type> self,std::string name){
     throw std::runtime_error("cannot make void variable");
 }

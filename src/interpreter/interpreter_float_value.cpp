@@ -14,6 +14,11 @@ double& FloatValue::get(){
     return value;
 }
 
+std::shared_ptr<Value> FloatValue::clone(){
+    return std::make_shared<FloatValue>(value);
+}
+
+
 std::shared_ptr<Type> FloatValue::get_type(){
     return Type::float_type();
 }

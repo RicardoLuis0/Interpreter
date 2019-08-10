@@ -3,6 +3,11 @@
 #include "interpreter_int_type.h"
 #include "interpreter_float_type.h"
 #include "interpreter_string_type.h"
+#include "interpreter_array_type.h"
+#include "interpreter_default_frame.h"
+#include "parser_expression.h"
+#include "parser_expression_term.h"
+#include "integer_token.h"
 
 using namespace Interpreter;
 
@@ -27,7 +32,7 @@ std::shared_ptr<Type> Type::string_type(){
     return string_type_instance;
 }
 
-std::shared_ptr<Type> Type::class_type(class DefaultFrame * context,std::string name){
+std::shared_ptr<Type> Type::class_type(DefaultFrame * context,std::string name){
     throw std::runtime_error("classes/structs/typedefs not implemented yet");
 }
 
@@ -35,7 +40,7 @@ std::string Type::get_name(){
     return "invalid";
 }
 
-std::shared_ptr<Type> Type::from_vartype(std::shared_ptr<Parser::VarType> t){
+std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std::shared_ptr<Parser::VarType> t){
     switch(t->type){
     default:
         throw std::runtime_error("invalid type");
@@ -53,8 +58,20 @@ std::shared_ptr<Type> Type::from_vartype(std::shared_ptr<Parser::VarType> t){
             return string_type_instance;
         }
     case Parser::VARTYPE_IDENTIFIER:
-        return class_type(nullptr,"");//throws
+        return class_type(context,"");//throws
     }
+}
+
+std::shared_ptr<Type> Type::from_vartype(DefaultFrame * context,std::shared_ptr<Parser::VarType> t){
+    std::shared_ptr<Type> type=from_vartype_ignore_array(context,t);
+    for(std::shared_ptr<Parser::Expression> e:t->array_sizes){
+        if(e->type==Parser::EXPRESSION_TERM&&std::static_pointer_cast<Parser::ExpressionTerm>(e->contents)->type==Parser::EXPRESSION_TERM_LITERAL_INT){
+            type=std::make_shared<ArrayType>(type,std::static_pointer_cast<Lexer::IntegerToken>(std::static_pointer_cast<Parser::ExpressionTerm>(e->contents)->contents_t)->get_integer());
+        }else{
+            throw std::runtime_error("invalid type for array size, must be integer literal");
+        }
+    }
+    return type;
 }
 
 bool Type::allows_implicit_cast(std::shared_ptr<Type> other){

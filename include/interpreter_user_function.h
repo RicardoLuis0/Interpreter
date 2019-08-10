@@ -17,11 +17,13 @@ namespace Interpreter {
             std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override;
             //std::shared_ptr<ExecFrame> getFrame
         private:
-            friend class CodeBlock;
+            std::vector<FunctionParameter> build_parameters(DefaultFrame * context);
             std::shared_ptr<Parser::FunctionDefinition> function;
+            std::vector<FunctionParameter> parameters;
             std::shared_ptr<DefaultFrame> frame;
             std::shared_ptr<CodeBlock> code;
             std::shared_ptr<Type> return_type;
+            friend class CodeBlock;
     };
 }
 

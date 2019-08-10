@@ -25,11 +25,11 @@ std::shared_ptr<Value> StringType::cast(std::shared_ptr<Value> self,std::shared_
 }
 
 
-std::shared_ptr<Value> StringType::make_value(){
+std::shared_ptr<Value> StringType::make_value(std::shared_ptr<Type> self){
     return std::make_shared<StringValue>("");
 }
 
-std::shared_ptr<Variable> StringType::make_variable(std::string name){
+std::shared_ptr<Variable> StringType::make_variable(std::shared_ptr<Type> self,std::string name){
     return std::make_shared<StringVariable>(name,"");
 }
 

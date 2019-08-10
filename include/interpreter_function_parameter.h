@@ -10,7 +10,7 @@ namespace Interpreter {
     public:
         FunctionParameter(std::shared_ptr<Type>);
         FunctionParameter(std::shared_ptr<Type>,std::string name,bool ref);
-        static std::vector<FunctionParameter> from_pfdp(std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>>);
+        static std::vector<FunctionParameter> from_pfdp(class DefaultFrame * context,std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>>);
         static std::string get_typelist(std::vector<FunctionParameter>,bool print_ref=false);
         bool operator==(const FunctionParameter &other)const;
         std::shared_ptr<Type> type;

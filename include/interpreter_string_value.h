@@ -2,7 +2,6 @@
 #define INTERPRETER_STRING_VALUE_H
 
 #include "interpreter_value.h"
-#include "parser_var_type.h"
 #include "interpreter_type.h"
 
 namespace Interpreter {
@@ -12,6 +11,9 @@ namespace Interpreter {
             operator std::string&();
             std::string &get();
             virtual std::shared_ptr<Type> get_type() override;
+            virtual std::shared_ptr<Value> clone() override;
+            
+            //operators
             virtual std::shared_ptr<Value> eq(std::shared_ptr<Value>&) override;
             virtual std::shared_ptr<Value> neq(std::shared_ptr<Value>&) override;
             virtual std::shared_ptr<Value> assign(std::shared_ptr<Value>&) override;

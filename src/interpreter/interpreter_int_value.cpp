@@ -13,6 +13,10 @@ int& IntValue::get(){
     return value;
 }
 
+std::shared_ptr<Value> IntValue::clone(){
+    return std::make_shared<IntValue>(value);
+}
+
 std::shared_ptr<Type> IntValue::get_type(){
     return Type::int_type();
 }

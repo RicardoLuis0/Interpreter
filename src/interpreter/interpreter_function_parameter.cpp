@@ -1,5 +1,6 @@
 #include "interpreter_function_parameter.h"
 #include "interpreter_util_defines_misc.h"
+#include "interpreter_default_frame.h"
 
 using namespace Interpreter;
 
@@ -11,10 +12,10 @@ FunctionParameter::FunctionParameter(std::shared_ptr<Type> t,std::string name,bo
     
 }
 
-std::vector<FunctionParameter> FunctionParameter::from_pfdp(std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> params){
+std::vector<FunctionParameter> FunctionParameter::from_pfdp(DefaultFrame * context,std::vector<std::shared_ptr<Parser::FunctionDefinitionParameter>> params){
     std::vector<FunctionParameter> temp;
     for(std::shared_ptr<Parser::FunctionDefinitionParameter> param:params){
-        temp.emplace_back(Type::from_vartype(param->type),param->name,param->is_reference);
+        temp.emplace_back(Type::from_vartype(context,param->type),param->name,param->is_reference);
     }
     return temp;
 }

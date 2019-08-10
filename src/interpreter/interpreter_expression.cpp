@@ -67,6 +67,9 @@ std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::share
     for(std::shared_ptr<Lexer::SymbolToken> t:term->unary_post_operators){
         expr=std::make_shared<ExprPartUnaryOp>(expr,t->get_symbol_type(),false);
     }
+    for(std::shared_ptr<Parser::ParserResultPart> t:term->array_access){
+        expr=std::make_shared<ExprPartOp>(expr,SYMBOL_SQUARE_BRACKET_OPEN,get_expression(context,std::static_pointer_cast<Parser::Expression>(t)));
+    }
     return expr;
 }
 
