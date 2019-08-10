@@ -14,21 +14,27 @@ std::shared_ptr<Type> Type::string_type_instance(std::make_shared<StringType>())
 std::shared_ptr<Type> Type::void_type(){
     return void_type_instance;
 }
+
 std::shared_ptr<Type> Type::int_type(){
     return int_type_instance;
 }
+
 std::shared_ptr<Type> Type::float_type(){
     return float_type_instance;
 }
+
 std::shared_ptr<Type> Type::string_type(){
     return string_type_instance;
 }
+
 std::shared_ptr<Type> Type::class_type(class DefaultFrame * context,std::string name){
     throw std::runtime_error("classes/structs/typedefs not implemented yet");
 }
+
 std::string Type::get_name(){
     return "invalid";
 }
+
 std::shared_ptr<Type> Type::from_vartype(std::shared_ptr<Parser::VarType> t){
     switch(t->type){
     default:
@@ -54,9 +60,11 @@ std::shared_ptr<Type> Type::from_vartype(std::shared_ptr<Parser::VarType> t){
 bool Type::allows_implicit_cast(std::shared_ptr<Type> other){
     return false;
 }
+
 bool Type::has_cast(std::shared_ptr<Type> other){
     return allows_implicit_cast(other);
 }
+
 std::shared_ptr<Value> Type::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
     throw std::runtime_error("illegal cast");
 }
