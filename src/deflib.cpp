@@ -8,7 +8,7 @@
 #include "conio.h"
 
 //NOTE native functions to make later
-//void printf(string format, ... args)
+//void printf(string format, any ... args) TODO, varargs not implemented
 //void puts(string) DONE
 //void putchar(int) DONE
 //string getline() DONE
@@ -18,6 +18,7 @@
 //string ftos(float) DONE
 //void cls() DONE
 //int getch() DONE
+//int array_size(any[]) TODO
 
 namespace Interpreter {
     class puts : public Function {

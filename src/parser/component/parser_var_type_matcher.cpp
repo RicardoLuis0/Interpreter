@@ -29,7 +29,11 @@ std::shared_ptr<Parser::VarType> Parser::VarTypeMatcher::makeMatch(parserProgres
     }
     if(vt){
         while(p.isSymbol(SYMBOL_SQUARE_BRACKET_OPEN)){
-            vt->array_sizes.push_back(ExpressionMatcher().makeMatch(p));
+            try{
+                vt->array_sizes.insert(vt->array_sizes.begin(),ExpressionMatcher().makeMatch(p));
+            }catch(MyExcept::NoMatchException &e){
+                vt->array_sizes.insert(vt->array_sizes.begin(),nullptr);
+            }
             if(!p.isSymbol(SYMBOL_SQUARE_BRACKET_CLOSE)){
                 throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ']', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
             }

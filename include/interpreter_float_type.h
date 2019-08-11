@@ -14,6 +14,7 @@ namespace Interpreter {
         std::shared_ptr<Value> cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other) override;
         std::shared_ptr<Value> make_value(std::shared_ptr<Type> self) override;
         std::shared_ptr<Variable> make_variable(std::shared_ptr<Type> self,std::string name) override;
+        bool is(std::shared_ptr<Type>) override;
         std::string get_name() override;
     };
 }

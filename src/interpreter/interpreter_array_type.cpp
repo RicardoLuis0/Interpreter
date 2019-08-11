@@ -29,22 +29,26 @@ std::shared_ptr<Variable> ArrayType::make_variable(std::shared_ptr<Type> self,st
 std::shared_ptr<Type> ArrayType::get_type(){
     return type;
 }
+
 int ArrayType::get_size(){
     return size;
 }
 
-bool ArrayType::allows_implicit_cast(std::shared_ptr<Type> o){
+bool ArrayType::is(std::shared_ptr<Type> o){
     std::shared_ptr<ArrayType> other=std::dynamic_pointer_cast<ArrayType>(o);
     if(other){
-        return (other->size==size&&typeid(*other->type)==typeid(*type));
+        return ((size<=0||other->size<0||other->size==size)&&other->type->is(type));
     }else{
         return false;
     }
 }
 
-std::shared_ptr<Value> ArrayType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> o){
-    std::shared_ptr<ArrayType> other=std::dynamic_pointer_cast<ArrayType>(o);
-    if(other&&(other->size==size&&typeid(*other->type)==typeid(*type))){
+bool ArrayType::allows_implicit_cast(std::shared_ptr<Type> other){
+    return is(other);
+}
+
+std::shared_ptr<Value> ArrayType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
+    if(is(other)){
         return self;
     }else{
         return Type::cast(self,other);//throws

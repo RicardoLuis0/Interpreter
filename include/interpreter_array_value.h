@@ -8,6 +8,7 @@ namespace Interpreter {
     class ArrayValue : public virtual Value {
         public:
             ArrayValue(std::shared_ptr<ArrayType>);
+            ArrayValue(std::shared_ptr<ArrayValue>);
             ArrayValue(std::shared_ptr<ArrayType>,std::vector<std::shared_ptr<Value>>);
             std::vector<std::shared_ptr<Value>> &get();
             virtual std::shared_ptr<Type> get_type() override;

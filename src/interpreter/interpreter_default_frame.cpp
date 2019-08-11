@@ -19,6 +19,7 @@
 #include "symbol_token.h"
 #include "interpreter_void_type.h"
 #include "interpreter_expression.h"
+#include "interpreter_array_type.h"
 
 using namespace Interpreter;
 
@@ -110,6 +111,14 @@ void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool g
     case Parser::DEFINITION_VAR:{
             std::shared_ptr<Parser::VariableDefinition> vardef(std::static_pointer_cast<Parser::VariableDefinition>(def->def));
             std::shared_ptr<Type> type = Type::from_vartype(this,vardef->type);
+            if(std::shared_ptr<ArrayType> at=std::dynamic_pointer_cast<ArrayType>(type)){
+                while(at!=nullptr){
+                    if(at->get_size()<=0){
+                        throw std::runtime_error("invalid size for array");
+                    }
+                    at=std::dynamic_pointer_cast<ArrayType>(at->get_type());
+                }
+            }
             for(std::shared_ptr<Parser::VariableDefinitionItem> var:vardef->variables){
                 add_variable(type,var,global);
                 if(cb&&var->value)cb(arg,var);

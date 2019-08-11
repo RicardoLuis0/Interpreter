@@ -12,12 +12,16 @@ std::string StringType::get_name(){
     return "string";
 }
 
-bool StringType::allows_implicit_cast(std::shared_ptr<Type> other){
+bool StringType::is(std::shared_ptr<Type> other){
     return CHECKPTR(other,StringType);
 }
 
+bool StringType::allows_implicit_cast(std::shared_ptr<Type> other){
+    return is(other);
+}
+
 std::shared_ptr<Value> StringType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
-    if(CHECKPTR(other,StringType)){
+    if(is(other)){
         return self;
     }else{
         return Type::cast(self,other);//throws

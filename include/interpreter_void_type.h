@@ -12,6 +12,7 @@ namespace Interpreter {
         std::shared_ptr<Value> call_unary_operator(int op,std::shared_ptr<Value> self,bool pre) override;
         std::shared_ptr<Value> make_value(std::shared_ptr<Type> self) override;
         std::shared_ptr<Variable> make_variable(std::shared_ptr<Type> self,std::string name) override;
+        bool is(std::shared_ptr<Type>) override;
     };
 }
 

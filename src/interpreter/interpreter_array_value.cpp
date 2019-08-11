@@ -5,10 +5,17 @@ using namespace Interpreter;
 
 ArrayValue::ArrayValue(std::shared_ptr<ArrayType> t):type(t){
     int size=type->get_size();
-    std::shared_ptr<Type> t2=type->get_type();
-    for(int i=0;i<size;i++){
-        array.push_back(t2->make_value(t2));
+    if(size>0){
+        std::shared_ptr<Type> t2=type->get_type();
+        for(int i=0;i<size;i++){
+            array.push_back(t2->make_value(t2));
+        }
     }
+}
+
+ArrayValue::ArrayValue(std::shared_ptr<ArrayValue> val):type(val->type),array(val->clone_array()){
+    int size=array.size();
+    
 }
 
 ArrayValue::ArrayValue(std::shared_ptr<ArrayType> t,std::vector<std::shared_ptr<Value>> arr):type(t),array(arr){
@@ -27,6 +34,7 @@ std::shared_ptr<Value> ArrayValue::clone(){
 }
 
 std::shared_ptr<Value> ArrayValue::access_array(std::shared_ptr<Value> &v){
+    int s=std::dynamic_pointer_cast<IntValue>(v)->get();
     return array.at(std::dynamic_pointer_cast<IntValue>(v)->get());
 }
 

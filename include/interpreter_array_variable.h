@@ -8,6 +8,7 @@ namespace Interpreter {
     class ArrayVariable : public virtual Variable , public virtual ArrayValue {
         public:
             ArrayVariable(std::string,std::shared_ptr<ArrayType>);
+            ArrayVariable(std::string,std::shared_ptr<ArrayValue>);
             ArrayVariable(std::string,std::shared_ptr<ArrayType>,std::vector<std::shared_ptr<Value>>);
             virtual std::shared_ptr<Value> clone() override;
     };

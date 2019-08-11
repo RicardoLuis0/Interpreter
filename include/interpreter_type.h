@@ -17,6 +17,7 @@ namespace Interpreter {
         static std::shared_ptr<Type> string_type();
         static std::shared_ptr<Type> class_type(class DefaultFrame * context,std::string name);
         static std::shared_ptr<Type> from_vartype(class DefaultFrame * context,std::shared_ptr<Parser::VarType>);
+        virtual bool is(std::shared_ptr<Type>)=0;
         virtual std::shared_ptr<Value> make_value(std::shared_ptr<Type> self)=0;
         virtual std::shared_ptr<Variable> make_variable(std::shared_ptr<Type> self,std::string name)=0;
         virtual std::string get_name();
