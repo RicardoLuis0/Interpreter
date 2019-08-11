@@ -9,7 +9,8 @@
 #include "conio.h"
 
 //NOTE native functions to make later
-//void printf(string format, any ... args) TODO, varargs not implemented
+//int sprintf(string &output,string format, any ... args) TODO, varargs not implemented
+//int printf(string format, any ... args) TODO
 //void puts(string) DONE
 //void putchar(int) DONE
 //string getline() DONE
@@ -22,6 +23,7 @@
 //int array_size(any[]) DONE
 
 namespace Interpreter {
+
     class puts : public Function {
 
         std::string get_name() override {
@@ -63,6 +65,7 @@ namespace Interpreter {
             std::getline(std::cin,temp,'\n');
             return std::make_shared<StringValue>(temp);
         }
+
     };
 
     class stoi : public Function{
@@ -86,6 +89,7 @@ namespace Interpreter {
                 return std::make_shared<IntValue>(-1);
             }
         }
+
     };
 
     class itos : public Function{
@@ -105,6 +109,7 @@ namespace Interpreter {
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
             return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<IntValue>(args[0])->get()));
         }
+
     };
 
     class ftos : public Function{
@@ -124,6 +129,7 @@ namespace Interpreter {
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
             return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<FloatValue>(args[0])->get()));
         }
+
     };
 
     class cls : public Function{
@@ -144,6 +150,7 @@ namespace Interpreter {
             system("cls");
             return nullptr;
         }
+
     };
 
     class getch : public Function{
@@ -163,6 +170,7 @@ namespace Interpreter {
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
             return std::make_shared<IntValue>(::getch());
         }
+
     };
 
     class putchar : public Function{
@@ -183,6 +191,7 @@ namespace Interpreter {
             ::putchar(std::dynamic_pointer_cast<IntValue>(args[0])->get());
             return nullptr;
         }
+
     };
 
     class array_size : public Function{
@@ -202,6 +211,7 @@ namespace Interpreter {
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
             return std::make_shared<IntValue>(std::dynamic_pointer_cast<ArrayValue>(args[0])->get().size());
         }
+
     };
 
 }
