@@ -21,16 +21,16 @@ std::shared_ptr<Variable> FloatType::make_variable(std::shared_ptr<Type> self,st
     return std::make_shared<FloatVariable>(name,0);
 }
 
-bool FloatType::is(std::shared_ptr<Type> other){
+bool FloatType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
     return CHECKPTR(other,FloatType);
 }
 
-bool FloatType::allows_implicit_cast(std::shared_ptr<Type> other){
-    return CHECKPTR(other,IntType)||is(other);
+bool FloatType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
+    return CHECKPTR(other,IntType)||is(self,other);
 }
 
 std::shared_ptr<Value> FloatType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
-    if(is(other)){
+    if(is(self->get_type(),other)){
         return self;
     }else if(CHECKPTR(other,IntType)){
         return std::make_shared<IntValue>(std::dynamic_pointer_cast<FloatValue>(self)->get());

@@ -34,21 +34,21 @@ int ArrayType::get_size(){
     return size;
 }
 
-bool ArrayType::is(std::shared_ptr<Type> o){
+bool ArrayType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> o){
     std::shared_ptr<ArrayType> other=std::dynamic_pointer_cast<ArrayType>(o);
     if(other){
-        return ((size<=0||other->size<0||other->size==size)&&other->type->is(type));
+        return ((size<=0||other->size<0||other->size==size)&&other->type->is(other->type,type));
     }else{
         return false;
     }
 }
 
-bool ArrayType::allows_implicit_cast(std::shared_ptr<Type> other){
-    return is(other);
+bool ArrayType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
+    return is(self,other);
 }
 
 std::shared_ptr<Value> ArrayType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
-    if(is(other)){
+    if(is(self->get_type(),other)){
         return self;
     }else{
         return Type::cast(self,other);//throws

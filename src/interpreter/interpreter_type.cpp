@@ -78,12 +78,12 @@ std::shared_ptr<Type> Type::from_vartype(DefaultFrame * context,std::shared_ptr<
     return type;
 }
 
-bool Type::allows_implicit_cast(std::shared_ptr<Type> other){
+bool Type::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
     return false;
 }
 
-bool Type::has_cast(std::shared_ptr<Type> other){
-    return allows_implicit_cast(other);
+bool Type::has_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
+    return allows_implicit_cast(self,other);
 }
 
 std::shared_ptr<Value> Type::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){

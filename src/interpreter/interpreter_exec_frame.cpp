@@ -36,13 +36,13 @@ std::shared_ptr<Function> ExecFrame::get_function(std::string name,std::vector<F
 
 void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::shared_ptr<Type> t,bool reference){
     if(CHECKPTR(t,IntType)){
-        variables[s]=(reference&&val->get_type()->is(t))?std::dynamic_pointer_cast<IntVariable>(val):std::make_shared<IntVariable>(s,std::dynamic_pointer_cast<IntValue>(val->get_type()->cast(val,t))->get());
+        variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<IntVariable>(val):std::make_shared<IntVariable>(s,std::dynamic_pointer_cast<IntValue>(val->get_type()->cast(val,t))->get());
     }else if(CHECKPTR(t,FloatType)){
-        variables[s]=(reference&&val->get_type()->is(t))?std::dynamic_pointer_cast<FloatVariable>(val):std::make_shared<FloatVariable>(s,std::dynamic_pointer_cast<FloatValue>(val->get_type()->cast(val,t))->get());
+        variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<FloatVariable>(val):std::make_shared<FloatVariable>(s,std::dynamic_pointer_cast<FloatValue>(val->get_type()->cast(val,t))->get());
     }else if(CHECKPTR(t,StringType)){
-        variables[s]=(reference&&val->get_type()->is(t))?std::dynamic_pointer_cast<StringVariable>(val):std::make_shared<StringVariable>(s,std::dynamic_pointer_cast<StringValue>(val->get_type()->cast(val,t))->get());
+        variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<StringVariable>(val):std::make_shared<StringVariable>(s,std::dynamic_pointer_cast<StringValue>(val->get_type()->cast(val,t))->get());
     }else if(CHECKPTR(t,ArrayType)){
-        variables[s]=(reference&&val->get_type()->is(t))?std::dynamic_pointer_cast<ArrayVariable>(val):std::make_shared<ArrayVariable>(s,std::dynamic_pointer_cast<ArrayType>(val->get_type()->cast(val,t)));
+        variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<ArrayVariable>(val):std::make_shared<ArrayVariable>(s,std::dynamic_pointer_cast<ArrayType>(val->get_type()->cast(val,t)));
     }else{
         throw std::runtime_error("classes not implemented");
     }

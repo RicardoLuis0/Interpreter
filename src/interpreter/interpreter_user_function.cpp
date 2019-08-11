@@ -47,8 +47,8 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
     case ACTION_RETURN:
         {
             std::shared_ptr<Value> retval(std::dynamic_pointer_cast<LineResultReturn>(result)->get());
-            if(retval->get_type()->allows_implicit_cast(return_type)){
-                return retval;
+            if(retval->get_type()->allows_implicit_cast(retval->get_type(),return_type)){
+                return retval->get_type()->cast(retval,return_type);
             }
         }
     default:

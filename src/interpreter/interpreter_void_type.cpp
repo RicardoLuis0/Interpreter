@@ -27,6 +27,6 @@ std::shared_ptr<Variable> VoidType::make_variable(std::shared_ptr<Type> self,std
     throw std::runtime_error("cannot make void variable");
 }
 
-bool VoidType::is(std::shared_ptr<Type> other){
+bool VoidType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
     return false;
 }

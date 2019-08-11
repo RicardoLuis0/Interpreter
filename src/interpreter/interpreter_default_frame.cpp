@@ -64,7 +64,7 @@ std::shared_ptr<Function> DefaultFrame::get_function_local(std::string name,std:
             iter2=std::find_if(iter1->second.begin(),iter1->second.end(),[param_types](const std::pair<std::vector<FunctionParameter>,std::shared_ptr<Function>> &p)->bool{//loose search
                 if(param_types.size()!=p.first.size())return false;
                 for(size_t i=0;i<p.first.size();i++){
-                    if(!p.first[i].type->allows_implicit_cast(param_types[i].type))return false;
+                    if(!p.first[i].type->allows_implicit_cast(p.first[i].type,param_types[i].type))return false;
                 }
                 return true;
             });
