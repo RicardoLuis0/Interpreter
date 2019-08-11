@@ -15,7 +15,11 @@
 #define CHECKPTR(ptr,type) (std::dynamic_pointer_cast<type>(ptr)!=nullptr)
 
 inline std::string get_op_str(int op){
-    return get_symbol_data(symbol_type_t(op)).name;
+    if(op==SYMBOL_SQUARE_BRACKET_OPEN){
+        return "[]";
+    }else{
+        return get_symbol_data(symbol_type_t(op)).str;
+    }
 }
 
 #endif // INTERPRETER_UTIL_DEFINES_MISC_H

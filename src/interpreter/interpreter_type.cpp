@@ -8,6 +8,7 @@
 #include "parser_expression.h"
 #include "parser_expression_term.h"
 #include "integer_token.h"
+#include "interpreter_util_defines_misc.h"
 
 using namespace Interpreter;
 
@@ -36,8 +37,8 @@ std::shared_ptr<Type> Type::class_type(DefaultFrame * context,std::string name){
     throw std::runtime_error("classes/structs/typedefs not implemented yet");
 }
 
-std::string Type::get_name(){
-    return "invalid";
+bool Type::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
+    return false;
 }
 
 std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std::shared_ptr<Parser::VarType> t){
@@ -88,4 +89,32 @@ bool Type::has_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
 
 std::shared_ptr<Value> Type::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
     throw std::runtime_error("illegal cast");
+}
+
+std::shared_ptr<Value> Type::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
+    throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+}
+
+std::shared_ptr<Value> Type::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
+    throw std::runtime_error("operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+}
+
+std::shared_ptr<Value> Type::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
+    throw std::runtime_error("invalid operator '"+get_op_str(op)+"'");
+}
+
+std::shared_ptr<Value> Type::call_unary_operator(int op,std::shared_ptr<Value> self,bool pre){
+    if(pre){
+        throw std::runtime_error("invalid unary pre operator '"+get_op_str(op)+"'");
+    }else{
+        throw std::runtime_error("invalid unary post operator '"+get_op_str(op)+"'");
+    }
+}
+
+std::shared_ptr<Value> Type::make_value(std::shared_ptr<Type> self){
+    throw std::runtime_error("cannot make "+self->get_name()+" value");
+}
+
+std::shared_ptr<Variable> Type::make_variable(std::shared_ptr<Type> self,std::string name){
+    throw std::runtime_error("cannot make "+self->get_name()+" variable");
 }
