@@ -27,7 +27,7 @@ std::shared_ptr<Value> ArrayValue::clone(){
 }
 
 std::shared_ptr<Value> ArrayValue::access_array(std::shared_ptr<Value> &v){
-    return array[std::dynamic_pointer_cast<IntValue>(v)->get()];
+    return array.at(std::dynamic_pointer_cast<IntValue>(v)->get());
 }
 
 std::vector<std::shared_ptr<Value>> ArrayValue::clone_array(){
