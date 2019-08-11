@@ -7,6 +7,7 @@
 #include "interpreter_dummy_variable.h"
 #include "interpreter_array_value.h"
 #include "interpreter_array_variable.h"
+#include "interpreter_any_type.h"
 
 using namespace Interpreter;
 
@@ -38,6 +39,8 @@ bool ArrayType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> o){
     std::shared_ptr<ArrayType> other=std::dynamic_pointer_cast<ArrayType>(o);
     if(other){
         return ((size<=0||other->size<0||other->size==size)&&other->type->is(other->type,type));
+    }else if(CHECKPTR(other,AnyType)){
+        return true;
     }else{
         return false;
     }

@@ -8,6 +8,7 @@
 #include "interpreter_float_value.h"
 #include "interpreter_int_value.h"
 #include "interpreter_int_variable.h"
+#include "interpreter_any_type.h"
 
 using namespace Interpreter;
 
@@ -24,7 +25,7 @@ std::shared_ptr<Variable> IntType::make_variable(std::shared_ptr<Type> self,std:
 }
 
 bool IntType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return CHECKPTR(other,IntType);
+    return CHECKPTR(other,IntType)||CHECKPTR(other,AnyType);
 }
 
 bool IntType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){

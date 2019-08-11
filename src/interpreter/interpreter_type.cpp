@@ -1,4 +1,5 @@
 #include "interpreter_type.h"
+#include "interpreter_any_type.h"
 #include "interpreter_void_type.h"
 #include "interpreter_int_type.h"
 #include "interpreter_float_type.h"
@@ -12,10 +13,15 @@
 
 using namespace Interpreter;
 
+std::shared_ptr<Type> Type::any_type_instance(std::make_shared<AnyType>());
 std::shared_ptr<Type> Type::void_type_instance(std::make_shared<VoidType>());
 std::shared_ptr<Type> Type::int_type_instance(std::make_shared<IntType>());
 std::shared_ptr<Type> Type::float_type_instance(std::make_shared<FloatType>());
 std::shared_ptr<Type> Type::string_type_instance(std::make_shared<StringType>());
+
+std::shared_ptr<Type> Type::any_type(){
+    return any_type_instance;
+}
 
 std::shared_ptr<Type> Type::void_type(){
     return void_type_instance;

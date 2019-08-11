@@ -11,6 +11,7 @@ namespace Interpreter {
 
     class Type {
     public:
+        static std::shared_ptr<Type> any_type();
         static std::shared_ptr<Type> void_type();
         static std::shared_ptr<Type> int_type();
         static std::shared_ptr<Type> float_type();
@@ -30,6 +31,7 @@ namespace Interpreter {
         virtual std::shared_ptr<Value> cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other);
     protected:
         static std::shared_ptr<Type> from_vartype_ignore_array(class DefaultFrame * context,std::shared_ptr<Parser::VarType> t);
+        static std::shared_ptr<Type> any_type_instance;
         static std::shared_ptr<Type> void_type_instance;
         static std::shared_ptr<Type> int_type_instance;
         static std::shared_ptr<Type> float_type_instance;

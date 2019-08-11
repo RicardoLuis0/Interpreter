@@ -3,6 +3,7 @@
 #include "interpreter_function.h"
 #include "parser_var_type.h"
 #include "interpreter_string_value.h"
+#include "interpreter_array_value.h"
 #include "interpreter_int_value.h"
 #include "interpreter_float_value.h"
 #include "conio.h"
@@ -18,7 +19,7 @@
 //string ftos(float) DONE
 //void cls() DONE
 //int getch() DONE
-//int array_size(any[]) TODO
+//int array_size(any[]) DONE
 
 namespace Interpreter {
     class puts : public Function {
@@ -184,6 +185,25 @@ namespace Interpreter {
         }
     };
 
+    class array_size : public Function{
+
+        std::string get_name() override {
+            return "array_size";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::int_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            return std::make_shared<IntValue>(std::dynamic_pointer_cast<ArrayValue>(args[0])->get().size());
+        }
+    };
+
 }
 
 void Interpreter::init_deflib(DefaultFrame * d){
@@ -195,4 +215,5 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::ftos>());
     d->register_function(std::make_shared<Interpreter::cls>());
     d->register_function(std::make_shared<Interpreter::getch>());
+    d->register_function(std::make_shared<Interpreter::array_size>());
 }

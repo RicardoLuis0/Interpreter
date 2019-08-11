@@ -5,6 +5,7 @@
 #include "interpreter_dummy_variable.h"
 #include "interpreter_string_value.h"
 #include "interpreter_string_variable.h"
+#include "interpreter_any_type.h"
 
 using namespace Interpreter;
 
@@ -13,7 +14,7 @@ std::string StringType::get_name(){
 }
 
 bool StringType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return CHECKPTR(other,StringType);
+    return CHECKPTR(other,StringType)||CHECKPTR(other,AnyType);
 }
 
 bool StringType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
