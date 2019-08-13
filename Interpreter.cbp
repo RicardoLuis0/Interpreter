@@ -181,6 +181,7 @@
 		<Unit filename="src/interpreter/interpreter_expr_part_fn_call.cpp" />
 		<Unit filename="src/interpreter/interpreter_expr_part_op.cpp" />
 		<Unit filename="src/interpreter/interpreter_expr_part_unary_op.cpp" />
+		<Unit filename="src/interpreter/interpreter_expr_part_value.cpp" />
 		<Unit filename="src/interpreter/interpreter_expr_part_var.cpp" />
 		<Unit filename="src/interpreter/interpreter_expression.cpp" />
 		<Unit filename="src/interpreter/interpreter_for_statement.cpp" />
@@ -207,7 +208,6 @@
 		<Unit filename="src/interpreter/values/interpreter_array_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_class_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_dummy_value.cpp" />
-		<Unit filename="src/interpreter/values/interpreter_expr_part_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_float_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_int_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_string_value.cpp" />
