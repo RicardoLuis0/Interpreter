@@ -16,5 +16,8 @@ void cls()
 int stoi(string)
 	convert string to int
 
-string to_string(int|float)
-	convert int|float to string
+string to_string(any)
+	convert value to string
+
+int array_size(any[])
+	return size of array
