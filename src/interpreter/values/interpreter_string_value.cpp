@@ -1,7 +1,7 @@
 #include "interpreter_string_value.h"
 #include "interpreter_string_variable.h"
-
 #include "interpreter_int_value.h"
+#include "interpreter_util_defines_misc.h"
 
 using namespace Interpreter;
 
@@ -27,24 +27,29 @@ std::shared_ptr<Variable> StringValue::clone_var(std::string new_name){
     return std::make_shared<StringVariable>(new_name,value);
 }
 
-std::shared_ptr<Value> StringValue::assign(std::shared_ptr<Value> &other){//other can only be string
+std::shared_ptr<Value> StringValue::assign(std::shared_ptr<Value> &other){
+    if(!CHECKPTR(other,StringValue))throw std::runtime_error("invalid types for operator '='");
     value=std::dynamic_pointer_cast<StringValue>(other)->get();
     return nullptr;
 }
 
-std::shared_ptr<Value> StringValue::assign_add(std::shared_ptr<Value> &other){//other can only be string
+std::shared_ptr<Value> StringValue::assign_add(std::shared_ptr<Value> &other){
+    if(!CHECKPTR(other,StringValue))throw std::runtime_error("invalid types for operator '+='");
     value+=std::dynamic_pointer_cast<StringValue>(other)->get();
     return nullptr;
 }
 
-std::shared_ptr<Value> StringValue::add(std::shared_ptr<Value> &other){//other can only be string
+std::shared_ptr<Value> StringValue::add(std::shared_ptr<Value> &other){
+    if(!CHECKPTR(other,StringValue))throw std::runtime_error("invalid types for operator '+'");
     return std::make_shared<StringValue>(value+std::dynamic_pointer_cast<StringValue>(other)->get());
 }
 
-std::shared_ptr<Value> StringValue::eq(std::shared_ptr<Value> &other){//other can only be string
+std::shared_ptr<Value> StringValue::eq(std::shared_ptr<Value> &other){
+    if(!CHECKPTR(other,StringValue))throw std::runtime_error("invalid types for operator '=='");
     return std::make_shared<IntValue>(std::dynamic_pointer_cast<StringValue>(other)->get()==value);
 }
 
-std::shared_ptr<Value> StringValue::neq(std::shared_ptr<Value> &other){//other can only be string
+std::shared_ptr<Value> StringValue::neq(std::shared_ptr<Value> &other){
+    if(!CHECKPTR(other,StringValue))throw std::runtime_error("invalid types for operator '!='");
     return std::make_shared<IntValue>(std::dynamic_pointer_cast<StringValue>(other)->get()!=value);
 }

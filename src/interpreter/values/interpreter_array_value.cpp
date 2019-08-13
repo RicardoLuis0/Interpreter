@@ -1,6 +1,7 @@
 #include "interpreter_array_value.h"
 #include "interpreter_array_variable.h"
 #include "interpreter_int_value.h"
+#include "interpreter_util_defines_misc.h"
 
 using namespace Interpreter;
 
@@ -37,6 +38,7 @@ std::shared_ptr<Variable> ArrayValue::clone_var(std::string new_name){
 }
 
 std::shared_ptr<Value> ArrayValue::access_array(std::shared_ptr<Value> &v){
+    if(!CHECKPTR(v,IntValue))throw std::runtime_error("invalid types for operator '[]'");
     return array.at(std::dynamic_pointer_cast<IntValue>(v)->get());
 }
 
