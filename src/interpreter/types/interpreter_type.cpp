@@ -1,7 +1,11 @@
 #include "interpreter_type.h"
 #include "interpreter_any_type.h"
 #include "interpreter_void_type.h"
+#include "interpreter_bool_type.h"
+#include "interpreter_char_type.h"
+#include "interpreter_unsigned_char_type.h"
 #include "interpreter_int_type.h"
+#include "interpreter_unsigned_int_type.h"
 #include "interpreter_float_type.h"
 #include "interpreter_string_type.h"
 #include "interpreter_array_type.h"
@@ -15,7 +19,11 @@ using namespace Interpreter;
 
 std::shared_ptr<Type> Type::any_type_instance(std::make_shared<AnyType>());
 std::shared_ptr<Type> Type::void_type_instance(std::make_shared<VoidType>());
+std::shared_ptr<Type> Type::bool_type_instance(std::make_shared<BoolType>());
+std::shared_ptr<Type> Type::char_type_instance(std::make_shared<CharType>());
+std::shared_ptr<Type> Type::unsigned_char_type_instance(std::make_shared<UnsignedCharType>());
 std::shared_ptr<Type> Type::int_type_instance(std::make_shared<IntType>());
+std::shared_ptr<Type> Type::unsigned_int_type_instance(std::make_shared<UnsignedIntType>());
 std::shared_ptr<Type> Type::float_type_instance(std::make_shared<FloatType>());
 std::shared_ptr<Type> Type::string_type_instance(std::make_shared<StringType>());
 
@@ -27,8 +35,24 @@ std::shared_ptr<Type> Type::void_type(){
     return void_type_instance;
 }
 
+std::shared_ptr<Type> Type::bool_type(){
+    return bool_type_instance;
+}
+
+std::shared_ptr<Type> Type::char_type(){
+    return char_type_instance;
+}
+
+std::shared_ptr<Type> Type::unsigned_char_type(){
+    return unsigned_char_type_instance;
+}
+
 std::shared_ptr<Type> Type::int_type(){
     return int_type_instance;
+}
+
+std::shared_ptr<Type> Type::unsigned_int_type(){
+    return unsigned_int_type_instance;
 }
 
 std::shared_ptr<Type> Type::float_type(){

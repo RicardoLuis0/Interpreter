@@ -28,7 +28,9 @@ std::vector<Lexer::keyword_data> base_keywords{
     {"null","KEYWORD_NULL",KEYWORD_NULL},
     {"static","KEYWORD_STATIC",KEYWORD_STATIC},
     */
+    {"any","KEYWORD_ANY",KEYWORD_ANY},
     {"void","KEYWORD_VOID",KEYWORD_VOID},
+    {"bool","KEYWORD_BOOL",KEYWORD_BOOL},
     {"char","KEYWORD_CHAR",KEYWORD_CHAR},
     {"int","KEYWORD_INT",KEYWORD_INT},
     {"float","KEYWORD_FLOAT",KEYWORD_FLOAT},

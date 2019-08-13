@@ -4,7 +4,7 @@ int turn;
 
 void render(){
 	cls();
-	puts("TicTacToe\n---\nPlayer "+itos(turn)+"'s Turn\n+---+\n");
+	puts("TicTacToe\n---\nPlayer "+to_string(turn)+"'s Turn\n+---+\n");
 	int i,j;
 	for(i=0;i<3;i++){
 	puts("|");
@@ -76,7 +76,7 @@ void game() {
 				if(check==3){
 					puts("Tie!\nPress any key...\n");
 				}else{
-					puts("Player "+itos(check)+" wins\nPress any key...\n");
+					puts("Player "+to_string(check)+" wins\nPress any key...\n");
 				}
 				getch();
 			}

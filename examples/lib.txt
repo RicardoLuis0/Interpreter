@@ -16,8 +16,5 @@ void cls()
 int stoi(string)
 	convert string to int
 
-string itos(int)
-	convert int to string
-
-string ftos(float)
-	convert float to string
+string to_string(int|float)
+	convert int|float to string

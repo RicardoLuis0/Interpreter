@@ -26,7 +26,6 @@ std::shared_ptr<Variable> ArrayType::make_variable(std::shared_ptr<Type> self,st
     return std::make_shared<ArrayVariable>(name,std::dynamic_pointer_cast<ArrayType>(self));
 }
 
-
 std::shared_ptr<Type> ArrayType::get_type(){
     return type;
 }

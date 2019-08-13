@@ -15,9 +15,9 @@
 //void putchar(int) DONE
 //string getline() DONE
 //int stoi(string) DONE
-//float stof(string)
-//string itos(int) DONE
-//string ftos(float) DONE
+//float stof(string) DONE
+//string to_string(int) DONE
+//string to_string(float) DONE
 //void cls() DONE
 //int getch() DONE
 //int array_size(any[]) DONE
@@ -92,10 +92,35 @@ namespace Interpreter {
 
     };
 
+
+    class stof : public Function{
+
+        std::string get_name() override {
+            return "stof";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::float_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::string_type(),"str",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            try{
+                return std::make_shared<FloatValue>(std::stod(std::dynamic_pointer_cast<StringValue>(args[0])->get()));
+            }catch(...){
+                return std::make_shared<FloatValue>(0);
+            }
+        }
+
+    };
+
     class itos : public Function{
 
         std::string get_name() override {
-            return "itos";
+            return "to_string";
         }
 
         std::shared_ptr<Type> get_type(){
@@ -115,7 +140,7 @@ namespace Interpreter {
     class ftos : public Function{
 
         std::string get_name() override {
-            return "ftos";
+            return "to_string";
         }
 
         std::shared_ptr<Type> get_type(){
@@ -221,6 +246,7 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::putchar>());
     d->register_function(std::make_shared<Interpreter::getline>());
     d->register_function(std::make_shared<Interpreter::stoi>());
+    d->register_function(std::make_shared<Interpreter::stof>());
     d->register_function(std::make_shared<Interpreter::itos>());
     d->register_function(std::make_shared<Interpreter::ftos>());
     d->register_function(std::make_shared<Interpreter::cls>());

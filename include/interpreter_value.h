@@ -2,8 +2,6 @@
 #define Value_H
 
 #include <memory>
-#include "parser_var_type.h"
-//#include "interpreter_type.h"
 
 namespace Interpreter {
     class Value {

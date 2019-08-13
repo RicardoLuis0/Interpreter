@@ -29,7 +29,6 @@ std::shared_ptr<Value> StringType::cast(std::shared_ptr<Value> self,std::shared_
     }
 }
 
-
 std::shared_ptr<Value> StringType::make_value(std::shared_ptr<Type> self){
     return std::make_shared<StringValue>("");
 }
