@@ -1,4 +1,5 @@
 #include "interpreter_int_value.h"
+#include "interpreter_int_variable.h"
 #include "interpreter_float_value.h"
 #include "interpreter_util_defines_misc.h"
 
@@ -15,6 +16,10 @@ int& IntValue::get(){
 
 std::shared_ptr<Value> IntValue::clone(){
     return std::make_shared<IntValue>(value);
+}
+
+std::shared_ptr<Variable> IntValue::clone_var(std::string new_name){
+    return std::make_shared<IntVariable>(new_name,value);
 }
 
 std::shared_ptr<Type> IntValue::get_type(){

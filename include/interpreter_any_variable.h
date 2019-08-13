@@ -6,8 +6,9 @@
 
 namespace Interpreter {
     class AnyVariable : public virtual Variable , public virtual AnyValue {
-        AnyVariable(std::string);
-        virtual std::shared_ptr<Value> clone() override;
+        public:
+            AnyVariable(std::string);
+            virtual std::shared_ptr<Value> clone() override;
     };
 }
 

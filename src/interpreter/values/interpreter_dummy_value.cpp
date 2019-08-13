@@ -12,3 +12,7 @@ std::shared_ptr<class Type> DummyValue::get_type(){
 std::shared_ptr<Value> DummyValue::clone(){
     throw std::runtime_error("Cannot clone DummyValue");
 }
+
+std::shared_ptr<Variable> DummyValue::clone_var(std::string new_name){
+    throw std::runtime_error("Cannot clone DummyValue");
+}

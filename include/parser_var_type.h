@@ -15,6 +15,7 @@ namespace Parser{
     };
     enum ParserPrimitiveType_t{
         PRIMITIVE_INVALID,
+        PRIMITIVE_ANY,
         PRIMITIVE_INT,
         PRIMITIVE_FLOAT,
         PRIMITIVE_STRING,

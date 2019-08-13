@@ -1,0 +1,13 @@
+any add(any a,any b){
+	return a+b;
+}
+
+void main(){
+	int i1=2,i2=5;
+	puts(to_string(add(i1,i2))+"\n");
+	float f1=2.5,f2=5.2;
+	puts(to_string(add(f1,f2))+"\n");
+	string s1="this is",s2=" a test";
+	puts(add(s1,s2)+"\n");
+	return 0;
+}

@@ -411,6 +411,9 @@ void print_statement(int indent,std::shared_ptr<Parser::Statement> stmt){
 
 void print_primitive(int indent,Parser::ParserPrimitiveType_t primitive){
     switch(primitive){
+    case Parser::PRIMITIVE_ANY:
+        std::cout<<get_indent(indent)<<"[PRIMITIVE] any\n";
+        break;
     case Parser::PRIMITIVE_INT:
         std::cout<<get_indent(indent)<<"[PRIMITIVE] int\n";
         break;

@@ -10,6 +10,7 @@ namespace Interpreter {
             DummyValue(std::shared_ptr<Type>);
             std::shared_ptr<class Type> get_type() override;
             virtual std::shared_ptr<Value> clone() override;
+            virtual std::shared_ptr<class Variable> clone_var(std::string new_name) override;
             
     };
 }

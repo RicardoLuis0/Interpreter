@@ -8,6 +8,7 @@ namespace Interpreter {
         public:
             virtual std::shared_ptr<class Type> get_type()=0;
             virtual std::shared_ptr<Value> clone()=0;
+            virtual std::shared_ptr<class Variable> clone_var(std::string new_name)=0;//clone into a variable
             //operators
             
             //special

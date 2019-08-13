@@ -73,14 +73,16 @@ bool Type::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
 
 std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std::shared_ptr<Parser::VarType> t){
     switch(t->type){
-    default:
-        throw std::runtime_error("invalid type");
     case Parser::VARTYPE_VOID:
         return void_type_instance;
+    case Parser::VARTYPE_IDENTIFIER:
+        return class_type(context,"");//throws
     case Parser::VARTYPE_PRIMITIVE:
         switch(t->primitive){
         case Parser::PRIMITIVE_INVALID:
             throw std::runtime_error("invalid primitive value 'PRIMITIVE_INVALID'");
+        case Parser::PRIMITIVE_ANY:
+            return any_type_instance;
         case Parser::PRIMITIVE_INT:
             return int_type_instance;
         case Parser::PRIMITIVE_FLOAT:
@@ -88,9 +90,8 @@ std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std
         case Parser::PRIMITIVE_STRING:
             return string_type_instance;
         }
-    case Parser::VARTYPE_IDENTIFIER:
-        return class_type(context,"");//throws
     }
+    throw std::runtime_error("invalid type");
 }
 
 std::shared_ptr<Type> Type::from_vartype(DefaultFrame * context,std::shared_ptr<Parser::VarType> t){
@@ -110,7 +111,7 @@ std::shared_ptr<Type> Type::from_vartype(DefaultFrame * context,std::shared_ptr<
 }
 
 bool Type::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return false;
+    return is(self,other);
 }
 
 bool Type::has_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
@@ -118,6 +119,9 @@ bool Type::has_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
 }
 
 std::shared_ptr<Value> Type::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
+    if(is(self->get_type(),other)){
+        return self;
+    }
     throw std::runtime_error("illegal cast");
 }
 

@@ -13,6 +13,7 @@ namespace Interpreter {
             std::vector<std::shared_ptr<Value>> &get();
             virtual std::shared_ptr<Type> get_type() override;
             virtual std::shared_ptr<Value> clone() override;
+            virtual std::shared_ptr<class Variable> clone_var(std::string new_name) override;
             virtual std::shared_ptr<Value> access_array(std::shared_ptr<Value>&) override;
         protected:
             std::vector<std::shared_ptr<Value>> clone_array();

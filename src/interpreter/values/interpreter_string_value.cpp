@@ -1,4 +1,5 @@
 #include "interpreter_string_value.h"
+#include "interpreter_string_variable.h"
 
 #include "interpreter_int_value.h"
 
@@ -20,6 +21,10 @@ std::shared_ptr<Type> StringValue::get_type(){
 
 std::shared_ptr<Value> StringValue::clone(){
     return std::make_shared<StringValue>(value);
+}
+
+std::shared_ptr<Variable> StringValue::clone_var(std::string new_name){
+    return std::make_shared<StringVariable>(new_name,value);
 }
 
 std::shared_ptr<Value> StringValue::assign(std::shared_ptr<Value> &other){//other can only be string

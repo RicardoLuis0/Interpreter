@@ -1,4 +1,5 @@
 #include "interpreter_array_value.h"
+#include "interpreter_array_variable.h"
 #include "interpreter_int_value.h"
 
 using namespace Interpreter;
@@ -29,6 +30,10 @@ std::shared_ptr<Type> ArrayValue::get_type(){
 
 std::shared_ptr<Value> ArrayValue::clone(){
     return std::make_shared<ArrayValue>(type,clone_array());
+}
+
+std::shared_ptr<Variable> ArrayValue::clone_var(std::string new_name){
+    return std::make_shared<ArrayVariable>(new_name,type,clone_array());
 }
 
 std::shared_ptr<Value> ArrayValue::access_array(std::shared_ptr<Value> &v){

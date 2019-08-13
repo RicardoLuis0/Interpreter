@@ -16,8 +16,7 @@
 //string getline() DONE
 //int stoi(string) DONE
 //float stof(string) DONE
-//string to_string(int) DONE
-//string to_string(float) DONE
+//string to_string(any) DONE
 //void cls() DONE
 //int getch() DONE
 //int array_size(any[]) DONE
@@ -117,7 +116,7 @@ namespace Interpreter {
 
     };
 
-    class itos : public Function{
+    class to_string : public Function{
 
         std::string get_name() override {
             return "to_string";
@@ -128,31 +127,19 @@ namespace Interpreter {
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{Type::int_type(),"int",false}};
+            return {{Type::any_type(),"val",false}};
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
-            return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<IntValue>(args[0])->get()));
-        }
-
-    };
-
-    class ftos : public Function{
-
-        std::string get_name() override {
-            return "to_string";
-        }
-
-        std::shared_ptr<Type> get_type(){
-            return Type::string_type();
-        }
-
-        std::vector<FunctionParameter> get_parameters() override {
-            return {{Type::float_type(),"float",false}};
-        }
-
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
-            return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<FloatValue>(args[0])->get()));
+            if(std::shared_ptr<StringValue> val=std::dynamic_pointer_cast<StringValue>(args[0])){
+                return val->clone();
+            }else if(std::shared_ptr<IntValue> val=std::dynamic_pointer_cast<IntValue>(args[0])){
+                return std::make_shared<StringValue>(std::to_string(val->get()));
+            }else if(std::shared_ptr<FloatValue> val=std::dynamic_pointer_cast<FloatValue>(args[0])){
+                return std::make_shared<StringValue>(std::to_string(val->get()));
+            }else{
+                throw std::runtime_error("invalid variable type "+args[0]->get_type()->get_name());
+            }
         }
 
     };
@@ -247,8 +234,7 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::getline>());
     d->register_function(std::make_shared<Interpreter::stoi>());
     d->register_function(std::make_shared<Interpreter::stof>());
-    d->register_function(std::make_shared<Interpreter::itos>());
-    d->register_function(std::make_shared<Interpreter::ftos>());
+    d->register_function(std::make_shared<Interpreter::to_string>());
     d->register_function(std::make_shared<Interpreter::cls>());
     d->register_function(std::make_shared<Interpreter::getch>());
     d->register_function(std::make_shared<Interpreter::array_size>());
