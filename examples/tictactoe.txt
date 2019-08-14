@@ -5,10 +5,9 @@ int turn;
 void render(){
 	cls();
 	puts("TicTacToe\n---\nPlayer "+to_string(turn)+"'s Turn\n+---+\n");
-	int i,j;
-	for(i=0;i<3;i++){
+	for(int i=0;i<3;i++){
 	puts("|");
-		for(j=0;j<3;j++){
+		for(int j=0;j<3;j++){
 			int val=board[j][i];
 			if(val==1){
 				puts("O");
@@ -24,8 +23,7 @@ void render(){
 }
 
 int checkwin(){
-	int i;
-	for(i=0;i<3;i++){
+	for(int i=0;i<3;i++){
 		if(board[i][0]!=0&&board[i][0]==board[i][1]&&board[i][1]==board[i][2]){
 			return board[i][0];
 		}
@@ -38,9 +36,9 @@ int checkwin(){
 	}else if(board[0][2]!=0&&board[0][2]==board[1][1]&&board[1][1]==board[2][0]){
 		return board[0][2];
 	}else{
-		int is_tie=1,i,j;
-		for(i=0;i<3;i++){
-			for(j=0;j<3;j++){
+		int is_tie=1;
+		for(int i=0;i<3;i++){
+			for(int j=0;j<3;j++){
 				if(board[i][j]==0)is_tie=0;
 			}
 		}
@@ -103,9 +101,8 @@ int main(){
 		if(out!="Y"&&out!="y"){
 			do_loop=0;
 		}
-		int i,j;
-		for(i=0;i<3;i++){
-			for(j=0;j<3;j++){
+		for(int i=0;i<3;i++){
+			for(int j=0;j<3;j++){
 				board[i][j]=0;
 			}
 		}
