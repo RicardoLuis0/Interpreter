@@ -5,6 +5,7 @@
 #include "parser_code_block.h"
 #include "parser_var_type.h"
 #include "parser_variable_definition_item.h"
+#include "parser_variable_definition.h"
 #include "parser_function_definition.h"
 
 #include "interpreter_function.h"
@@ -25,6 +26,7 @@ namespace Interpreter{
     class DefaultFrame{
         public:
             std::vector<std::shared_ptr<class Expression>> initialize_globals;
+            DefaultFrame(DefaultFrame * parent,std::shared_ptr<Parser::VariableDefinition>);//make for statement definition context
             DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>>);//make global scope
             DefaultFrame(DefaultFrame * parent,Function * func);//Function func must be of type UserFunction
             DefaultFrame(DefaultFrame * parent);

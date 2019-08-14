@@ -14,6 +14,7 @@ namespace Interpreter {
             std::shared_ptr<Expression> pre;
             std::shared_ptr<Expression> condition;
             std::shared_ptr<Expression> inc;
+            std::shared_ptr<DefaultFrame> defFrame;
             std::shared_ptr<CodeBlock> code;
     };
 }

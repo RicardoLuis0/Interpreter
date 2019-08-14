@@ -11,11 +11,12 @@ namespace Interpreter {
     class ExecFrame{
         protected:
             void set_variable(std::string,std::shared_ptr<Value>,std::shared_ptr<Type>,bool reference=false);
-        public:
-            ExecFrame(ExecFrame * parent,class DefaultFrame * defaults);
+            std::map<std::string,std::shared_ptr<Variable>> variables;
             ExecFrame * parent;
             class DefaultFrame * defaults;
-            std::map<std::string,std::shared_ptr<Variable>> variables;
+            friend class ForStatement;
+        public:
+            ExecFrame(ExecFrame * parent,class DefaultFrame * defaults);
             std::shared_ptr<Variable> get_variable(std::string);
             std::shared_ptr<Function> get_function(std::string,std::vector<FunctionParameter>);
             void set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>>);

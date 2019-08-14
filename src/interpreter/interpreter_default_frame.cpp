@@ -30,6 +30,10 @@ DefaultFrame::DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>> defs
     }
 }
 
+DefaultFrame::DefaultFrame(DefaultFrame * p,std::shared_ptr<Parser::VariableDefinition> def):parent(p){
+    add_definition(std::make_shared<Parser::Definition>(Parser::DEFINITION_VAR,def),true);
+}
+
 DefaultFrame::DefaultFrame(DefaultFrame * p,Function * func):parent(p){
     add_parameters(func->get_parameters());
 }
@@ -133,6 +137,7 @@ void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool g
 
 void DefaultFrame::add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global){
     if(CHECKPTR(type,VoidType))throw std::runtime_error("variable type can't be void");
+    variable_defaults.insert({var->name,type->make_variable(type,var->name)});
     if(global&&var->value){
         if(var->value->type==Parser::EXPRESSION_TERM){
             std::shared_ptr<Parser::ExpressionTerm> term(std::static_pointer_cast<Parser::ExpressionTerm>(var->value->contents));
@@ -143,5 +148,4 @@ void DefaultFrame::add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parse
                 var->value),Parser::EXPRESSION_BINARY_OPERATION)));
         }
     }
-    variable_defaults.insert({var->name,type->make_variable(type,var->name)});
 }
