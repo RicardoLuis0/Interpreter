@@ -28,81 +28,82 @@ std::shared_ptr<Type> FloatValue::get_type(){
 }
 
 std::shared_ptr<Value> FloatValue::lt(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '<'");
-    return std::make_shared<IntValue>(value<(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get()));
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '<'");
+    return std::make_shared<IntValue>(value<std::dynamic_pointer_cast<FloatValue>(other)->get());
 }
 
 std::shared_ptr<Value> FloatValue::gt(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '>'");
-    return std::make_shared<IntValue>(value>(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get()));
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '>'");
+    return std::make_shared<IntValue>(value>std::dynamic_pointer_cast<FloatValue>(other)->get());
 }
 
 std::shared_ptr<Value> FloatValue::eq(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '=='");
-    return std::make_shared<IntValue>(value==(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get()));
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '=='");
+    return std::make_shared<IntValue>(value==std::dynamic_pointer_cast<FloatValue>(other)->get());
 }
 
 std::shared_ptr<Value> FloatValue::neq(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '!='");
-    return std::make_shared<IntValue>(value==(typeid(*other)!=typeid(IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get()));
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '!='");
+    return std::make_shared<IntValue>(value!=std::dynamic_pointer_cast<FloatValue>(other)->get());
 }
 
 std::shared_ptr<Value> FloatValue::gt_eq(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '>='");
-    return std::make_shared<IntValue>(value>=(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get()));
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '>='");
+    return std::make_shared<IntValue>(value>=std::dynamic_pointer_cast<FloatValue>(other)->get());
 }
 
 std::shared_ptr<Value> FloatValue::lt_eq(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '<='");
-    return std::make_shared<IntValue>(value<=(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get()));
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '<='");
+    return std::make_shared<IntValue>(value<=std::dynamic_pointer_cast<FloatValue>(other)->get());
 }
+
 std::shared_ptr<Value> FloatValue::add(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '+'");
-    return std::make_shared<FloatValue>(value+(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get()));
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '+'");
+    return std::make_shared<FloatValue>(value+std::dynamic_pointer_cast<FloatValue>(other)->get());
 }
 
 std::shared_ptr<Value> FloatValue::sub(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '-'");
-    return std::make_shared<FloatValue>(value-(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get()));
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '-'");
+    return std::make_shared<FloatValue>(value-std::dynamic_pointer_cast<FloatValue>(other)->get());
 }
 
 std::shared_ptr<Value> FloatValue::mul(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '*'");
-    return std::make_shared<FloatValue>(value*(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get()));
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '*'");
+    return std::make_shared<FloatValue>(value*std::dynamic_pointer_cast<FloatValue>(other)->get());
 }
 
 std::shared_ptr<Value> FloatValue::div(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '/'");
-    return std::make_shared<FloatValue>(value/(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get()));
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '/'");
+    return std::make_shared<FloatValue>(value/std::dynamic_pointer_cast<FloatValue>(other)->get());
 }
 
 std::shared_ptr<Value> FloatValue::assign(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '='");
-    value=(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get());
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '='");
+    value=std::dynamic_pointer_cast<FloatValue>(other)->get();
     return nullptr;
 }
 
 std::shared_ptr<Value> FloatValue::assign_add(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '+='");
-    value+=(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get());
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '+='");
+    value+=std::dynamic_pointer_cast<FloatValue>(other)->get();
     return nullptr;
 }
 
 std::shared_ptr<Value> FloatValue::assign_sub(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '-='");
-    value-=(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get());
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '-='");
+    value-=std::dynamic_pointer_cast<FloatValue>(other)->get();
     return nullptr;
 }
 
 std::shared_ptr<Value> FloatValue::assign_mul(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '*='");
-    value*=(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get());
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '*='");
+    value*=std::dynamic_pointer_cast<FloatValue>(other)->get();
     return nullptr;
 }
 
 std::shared_ptr<Value> FloatValue::assign_div(std::shared_ptr<Value> &other){
-    if(!(CHECKPTR(other,IntValue)||CHECKPTR(other,FloatValue)))throw std::runtime_error("invalid types for operator '/='");
-    value/=(CHECKPTR(other,IntValue)?std::dynamic_pointer_cast<IntValue>(other)->get():std::dynamic_pointer_cast<FloatValue>(other)->get());
+    if(!CHECKPTR(other,FloatValue))throw std::runtime_error("invalid types for operator '/='");
+    value/=std::dynamic_pointer_cast<FloatValue>(other)->get();
     return nullptr;
 }
 

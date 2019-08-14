@@ -59,7 +59,7 @@ std::shared_ptr<Value> FloatType::get_operator_result(int op,std::shared_ptr<Val
     case SYMBOL_GREATER_EQUALS:
     case SYMBOL_LOWER:
     case SYMBOL_LOWER_EQUALS:
-        if((std::dynamic_pointer_cast<IntType>(other->get_type())==nullptr)&&(std::dynamic_pointer_cast<FloatType>(other->get_type())==nullptr)){
+        if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())&&!other->get_type()->allows_implicit_cast(other->get_type(),Type::float_type())){
             throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
         }
         return std::make_shared<DummyValue>(Type::int_type());
@@ -67,19 +67,19 @@ std::shared_ptr<Value> FloatType::get_operator_result(int op,std::shared_ptr<Val
     case SYMBOL_MINUS:
     case SYMBOL_MULTIPLY:
     case SYMBOL_DIVIDE:
-        if((std::dynamic_pointer_cast<IntType>(other->get_type())==nullptr)&&(std::dynamic_pointer_cast<FloatType>(other->get_type())==nullptr)){
+        if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())&&!other->get_type()->allows_implicit_cast(other->get_type(),Type::float_type())){
             throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
         }
-        return std::make_shared<DummyValue>(other->get_type());
+        return std::make_shared<DummyValue>(Type::float_type());
     case SYMBOL_ASSIGNMENT:
     case SYMBOL_PLUS_ASSIGNMENT:
     case SYMBOL_MINUS_ASSIGNMENT:
     case SYMBOL_MULTIPLY_ASSIGNMENT:
     case SYMBOL_DIVIDE_ASSIGNMENT:
-        if((std::dynamic_pointer_cast<IntType>(other->get_type())==nullptr)&&(std::dynamic_pointer_cast<FloatType>(other->get_type())==nullptr)){
+        if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())&&!other->get_type()->allows_implicit_cast(other->get_type(),Type::float_type())){
             throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
         }
-        return std::make_shared<DummyVariable>(self->get_type());
+        return std::make_shared<DummyVariable>(Type::float_type());
     default:
         //OP_UNKNOWN
         throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
@@ -88,13 +88,23 @@ std::shared_ptr<Value> FloatType::get_operator_result(int op,std::shared_ptr<Val
 
 std::shared_ptr<Value> FloatType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
     if(pre&&(op==SYMBOL_PLUS||op==SYMBOL_MINUS)){
-        return std::make_shared<DummyValue>(self->get_type());
+        return std::make_shared<DummyValue>(Type::float_type());
     }else{
         throw std::runtime_error("operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
     }
 }
 
 std::shared_ptr<Value> FloatType::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
+    try{
+        other=other->get_type()->cast(other,Type::float_type());//try to cast to float
+    }catch(...){
+        try{
+            other=other->get_type()->cast(other,Type::int_type());//if that doesn't work, try casting to int and then to float
+            other=other->get_type()->cast(other,Type::float_type());
+        }catch(...){
+            throw std::runtime_error("Invalid type for float operator '"+get_op_str(op)+"'");
+        }
+    }
     switch(op){
     default:
         throw std::runtime_error("invalid operator '"+get_op_str(op)+"'");

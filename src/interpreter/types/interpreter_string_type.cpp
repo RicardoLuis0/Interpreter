@@ -46,24 +46,18 @@ std::shared_ptr<Value> StringType::get_operator_result(int op,std::shared_ptr<Va
         }
         break;
     }
+    if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::string_type())){
+        throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+    }
     switch(op){
     case SYMBOL_NOT_EQUALS:
     case SYMBOL_EQUALS:
-        if(std::dynamic_pointer_cast<StringType>(other->get_type())==nullptr){
-            throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
-        }
         return std::make_shared<DummyValue>(Type::int_type());
     case SYMBOL_PLUS:
-        if(std::dynamic_pointer_cast<StringType>(other->get_type())==nullptr){
-            throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
-        }
-        return std::make_shared<DummyValue>(self->get_type());
+        return std::make_shared<DummyValue>(Type::string_type());
     case SYMBOL_ASSIGNMENT:
     case SYMBOL_PLUS_ASSIGNMENT:
-        if(std::dynamic_pointer_cast<StringType>(other->get_type())==nullptr){
-            throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
-        }
-        return std::make_shared<DummyVariable>(self->get_type());
+        return std::make_shared<DummyVariable>(Type::string_type());
     default:
         //OP_UNKNOWN
         throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
@@ -71,10 +65,19 @@ std::shared_ptr<Value> StringType::get_operator_result(int op,std::shared_ptr<Va
 }
 
 std::shared_ptr<Value> StringType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
-    throw std::runtime_error("operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+    if(pre){
+        throw std::runtime_error("unary pre operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+    }else{
+        throw std::runtime_error("unary post operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+    }
 }
 
 std::shared_ptr<Value> StringType::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
+    try{
+        other=other->get_type()->cast(other,Type::string_type());
+    }catch(...){
+        throw std::runtime_error("Invalid type for string operator '"+get_op_str(op)+"'");
+    }
     switch(op){
     default:
         throw std::runtime_error("invalid operator '"+get_op_str(op)+"'");
@@ -94,5 +97,9 @@ std::shared_ptr<Value> StringType::call_operator(int op,std::shared_ptr<Value> s
 }
 
 std::shared_ptr<Value> StringType::call_unary_operator(int op,std::shared_ptr<Value> self,bool pre){
-    throw std::runtime_error("invalid unary post operator '"+get_op_str(op)+"'");\
+    if(pre){
+        throw std::runtime_error("invalid unary pre operator '"+get_op_str(op)+"'");
+    }else{
+        throw std::runtime_error("invalid unary post operator '"+get_op_str(op)+"'");
+    }
 }
