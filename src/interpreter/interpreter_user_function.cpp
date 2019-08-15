@@ -47,15 +47,29 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
     case ACTION_RETURN:
         {
             std::shared_ptr<Value> retval(std::dynamic_pointer_cast<LineResultReturn>(result)->get());
-            if(retval->get_type()->allows_implicit_cast(retval->get_type(),return_type)){
-                return retval->get_type()->cast(retval,return_type);
+            if(retval){
+                if(CHECKPTR(return_type,VoidType)){
+                    throw std::runtime_error("void function "+function->name+" returning a value");
+                }else{
+                    if(retval->get_type()->allows_implicit_cast(retval->get_type(),return_type)){
+                        return retval->get_type()->cast(retval,return_type);
+                    }else{
+                        throw std::runtime_error("function "+function->name+" returning an invalid value type");
+                    }
+                }
+            }else{
+                if(CHECKPTR(return_type,VoidType)){
+                    return nullptr;
+                }else{
+                    throw std::runtime_error("function "+function->name+" missing return value");
+                }
             }
         }
     default:
         if(CHECKPTR(return_type,VoidType)){
             return nullptr;
         }else{
-            throw std::runtime_error("function "+function->name+" missing return");
+            throw std::runtime_error("function "+function->name+" missing return value");
         }
     }
 }
