@@ -218,6 +218,7 @@ std::string get_indent(int indent){
 void print_expression(int,std::shared_ptr<Parser::Expression>);
 void print_line(int,std::shared_ptr<Parser::Line>);
 void print_expression_term(int,std::shared_ptr<Parser::ExpressionTerm>);
+void print_variable_definition(int indent,std::shared_ptr<Parser::VariableDefinition> def);
 
 void print_expression_list(int indent,std::shared_ptr<Parser::ExpressionList> exprlist){
     std::cout<<get_indent(indent)<<">Expression List\n";
@@ -290,9 +291,20 @@ void print_expression_term(int indent,std::shared_ptr<Parser::ExpressionTerm> te
         std::cout<<get_indent(indent)<<".literal (string):\n";
         print_token(indent+1,term->contents_t);
         break;
+    case Parser::EXPRESSION_TERM_LITERAL_TRUE:
+        std::cout<<get_indent(indent)<<".literal:\n";
+        std::cout<<get_indent(indent+1)<<"true\n";
+        break;
+    case Parser::EXPRESSION_TERM_LITERAL_FALSE:
+        std::cout<<get_indent(indent)<<".literal:\n";
+        std::cout<<get_indent(indent+1)<<"false\n";
+        break;
     case Parser::EXPRESSION_TERM_IDENTIFIER:
         std::cout<<get_indent(indent)<<".identifier:\n";
         print_token(indent+1,term->contents_t);
+        break;
+    default:
+        throw std::runtime_error("unknown Parser::ExpressionTerm::type value");
         break;
     }
     if(!term->unary_post_operators.empty()){
@@ -365,6 +377,10 @@ void print_for_statement(int indent,std::shared_ptr<Parser::ForStatement> stmt){
     if(stmt->pre){
         std::cout<<get_indent(indent)<<".pre:\n";
         print_expression(indent+1,stmt->pre);
+    }
+    if(stmt->vardef_pre){
+        std::cout<<get_indent(indent)<<".pre [variable definition]:\n";
+        print_variable_definition(indent+1,std::static_pointer_cast<Parser::VariableDefinition>(stmt->vardef_pre));
     }
     if(stmt->condition){
         std::cout<<get_indent(indent)<<".condition:\n";
