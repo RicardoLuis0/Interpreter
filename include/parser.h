@@ -28,6 +28,8 @@ namespace Parser{
         int location;
         parserProgress& operator--();
         parserProgress& operator--(int);
+        parserProgress& operator++();
+        parserProgress& operator++(int);
     };
     class Parser{
         public:

@@ -422,6 +422,12 @@ void print_statement(int indent,std::shared_ptr<Parser::Statement> stmt){
     case Parser::STATEMENT_RETURN:
         print_return_statement(indent+1,std::static_pointer_cast<Parser::ReturnStatement>(stmt->statement));
         break;
+    case Parser::STATEMENT_BREAK:
+        std::cout<<get_indent(indent+1)<<">Break Statement\n";
+        break;
+    case Parser::STATEMENT_CONTINUE:
+        std::cout<<get_indent(indent+1)<<">Continue Statement\n";
+        break;
     }
 }
 

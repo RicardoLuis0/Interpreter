@@ -139,3 +139,13 @@ Parser::parserProgress& Parser::parserProgress::operator--(int){
     location--;
     return *this;
 }
+
+Parser::parserProgress& Parser::parserProgress::operator++(){
+    location++;
+    return *this;
+}
+
+Parser::parserProgress& Parser::parserProgress::operator++(int){
+    location++;
+    return *this;
+}

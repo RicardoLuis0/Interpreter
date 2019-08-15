@@ -10,6 +10,8 @@ namespace Parser{
         STATEMENT_WHILE,
         STATEMENT_FOR,
         STATEMENT_RETURN,
+        STATEMENT_BREAK,
+        STATEMENT_CONTINUE,
     };
     class Statement : public ParserResultPart {
         public:

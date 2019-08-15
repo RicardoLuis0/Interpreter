@@ -1,0 +1,12 @@
+void main(){
+	int count=0;
+	while(true){
+		count++;
+		if(count<5){
+			continue;
+		}else if(count>15){
+			break;
+		}
+		puts(to_string(count)+"\n");
+	}
+}

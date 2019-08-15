@@ -6,6 +6,8 @@
 #include "interpreter_line_result_simple.h"
 #include "interpreter_return_statement.h"
 #include "interpreter_if_statement.h"
+#include "interpreter_break_statement.h"
+#include "interpreter_continue_statement.h"
 #include "interpreter_while_statement.h"
 #include "interpreter_for_statement.h"
 #include "interpreter_user_function.h"
@@ -81,6 +83,12 @@ void CodeBlock::addStatement(std::shared_ptr<Parser::Statement> stmt){
         break;
     case Parser::STATEMENT_RETURN:
         code.push_back(std::make_shared<ReturnStatement>(default_frame.get(),std::static_pointer_cast<Parser::ReturnStatement>(stmt->statement)));
+        break;
+    case Parser::STATEMENT_BREAK:
+        code.push_back(std::make_shared<BreakStatement>());
+        break;
+    case Parser::STATEMENT_CONTINUE:
+        code.push_back(std::make_shared<ContinueStatement>());
         break;
     }
 }
