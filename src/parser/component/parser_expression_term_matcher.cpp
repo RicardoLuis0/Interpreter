@@ -6,6 +6,9 @@
 #include "parser_unary_operation_matcher.h"
 #include "symbols_keywords.h"
 #include "parser_expression_matcher.h"
+#include "keyword_token.h"
+
+//literal = int,float,string,true,false
 
 //ExpressionTerm = ( ExpressionGroup | FunctionCall | UnaryOperation | literal | identifier ) , { symbol 'unary_post_operator' } , { symbol '[' , Expression , symbol ']' };
 
@@ -33,26 +36,18 @@ std::shared_ptr<Parser::ExpressionTerm> Parser::ExpressionTermMatcher::makeMatch
             }catch(MyExcept::NoMatchException &e){
                 p.location=location_backup;
                 std::shared_ptr<Lexer::Token> temp_token;
-                temp_token=p.isType(Lexer::TOKEN_TYPE_INTEGER);//int
-                if(temp_token){
+                if(temp_token=p.isType(Lexer::TOKEN_TYPE_INTEGER)){//int
                     term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_INT);
+                }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_FLOAT)){//float
+                    term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_FLOAT);
+                }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_STRING)){//string
+                    term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_STRING);
+                }else if(temp_token=p.isKeyword({KEYWORD_TRUE,KEYWORD_FALSE})){
+                    term=std::make_shared<ExpressionTerm>(p.get(-1),(std::static_pointer_cast<Lexer::KeywordToken>(temp_token)->get_keyword_type()==KEYWORD_TRUE)?EXPRESSION_TERM_LITERAL_TRUE:EXPRESSION_TERM_LITERAL_FALSE);
+                }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_WORD)){//ident
+                    term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_IDENTIFIER);
                 }else{
-                    temp_token=p.isType(Lexer::TOKEN_TYPE_FLOAT);//float
-                    if(temp_token){
-                        term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_FLOAT);
-                    }else{
-                        temp_token=p.isType(Lexer::TOKEN_TYPE_STRING);//string
-                        if(temp_token){
-                            term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_STRING);
-                        }else {
-                            temp_token=p.isType(Lexer::TOKEN_TYPE_WORD);//ident
-                            if(temp_token){
-                                term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_IDENTIFIER);
-                            }else{
-                                throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected literal or identifier, got '"+p.get_nothrow_nonull()->get_formatted()+"'");
-                            }
-                        }
-                    }
+                    throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected literal or identifier, got '"+p.get_nothrow_nonull()->get_formatted()+"'");
                 }
             }
         }

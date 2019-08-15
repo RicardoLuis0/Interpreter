@@ -50,7 +50,7 @@ std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::share
         expr=std::make_shared<ExprPartVar>(context,std::static_pointer_cast<Lexer::WordToken>(term->contents_t)->get_literal());
         break;
     case Parser::EXPRESSION_TERM_LITERAL_INT:
-        expr=ExprPartValue::from_int(int(std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer()));
+        expr=ExprPartValue::from_int(std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer());
         break;
     case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
         expr=ExprPartValue::from_double(std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float());
@@ -60,6 +60,12 @@ std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::share
         break;
     case Parser::EXPRESSION_TERM_UNARY_OPERATION:
         expr=std::make_shared<ExprPartUnaryOp>(get_term(context,std::static_pointer_cast<Parser::UnaryOperation>(term->contents_p)->term),std::static_pointer_cast<Parser::UnaryOperation>(term->contents_p)->unary_operator->get_symbol_type(),true);
+        break;
+    case Parser::EXPRESSION_TERM_LITERAL_TRUE:
+        expr=ExprPartValue::from_int(1);
+        break;
+    case Parser::EXPRESSION_TERM_LITERAL_FALSE:
+        expr=ExprPartValue::from_int(0);
         break;
     default:
         throw std::runtime_error("unimplemented Expression term");
