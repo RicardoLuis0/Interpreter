@@ -8,8 +8,6 @@ auto type = parse-time type checking, generates all errors before code is execut
 
 'type' type = for runtime type checking, together with "type get_type(any)" function and type literals (still unsure of type literals syntax)
 
-bool type
-
 unsigned int type
 
 char type

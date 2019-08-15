@@ -13,7 +13,6 @@ namespace Interpreter {
     public:
         static std::shared_ptr<Type> any_type();
         static std::shared_ptr<Type> void_type();
-        static std::shared_ptr<Type> bool_type();
         static std::shared_ptr<Type> char_type();
         static std::shared_ptr<Type> unsigned_char_type();
         static std::shared_ptr<Type> int_type();
@@ -37,7 +36,6 @@ namespace Interpreter {
         static std::shared_ptr<Type> from_vartype_ignore_array(class DefaultFrame * context,std::shared_ptr<Parser::VarType> t);
         static std::shared_ptr<Type> any_type_instance;
         static std::shared_ptr<Type> void_type_instance;
-        static std::shared_ptr<Type> bool_type_instance;
         static std::shared_ptr<Type> char_type_instance;
         static std::shared_ptr<Type> unsigned_char_type_instance;
         static std::shared_ptr<Type> int_type_instance;

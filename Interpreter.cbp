@@ -55,7 +55,6 @@
 		<Unit filename="include/interpreter_array_type.h" />
 		<Unit filename="include/interpreter_array_value.h" />
 		<Unit filename="include/interpreter_array_variable.h" />
-		<Unit filename="include/interpreter_bool_type.h" />
 		<Unit filename="include/interpreter_char_type.h" />
 		<Unit filename="include/interpreter_class.h" />
 		<Unit filename="include/interpreter_class_reference_variable.h" />
@@ -194,7 +193,6 @@
 		<Unit filename="src/interpreter/interpreter_while_statement.cpp" />
 		<Unit filename="src/interpreter/types/interpreter_any_type.cpp" />
 		<Unit filename="src/interpreter/types/interpreter_array_type.cpp" />
-		<Unit filename="src/interpreter/types/interpreter_bool_type.cpp" />
 		<Unit filename="src/interpreter/types/interpreter_char_type.cpp" />
 		<Unit filename="src/interpreter/types/interpreter_float_type.cpp" />
 		<Unit filename="src/interpreter/types/interpreter_int_type.cpp" />
