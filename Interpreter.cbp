@@ -159,6 +159,7 @@
 		<Unit filename="include/parser_variable_definition_matcher.h" />
 		<Unit filename="include/parser_while_statement.h" />
 		<Unit filename="include/parser_while_statement_matcher.h" />
+		<Unit filename="include/preprocessor.h" />
 		<Unit filename="include/read_file.h" />
 		<Unit filename="include/single_quote_string_token_matcher.h" />
 		<Unit filename="include/string_token.h" />
@@ -288,6 +289,7 @@
 		<Unit filename="src/parser/result/parser_variable_definition_item.cpp" />
 		<Unit filename="src/parser/result/parser_while_statement.cpp" />
 		<Unit filename="src/parser/util/parser_expression_operator_precedence.cpp" />
+		<Unit filename="src/preprocessor.cpp" />
 		<Unit filename="src/symbols_keywords.cpp" />
 		<Unit filename="src/token/eof_token.cpp" />
 		<Unit filename="src/token/float_token.cpp" />

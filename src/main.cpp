@@ -36,6 +36,9 @@
 #include "interpreter_void_type.h"
 #include "interpreter_int_type.h"
 #include <cstring>
+
+#include "preprocessor.h"
+
 //TODO update docs
 /**
  * @mainpage
@@ -126,12 +129,23 @@ int test_exec(){
     return 1;
 }
 
+int test_preprocessor(){
+    try{
+        system("cls");
+        std::cout<<preprocess("pre_test.txt");
+        return 0;
+    }catch(std::exception &e){
+        std::cout<<"uncaught exception: "<<e.what();
+        return 1;
+    }
+}
+
 int main(int argc,char ** argv){
     Console::init();
     if(argc<2){
         while(true){
             Console::clear();
-            std::cout<<"0> test lexer\n1> test expression parser\n2> test line parser\n3> test whole code parsing\n4> test execution\n\nChoice: ";
+            std::cout<<"0> test lexer\n1> test expression parser\n2> test line parser\n3> test whole code parsing\n4> test execution\n5> test preprocessor\n\nChoice: ";
             std::string input;
             std::cin>>input;
             if(input.compare("0")==0){
@@ -144,6 +158,8 @@ int main(int argc,char ** argv){
                 test_definitions();
             }else if(input.compare("4")==0){
                 return test_exec();
+            }else if(input.compare("5")==0){
+                return test_preprocessor();
             }else{
                 continue;
             }
