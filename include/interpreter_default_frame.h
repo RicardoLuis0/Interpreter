@@ -40,6 +40,9 @@ namespace Interpreter{
             std::vector<std::vector<FunctionParameter>> get_function_variants(std::string);
             std::shared_ptr<Function> get_function(std::string,std::vector<FunctionParameter>);
             std::shared_ptr<Function> get_function_local(std::string,std::vector<FunctionParameter>);
+            bool is_function=false;
+            DefaultFrame * function_statics=nullptr;
+            Function * func=nullptr;
             void register_function(std::shared_ptr<Function> func);
             void add_parameters(std::vector<FunctionParameter>);
             void add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global=false);

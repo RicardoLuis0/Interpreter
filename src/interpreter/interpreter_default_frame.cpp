@@ -35,8 +35,10 @@ DefaultFrame::DefaultFrame(DefaultFrame * p,std::shared_ptr<Parser::VariableDefi
     add_definition(std::make_shared<Parser::Definition>(Parser::DEFINITION_VAR,def,def->line_start,def->line_end),true);
 }
 
-DefaultFrame::DefaultFrame(DefaultFrame * p,Function * func):parent(p){
-    add_parameters(func->get_parameters());
+DefaultFrame::DefaultFrame(DefaultFrame * p,Function * f):parent(p){
+    add_parameters(f->get_parameters());
+    is_function=true;
+    func=f;
 }
 
 DefaultFrame::DefaultFrame(DefaultFrame * p):parent(p){
