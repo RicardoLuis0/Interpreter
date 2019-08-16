@@ -98,9 +98,31 @@ std::shared_ptr<ExecFrame> CodeBlock::getContext(ExecFrame * parent){
 
 void CodeBlock::varDefCallback(std::shared_ptr<Parser::VariableDefinitionItem> var){
     std::string name=var->name;
-    code.push_back(std::make_shared<Expression>(default_frame.get(),std::make_shared<Parser::Expression>(
-            std::make_shared<Parser::BinaryOperation>(
-                std::make_shared<Parser::ExpressionTerm>(std::make_shared<Lexer::WordToken>(0,var->name),Parser::EXPRESSION_TERM_IDENTIFIER),
-                std::make_shared<Lexer::SymbolToken>(0,get_symbol_data(SYMBOL_ASSIGNMENT)),
-                var->value),Parser::EXPRESSION_BINARY_OPERATION)));
+    code.push_back(
+        std::make_shared<Expression>(
+            default_frame.get(),
+            std::make_shared<Parser::Expression>(
+                std::make_shared<Parser::BinaryOperation>(
+                    std::make_shared<Parser::ExpressionTerm>(
+                        std::make_shared<Lexer::WordToken>(
+                            0,var->name
+                        ),
+                        Parser::EXPRESSION_TERM_IDENTIFIER,
+                        var->line_start,
+                        var->line_end
+                    ),
+                    std::make_shared<Lexer::SymbolToken>(
+                        var->line_start,
+                        get_symbol_data(SYMBOL_ASSIGNMENT)
+                    ),
+                    var->value,
+                    var->line_start,
+                    var->line_end
+                ),
+                Parser::EXPRESSION_BINARY_OPERATION,
+                var->line_start,
+                var->line_end
+            )
+        )
+    );
 }

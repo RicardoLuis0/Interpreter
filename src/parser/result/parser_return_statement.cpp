@@ -1,3 +1,5 @@
 #include "parser_return_statement.h"
 
-Parser::ReturnStatement::ReturnStatement(std::shared_ptr<Expression> expr):value(expr){}
+using namespace Parser;
+
+ReturnStatement::ReturnStatement(std::shared_ptr<Expression> expr,int ls,int le):ParserResultPart(ls,le),value(expr){}

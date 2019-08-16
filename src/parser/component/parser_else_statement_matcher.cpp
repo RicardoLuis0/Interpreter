@@ -6,7 +6,10 @@
 
 //ElseStatement = keyword 'else' , Line ;
 
-std::shared_ptr<Parser::ElseStatement> Parser::ElseStatementMatcher::makeMatch(parserProgress &p){
+using namespace Parser;
+
+std::shared_ptr<ElseStatement> ElseStatementMatcher::makeMatch(parserProgress &p){
+    int line_start=p.get_line();
     if(!p.isKeyword(KEYWORD_ELSE))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected 'else', got '"+p.get_nothrow_nonull()->get_literal()+"'");
-    return std::make_shared<ElseStatement>(LineMatcher().makeMatch(p));
+    return std::make_shared<ElseStatement>(LineMatcher().makeMatch(p),line_start,p.get_line(-1));
 }

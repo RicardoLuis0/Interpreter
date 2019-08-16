@@ -13,6 +13,7 @@
 #include "interpreter_string_type.h"
 #include "interpreter_array_type.h"
 #include "interpreter_expression.h"
+#include "my_except.h"
 
 using namespace Interpreter;
 

@@ -22,8 +22,8 @@ namespace Parser{
     };
     class VarType : public ParserResultPart {
     public:
-        VarType(std::shared_ptr<Lexer::KeywordToken> primitive,bool has_sign,bool sign);
-        VarType(ParserPrimitiveType_t primitive,bool has_sign,bool sign);
+        VarType(std::shared_ptr<Lexer::KeywordToken> primitive,bool has_sign,bool sign,int line_start,int line_end);
+        VarType(ParserPrimitiveType_t primitive,bool has_sign,bool sign,int line_start,int line_end);
         ParserPrimitiveType_t primitive;
         ParserVarTypeType_t type;
         bool has_sign;

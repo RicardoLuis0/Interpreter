@@ -1,6 +1,7 @@
 #include "interpreter_expr_part_fn_call.h"
 #include "interpreter_util_defines_misc.h"
 #include "interpreter_variable.h"
+#include "my_except.h"
 
 #include <iostream>
 
@@ -23,18 +24,18 @@ ExprPartFnCall::ExprPartFnCall(DefaultFrame * context,std::shared_ptr<Parser::Fu
             for(auto &p:vec){
                 error+="  "+ident+"("+FunctionParameter::get_typelist(p,true)+")\n";
             }
-            throw std::runtime_error(error);
+            throw MyExcept::SyntaxError(fn->line_start,fn->line_end,error);
         }else{
-            throw std::runtime_error("call to undefined function '"+ident+"'");
+            throw MyExcept::SyntaxError(fn->line_start,fn->line_end,"call to undefined function '"+ident+"'");
         }
     }
     std::vector<FunctionParameter> params2=fnc->get_parameters();
     for(size_t i=0;i<params.size();i++){//check reference types
         if(params2[i].is_reference){
             if(CHECKPTR(arguments[i]->get_dummy_type(),Variable)){
-                if(!(typeid(*(params[i].type))==typeid(*(params2[i].type))))throw std::runtime_error("types "+params[i].type->get_name()+" and "+params2[i].type->get_name()+" don't match for reference argument");
+                if(!(typeid(*(params[i].type))==typeid(*(params2[i].type))))throw MyExcept::SyntaxError(fn->line_start,fn->line_end,"types "+params[i].type->get_name()+" and "+params2[i].type->get_name()+" don't match for reference argument");
             }else{
-                throw std::runtime_error("argument for reference must be a variable");
+                throw MyExcept::SyntaxError(fn->line_start,fn->line_end,"argument for reference must be a variable");
             }
         }
     }

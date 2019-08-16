@@ -9,6 +9,7 @@
 #include "interpreter_int_value.h"
 #include "interpreter_int_variable.h"
 #include "interpreter_any_type.h"
+#include "my_except.h"
 
 using namespace Interpreter;
 
@@ -42,7 +43,7 @@ std::shared_ptr<Value> IntType::cast(std::shared_ptr<Value> self,std::shared_ptr
     }
 }
 
-std::shared_ptr<Value> IntType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
+std::shared_ptr<Value> IntType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end){
     switch(op){
     case SYMBOL_LEFT_SHIFT_ASSIGNMENT:
     case SYMBOL_RIGHT_SHIFT_ASSIGNMENT:
@@ -56,7 +57,7 @@ std::shared_ptr<Value> IntType::get_operator_result(int op,std::shared_ptr<Value
     case SYMBOL_DIVIDE_ASSIGNMENT:
     case SYMBOL_ASSIGNMENT:
         if(std::dynamic_pointer_cast<Variable>(self)==nullptr){
-            throw std::runtime_error("operator '"+get_op_str(op)+"' only available for variables");
+            throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' only available for variables");
         }
         break;
     }
@@ -76,7 +77,7 @@ std::shared_ptr<Value> IntType::get_operator_result(int op,std::shared_ptr<Value
     case SYMBOL_LOGICAL_AND:
     case SYMBOL_LOGICAL_OR:
         if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())){
-            throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+            throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
         }
         return std::make_shared<DummyValue>(Type::int_type());
     case SYMBOL_PLUS:
@@ -85,7 +86,7 @@ std::shared_ptr<Value> IntType::get_operator_result(int op,std::shared_ptr<Value
     case SYMBOL_DIVIDE:
         if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())){
             if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::float_type())){
-                throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+                throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
             }else{
                 return std::make_shared<DummyValue>(Type::float_type());
             }
@@ -104,17 +105,17 @@ std::shared_ptr<Value> IntType::get_operator_result(int op,std::shared_ptr<Value
     case SYMBOL_BITWISE_XOR_ASSIGNMENT:
     case SYMBOL_PERCENT_ASSIGNMENT:
         if((!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type()))){
-            throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+            throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
         }
         return std::make_shared<DummyVariable>(Type::int_type());
     default:
         //OP_UNKNOWN
-        throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+        throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
     }
 }
 
-std::shared_ptr<Value> IntType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
-    if((op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT)&&!CHECKPTR(self,Variable))throw std::runtime_error("operator '"+get_op_str(op)+"' only available for variables");
+std::shared_ptr<Value> IntType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end){
+    if((op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT)&&!CHECKPTR(self,Variable))throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' only available for variables");
     if(pre){
         if(op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT||op==SYMBOL_LOGICAL_NOT){
             return std::make_shared<DummyVariable>(self->get_type());
@@ -124,7 +125,7 @@ std::shared_ptr<Value> IntType::get_unary_operator_result(int op,std::shared_ptr
     }else if(op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT||op==SYMBOL_LOGICAL_NOT){
         return std::make_shared<DummyValue>(self->get_type());
     }
-    throw std::runtime_error("operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+    throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
 }
 
 std::shared_ptr<Value> IntType::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){

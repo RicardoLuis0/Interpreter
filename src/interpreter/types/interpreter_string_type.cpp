@@ -6,6 +6,7 @@
 #include "interpreter_string_value.h"
 #include "interpreter_string_variable.h"
 #include "interpreter_any_type.h"
+#include "my_except.h"
 
 using namespace Interpreter;
 
@@ -37,17 +38,17 @@ std::shared_ptr<Variable> StringType::make_variable(std::shared_ptr<Type> self,s
     return std::make_shared<StringVariable>(name,"");
 }
 
-std::shared_ptr<Value> StringType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
+std::shared_ptr<Value> StringType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end){
     switch(op){
     case SYMBOL_PLUS_ASSIGNMENT:
     case SYMBOL_ASSIGNMENT:
         if(std::dynamic_pointer_cast<Variable>(self)==nullptr){
-            throw std::runtime_error("operator '"+get_op_str(op)+"' only available for variables");
+            throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' only available for variables");
         }
         break;
     }
     if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::string_type())){
-        throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+        throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
     }
     switch(op){
     case SYMBOL_NOT_EQUALS:
@@ -60,15 +61,15 @@ std::shared_ptr<Value> StringType::get_operator_result(int op,std::shared_ptr<Va
         return std::make_shared<DummyVariable>(Type::string_type());
     default:
         //OP_UNKNOWN
-        throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+        throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
     }
 }
 
-std::shared_ptr<Value> StringType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
+std::shared_ptr<Value> StringType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end){
     if(pre){
-        throw std::runtime_error("unary pre operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+        throw MyExcept::SyntaxError(line_start,line_end,"unary pre operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
     }else{
-        throw std::runtime_error("unary post operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+        throw MyExcept::SyntaxError(line_start,line_end,"unary post operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
     }
 }
 

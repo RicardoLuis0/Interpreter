@@ -1,5 +1,9 @@
 #include "parser_variable_definition_item.h"
 
-Parser::VariableDefinitionItem::VariableDefinitionItem(std::string s):name(s),value(nullptr){
+using namespace Parser;
+
+VariableDefinitionItem::VariableDefinitionItem(std::string s,int ls,int le):ParserResultPart(ls,le),name(s),value(nullptr){
 }
-Parser::VariableDefinitionItem::VariableDefinitionItem(std::shared_ptr<Lexer::WordToken> t,std::shared_ptr<Expression> e):name(t->get_literal()),value(e){}
+
+VariableDefinitionItem::VariableDefinitionItem(std::shared_ptr<Lexer::WordToken> t,std::shared_ptr<Expression> e,int ls,int le):ParserResultPart(ls,le),name(t->get_literal()),value(e){
+}

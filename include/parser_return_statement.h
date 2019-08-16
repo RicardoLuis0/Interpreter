@@ -7,7 +7,7 @@
 namespace Parser{
     class ReturnStatement : public ParserResultPart {
         public:
-            ReturnStatement(std::shared_ptr<Expression> value);
+            ReturnStatement(std::shared_ptr<Expression> value,int line_start,int line_end);
             std::shared_ptr<Expression> value;
     };
 }

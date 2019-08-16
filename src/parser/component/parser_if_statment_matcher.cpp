@@ -8,7 +8,10 @@
 
 //IfStatement = keyword 'if' , symbol '(' , Expression , symbol ')' , Line , [ ElseStatement ] ;
 
-std::shared_ptr<Parser::IfStatement> Parser::IfStatementMatcher::makeMatch(parserProgress &p){
+using namespace Parser;
+
+std::shared_ptr<IfStatement> IfStatementMatcher::makeMatch(parserProgress &p){
+    int line_start=p.get_line();
     if(!p.isKeyword(KEYWORD_IF))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected 'if', got '"+p.get_nothrow_nonull()->get_literal()+"'");
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '(', got '"+p.get_nothrow_nonull()->get_literal()+"'");
     std::shared_ptr<Expression> expr=ExpressionMatcher().makeMatch(p);
@@ -23,5 +26,5 @@ std::shared_ptr<Parser::IfStatement> Parser::IfStatementMatcher::makeMatch(parse
         if(p.isKeyword(KEYWORD_ELSE))throw;
         else_stmt=nullptr;
     }
-    return std::make_shared<IfStatement>(expr,line,else_stmt);
+    return std::make_shared<IfStatement>(expr,line,else_stmt,line_start,p.get_line(-1));
 }

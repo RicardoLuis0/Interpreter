@@ -7,6 +7,8 @@
 
 //BinaryOperation = ExpressionTerm , operator 'any_binary_operator' , Expression ;
 
+using namespace Parser;
+
 static std::vector<int> binary_operators{
     SYMBOL_ASSIGNMENT,
     SYMBOL_EQUALS,
@@ -39,16 +41,17 @@ static std::vector<int> binary_operators{
     SYMBOL_PERCENT_ASSIGNMENT,
 };
 
-bool Parser::BinaryOperationMatcher::checkIsBinaryOperator(parserProgress &p){
+bool BinaryOperationMatcher::checkIsBinaryOperator(parserProgress &p){
     return p.peekSymbol(binary_operators);
 }
 
-std::shared_ptr<Parser::BinaryOperation> Parser::BinaryOperationMatcher::makeMatch(parserProgress &p){
+std::shared_ptr<BinaryOperation> BinaryOperationMatcher::makeMatch(parserProgress &p){
+    int line_start=p.get_line();
     std::shared_ptr<ExpressionTerm> term1=ExpressionTermMatcher().makeMatch(p);
     std::shared_ptr<Lexer::SymbolToken> ptr=p.isSymbol(binary_operators);
     if(!ptr){
         throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected binary operator, got '"+p.get_nothrow_nonull()->get_formatted()+"'");
     }
     std::shared_ptr<Expression> term2=ExpressionMatcher().makeMatch(p);
-    return std::make_shared<BinaryOperation>(term1,ptr,term2);
+    return std::make_shared<BinaryOperation>(term1,ptr,term2,line_start,p.get_line(-1));
 }

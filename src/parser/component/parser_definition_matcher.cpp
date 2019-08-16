@@ -8,11 +8,14 @@
 
 //Definition = FunctionDefinition | VariableDefinition , symbol ';' ;
 
-std::shared_ptr<Parser::Definition> Parser::DefinitionMatcher::makeMatch(parserProgress &p){
+using namespace Parser;
+
+std::shared_ptr<Definition> DefinitionMatcher::makeMatch(parserProgress &p){
+    int line_start=p.get_line();
     int location_backup;
     try{
         location_backup=p.location;
-        return std::make_shared<Definition>(DEFINITION_FUNC,FunctionDefinitionMatcher().makeMatch(p));
+        return std::make_shared<Definition>(DEFINITION_FUNC,FunctionDefinitionMatcher().makeMatch(p),line_start,p.get_line(-1));
     }catch(MyExcept::NoMatchException &e){
         p.location=location_backup;
         std::shared_ptr<VarType> vt=nullptr;
@@ -25,6 +28,6 @@ std::shared_ptr<Parser::Definition> Parser::DefinitionMatcher::makeMatch(parserP
         p.location=location_backup;
         std::shared_ptr<VariableDefinition> vdef=VariableDefinitionMatcher().makeMatch(p);
         if(!p.isSymbol(SYMBOL_SEMICOLON))MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");//variable definition must end in semicolon
-        return std::make_shared<Definition>(DEFINITION_VAR,vdef);
+        return std::make_shared<Definition>(DEFINITION_VAR,vdef,line_start,p.get_line(-1));
     }
 }

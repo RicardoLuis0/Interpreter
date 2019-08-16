@@ -7,7 +7,10 @@
 
 //ExpressionList = Expression , { symbol ',' , Expression } ;
 
-std::shared_ptr<Parser::ExpressionList> Parser::ExpressionListMatcher::makeMatch(parserProgress &p){
+using namespace Parser;
+
+std::shared_ptr<ExpressionList> ExpressionListMatcher::makeMatch(parserProgress &p){
+    int line_start=p.get_line();
     std::vector<std::shared_ptr<Expression>> list{ExpressionMatcher().makeMatch(p)};
     while(1){
         int location_backup;
@@ -16,11 +19,11 @@ std::shared_ptr<Parser::ExpressionList> Parser::ExpressionListMatcher::makeMatch
             if(p.isSymbol(SYMBOL_COMMA)){
                 list.push_back(ExpressionMatcher().makeMatch(p));
             }else{
-                return std::make_shared<ExpressionList>(list);
+                return std::make_shared<ExpressionList>(list,line_start,p.get_line(-1));
             }
         }catch(MyExcept::NoMatchException &e){
             p.location=location_backup;
-            return std::make_shared<ExpressionList>(list);
+            return std::make_shared<ExpressionList>(list,line_start,p.get_line(-1));
         }
     }
 }

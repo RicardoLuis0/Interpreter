@@ -46,11 +46,11 @@ std::shared_ptr<Value> UnsignedIntType::cast(std::shared_ptr<Value> self,std::sh
     }
 }
 
-std::shared_ptr<Value> UnsignedIntType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
+std::shared_ptr<Value> UnsignedIntType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end){
     return nullptr;
 }
 
-std::shared_ptr<Value> UnsignedIntType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
+std::shared_ptr<Value> UnsignedIntType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end){
     return nullptr;
 }
 

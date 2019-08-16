@@ -25,8 +25,8 @@ namespace Interpreter {
         virtual bool is(std::shared_ptr<Type> self,std::shared_ptr<Type> other);
         virtual std::shared_ptr<Value> make_value(std::shared_ptr<Type> self);
         virtual std::shared_ptr<Variable> make_variable(std::shared_ptr<Type> self,std::string name);
-        virtual std::shared_ptr<Value> get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other);
-        virtual std::shared_ptr<Value> get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre);
+        virtual std::shared_ptr<Value> get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end);
+        virtual std::shared_ptr<Value> get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end);
         virtual std::shared_ptr<Value> call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other);
         virtual std::shared_ptr<Value> call_unary_operator(int op,std::shared_ptr<Value> self,bool pre);
         virtual bool allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other);

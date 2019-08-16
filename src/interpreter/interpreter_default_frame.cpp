@@ -20,6 +20,7 @@
 #include "interpreter_void_type.h"
 #include "interpreter_expression.h"
 #include "interpreter_array_type.h"
+#include "my_except.h"
 
 using namespace Interpreter;
 
@@ -31,7 +32,7 @@ DefaultFrame::DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>> defs
 }
 
 DefaultFrame::DefaultFrame(DefaultFrame * p,std::shared_ptr<Parser::VariableDefinition> def):parent(p){
-    add_definition(std::make_shared<Parser::Definition>(Parser::DEFINITION_VAR,def),true);
+    add_definition(std::make_shared<Parser::Definition>(Parser::DEFINITION_VAR,def,def->line_start,def->line_end),true);
 }
 
 DefaultFrame::DefaultFrame(DefaultFrame * p,Function * func):parent(p){
@@ -87,7 +88,7 @@ std::shared_ptr<Function> DefaultFrame::get_function(std::string name,std::vecto
 
 void DefaultFrame::add_parameters(std::vector<FunctionParameter> params){
     for(FunctionParameter &p:params){
-        add_variable(p.type,std::make_shared<Parser::VariableDefinitionItem>(p.name));
+        add_variable(p.type,std::make_shared<Parser::VariableDefinitionItem>(p.name,0,0));
     }
 }
 
@@ -95,7 +96,7 @@ void DefaultFrame::register_function(std::shared_ptr<Function> func){
     if(MAP_HAS(functions,{func->get_name()})){
         auto &m2=functions[func->get_name()];
         if(MAP_HAS(m2,func->get_parameters())){
-            throw std::runtime_error("Redefining Function "+func->get_name());
+            throw MyExcept::SyntaxError(func->get_line(),func->get_line(),"Redefining Function "+func->get_name()+"("+FunctionParameter::get_typelist(func->get_parameters())+")");
         }else{
             m2.insert({func->get_parameters(),func});
         }
@@ -118,7 +119,7 @@ void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool g
             if(std::shared_ptr<ArrayType> at=std::dynamic_pointer_cast<ArrayType>(type)){
                 while(at!=nullptr){
                     if(at->get_size()<=0){
-                        throw std::runtime_error("invalid size for array");
+                        throw MyExcept::SyntaxError(def->line_start,def->line_start,"invalid size for array");
                     }
                     at=std::dynamic_pointer_cast<ArrayType>(at->get_type());
                 }
@@ -136,16 +137,39 @@ void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool g
 }
 
 void DefaultFrame::add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global){
-    if(CHECKPTR(type,VoidType))throw std::runtime_error("variable type can't be void");
+    if(CHECKPTR(type,VoidType))throw MyExcept::SyntaxError(var->line_start,var->line_start,"variable type can't be void");
     variable_defaults.insert({var->name,type->make_variable(type,var->name)});
     if(global&&var->value){
         if(var->value->type==Parser::EXPRESSION_TERM){
             std::shared_ptr<Parser::ExpressionTerm> term(std::static_pointer_cast<Parser::ExpressionTerm>(var->value->contents));
-            initialize_globals.push_back(std::make_shared<Expression>(this,std::make_shared<Parser::Expression>(
-            std::make_shared<Parser::BinaryOperation>(
-                std::make_shared<Parser::ExpressionTerm>(std::make_shared<Lexer::WordToken>(0,var->name),Parser::EXPRESSION_TERM_IDENTIFIER),
-                std::make_shared<Lexer::SymbolToken>(0,get_symbol_data(SYMBOL_ASSIGNMENT)),
-                var->value),Parser::EXPRESSION_BINARY_OPERATION)));
+            initialize_globals.push_back(
+                std::make_shared<Expression>(
+                    this,
+                    std::make_shared<Parser::Expression>(
+                        std::make_shared<Parser::BinaryOperation>(
+                            std::make_shared<Parser::ExpressionTerm>(
+                                std::make_shared<Lexer::WordToken>(
+                                    0,
+                                    var->name
+                                ),
+                                Parser::EXPRESSION_TERM_IDENTIFIER,
+                                var->line_start,
+                                var->line_end
+                            ),
+                            std::make_shared<Lexer::SymbolToken>(
+                                var->line_start,
+                                get_symbol_data(SYMBOL_ASSIGNMENT)
+                            ),
+                            var->value,
+                            var->line_start,
+                            var->line_end
+                        ),
+                        Parser::EXPRESSION_BINARY_OPERATION,
+                        var->line_start,
+                        var->line_end
+                    )
+                )
+            );
         }
     }
 }

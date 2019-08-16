@@ -7,7 +7,10 @@
 
 //VarType = ( [ keyword 'unsigned' | keyword 'signed' ] , ( keyword 'any' | keyword 'void' | keyword 'int' | keyword 'float' | keyword 'string' ) ) , { symbol '[' , [ Expression ] , symbol ']' } ;
 
-std::shared_ptr<Parser::VarType> Parser::VarTypeMatcher::makeMatch(parserProgress &p){
+using namespace Parser;
+
+std::shared_ptr<VarType> VarTypeMatcher::makeMatch(parserProgress &p){
+    int line_start=p.get_line();
     std::shared_ptr<Lexer::KeywordToken> kw=p.isKeyword({KEYWORD_SIGNED,KEYWORD_UNSIGNED});
     std::shared_ptr<VarType> vt;
     bool has_sign=false;
@@ -18,7 +21,7 @@ std::shared_ptr<Parser::VarType> Parser::VarTypeMatcher::makeMatch(parserProgres
     }
     kw=p.isKeyword({KEYWORD_ANY,KEYWORD_VOID,KEYWORD_INT,KEYWORD_FLOAT,KEYWORD_STRING});
     if(kw){
-        vt=std::make_shared<VarType>(kw,has_sign,sign);
+        vt=std::make_shared<VarType>(kw,has_sign,sign,line_start,p.get_line(-1));
     }else{
         if(has_sign){
             p--;

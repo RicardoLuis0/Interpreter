@@ -1,10 +1,11 @@
 #include "interpreter_expr_part_var.h"
 #include "interpreter_dummy_variable.h"
+#include "my_except.h"
 
 using namespace Interpreter;
 
-ExprPartVar::ExprPartVar(DefaultFrame * context,std::string s):ident(s){
-    if(context->get_variable(ident)==nullptr)throw std::runtime_error("undefined variable "+ident);
+ExprPartVar::ExprPartVar(DefaultFrame * context,std::string s,int line):ident(s){
+    if(context->get_variable(ident)==nullptr)throw MyExcept::SyntaxError(line,line,"undefined variable "+ident);
     type=context->get_variable(ident)->get_type();
 }
 

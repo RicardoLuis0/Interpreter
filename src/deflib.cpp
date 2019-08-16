@@ -7,6 +7,7 @@
 #include "interpreter_int_value.h"
 #include "interpreter_float_value.h"
 #include "conio.h"
+#include "my_except.h"
 
 //NOTE native functions to make later
 //int sprintf(string &output,string format, any ... args) TODO, varargs not implemented
@@ -138,7 +139,7 @@ namespace Interpreter {
             }else if(std::shared_ptr<FloatValue> val=std::dynamic_pointer_cast<FloatValue>(args[0])){
                 return std::make_shared<StringValue>(std::to_string(val->get()));
             }else{
-                throw std::runtime_error("invalid variable type "+args[0]->get_type()->get_name());
+                throw MyExcept::SyntaxError("invalid variable type "+args[0]->get_type()->get_name());
             }
         }
 

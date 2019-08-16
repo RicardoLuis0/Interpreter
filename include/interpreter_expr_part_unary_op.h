@@ -6,7 +6,7 @@
 namespace Interpreter {
     class ExprPartUnaryOp : public ExprPart {
         public:
-            ExprPartUnaryOp(std::shared_ptr<ExprPart> val,int op,bool pre);
+            ExprPartUnaryOp(std::shared_ptr<ExprPart> val,int op,bool pre,int line_start,int line_end);
             std::shared_ptr<Value> get_dummy_type() override;
             std::shared_ptr<Type> get_type() override;
             std::shared_ptr<Value> eval(ExecFrame * context) override;

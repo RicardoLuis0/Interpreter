@@ -9,7 +9,7 @@
 namespace Parser{
     class ForStatement:public ParserResultPart{
     public:
-        ForStatement(std::shared_ptr<Expression> pre,std::shared_ptr<VariableDefinition> vardef_pre,std::shared_ptr<Expression> condition,std::shared_ptr<Expression> inc,std::shared_ptr<Line> code);
+        ForStatement(std::shared_ptr<Expression> pre,std::shared_ptr<VariableDefinition> vardef_pre,std::shared_ptr<Expression> condition,std::shared_ptr<Expression> inc,std::shared_ptr<Line> code,int line_start,int line_end);
         std::shared_ptr<Expression> pre,condition,inc;
         std::shared_ptr<VariableDefinition> vardef_pre;
         std::shared_ptr<Line> code;

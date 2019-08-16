@@ -1,5 +1,7 @@
 #include "parser_expression.h"
 
-Parser::Expression::Expression(std::shared_ptr<ParserResultPart> ptr,ExpressionType_t ptype):contents(ptr),type(ptype){
+using namespace Parser;
+
+Expression::Expression(std::shared_ptr<ParserResultPart> ptr,ExpressionType_t ptype,int ls,int le):ParserResultPart(ls,le),contents(ptr),type(ptype){
     
 }

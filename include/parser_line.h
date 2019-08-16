@@ -14,7 +14,7 @@ namespace Parser{
     };
     class Line : public ParserResultPart {
         public:
-            Line(std::shared_ptr<ParserResultPart>,ParserLineType_t);
+            Line(std::shared_ptr<ParserResultPart>,ParserLineType_t,int line_start,int line_end);
             std::shared_ptr<ParserResultPart> contents;
             const ParserLineType_t type;
         protected:

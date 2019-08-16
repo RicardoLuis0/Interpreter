@@ -9,11 +9,14 @@
 
 //VariableDefinition = VarType , VariableDefinitionItem { symbol ',' , VariableDefinitionItem } ;
 
-std::shared_ptr<Parser::VariableDefinition> Parser::VariableDefinitionMatcher::makeMatch(parserProgress &p){
+using namespace Parser;
+
+std::shared_ptr<VariableDefinition> VariableDefinitionMatcher::makeMatch(parserProgress &p){
+    int line_start=p.get_line();
     std::shared_ptr<VarType> vt=VarTypeMatcher().makeMatch(p);
     std::vector<std::shared_ptr<VariableDefinitionItem>> vars;
     do{
         vars.push_back(VariableDefinitionItemMatcher().makeMatch(p));
     }while(p.isSymbol(SYMBOL_COMMA));
-    return std::make_shared<VariableDefinition>(vt,vars);
+    return std::make_shared<VariableDefinition>(vt,vars,line_start,p.get_line(-1));
 }

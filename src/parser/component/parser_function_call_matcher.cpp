@@ -7,7 +7,10 @@
 
 //FunctionCall = identifier , symbol '(' , [ ExpressionList ] , symbol ')' ;
 
-std::shared_ptr<Parser::FunctionCall> Parser::FunctionCallMatcher::makeMatch(parserProgress &p){
+using namespace Parser;
+
+std::shared_ptr<FunctionCall> FunctionCallMatcher::makeMatch(parserProgress &p){
+    int line_start=p.get_line();
     std::shared_ptr<Lexer::Token> identifier=p.isType(Lexer::TOKEN_TYPE_WORD);
     if(!identifier) throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected identifier, got '"+p.get_nothrow_nonull()->get_formatted()+"'");
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
@@ -19,14 +22,16 @@ std::shared_ptr<Parser::FunctionCall> Parser::FunctionCallMatcher::makeMatch(par
         arguments = ExpressionListMatcher().makeMatch(p);
     }catch(MyExcept::NoMatchException &e){
         p.location=location_backup;
-        if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+        if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE)){
             throw;
-        }else{
-            return std::make_shared<FunctionCall>(std::static_pointer_cast<Lexer::WordToken>(identifier),nullptr);
         }
+        arguments=nullptr;
+        /*else{
+            return std::make_shared<FunctionCall>(std::static_pointer_cast<Lexer::WordToken>(identifier),nullptr,line_start,p.get_line(-1));
+        }*/
     }
     if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
         throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ')', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
     }
-    return std::make_shared<FunctionCall>(std::static_pointer_cast<Lexer::WordToken>(identifier),arguments);
+    return std::make_shared<FunctionCall>(std::static_pointer_cast<Lexer::WordToken>(identifier),arguments,line_start,p.get_line(-1));
 }

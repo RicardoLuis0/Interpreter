@@ -7,7 +7,10 @@
 
 //CodeBlock = symbol '{' , { Line } , symbol '}' ;
 
-std::shared_ptr<Parser::CodeBlock> Parser::CodeBlockMatcher::makeMatch(parserProgress &p){
+using namespace Parser;
+
+std::shared_ptr<CodeBlock> CodeBlockMatcher::makeMatch(parserProgress &p){
+    int line_start=p.get_line();
     std::vector<std::shared_ptr<Line>> lines;
     bool is_symbol=false;
     if(p.isSymbol(SYMBOL_CURLY_BRACKET_OPEN)){
@@ -20,5 +23,5 @@ std::shared_ptr<Parser::CodeBlock> Parser::CodeBlockMatcher::makeMatch(parserPro
     }else{
         throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '{', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
     }
-    return std::make_shared<CodeBlock>(lines);
+    return std::make_shared<CodeBlock>(lines,line_start,p.get_line(-1));
 }

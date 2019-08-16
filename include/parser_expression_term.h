@@ -22,8 +22,8 @@ namespace Parser {
     };
     class ExpressionTerm:public ParserResultPart {
         public:
-            ExpressionTerm(std::shared_ptr<ParserResultPart>,ExpressionTermType_t type);
-            ExpressionTerm(std::shared_ptr<Lexer::Token>,ExpressionTermType_t type);
+            ExpressionTerm(std::shared_ptr<ParserResultPart>,ExpressionTermType_t type,int line_start,int line_end);
+            ExpressionTerm(std::shared_ptr<Lexer::Token>,ExpressionTermType_t type,int line_start,int line_end);
             std::shared_ptr<ParserResultPart> contents_p;
             std::shared_ptr<Lexer::Token> contents_t;
             std::vector<std::shared_ptr<Lexer::SymbolToken>> unary_post_operators;

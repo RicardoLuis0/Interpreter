@@ -8,7 +8,7 @@
 namespace Parser{
     class ExpressionList:public ParserResultPart{
     public:
-        ExpressionList(std::vector<std::shared_ptr<Expression>> expression_list);
+        ExpressionList(std::vector<std::shared_ptr<Expression>> expression_list,int line_start,int line_end);
         std::vector<std::shared_ptr<Expression>> expression_list;
     };
 }

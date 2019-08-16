@@ -1,6 +1,7 @@
 #include "parser_expression_list.h"
 
+using namespace Parser;
 
-Parser::ExpressionList::ExpressionList(std::vector<std::shared_ptr<Expression>> el):expression_list(el){
+ExpressionList::ExpressionList(std::vector<std::shared_ptr<Expression>> el,int ls,int le):ParserResultPart(ls,le),expression_list(el){
     
 }

@@ -31,6 +31,10 @@ std::vector<FunctionParameter> UserFunction::build_parameters(DefaultFrame * con
     return FunctionParameter::from_pfdp(context,function->parameters);
 }
 
+int UserFunction::get_line(){
+    return function->line_start;
+}
+
 std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args){
     std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>> args_o;
     int i=0;
@@ -44,8 +48,7 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
     f->set_args(args_o);
     std::shared_ptr<LineResult> result=code->run(f.get());
     switch(result->getAction()){
-    case ACTION_RETURN:
-        {
+    case ACTION_RETURN:{
             std::shared_ptr<Value> retval(std::dynamic_pointer_cast<LineResultReturn>(result)->get());
             if(retval){
                 if(CHECKPTR(return_type,VoidType)){

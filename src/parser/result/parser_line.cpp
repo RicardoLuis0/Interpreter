@@ -1,5 +1,7 @@
 #include "parser_line.h"
 
-Parser::Line::Line(std::shared_ptr<ParserResultPart> ptr,ParserLineType_t ptype):contents(ptr),type(ptype){
+using namespace Parser;
+
+Line::Line(std::shared_ptr<ParserResultPart> ptr,ParserLineType_t ptype,int ls,int le):ParserResultPart(ls,le),contents(ptr),type(ptype){
     
 }

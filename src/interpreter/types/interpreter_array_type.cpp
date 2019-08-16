@@ -8,6 +8,7 @@
 #include "interpreter_array_value.h"
 #include "interpreter_array_variable.h"
 #include "interpreter_any_type.h"
+#include "my_except.h"
 
 using namespace Interpreter;
 
@@ -57,21 +58,21 @@ std::shared_ptr<Value> ArrayType::cast(std::shared_ptr<Value> self,std::shared_p
     }
 }
 
-std::shared_ptr<Value> ArrayType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
+std::shared_ptr<Value> ArrayType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end){
     switch(op){
     case SYMBOL_SQUARE_BRACKET_OPEN://[] operator
         if(std::dynamic_pointer_cast<IntType>(other->get_type())==nullptr){
-            throw std::runtime_error("invalid type "+other->get_type()->get_name()+" for operator '[]', expected integer");
+            throw MyExcept::SyntaxError(line_start,line_end,"invalid type "+other->get_type()->get_name()+" for operator '[]', expected integer");
         }
         return std::make_shared<DummyVariable>(std::dynamic_pointer_cast<ArrayType>(self->get_type())->get_type());
     default:
         //OP_UNKNOWN/invalid
-        throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+        throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
     }
 }
 
-std::shared_ptr<Value> ArrayType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
-    throw std::runtime_error("operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+std::shared_ptr<Value> ArrayType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end){
+    throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
 }
 
 std::shared_ptr<Value> ArrayType::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){

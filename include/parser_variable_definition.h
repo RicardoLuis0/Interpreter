@@ -10,7 +10,7 @@
 namespace Parser{
     class VariableDefinition : public ParserResultPart {
         public:
-            VariableDefinition(std::shared_ptr<VarType> type,std::vector<std::shared_ptr<VariableDefinitionItem>> variables);
+            VariableDefinition(std::shared_ptr<VarType> type,std::vector<std::shared_ptr<VariableDefinitionItem>> variables,int line_start,int line_end);
             std::shared_ptr<VarType> type;
             std::vector<std::shared_ptr<VariableDefinitionItem>> variables;
     };

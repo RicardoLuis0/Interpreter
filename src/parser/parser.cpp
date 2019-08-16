@@ -4,23 +4,27 @@
 #include "keyword_token.h"
 #include "eof_token.h"
 
-//TODO add line tracking to parser result
+using namespace Parser;
 
-bool Parser::parserProgress::in_range(int offset){
+int parserProgress::get_line(int offset){
+    return get_nothrow_nonull()->line;
+}
+
+bool parserProgress::in_range(int offset){
     return !(int64_t(location+offset)>=int64_t(data.size()));//to fix signed with unsigned comparison error
 }
 
-bool Parser::parserProgress::peekType(Lexer::token_type_t id,int offset){
+bool parserProgress::peekType(Lexer::token_type_t id,int offset){
     if(!in_range(offset))return false;
     return (get(offset)->type==id);
 }
 
-bool Parser::parserProgress::peekSymbol(int id,int offset){
+bool parserProgress::peekSymbol(int id,int offset){
     if(!in_range(offset))return false;
     return (get(offset)->type==Lexer::TOKEN_TYPE_SYMBOL&&std::static_pointer_cast<Lexer::SymbolToken>(get(offset))->get_symbol_type()==id);
 }
 
-bool Parser::parserProgress::peekSymbol(std::vector<int> ids,int offset){
+bool parserProgress::peekSymbol(std::vector<int> ids,int offset){
     if(!in_range(offset))return false;
     if(get(offset)->type==Lexer::TOKEN_TYPE_SYMBOL){
         int id=std::static_pointer_cast<Lexer::SymbolToken>(get(offset))->get_symbol_type();
@@ -33,12 +37,12 @@ bool Parser::parserProgress::peekSymbol(std::vector<int> ids,int offset){
     return false;
 }
 
-bool Parser::parserProgress::peekKeyword(int id,int offset){
+bool parserProgress::peekKeyword(int id,int offset){
     if(!in_range(offset))return false;
     return (get(offset)->type==Lexer::TOKEN_TYPE_KEYWORD&&std::static_pointer_cast<Lexer::KeywordToken>(get(offset))->get_keyword_type()==id);
 }
 
-bool Parser::parserProgress::peekKeyword(std::vector<int> ids,int offset){
+bool parserProgress::peekKeyword(std::vector<int> ids,int offset){
     if(!in_range(offset))return false;
     if(get(offset)->type==Lexer::TOKEN_TYPE_KEYWORD){
         int id=std::static_pointer_cast<Lexer::KeywordToken>(get(offset))->get_keyword_type();
@@ -51,23 +55,23 @@ bool Parser::parserProgress::peekKeyword(std::vector<int> ids,int offset){
     return false;
 }
 
-std::shared_ptr<Lexer::Token> Parser::parserProgress::get(int offset){
+std::shared_ptr<Lexer::Token> parserProgress::get(int offset){
     if(!in_range(offset))throw std::out_of_range("token out of range");
     return data[location+offset];
 }
 
-std::shared_ptr<Lexer::Token> Parser::parserProgress::get_nothrow(int offset){
+std::shared_ptr<Lexer::Token> parserProgress::get_nothrow(int offset){
     if(!in_range(offset))return nullptr;
     return data[location+offset];
 }
 
-std::shared_ptr<Lexer::Token> Parser::parserProgress::get_nothrow_nonull(int offset){
-    if(!in_range(offset))return std::make_shared<Lexer::EOFToken>(data[data.size()-1]->line);
+std::shared_ptr<Lexer::Token> parserProgress::get_nothrow_nonull(int offset){
+    if(!in_range(offset))return std::make_shared<Lexer::EOFToken>((location+offset>0)?data[data.size()-1]->line:0);
     return data[location+offset];
 }
 
-std::shared_ptr<Lexer::Token> Parser::parserProgress::isType(Lexer::token_type_t id){
-    if(!in_range(0))return nullptr;
+std::shared_ptr<Lexer::Token> parserProgress::isType(Lexer::token_type_t id){
+    if(!in_range())return nullptr;
     if(get()->type==id){
         auto temp=get();
         location++;
@@ -76,7 +80,7 @@ std::shared_ptr<Lexer::Token> Parser::parserProgress::isType(Lexer::token_type_t
     return nullptr;
 }
 
-bool Parser::parserProgress::isSymbol(int id){
+bool parserProgress::isSymbol(int id){
     if(!in_range(0))return false;
     if(get()->type==Lexer::TOKEN_TYPE_SYMBOL&&std::static_pointer_cast<Lexer::SymbolToken>(get())->get_symbol_type()==id){
         location++;
@@ -85,7 +89,7 @@ bool Parser::parserProgress::isSymbol(int id){
     return false;
 }
 
-std::shared_ptr<Lexer::SymbolToken> Parser::parserProgress::isSymbol(std::vector<int> ids){
+std::shared_ptr<Lexer::SymbolToken> parserProgress::isSymbol(std::vector<int> ids){
     if(!in_range(0))return nullptr;
     if(get()->type==Lexer::TOKEN_TYPE_SYMBOL){
         int id=std::static_pointer_cast<Lexer::SymbolToken>(get())->get_symbol_type();
@@ -100,7 +104,7 @@ std::shared_ptr<Lexer::SymbolToken> Parser::parserProgress::isSymbol(std::vector
     return nullptr;
 }
 
-bool Parser::parserProgress::isKeyword(int id){
+bool parserProgress::isKeyword(int id){
     if(!in_range(0))return false;
     if(get()->type==Lexer::TOKEN_TYPE_KEYWORD&&std::static_pointer_cast<Lexer::KeywordToken>(get())->get_keyword_type()==id){
         location++;
@@ -109,7 +113,7 @@ bool Parser::parserProgress::isKeyword(int id){
     return false;
 }
 
-std::shared_ptr<Lexer::KeywordToken> Parser::parserProgress::isKeyword(std::vector<int> ids){
+std::shared_ptr<Lexer::KeywordToken> parserProgress::isKeyword(std::vector<int> ids){
     if(!in_range(0))return nullptr;
     if(get()->type==Lexer::TOKEN_TYPE_KEYWORD){
         int id=std::static_pointer_cast<Lexer::KeywordToken>(get())->get_keyword_type();
@@ -124,28 +128,28 @@ std::shared_ptr<Lexer::KeywordToken> Parser::parserProgress::isKeyword(std::vect
     return nullptr;
 }
 
-void Parser::Parser::parse(const std::vector<std::shared_ptr<Lexer::Token>> &data){
+void parse(const std::vector<std::shared_ptr<Lexer::Token>> &data){
     //parserProgress progress {data:data,location:0};
     //TODO Parser::parse
     throw std::runtime_error("unimplemented");
 }
 
-Parser::parserProgress& Parser::parserProgress::operator--(){
+parserProgress& parserProgress::operator--(){
     location--;
     return *this;
 }
 
-Parser::parserProgress& Parser::parserProgress::operator--(int){
+parserProgress& parserProgress::operator--(int){
     location--;
     return *this;
 }
 
-Parser::parserProgress& Parser::parserProgress::operator++(){
+parserProgress& parserProgress::operator++(){
     location++;
     return *this;
 }
 
-Parser::parserProgress& Parser::parserProgress::operator++(int){
+parserProgress& parserProgress::operator++(int){
     location++;
     return *this;
 }

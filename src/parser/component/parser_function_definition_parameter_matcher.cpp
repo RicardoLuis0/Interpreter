@@ -8,10 +8,13 @@
 
 //FunctionDefinitionParameter = VarType , [ symbol '&' ] , identifier ;
 
-std::shared_ptr<Parser::FunctionDefinitionParameter> Parser::FunctionDefinitionParameterMatcher::makeMatch(parserProgress &p){
+using namespace Parser;
+
+std::shared_ptr<FunctionDefinitionParameter> FunctionDefinitionParameterMatcher::makeMatch(parserProgress &p){
+    int line_start=p.get_line();
     std::shared_ptr<VarType> vt=VarTypeMatcher().makeMatch(p);
     bool ref=p.isSymbol(SYMBOL_BITWISE_AND);
     std::shared_ptr<Lexer::Token> t;
     if(!(t=p.isType(Lexer::TOKEN_TYPE_WORD)))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected identifier, got '"+p.get_nothrow_nonull()->get_literal()+"'");
-    return std::make_shared<FunctionDefinitionParameter>(vt,std::static_pointer_cast<Lexer::WordToken>(t),ref);
+    return std::make_shared<FunctionDefinitionParameter>(vt,std::static_pointer_cast<Lexer::WordToken>(t),ref,line_start,p.get_line(-1));
 }

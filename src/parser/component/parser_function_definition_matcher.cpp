@@ -9,7 +9,10 @@
 
 //FunctionDefinition = VarType , identifier , symbol '(' , [ FunctionDefinitionParameter { symbol ',' , FunctionDefinitionParameter } ] , symbol ')' , CodeBlock ;
 
-std::shared_ptr<Parser::FunctionDefinition> Parser::FunctionDefinitionMatcher::makeMatch(parserProgress &p){
+using namespace Parser;
+
+std::shared_ptr<FunctionDefinition> FunctionDefinitionMatcher::makeMatch(parserProgress &p){
+    int line_start=p.get_line();
     std::shared_ptr<VarType> vt=VarTypeMatcher().makeMatch(p);
     std::shared_ptr<Lexer::Token> t;
     if(!(t=p.isType(Lexer::TOKEN_TYPE_WORD)))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected identifier, got '"+p.get_nothrow_nonull()->get_literal()+"'");
@@ -26,5 +29,5 @@ std::shared_ptr<Parser::FunctionDefinition> Parser::FunctionDefinitionMatcher::m
     }
     if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ')', got '"+p.get_nothrow_nonull()->get_literal()+"'");
     std::shared_ptr<CodeBlock> code=CodeBlockMatcher().makeMatch(p);
-    return std::make_shared<FunctionDefinition>(vt,std::static_pointer_cast<Lexer::WordToken>(t),params,code);
+    return std::make_shared<FunctionDefinition>(vt,std::static_pointer_cast<Lexer::WordToken>(t),params,code,line_start,p.get_line(-1));
 }

@@ -169,6 +169,7 @@
 		<Unit filename="include/symbol_type.h" />
 		<Unit filename="include/symbols_keywords.h" />
 		<Unit filename="include/symbols_token_matcher.h" />
+		<Unit filename="include/syntax_error.h" />
 		<Unit filename="include/token.h" />
 		<Unit filename="include/token_matcher.h" />
 		<Unit filename="include/token_type.h" />
@@ -243,6 +244,7 @@
 		<Unit filename="src/myexcept/file_error.cpp" />
 		<Unit filename="src/myexcept/no_match_exception.cpp" />
 		<Unit filename="src/myexcept/parse_error.cpp" />
+		<Unit filename="src/myexcept/syntax_error.cpp" />
 		<Unit filename="src/parser/component/parser_binary_operation_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_code_block_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_component.cpp" />

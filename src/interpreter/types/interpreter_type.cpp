@@ -13,6 +13,7 @@
 #include "parser_expression_term.h"
 #include "integer_token.h"
 #include "interpreter_util_defines_misc.h"
+#include "my_except.h"
 
 using namespace Interpreter;
 
@@ -74,7 +75,7 @@ std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std
     case Parser::VARTYPE_PRIMITIVE:
         switch(t->primitive){
         case Parser::PRIMITIVE_INVALID:
-            throw std::runtime_error("invalid primitive value 'PRIMITIVE_INVALID'");
+            throw MyExcept::SyntaxError(t->line_start,t->line_end,"invalid primitive value 'PRIMITIVE_INVALID'");
         case Parser::PRIMITIVE_ANY:
             return any_type_instance;
         case Parser::PRIMITIVE_INT:
@@ -119,12 +120,12 @@ std::shared_ptr<Value> Type::cast(std::shared_ptr<Value> self,std::shared_ptr<Ty
     throw std::runtime_error("illegal cast");
 }
 
-std::shared_ptr<Value> Type::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
-    throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+std::shared_ptr<Value> Type::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end){
+    throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
 }
 
-std::shared_ptr<Value> Type::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
-    throw std::runtime_error("operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+std::shared_ptr<Value> Type::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end){
+    throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
 }
 
 std::shared_ptr<Value> Type::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){

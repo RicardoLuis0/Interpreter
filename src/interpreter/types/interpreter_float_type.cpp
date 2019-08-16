@@ -7,6 +7,7 @@
 #include "interpreter_float_value.h"
 #include "interpreter_float_variable.h"
 #include "interpreter_any_type.h"
+#include "my_except.h"
 
 using namespace Interpreter;
 
@@ -40,7 +41,7 @@ std::shared_ptr<Value> FloatType::cast(std::shared_ptr<Value> self,std::shared_p
     }
 }
 
-std::shared_ptr<Value> FloatType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
+std::shared_ptr<Value> FloatType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end){
     switch(op){
     case SYMBOL_PLUS_ASSIGNMENT:
     case SYMBOL_MINUS_ASSIGNMENT:
@@ -48,7 +49,7 @@ std::shared_ptr<Value> FloatType::get_operator_result(int op,std::shared_ptr<Val
     case SYMBOL_DIVIDE_ASSIGNMENT:
     case SYMBOL_ASSIGNMENT:
         if(std::dynamic_pointer_cast<Variable>(self)==nullptr){
-            throw std::runtime_error("operator '"+get_op_str(op)+"' only available for variables");
+            throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' only available for variables");
         }
         break;
     }
@@ -60,7 +61,7 @@ std::shared_ptr<Value> FloatType::get_operator_result(int op,std::shared_ptr<Val
     case SYMBOL_LOWER:
     case SYMBOL_LOWER_EQUALS:
         if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())&&!other->get_type()->allows_implicit_cast(other->get_type(),Type::float_type())){
-            throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+            throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
         }
         return std::make_shared<DummyValue>(Type::int_type());
     case SYMBOL_PLUS:
@@ -68,7 +69,7 @@ std::shared_ptr<Value> FloatType::get_operator_result(int op,std::shared_ptr<Val
     case SYMBOL_MULTIPLY:
     case SYMBOL_DIVIDE:
         if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())&&!other->get_type()->allows_implicit_cast(other->get_type(),Type::float_type())){
-            throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+            throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
         }
         return std::make_shared<DummyValue>(Type::float_type());
     case SYMBOL_ASSIGNMENT:
@@ -77,20 +78,20 @@ std::shared_ptr<Value> FloatType::get_operator_result(int op,std::shared_ptr<Val
     case SYMBOL_MULTIPLY_ASSIGNMENT:
     case SYMBOL_DIVIDE_ASSIGNMENT:
         if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())&&!other->get_type()->allows_implicit_cast(other->get_type(),Type::float_type())){
-            throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+            throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
         }
         return std::make_shared<DummyVariable>(Type::float_type());
     default:
         //OP_UNKNOWN
-        throw std::runtime_error("incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+        throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
     }
 }
 
-std::shared_ptr<Value> FloatType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre){
+std::shared_ptr<Value> FloatType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end){
     if(pre&&(op==SYMBOL_PLUS||op==SYMBOL_MINUS)){
         return std::make_shared<DummyValue>(Type::float_type());
     }else{
-        throw std::runtime_error("operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+        throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
     }
 }
 

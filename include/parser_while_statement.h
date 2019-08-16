@@ -8,7 +8,7 @@
 namespace Parser{
     class WhileStatement:public ParserResultPart{
     public:
-        WhileStatement(std::shared_ptr<Expression> condition,std::shared_ptr<Line> code);
+        WhileStatement(std::shared_ptr<Expression> condition,std::shared_ptr<Line> code,int line_start,int line_end);
         std::shared_ptr<Expression> condition;
         std::shared_ptr<Line> code;
     };
