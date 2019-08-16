@@ -132,7 +132,7 @@ int test_exec(){
 int test_preprocessor(){
     try{
         system("cls");
-        std::cout<<preprocess("pre_test.txt");
+        std::cout<<preprocess_file("pre_test.txt");
         return 0;
     }catch(std::exception &e){
         std::cout<<"uncaught exception: "<<e.what();
