@@ -2,6 +2,7 @@
 #include "interpreter_line_result_return.h"
 #include "interpreter_util_defines_misc.h"
 #include "interpreter_void_type.h"
+#include "my_except.h"
 
 using namespace Interpreter;
 
@@ -39,7 +40,7 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
     std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>> args_o;
     int i=0;
     if(function->parameters.size()!=args.size()){
-        throw std::runtime_error("wrong parameter count");
+        throw MyExcept::InterpreterRuntimeError(function->line_start,"wrong parameter count");
     }
     for(std::shared_ptr<Parser::FunctionDefinitionParameter> param:function->parameters){
         args_o.insert({param->name,{args[i++],{param->is_reference,Type::from_vartype(frame->parent,param->type)}}});
@@ -52,19 +53,19 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
             std::shared_ptr<Value> retval(std::dynamic_pointer_cast<LineResultReturn>(result)->get());
             if(retval){
                 if(CHECKPTR(return_type,VoidType)){
-                    throw std::runtime_error("void function "+function->name+" returning a value");
+                    throw MyExcept::InterpreterRuntimeError(std::dynamic_pointer_cast<LineResultReturn>(result)->get_line(),"void function "+function->name+" returning a value");
                 }else{
                     if(retval->get_type()->allows_implicit_cast(retval->get_type(),return_type)){
                         return retval->get_type()->cast(retval,return_type);
                     }else{
-                        throw std::runtime_error("function "+function->name+" returning an invalid value type");
+                        throw MyExcept::InterpreterRuntimeError(std::dynamic_pointer_cast<LineResultReturn>(result)->get_line(),"function "+function->name+" returning an invalid value type");
                     }
                 }
             }else{
                 if(CHECKPTR(return_type,VoidType)){
                     return nullptr;
                 }else{
-                    throw std::runtime_error("function "+function->name+" missing return value");
+                    throw MyExcept::InterpreterRuntimeError(std::dynamic_pointer_cast<LineResultReturn>(result)->get_line(),"function "+function->name+" missing return value");
                 }
             }
         }
@@ -72,7 +73,7 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
         if(CHECKPTR(return_type,VoidType)){
             return nullptr;
         }else{
-            throw std::runtime_error("function "+function->name+" missing return value");
+            throw MyExcept::InterpreterRuntimeError(function->line_start,"function "+function->name+" missing return value");
         }
     }
 }

@@ -7,6 +7,7 @@
 namespace Interpreter {
     class BreakStatement : public Line {
         public:
+            BreakStatement(int line);
             std::shared_ptr<LineResult> run(ExecFrame * context) override;
     };
 }

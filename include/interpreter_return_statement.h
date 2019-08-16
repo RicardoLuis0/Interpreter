@@ -13,6 +13,7 @@ namespace Interpreter {
             ReturnStatement(DefaultFrame * context,std::shared_ptr<Parser::ReturnStatement>);
             std::shared_ptr<LineResult> run(ExecFrame * context) override;
             std::shared_ptr<Expression> value;
+            int line;
     };
 }
 

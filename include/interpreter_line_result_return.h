@@ -8,10 +8,12 @@ namespace Interpreter {
 
     class LineResultReturn : public LineResultSimple {
         public:
-            LineResultReturn(std::shared_ptr<Value> value);
+            LineResultReturn(std::shared_ptr<Value> value,int line);
             std::shared_ptr<Value> get();
+            int get_line();
         protected:
             std::shared_ptr<Value> value;
+            int line;
     };
 }
 

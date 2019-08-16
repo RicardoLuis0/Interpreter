@@ -18,7 +18,7 @@ static void varDefCallbackCaller(void * ptr,std::shared_ptr<Parser::VariableDefi
     ((CodeBlock*)ptr)->varDefCallback(vdef);
 }
 
-CodeBlock::CodeBlock(std::shared_ptr<DefaultFrame> frame,std::shared_ptr<Parser::CodeBlock> b):default_frame(frame){
+CodeBlock::CodeBlock(std::shared_ptr<DefaultFrame> frame,std::shared_ptr<Parser::CodeBlock> b):Line(b->line_start),default_frame(frame){
     for(std::shared_ptr<Parser::Line> l : b->lines){
         addLine(l);
     }
@@ -32,7 +32,7 @@ CodeBlock::CodeBlock(DefaultFrame * p,std::shared_ptr<Parser::CodeBlock> b):Code
     
 }
 
-CodeBlock::CodeBlock(DefaultFrame * p,std::shared_ptr<Parser::Line> l):default_frame(std::make_shared<DefaultFrame>(p)){
+CodeBlock::CodeBlock(DefaultFrame * p,std::shared_ptr<Parser::Line> l):Line(l->line_start),default_frame(std::make_shared<DefaultFrame>(p)){
     if(l->type==Parser::LINE_CODE_BLOCK){
         std::shared_ptr<Parser::CodeBlock> b(std::static_pointer_cast<Parser::CodeBlock>(l->contents));
         for(std::shared_ptr<Parser::Line> l : b->lines){
@@ -85,10 +85,10 @@ void CodeBlock::addStatement(std::shared_ptr<Parser::Statement> stmt){
         code.push_back(std::make_shared<ReturnStatement>(default_frame.get(),std::static_pointer_cast<Parser::ReturnStatement>(stmt->statement)));
         break;
     case Parser::STATEMENT_BREAK:
-        code.push_back(std::make_shared<BreakStatement>());
+        code.push_back(std::make_shared<BreakStatement>(stmt->line_start));
         break;
     case Parser::STATEMENT_CONTINUE:
-        code.push_back(std::make_shared<ContinueStatement>());
+        code.push_back(std::make_shared<ContinueStatement>(stmt->line_start));
         break;
     }
 }

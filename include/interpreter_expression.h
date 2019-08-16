@@ -22,6 +22,7 @@ namespace Interpreter {
             std::shared_ptr<ExprPart> expression;
             std::shared_ptr<ExprPart> get_term(DefaultFrame *,std::shared_ptr<Parser::ExpressionTerm>);
             std::shared_ptr<ExprPart> get_expression(DefaultFrame *,std::shared_ptr<Parser::Expression>);
+            int line;
     };
 }
 

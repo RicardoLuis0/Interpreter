@@ -16,7 +16,7 @@
 
 using namespace Interpreter;
 
-Expression::Expression(DefaultFrame * context,std::shared_ptr<Parser::Expression> e){
+Expression::Expression(DefaultFrame * context,std::shared_ptr<Parser::Expression> e):Line(e->line_start){
     expression=get_expression(context,e);
 }
 

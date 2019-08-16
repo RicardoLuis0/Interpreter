@@ -7,6 +7,7 @@
 namespace Interpreter {
     class ContinueStatement : public Line {
         public:
+            ContinueStatement(int line);
             std::shared_ptr<LineResult> run(ExecFrame * context) override;
     };
 }

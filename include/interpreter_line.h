@@ -8,7 +8,11 @@
 namespace Interpreter {
     class Line {
         public:
+            Line(int source_line);
             virtual std::shared_ptr<LineResult> run(ExecFrame * context)=0;
+            int get_source_line();
+        protected:
+            int source_line;
     };
 }
 

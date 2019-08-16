@@ -5,5 +5,6 @@
 #include "file_error.h"
 #include "parse_error.h"
 #include "syntax_error.h"
+#include "interpreter_runtime_error.h"
 
 #endif // MYEXCEPT_H
