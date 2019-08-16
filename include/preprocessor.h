@@ -3,6 +3,8 @@
 
 #include <string>
 
-std::string preprocess(std::string filename);
+std::string preprocess_file(std::string filename);
+
+std::string preprocess(std::string &source);
 
 #endif // PREPROCESSOR_H
