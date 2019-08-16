@@ -37,7 +37,7 @@ std::shared_ptr<Function> ExecFrame::get_function(std::string name,std::vector<F
 
 void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::shared_ptr<Type> t,bool reference){
     if(CHECKPTR(t,AnyType)){
-        variables[s]=(reference)?std::dynamic_pointer_cast<Variable>(val):val->clone_var(s);//std::make_shared<IntVariable>(s,std::dynamic_pointer_cast<IntValue>(val->get_type()->cast(val,t))->get());
+        variables[s]=(reference)?std::dynamic_pointer_cast<Variable>(val):val->clone_var(s);
     }else if(CHECKPTR(t,IntType)){
         variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<IntVariable>(val):std::dynamic_pointer_cast<IntValue>(val->get_type()->cast(val,t))->clone_var(s);
     }else if(CHECKPTR(t,FloatType)){
