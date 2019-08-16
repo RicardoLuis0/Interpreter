@@ -21,9 +21,9 @@ namespace Interpreter {
             std::vector<FunctionParameter> build_parameters(DefaultFrame * context);
             std::shared_ptr<Parser::FunctionDefinition> function;
             std::vector<FunctionParameter> parameters;
+            std::shared_ptr<Type> return_type;
             std::shared_ptr<DefaultFrame> frame;
             std::shared_ptr<CodeBlock> code;
-            std::shared_ptr<Type> return_type;
             friend class CodeBlock;
     };
 }

@@ -6,7 +6,7 @@
 
 using namespace Interpreter;
 
-UserFunction::UserFunction(DefaultFrame * p,std::shared_ptr<Parser::FunctionDefinition> func,bool delay):function(func),parameters(build_parameters(p)),frame(std::make_shared<DefaultFrame>(p,this)),code(delay?nullptr:std::make_shared<CodeBlock>(this,func->code)),return_type(Type::from_vartype(p,func->return_type)){
+UserFunction::UserFunction(DefaultFrame * p,std::shared_ptr<Parser::FunctionDefinition> func,bool delay):function(func),parameters(build_parameters(p)),return_type(Type::from_vartype(p,func->return_type)),frame(std::make_shared<DefaultFrame>(p,this)),code(delay?nullptr:std::make_shared<CodeBlock>(this,func->code)){
     
 }
 
