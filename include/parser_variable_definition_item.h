@@ -1,7 +1,8 @@
 #ifndef PARSER_VARIABLE_DEFINITION_ITEM_H
 #define PARSER_VARIABLE_DEFINITION_ITEM_H
 
-#include "word_token.h"
+#include "lexer_word_token.h"
+
 #include "parser_result_part.h"
 #include "parser_expression.h"
 

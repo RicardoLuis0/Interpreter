@@ -4,8 +4,10 @@
 #include <vector>
 #include <memory>
 #include "parser_result_part.h"
-#include "token.h"
-#include "symbol_token.h"
+#include "lexer_token.h"
+
+#include "lexer_symbol_token.h"
+
 
 namespace Parser {
     enum ExpressionTermType_t{

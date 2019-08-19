@@ -6,7 +6,7 @@
 #include "parser_expression_term.h"
 #include "parser_expression_group.h"
 #include "parser_binary_operation.h"
-#include "symbol_token.h"
+#include "lexer_symbol_token.h"
 
 using namespace Parser;
 

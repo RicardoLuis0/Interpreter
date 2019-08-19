@@ -11,7 +11,7 @@
 #include "interpreter_default_frame.h"
 #include "parser_expression.h"
 #include "parser_expression_term.h"
-#include "integer_token.h"
+#include "lexer_integer_token.h"
 #include "interpreter_util_defines_misc.h"
 #include "my_except.h"
 

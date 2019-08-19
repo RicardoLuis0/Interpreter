@@ -3,7 +3,8 @@
 
 #include <memory>
 #include "parser_result_part.h"
-#include "word_token.h"
+#include "lexer_word_token.h"
+
 #include "parser_expression_list.h"
 
 namespace Parser{

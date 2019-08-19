@@ -8,9 +8,9 @@
 #include "interpreter_expr_part_fn_call.h"
 #include "interpreter_expr_part_var.h"
 #include "interpreter_expr_part_value.h"
-#include "string_token.h"
-#include "integer_token.h"
-#include "float_token.h"
+#include "lexer_string_token.h"
+#include "lexer_integer_token.h"
+#include "lexer_float_token.h"
 #include "parser_unary_operation.h"
 #include "interpreter_expr_part_unary_op.h"
 

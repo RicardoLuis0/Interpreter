@@ -2,7 +2,7 @@
 
 #include "my_except.h"
 #include "symbols_keywords.h"
-#include "token_type.h"
+#include "lexer_token_type.h"
 #include "parser_function_definition_parameter_matcher.h"
 #include "parser_var_type_matcher.h"
 #include "parser_code_block_matcher.h"

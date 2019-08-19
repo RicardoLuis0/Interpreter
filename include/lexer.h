@@ -4,8 +4,9 @@
 #include <memory>
 #include <vector>
 #include <string>
-#include "token.h"
-#include "global_token_matcher.h"
+#include "lexer_token.h"
+
+#include "lexer_global_token_matcher.h"
 #include "keyword_data.h"
 #include "symbol_data.h"
 

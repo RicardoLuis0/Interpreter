@@ -4,9 +4,9 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <token.h>
-#include <symbol_token.h>
-#include <keyword_token.h>
+#include "lexer_token.h"
+#include "lexer_symbol_token.h"
+#include "lexer_keyword_token.h"
 
 namespace Parser{
     struct parserProgress{

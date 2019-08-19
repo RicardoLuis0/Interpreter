@@ -4,7 +4,7 @@
 #include "parser_var_type_matcher.h"
 #include "my_except.h"
 #include "symbols_keywords.h"
-#include "token_type.h"
+#include "lexer_token_type.h"
 
 //FunctionDefinitionParameter = VarType , [ symbol '&' ] , identifier ;
 
