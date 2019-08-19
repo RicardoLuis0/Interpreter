@@ -1,10 +1,10 @@
-#include "lexer_single_quote_string_token_matcher.h"
-#include "lexer_string_token.h"
+#include "lexer_char_token_matcher.h"
+#include "lexer_char_token.h"
 #include "hex_read_util.h"
 #include "my_except.h"
 
 
-bool Lexer::SingleQuoteStringTokenMatcher::partialMatch(std::string s){
+bool Lexer::CharTokenMatcher::partialMatch(std::string s){
     bool reading_escape=false;
     bool read_end=false;
     for(size_t i=0;i<s.length();i++){
@@ -34,7 +34,7 @@ bool Lexer::SingleQuoteStringTokenMatcher::partialMatch(std::string s){
     return true;
 }
 
-bool Lexer::SingleQuoteStringTokenMatcher::fullMatch(std::string s){
+bool Lexer::CharTokenMatcher::fullMatch(std::string s){
     bool reading_escape=false;
     for(size_t i=0;i<s.length();i++){
         if(i==0){
@@ -62,7 +62,7 @@ bool Lexer::SingleQuoteStringTokenMatcher::fullMatch(std::string s){
     return false;
 }
 
-std::shared_ptr<Lexer::Token> Lexer::SingleQuoteStringTokenMatcher::makeMatch(int line,std::string s){
+std::shared_ptr<Lexer::Token> Lexer::CharTokenMatcher::makeMatch(int line,std::string s){
     std::string formatted;
     std::string unformatted;
     bool reading_escape=false;
@@ -132,7 +132,12 @@ std::shared_ptr<Lexer::Token> Lexer::SingleQuoteStringTokenMatcher::makeMatch(in
             reading_escape=false;
         }else{
             if(s[i]=='\''){
-                return std::make_shared<StringToken>(line,formatted,unformatted);
+                #ifdef MULTICHAR_LITERAL_FATAL
+                if(formatted.size()>1){
+                    throw MyExcept::NoMatchException(line,s);
+                }
+                #endif
+                return std::make_shared<CharToken>(line,formatted[0],unformatted);
             }else if(s[i]=='\\'){
                 reading_escape=true;
             }else{

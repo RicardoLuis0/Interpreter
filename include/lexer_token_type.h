@@ -20,6 +20,7 @@ namespace Lexer{
         TOKEN_TYPE_WORD,
         TOKEN_TYPE_STRING,
         TOKEN_TYPE_INTEGER,
+        TOKEN_TYPE_CHAR,
         TOKEN_TYPE_FLOAT,
     };
 

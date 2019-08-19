@@ -98,6 +98,8 @@
 		<Unit filename="include/keyword_type.h" />
 		<Unit filename="include/lexer.h" />
 		<Unit filename="include/lexer_binary_token_matcher.h" />
+		<Unit filename="include/lexer_char_token.h" />
+		<Unit filename="include/lexer_char_token_matcher.h" />
 		<Unit filename="include/lexer_comment_token_matcher.h" />
 		<Unit filename="include/lexer_eof_token.h" />
 		<Unit filename="include/lexer_float_token.h" />
@@ -111,7 +113,6 @@
 		<Unit filename="include/lexer_list_token_matcher.h" />
 		<Unit filename="include/lexer_literals_token_matcher.h" />
 		<Unit filename="include/lexer_octal_token_matcher.h" />
-		<Unit filename="include/lexer_single_quote_string_token_matcher.h" />
 		<Unit filename="include/lexer_string_token.h" />
 		<Unit filename="include/lexer_string_token_matcher.h" />
 		<Unit filename="include/lexer_symbol_token.h" />
@@ -229,6 +230,7 @@
 		<Unit filename="src/interpreter/variables/interpreter_variable.cpp" />
 		<Unit filename="src/lexer/lexer.cpp" />
 		<Unit filename="src/lexer/matchers/lexer_binary_token_matcher.cpp" />
+		<Unit filename="src/lexer/matchers/lexer_char_token_matcher.cpp" />
 		<Unit filename="src/lexer/matchers/lexer_comment_token_matcher.cpp" />
 		<Unit filename="src/lexer/matchers/lexer_float_token_matcher.cpp" />
 		<Unit filename="src/lexer/matchers/lexer_global_token_matcher.cpp" />
@@ -238,10 +240,10 @@
 		<Unit filename="src/lexer/matchers/lexer_list_token_matcher.cpp" />
 		<Unit filename="src/lexer/matchers/lexer_literals_token_matcher.cpp" />
 		<Unit filename="src/lexer/matchers/lexer_octal_token_matcher.cpp" />
-		<Unit filename="src/lexer/matchers/lexer_single_quote_string_token_matcher.cpp" />
 		<Unit filename="src/lexer/matchers/lexer_string_token_matcher.cpp" />
 		<Unit filename="src/lexer/matchers/lexer_symbols_token_matcher.cpp" />
 		<Unit filename="src/lexer/matchers/lexer_word_token_matcher.cpp" />
+		<Unit filename="src/lexer/token/lexer_char_token.cpp" />
 		<Unit filename="src/lexer/token/lexer_eof_token.cpp" />
 		<Unit filename="src/lexer/token/lexer_float_token.cpp" />
 		<Unit filename="src/lexer/token/lexer_integer_token.cpp" />
