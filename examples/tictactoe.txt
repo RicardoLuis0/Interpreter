@@ -111,13 +111,12 @@ int main(){
 		game();
 		while(true){
 			puts("Play again?(Y/N)\n");
-			string out=getline();
-			if(out=="Y"||out=="y"){
+			int c=getch();
+			if(c=='Y'||c=='y'){
 				break;
-			}else if(out=="N"||out=="n"){
+			}else if(c=='N'||c=='n'){
 				return 0;
 			}
-			cls();
 		}
 		for(int i=0;i<3;i++){
 			for(int j=0;j<3;j++){
