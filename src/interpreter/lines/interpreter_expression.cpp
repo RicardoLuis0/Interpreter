@@ -10,6 +10,7 @@
 #include "interpreter_expr_part_value.h"
 #include "lexer_string_token.h"
 #include "lexer_integer_token.h"
+#include "lexer_char_token.h"
 #include "lexer_float_token.h"
 #include "parser_unary_operation.h"
 #include "interpreter_expr_part_unary_op.h"
@@ -51,6 +52,9 @@ std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::share
         break;
     case Parser::EXPRESSION_TERM_LITERAL_INT:
         expr=ExprPartValue::from_int(std::static_pointer_cast<Lexer::IntegerToken>(term->contents_t)->get_integer());
+        break;
+    case Parser::EXPRESSION_TERM_LITERAL_CHAR:
+        expr=ExprPartValue::from_int(std::static_pointer_cast<Lexer::CharToken>(term->contents_t)->get_char());//make int value from char literal, TODO change to char value when it's implemented
         break;
     case Parser::EXPRESSION_TERM_LITERAL_FLOAT:
         expr=ExprPartValue::from_double(std::static_pointer_cast<Lexer::FloatToken>(term->contents_t)->get_float());

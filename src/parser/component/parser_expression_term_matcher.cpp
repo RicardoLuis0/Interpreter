@@ -41,6 +41,8 @@ std::shared_ptr<ExpressionTerm> ExpressionTermMatcher::makeMatch(parserProgress 
                 std::shared_ptr<Lexer::Token> temp_token;
                 if(temp_token=p.isType(Lexer::TOKEN_TYPE_INTEGER)){//int
                     term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_INT,line_start,p.get_line(-1));
+                }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_CHAR)){//float
+                    term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_CHAR,line_start,p.get_line(-1));
                 }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_FLOAT)){//float
                     term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_FLOAT,line_start,p.get_line(-1));
                 }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_STRING)){//string
