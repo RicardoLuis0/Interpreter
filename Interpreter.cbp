@@ -95,7 +95,6 @@
 		<Unit filename="include/interpreter_void_type.h" />
 		<Unit filename="include/interpreter_while_statement.h" />
 		<Unit filename="include/keyword_data.h" />
-		<Unit filename="include/keyword_type.h" />
 		<Unit filename="include/lexer.h" />
 		<Unit filename="include/lexer_binary_token_matcher.h" />
 		<Unit filename="include/lexer_char_token.h" />
@@ -174,7 +173,6 @@
 		<Unit filename="include/preprocessor.h" />
 		<Unit filename="include/read_file.h" />
 		<Unit filename="include/symbol_data.h" />
-		<Unit filename="include/symbol_type.h" />
 		<Unit filename="include/symbols_keywords.h" />
 		<Unit filename="include/syntax_error.h" />
 		<Unit filename="src/deflib.cpp" />

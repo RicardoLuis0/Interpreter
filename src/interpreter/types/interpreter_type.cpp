@@ -147,3 +147,23 @@ std::shared_ptr<Value> Type::make_value(std::shared_ptr<Type> self){
 std::shared_ptr<Variable> Type::make_variable(std::shared_ptr<Type> self,std::string name){
     throw std::runtime_error("cannot make "+self->get_name()+" variable");
 }
+
+void Type::check_variable_assignment(int op,std::shared_ptr<Value> self,int line_start,int line_end){
+    switch(op){
+    case SYMBOL_LEFT_SHIFT_ASSIGNMENT:
+    case SYMBOL_RIGHT_SHIFT_ASSIGNMENT:
+    case SYMBOL_BITWISE_AND_ASSIGNMENT:
+    case SYMBOL_BITWISE_OR_ASSIGNMENT:
+    case SYMBOL_BITWISE_XOR_ASSIGNMENT:
+    case SYMBOL_PERCENT_ASSIGNMENT:
+    case SYMBOL_PLUS_ASSIGNMENT:
+    case SYMBOL_MINUS_ASSIGNMENT:
+    case SYMBOL_MULTIPLY_ASSIGNMENT:
+    case SYMBOL_DIVIDE_ASSIGNMENT:
+    case SYMBOL_ASSIGNMENT:
+        if(std::dynamic_pointer_cast<Variable>(self)==nullptr){
+            throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' only available for variables");
+        }
+        break;
+    }
+}

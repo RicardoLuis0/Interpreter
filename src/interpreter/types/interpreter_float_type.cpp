@@ -42,17 +42,7 @@ std::shared_ptr<Value> FloatType::cast(std::shared_ptr<Value> self,std::shared_p
 }
 
 std::shared_ptr<Value> FloatType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end){
-    switch(op){
-    case SYMBOL_PLUS_ASSIGNMENT:
-    case SYMBOL_MINUS_ASSIGNMENT:
-    case SYMBOL_MULTIPLY_ASSIGNMENT:
-    case SYMBOL_DIVIDE_ASSIGNMENT:
-    case SYMBOL_ASSIGNMENT:
-        if(std::dynamic_pointer_cast<Variable>(self)==nullptr){
-            throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' only available for variables");
-        }
-        break;
-    }
+    check_variable_assignment(op,self,line_start,line_end);
     switch(op){
     case SYMBOL_NOT_EQUALS:
     case SYMBOL_EQUALS:

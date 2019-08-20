@@ -44,6 +44,7 @@ std::shared_ptr<Value> IntType::cast(std::shared_ptr<Value> self,std::shared_ptr
 }
 
 std::shared_ptr<Value> IntType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end){
+    check_variable_assignment(op,self,line_start,line_end);
     switch(op){
     case SYMBOL_LEFT_SHIFT_ASSIGNMENT:
     case SYMBOL_RIGHT_SHIFT_ASSIGNMENT:

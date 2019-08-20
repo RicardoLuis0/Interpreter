@@ -33,6 +33,7 @@ namespace Interpreter {
         virtual bool has_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other);
         virtual std::shared_ptr<Value> cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other);
     protected:
+        void check_variable_assignment(int op,std::shared_ptr<Value> self,int line_start,int line_end);
         static std::shared_ptr<Type> from_vartype_ignore_array(class DefaultFrame * context,std::shared_ptr<Parser::VarType> t);
         static std::shared_ptr<Type> any_type_instance;
         static std::shared_ptr<Type> void_type_instance;

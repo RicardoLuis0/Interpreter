@@ -39,14 +39,7 @@ std::shared_ptr<Variable> StringType::make_variable(std::shared_ptr<Type> self,s
 }
 
 std::shared_ptr<Value> StringType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end){
-    switch(op){
-    case SYMBOL_PLUS_ASSIGNMENT:
-    case SYMBOL_ASSIGNMENT:
-        if(std::dynamic_pointer_cast<Variable>(self)==nullptr){
-            throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' only available for variables");
-        }
-        break;
-    }
+    check_variable_assignment(op,self,line_start,line_end);
     if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::string_type())){
         throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
     }
