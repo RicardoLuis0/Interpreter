@@ -4,7 +4,7 @@
 #include "interpreter_int_type.h"
 
 namespace Interpreter {
-    class StringType : public PrimitiveType {
+    class StringType : public Type {
     public:
         std::shared_ptr<Value> get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end) override;
         std::shared_ptr<Value> get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end) override;

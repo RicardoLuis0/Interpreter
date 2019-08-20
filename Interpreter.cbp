@@ -80,6 +80,7 @@
 		<Unit filename="include/interpreter_line_result_return.h" />
 		<Unit filename="include/interpreter_line_result_simple.h" />
 		<Unit filename="include/interpreter_primitive_type.h" />
+		<Unit filename="include/interpreter_primitive_value.h" />
 		<Unit filename="include/interpreter_return_statement.h" />
 		<Unit filename="include/interpreter_runtime_error.h" />
 		<Unit filename="include/interpreter_string_type.h" />
@@ -215,6 +216,7 @@
 		<Unit filename="src/interpreter/values/interpreter_dummy_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_float_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_int_value.cpp" />
+		<Unit filename="src/interpreter/values/interpreter_primitive_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_string_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_value.cpp" />
 		<Unit filename="src/interpreter/variables/interpreter_any_variable.cpp" />

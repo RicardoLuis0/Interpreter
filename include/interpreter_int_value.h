@@ -1,14 +1,12 @@
 #ifndef INTERPRETER_INT_VALUE_H
 #define INTERPRETER_INT_VALUE_H
 
-#include "interpreter_value.h"
+#include "interpreter_primitive_value.h"
 #include "parser_var_type.h"
 #include "interpreter_type.h"
 
 namespace Interpreter {
-    class IntValue : public virtual Value {
-        protected:
-            int value;
+    class IntValue : public virtual PrimitiveValue {
         public:
             IntValue(int);
             operator int&();

@@ -4,7 +4,7 @@
 #include "interpreter_primitive_type.h"
 
 namespace Interpreter {
-    class ArrayType : public PrimitiveType {
+    class ArrayType : public Type {
     public:
         ArrayType(std::shared_ptr<Type>,int);
         std::shared_ptr<Value> get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end) override;
