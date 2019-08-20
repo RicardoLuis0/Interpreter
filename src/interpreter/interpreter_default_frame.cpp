@@ -144,34 +144,36 @@ void DefaultFrame::add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parse
     if(global&&var->value){
         if(var->value->type==Parser::EXPRESSION_TERM){
             std::shared_ptr<Parser::ExpressionTerm> term(std::static_pointer_cast<Parser::ExpressionTerm>(var->value->contents));
-            initialize_globals.push_back(
-                std::make_shared<Expression>(
-                    this,
-                    std::make_shared<Parser::Expression>(
-                        std::make_shared<Parser::BinaryOperation>(
-                            std::make_shared<Parser::ExpressionTerm>(
-                                std::make_shared<Lexer::WordToken>(
-                                    0,
-                                    var->name
-                                ),
-                                Parser::EXPRESSION_TERM_IDENTIFIER,
-                                var->line_start,
-                                var->line_end
-                            ),
-                            std::make_shared<Lexer::SymbolToken>(
-                                var->line_start,
-                                get_symbol_data(SYMBOL_ASSIGNMENT)
-                            ),
-                            var->value,
-                            var->line_start,
-                            var->line_end
-                        ),
-                        Parser::EXPRESSION_BINARY_OPERATION,
-                        var->line_start,
-                        var->line_end
-                    )
-                )
-            );
+            initialize_globals.push_back(vardefitem_to_assignment(var));
         }
     }
+}
+
+std::shared_ptr<Expression> DefaultFrame::vardefitem_to_assignment(std::shared_ptr<Parser::VariableDefinitionItem> var){
+    return std::make_shared<Expression>(
+        this,
+        std::make_shared<Parser::Expression>(
+            std::make_shared<Parser::BinaryOperation>(
+                std::make_shared<Parser::ExpressionTerm>(
+                    std::make_shared<Lexer::WordToken>(
+                        0,
+                        var->name
+                    ),
+                    Parser::EXPRESSION_TERM_IDENTIFIER,
+                    var->line_start,
+                    var->line_end
+                ),
+                std::make_shared<Lexer::SymbolToken>(
+                    var->line_start,
+                    get_symbol_data(SYMBOL_ASSIGNMENT)
+                ),
+                var->value,
+                var->line_start,
+                var->line_end
+            ),
+            Parser::EXPRESSION_BINARY_OPERATION,
+            var->line_start,
+            var->line_end
+        )
+    );
 }

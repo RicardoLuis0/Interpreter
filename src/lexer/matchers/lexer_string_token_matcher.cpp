@@ -3,14 +3,13 @@
 #include "hex_read_util.h"
 #include "my_except.h"
 
-
-bool Lexer::StringTokenMatcher::partialMatch(std::string s){
+bool Lexer::StringTokenMatcher::partialMatchString(std::string s,char c){
     bool reading_escape=false;
     bool read_end=false;
     for(size_t i=0;i<s.length();i++){
         if(read_end)return false;
         if(i==0){
-            if(s[i]!='"')return false;
+            if(s[i]!=c)return false;
         }else if(reading_escape){
             if(s[i]>='0'&&s[i]<='7'){//octal
                 if(s[i+1]>='0'&&s[i+1]<='7'){
@@ -24,7 +23,7 @@ bool Lexer::StringTokenMatcher::partialMatch(std::string s){
             }
             reading_escape=false;
         }else{
-            if(s[i]=='"'){
+            if(s[i]==c){
                 read_end=true;
             }else if(s[i]=='\\'){
                 reading_escape=true;
@@ -33,12 +32,11 @@ bool Lexer::StringTokenMatcher::partialMatch(std::string s){
     }
     return true;
 }
-
-bool Lexer::StringTokenMatcher::fullMatch(std::string s){
+bool Lexer::StringTokenMatcher::fullMatchString(std::string s,char c){
     bool reading_escape=false;
     for(size_t i=0;i<s.length();i++){
         if(i==0){
-            if(s[i]!='"')return false;
+            if(s[i]!=c)return false;
         }else if(reading_escape){
             if(s[i]>='0'&&s[i]<='7'){//octal
                 if(s[i+1]>='0'&&s[i+1]<='7'){
@@ -52,7 +50,7 @@ bool Lexer::StringTokenMatcher::fullMatch(std::string s){
             }
             reading_escape=false;
         }else{
-            if(s[i]=='"'){
+            if(s[i]==c){
                 return true;
             }else if(s[i]=='\\'){
                 reading_escape=true;
@@ -61,15 +59,14 @@ bool Lexer::StringTokenMatcher::fullMatch(std::string s){
     }
     return false;
 }
-
-std::shared_ptr<Lexer::Token> Lexer::StringTokenMatcher::makeMatch(int line,std::string s){
+std::shared_ptr<Lexer::StringToken> Lexer::StringTokenMatcher::matchString(int line,std::string s,char c){
     std::string formatted;
     std::string unformatted;
     bool reading_escape=false;
     for(size_t i=0;i<s.length();i++){
         unformatted+=s[i];
         if(i==0){
-            if(s[i]!='"')break;
+            if(s[i]!=c)break;
         }else if(reading_escape){
             switch(s[i]){
             case 'a':
@@ -131,7 +128,7 @@ std::shared_ptr<Lexer::Token> Lexer::StringTokenMatcher::makeMatch(int line,std:
             }
             reading_escape=false;
         }else{
-            if(s[i]=='"'){
+            if(s[i]==c){
                 return std::make_shared<StringToken>(line,formatted,unformatted);
             }else if(s[i]=='\\'){
                 reading_escape=true;
@@ -141,4 +138,16 @@ std::shared_ptr<Lexer::Token> Lexer::StringTokenMatcher::makeMatch(int line,std:
         }
     }
     throw MyExcept::NoMatchException(line,s);
+}
+
+bool Lexer::StringTokenMatcher::partialMatch(std::string s){
+    return partialMatchString(s,'"');
+}
+
+bool Lexer::StringTokenMatcher::fullMatch(std::string s){
+    return fullMatchString(s,'"');
+}
+
+std::shared_ptr<Lexer::Token> Lexer::StringTokenMatcher::makeMatch(int line,std::string s){
+    return matchString(line,s,'"');
 }

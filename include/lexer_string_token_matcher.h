@@ -2,6 +2,7 @@
 #define STRING_TOKEN_MATCHER_H
 
 #include "lexer_token_matcher.h"
+#include "lexer_string_token.h"
 
 /**
  * @namespace Lexer
@@ -17,6 +18,10 @@ namespace Lexer{
      */
 
     class StringTokenMatcher : public TokenMatcher {
+    protected:
+            bool partialMatchString(std::string s,char c);
+            bool fullMatchString(std::string s,char c);
+            std::shared_ptr<StringToken> matchString(int line,std::string s,char c);
         public:
             bool partialMatch(std::string s) override;
             bool fullMatch(std::string s) override;

@@ -40,6 +40,7 @@ namespace Interpreter{
             std::vector<std::vector<FunctionParameter>> get_function_variants(std::string);
             std::shared_ptr<Function> get_function(std::string,std::vector<FunctionParameter>);
             std::shared_ptr<Function> get_function_local(std::string,std::vector<FunctionParameter>);
+            std::shared_ptr<class Expression> vardefitem_to_assignment(std::shared_ptr<Parser::VariableDefinitionItem> vardef);
             bool is_function=false;
             DefaultFrame * function_statics=nullptr;
             Function * func=nullptr;

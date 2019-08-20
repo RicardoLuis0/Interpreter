@@ -2,6 +2,42 @@
 #include "lexer_float_token.h"
 #include "my_except.h"
 
+static int trymatch(std::string s){
+    if(s==".")return 0;
+    bool first=true;
+    bool decimal=false;
+    bool firstzero=false;
+    bool last=false;
+    for(char c:s){
+        if(first){
+            if(c<'1'||c>'9'){//must start with either '0-9' or '.'
+                if(c=='.'){
+                    decimal=true;
+                }else if(c=='0'){
+                    firstzero=true;
+                }else{
+                    return 0;
+                }
+            }
+        }else{
+            if(firstzero&&c!='.')return 0;
+            else firstzero=false;
+            if(last)return 0;
+            if(c<'0'||c>'9'){
+                if(c=='.'){
+                    if(decimal) return 0;
+                    decimal=true;
+                }else if(c=='f'){
+                    last=true;
+                }else{
+                    return 0;
+                }
+            }
+        }
+        first=false;
+    }
+    return (decimal&&s.length()>0)?1:-1;
+}
 
 static int ipow(int b,int e){//only works for positives
     int r=1;
@@ -12,77 +48,11 @@ static int ipow(int b,int e){//only works for positives
 }
 
 bool Lexer::FloatTokenMatcher::partialMatch(std::string s){
-    if(s==".")return true;
-    bool first=true;
-    bool decimal=false;
-    bool firstzero=false;
-    bool last=false;
-    for(char c:s){
-        if(first){
-            if(c<'1'||c>'9'){//must start with either '0-9' or '.'
-                if(c=='.'){
-                    decimal=true;
-                }else if(c=='0'){
-                    firstzero=true;
-                }else{
-                    return false;
-                }
-            }
-        }else{
-            if(firstzero&&c!='.')return false;
-            else firstzero=false;
-            if(last)return false;
-            if(c<'0'||c>'9'){
-                if(c=='.'){
-                    if(decimal) return false;
-                    decimal=true;
-                }else if(c=='f'){
-                    last=true;
-                }else{
-                    return false;
-                }
-            }
-        }
-        first=false;
-    }
-    return true;
+    return trymatch(s)!=0;
 }
 
 bool Lexer::FloatTokenMatcher::fullMatch(std::string s){
-    if(s==".")return false;
-    bool first=true;
-    bool decimal=false;
-    bool firstzero=false;
-    bool last=false;
-    for(char c:s){
-        if(first){
-            if(c<'1'||c>'9'){//must start with either '0-9' or '.'
-                if(c=='.'){
-                    decimal=true;
-                }else if(c=='0'){
-                    firstzero=true;
-                }else{
-                    return false;
-                }
-            }
-        }else{
-            if(firstzero&&c!='.')return false;
-            else firstzero=false;
-            if(last)return false;
-            if(c<'0'||c>'9'){
-                if(c=='.'){
-                    if(decimal) return false;
-                    decimal=true;
-                }else if(c=='f'){
-                    last=true;
-                }else{
-                    return false;
-                }
-            }
-        }
-        first=false;
-    }
-    return (decimal&&s.length()>0);
+    return trymatch(s)==1;
 }
 
 std::shared_ptr<Lexer::Token> Lexer::FloatTokenMatcher::makeMatch(int line,std::string s){
