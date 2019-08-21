@@ -152,7 +152,7 @@ std::shared_ptr<Value> IntType::call_operator(int op,std::shared_ptr<Value> self
             try{
                 other=other->get_type()->cast(other,Type::float_type());//if that doesn't work, try casting to float
             }catch(...){
-                throw std::runtime_error("Invalid type for int operator '"+get_op_str(op)+"'");
+                throw std::runtime_error("Invalid type '"+other->get_type()->get_name()+"' for int operator '"+get_op_str(op)+"'");
             }
         }
         //INT,FLOAT
@@ -179,7 +179,7 @@ std::shared_ptr<Value> IntType::call_operator(int op,std::shared_ptr<Value> self
                 other=other->get_type()->cast(other,Type::float_type());//if that doesn't work, try casting to float and then to int
                 other=other->get_type()->cast(other,Type::int_type());
             }catch(...){
-                throw std::runtime_error("Invalid type for int operator '"+get_op_str(op)+"'");
+                throw std::runtime_error("Invalid type '"+other->get_type()->get_name()+"' for int operator '"+get_op_str(op)+"'");
             }
         }
         break;

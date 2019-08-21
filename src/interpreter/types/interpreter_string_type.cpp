@@ -70,7 +70,7 @@ std::shared_ptr<Value> StringType::call_operator(int op,std::shared_ptr<Value> s
     try{
         other=other->get_type()->cast(other,Type::string_type());
     }catch(...){
-        throw std::runtime_error("Invalid type for string operator '"+get_op_str(op)+"'");
+        throw std::runtime_error("Invalid type '"+other->get_type()->get_name()+"' for string operator '"+get_op_str(op)+"'");
     }
     switch(op){
     default:

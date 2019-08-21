@@ -93,7 +93,7 @@ std::shared_ptr<Value> FloatType::call_operator(int op,std::shared_ptr<Value> se
             other=other->get_type()->cast(other,Type::int_type());//if that doesn't work, try casting to int and then to float
             other=other->get_type()->cast(other,Type::float_type());
         }catch(...){
-            throw std::runtime_error("Invalid type for float operator '"+get_op_str(op)+"'");
+            throw std::runtime_error("Invalid type '"+other->get_type()->get_name()+"' for float operator '"+get_op_str(op)+"'");
         }
     }
     switch(op){
