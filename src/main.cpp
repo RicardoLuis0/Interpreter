@@ -43,7 +43,7 @@
 /**
  * @mainpage
  * 
- * Lexer for interpreted language
+ * Interpreted language
  * 
  * @author Ricardo Luis Vaz Silva
  * @date 2/19/19

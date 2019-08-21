@@ -1,7 +1,6 @@
 #ifndef LEXER_CHAR_TOKEN_H
 #define LEXER_CHAR_TOKEN_H
 
-
 #include "lexer_token.h"
 
 namespace Lexer{

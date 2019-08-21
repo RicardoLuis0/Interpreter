@@ -10,7 +10,6 @@ const std::string Lexer::CharToken::get_formatted() const {
     return "[CHAR] <"+std::to_string(c)+">";
 }
 
-
 const std::string Lexer::CharToken::get_literal() const {
     return lit;
 }
