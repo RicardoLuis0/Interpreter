@@ -14,13 +14,16 @@
 #include "interpreter_array_type.h"
 #include "interpreter_expression.h"
 #include "my_except.h"
+#include <typeinfo>
 
 using namespace Interpreter;
 
 ExecFrame::ExecFrame(ExecFrame * p,DefaultFrame * d):parent(p),defaults(d){
-    for(auto vpair:defaults->variable_defaults){
-        std::shared_ptr<Variable> var=std::dynamic_pointer_cast<Variable>(vpair.second->clone());
-        if(!var)throw std::runtime_error("unexpected nullptr");
+    for(std::pair<std::string,std::shared_ptr<Variable>> vpair:defaults->variable_defaults){
+        std::shared_ptr<Variable> var=vpair.second->clone_var(vpair.first);
+        if(!var){
+            throw std::runtime_error("unexpected nullptr in "+std::string(typeid(*vpair.second).name())+"::clone");
+        }
         variables.insert({vpair.first,var});
     }
     for(std::shared_ptr<Expression> e:defaults->initialize_globals){

@@ -57,7 +57,9 @@ std::shared_ptr<ExpressionTerm> ExpressionTermMatcher::makeMatch(parserProgress 
             }
         }
     }
-    if(!term)throw std::runtime_error("unexpected nullptr");
+    if(!term){
+        throw std::runtime_error("unexpected nullptr");
+    }
     std::shared_ptr<Lexer::SymbolToken> ptr;
     while(ptr=p.isSymbol(UnaryOperationMatcher::post_unary_operators)){
         term->unary_post_operators.push_back(ptr);
