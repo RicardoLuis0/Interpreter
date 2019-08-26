@@ -2,14 +2,16 @@ DONE
 
 any type = runtime type checking, can generate runtime errors
 
+unsigned int type
+
+char type
+
+unsigned char type
+
 TODO
 
 auto type = parse-time type checking, generates all errors before code is executed
 
 'type' type = for runtime type checking, together with "type get_type(any)" function and type literals (still unsure of type literals syntax)
 
-unsigned int type
-
-char type
-
-unsigned char type
+const types = same as regular types but without assignment operator
