@@ -1,9 +1,16 @@
 #include "interpreter_float_type.h"
 #include "interpreter_util_defines_misc.h"
 #include "interpreter_variable.h"
+#include "interpreter_int_type.h"
+#include "interpreter_unsigned_int_type.h"
+#include "interpreter_char_type.h"
+#include "interpreter_unsigned_char_type.h"
 #include "interpreter_dummy_value.h"
 #include "interpreter_dummy_variable.h"
 #include "interpreter_int_value.h"
+#include "interpreter_unsigned_int_value.h"
+#include "interpreter_char_value.h"
+#include "interpreter_unsigned_char_value.h"
 #include "interpreter_float_value.h"
 #include "interpreter_float_variable.h"
 #include "interpreter_any_type.h"
@@ -28,14 +35,20 @@ bool FloatType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
 }
 
 bool FloatType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return CHECKPTR(other,IntType)||is(self,other);
+    return CHECKPTR(other,UnsignedCharType)||CHECKPTR(other,UnsignedIntType)||CHECKPTR(other,CharType)||CHECKPTR(other,IntType)||is(self,other);
 }
 
 std::shared_ptr<Value> FloatType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
     if(is(self->get_type(),other)){
         return self;
     }else if(CHECKPTR(other,IntType)){
-        return std::make_shared<IntValue>(std::dynamic_pointer_cast<FloatValue>(self)->get());
+        return std::make_shared<IntValue>(std::dynamic_pointer_cast<IntValue>(self)->get());
+    }else if(CHECKPTR(other,UnsignedIntType)){
+        return std::make_shared<UnsignedIntValue>(std::dynamic_pointer_cast<IntValue>(self)->get());
+    }else if(CHECKPTR(other,CharType)){
+        return std::make_shared<CharValue>(std::dynamic_pointer_cast<IntValue>(self)->get());
+    }else if(CHECKPTR(other,UnsignedCharType)){
+        return std::make_shared<UnsignedCharValue>(std::dynamic_pointer_cast<IntValue>(self)->get());
     }else{
         return Type::cast(self,other);//throws
     }

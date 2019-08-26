@@ -1,15 +1,15 @@
-#ifndef INTERPRETER_INT_VALUE_H
-#define INTERPRETER_INT_VALUE_H
+#ifndef INTERPRETER_UNSIGNED_CHAR_VALUE_H
+#define INTERPRETER_UNSIGNED_CHAR_VALUE_H
 
 #include "interpreter_primitive_value.h"
 #include "interpreter_type.h"
 
 namespace Interpreter {
-    class IntValue : public virtual PrimitiveValue {
+    class UnsignedCharValue : public virtual PrimitiveValue {
         public:
-            IntValue(int);
-            operator int&();
-            int &get();
+            UnsignedCharValue(unsigned char);
+            operator unsigned char&();
+            unsigned char &get();
             virtual std::shared_ptr<Type> get_type() override;
             virtual std::shared_ptr<Value> clone() override;
             virtual std::shared_ptr<class Variable> clone_var(std::string new_name) override;
@@ -57,4 +57,4 @@ namespace Interpreter {
     };
 }
 
-#endif // INTERPRETER_INT_VALUE_H
+#endif // INTERPRETER_UNSIGNED_CHAR_VALUE_H

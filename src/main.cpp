@@ -452,6 +452,9 @@ void print_primitive(int indent,Parser::ParserPrimitiveType_t primitive){
     case Parser::PRIMITIVE_ANY:
         std::cout<<get_indent(indent)<<"[PRIMITIVE] any\n";
         break;
+    case Parser::PRIMITIVE_CHAR:
+        std::cout<<get_indent(indent)<<"[PRIMITIVE] char\n";
+        break;
     case Parser::PRIMITIVE_INT:
         std::cout<<get_indent(indent)<<"[PRIMITIVE] int\n";
         break;

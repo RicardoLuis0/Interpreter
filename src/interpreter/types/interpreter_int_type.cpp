@@ -3,10 +3,16 @@
 #include "interpreter_variable.h"
 #include "interpreter_util_defines_misc.h"
 #include "interpreter_float_type.h"
+#include "interpreter_unsigned_int_type.h"
+#include "interpreter_char_type.h"
+#include "interpreter_unsigned_char_type.h"
 #include "interpreter_dummy_value.h"
 #include "interpreter_dummy_variable.h"
 #include "interpreter_float_value.h"
 #include "interpreter_int_value.h"
+#include "interpreter_unsigned_int_value.h"
+#include "interpreter_char_value.h"
+#include "interpreter_unsigned_char_value.h"
 #include "interpreter_int_variable.h"
 #include "interpreter_any_type.h"
 #include "my_except.h"
@@ -30,7 +36,7 @@ bool IntType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
 }
 
 bool IntType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return CHECKPTR(other,FloatType)||is(self,other);
+    return CHECKPTR(other,UnsignedCharType)||CHECKPTR(other,UnsignedIntType)||CHECKPTR(other,CharType)||CHECKPTR(other,FloatType)||is(self,other);
 }
 
 std::shared_ptr<Value> IntType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
@@ -38,6 +44,12 @@ std::shared_ptr<Value> IntType::cast(std::shared_ptr<Value> self,std::shared_ptr
         return self;
     }else if(CHECKPTR(other,FloatType)){
         return std::make_shared<FloatValue>(std::dynamic_pointer_cast<IntValue>(self)->get());
+    }else if(CHECKPTR(other,UnsignedIntType)){
+        return std::make_shared<UnsignedIntValue>(std::dynamic_pointer_cast<IntValue>(self)->get());
+    }else if(CHECKPTR(other,CharType)){
+        return std::make_shared<CharValue>(std::dynamic_pointer_cast<IntValue>(self)->get());
+    }else if(CHECKPTR(other,UnsignedCharType)){
+        return std::make_shared<UnsignedCharValue>(std::dynamic_pointer_cast<IntValue>(self)->get());
     }else{
         return Type::cast(self,other);//throws
     }
@@ -77,38 +89,56 @@ std::shared_ptr<Value> IntType::get_operator_result(int op,std::shared_ptr<Value
     case SYMBOL_LOWER_EQUALS:
     case SYMBOL_LOGICAL_AND:
     case SYMBOL_LOGICAL_OR:
-        if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())){
+        if(other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_int_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::char_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_char_type())){
+            return std::make_shared<DummyValue>(Type::int_type());
+        }else{
             throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
         }
-        return std::make_shared<DummyValue>(Type::int_type());
     case SYMBOL_PLUS:
     case SYMBOL_MINUS:
     case SYMBOL_MULTIPLY:
     case SYMBOL_DIVIDE:
-        if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())){
-            if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::float_type())){
-                throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
-            }else{
-                return std::make_shared<DummyValue>(Type::float_type());
-            }
-        }else{
+        if(other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_int_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::char_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_char_type())){
             return std::make_shared<DummyValue>(Type::int_type());
+        }else if(other->get_type()->allows_implicit_cast(other->get_type(),Type::float_type())){
+            throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+        }else{
+            return std::make_shared<DummyValue>(Type::float_type());
         }
     case SYMBOL_ASSIGNMENT:
     case SYMBOL_PLUS_ASSIGNMENT:
     case SYMBOL_MINUS_ASSIGNMENT:
     case SYMBOL_MULTIPLY_ASSIGNMENT:
     case SYMBOL_DIVIDE_ASSIGNMENT:
+        if(other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_int_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::char_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_char_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::float_type())){
+            return std::make_shared<DummyVariable>(Type::int_type());
+        }else{
+            throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+        }
     case SYMBOL_LEFT_SHIFT_ASSIGNMENT:
     case SYMBOL_RIGHT_SHIFT_ASSIGNMENT:
     case SYMBOL_BITWISE_AND_ASSIGNMENT:
     case SYMBOL_BITWISE_OR_ASSIGNMENT:
     case SYMBOL_BITWISE_XOR_ASSIGNMENT:
     case SYMBOL_PERCENT_ASSIGNMENT:
-        if((!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type()))){
+        if(other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_int_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::char_type())||
+             other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_char_type())){
+            return std::make_shared<DummyVariable>(Type::int_type());
+        }else{
             throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
         }
-        return std::make_shared<DummyVariable>(Type::int_type());
     default:
         //OP_UNKNOWN
         throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
@@ -146,16 +176,33 @@ std::shared_ptr<Value> IntType::call_operator(int op,std::shared_ptr<Value> self
     case SYMBOL_GREATER_EQUALS:
     case SYMBOL_LOWER:
     case SYMBOL_LOWER_EQUALS:
-        try{
-            other=other->get_type()->cast(other,Type::int_type());//try to cast to int
-        }catch(...){
+        if(!(other->get_type()->is(other->get_type(),Type::int_type())||
+           other->get_type()->is(other->get_type(),Type::char_type())||
+           other->get_type()->is(other->get_type(),Type::float_type()))){
             try{
-                other=other->get_type()->cast(other,Type::float_type());//if that doesn't work, try casting to float
+                other=other->get_type()->cast(other,Type::int_type());//try to cast to int
             }catch(...){
-                throw std::runtime_error("Invalid type '"+other->get_type()->get_name()+"' for int operator '"+get_op_str(op)+"'");
+                try{
+                    other=other->get_type()->cast(other,Type::char_type());//try to cast to char
+                }catch(...){
+                    try{
+                        other=other->get_type()->cast(other,Type::unsigned_int_type());//try to cast to unsigned int
+                        other=other->get_type()->cast(other,Type::int_type());//try to cast to int
+                    }catch(...){
+                        try{
+                            other=other->get_type()->cast(other,Type::unsigned_char_type());//try to cast to unsigned char
+                            other=other->get_type()->cast(other,Type::int_type());//try to cast to int
+                        }catch(...){
+                            try{
+                                other=other->get_type()->cast(other,Type::float_type());//try to cast to float
+                            }catch(...){
+                                throw std::runtime_error("Invalid type '"+other->get_type()->get_name()+"' for int operator '"+get_op_str(op)+"'");
+                            }
+                        }
+                    }
+                }
             }
         }
-        //INT,FLOAT
         break;
     case SYMBOL_LEFT_SHIFT_ASSIGNMENT:
     case SYMBOL_RIGHT_SHIFT_ASSIGNMENT:
@@ -172,14 +219,32 @@ std::shared_ptr<Value> IntType::call_operator(int op,std::shared_ptr<Value> self
     case SYMBOL_LOGICAL_AND:
     case SYMBOL_LOGICAL_OR:
         //INT
-        try{
-            other=other->get_type()->cast(other,Type::int_type());//try to cast to int
-        }catch(...){
+        if(!(other->get_type()->is(other->get_type(),Type::int_type())||
+           other->get_type()->is(other->get_type(),Type::char_type())||
+           other->get_type()->is(other->get_type(),Type::float_type()))){
             try{
-                other=other->get_type()->cast(other,Type::float_type());//if that doesn't work, try casting to float and then to int
-                other=other->get_type()->cast(other,Type::int_type());
+                other=other->get_type()->cast(other,Type::int_type());//try to cast to int
             }catch(...){
-                throw std::runtime_error("Invalid type '"+other->get_type()->get_name()+"' for int operator '"+get_op_str(op)+"'");
+                try{
+                    other=other->get_type()->cast(other,Type::char_type());//try to cast to char
+                }catch(...){
+                    try{
+                        other=other->get_type()->cast(other,Type::unsigned_int_type());//try to cast to unsigned int
+                        other=other->get_type()->cast(other,Type::int_type());//try to cast to int
+                    }catch(...){
+                        try{
+                            other=other->get_type()->cast(other,Type::unsigned_char_type());//try to cast to unsigned char
+                            other=other->get_type()->cast(other,Type::int_type());//try to cast to int
+                        }catch(...){
+                            try{
+                                other=other->get_type()->cast(other,Type::float_type());//try to cast to float
+                                other=other->get_type()->cast(other,Type::int_type());
+                            }catch(...){
+                                throw std::runtime_error("Invalid type '"+other->get_type()->get_name()+"' for int operator '"+get_op_str(op)+"'");
+                            }
+                        }
+                    }
+                }
             }
         }
         break;
