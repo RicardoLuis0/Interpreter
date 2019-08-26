@@ -69,6 +69,7 @@ bool Type::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
 std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std::shared_ptr<Parser::VarType> t){
     switch(t->type){
     case Parser::VARTYPE_VOID:
+        if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
         return void_type_instance;
     case Parser::VARTYPE_IDENTIFIER:
         return class_type(context,"");//throws
@@ -77,10 +78,14 @@ std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std
         case Parser::PRIMITIVE_INVALID:
             throw MyExcept::SyntaxError(t->line_start,t->line_end,"invalid primitive value 'PRIMITIVE_INVALID'");
         case Parser::PRIMITIVE_ANY:
+            if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
             return any_type_instance;
         case Parser::PRIMITIVE_INT:
-            return int_type_instance;
+            return (t->has_sign&&!t->sign)?unsigned_int_type_instance:int_type_instance;
+        case Parser::PRIMITIVE_CHAR:
+            return (t->has_sign&&!t->sign)?unsigned_char_type_instance:char_type_instance;
         case Parser::PRIMITIVE_FLOAT:
+            if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
             return float_type_instance;
         case Parser::PRIMITIVE_STRING:
             return string_type_instance;

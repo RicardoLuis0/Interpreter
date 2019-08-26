@@ -1,5 +1,6 @@
 #include "interpreter_expr_part_value.h"
 #include "interpreter_int_value.h"
+#include "interpreter_char_value.h"
 #include "interpreter_float_value.h"
 #include "interpreter_string_value.h"
 
@@ -11,6 +12,10 @@ ExprPartValue::ExprPartValue(std::shared_ptr<Value> v):value(v){
 
 std::shared_ptr<ExprPartValue> ExprPartValue::from_int(int i){
     return std::make_shared<ExprPartValue>(std::make_shared<IntValue>(i));
+}
+
+std::shared_ptr<ExprPartValue> ExprPartValue::from_char(char c){
+    return std::make_shared<ExprPartValue>(std::make_shared<CharValue>(c));
 }
 
 std::shared_ptr<ExprPartValue> ExprPartValue::from_double(double d){

@@ -2,6 +2,7 @@
 #include "symbols_keywords.h"
 #include "interpreter_variable.h"
 #include "interpreter_util_defines_misc.h"
+#include "interpreter_int_type.h"
 #include "interpreter_float_type.h"
 #include "interpreter_dummy_value.h"
 #include "interpreter_dummy_variable.h"

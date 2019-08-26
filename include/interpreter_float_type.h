@@ -1,7 +1,7 @@
 #ifndef INTERPRETER_FLOAT_TYPE_H
 #define INTERPRETER_FLOAT_TYPE_H
 
-#include "interpreter_int_type.h"
+#include "interpreter_primitive_type.h"
 
 namespace Interpreter {
     class FloatType : public PrimitiveType {

@@ -18,6 +18,7 @@ namespace Parser{
         PRIMITIVE_INVALID,
         PRIMITIVE_ANY,
         PRIMITIVE_INT,
+        PRIMITIVE_CHAR,
         PRIMITIVE_FLOAT,
         PRIMITIVE_STRING,
     };

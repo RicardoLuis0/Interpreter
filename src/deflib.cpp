@@ -5,6 +5,9 @@
 #include "interpreter_string_value.h"
 #include "interpreter_array_value.h"
 #include "interpreter_int_value.h"
+#include "interpreter_unsigned_int_value.h"
+#include "interpreter_char_value.h"
+#include "interpreter_unsigned_char_value.h"
 #include "interpreter_float_value.h"
 #include "conio.h"
 #include "my_except.h"
@@ -132,12 +135,19 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
-            if(std::shared_ptr<StringValue> val=std::dynamic_pointer_cast<StringValue>(args[0])){
-                return val->clone();
-            }else if(std::shared_ptr<IntValue> val=std::dynamic_pointer_cast<IntValue>(args[0])){
-                return std::make_shared<StringValue>(std::to_string(val->get()));
-            }else if(std::shared_ptr<FloatValue> val=std::dynamic_pointer_cast<FloatValue>(args[0])){
-                return std::make_shared<StringValue>(std::to_string(val->get()));
+            if(args[0]->get_type()->is(args[0]->get_type(),Type::string_type())){
+                return args[0]->get_type()->cast(args[0],Type::string_type());
+            }else if(args[0]->get_type()->is(args[0]->get_type(),Type::int_type())){
+                return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<IntValue>(args[0]->get_type()->cast(args[0],Type::int_type()))->get()));
+            }else if(args[0]->get_type()->is(args[0]->get_type(),Type::unsigned_int_type())){
+                return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<UnsignedIntValue>(args[0]->get_type()->cast(args[0],Type::unsigned_int_type()))->get()));
+            }else if(args[0]->get_type()->is(args[0]->get_type(),Type::char_type())){
+                return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<CharValue>(args[0]->get_type()->cast(args[0],Type::char_type()))->get()));
+            }else if(args[0]->get_type()->is(args[0]->get_type(),Type::unsigned_char_type())){
+                return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<UnsignedCharValue>(args[0]->get_type()->cast(args[0],Type::unsigned_char_type()))->get()));
+
+            }else if(args[0]->get_type()->is(args[0]->get_type(),Type::float_type())){
+                return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<FloatValue>(args[0]->get_type()->cast(args[0],Type::float_type()))->get()));
             }else{
                 throw MyExcept::SyntaxError("invalid variable type "+args[0]->get_type()->get_name());
             }
