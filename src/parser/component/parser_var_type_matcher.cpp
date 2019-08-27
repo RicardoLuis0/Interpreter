@@ -5,7 +5,7 @@
 #include "my_except.h"
 #include "parser_expression_matcher.h"
 
-//VarType = ( [ keyword 'unsigned' | keyword 'signed' ] , ( keyword 'any' | keyword 'void' | keyword 'int' | keyword 'float' | keyword 'string' ) ) , { symbol '[' , [ Expression ] , symbol ']' } ;
+//VarType = ( [ keyword 'unsigned' | keyword 'signed' ] , ( keyword 'any' | keyword 'void' | keyword 'int' | keyword 'char' | keyword 'float' | keyword 'string' ) ) , { symbol '[' , [ Expression ] , symbol ']' } ;
 
 using namespace Parser;
 
