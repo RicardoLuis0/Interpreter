@@ -42,7 +42,7 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
-            std::cout<<std::dynamic_pointer_cast<StringValue>(args[0])->get();
+            std::cout<<std::dynamic_pointer_cast<StringValue>(args[0]->get_type()->cast(args[0],Type::string_type()))->get();
             return nullptr;
         }
 
@@ -87,7 +87,7 @@ namespace Interpreter {
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
             try{
-                return std::make_shared<IntValue>(std::stoi(std::dynamic_pointer_cast<StringValue>(args[0])->get()));
+                return std::make_shared<IntValue>(std::stoi(std::dynamic_pointer_cast<StringValue>(args[0]->get_type()->cast(args[0],Type::string_type()))->get()));
             }catch(...){
                 return std::make_shared<IntValue>(-1);
             }
@@ -112,7 +112,7 @@ namespace Interpreter {
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
             try{
-                return std::make_shared<FloatValue>(std::stod(std::dynamic_pointer_cast<StringValue>(args[0])->get()));
+                return std::make_shared<FloatValue>(std::stod(std::dynamic_pointer_cast<StringValue>(args[0]->get_type()->cast(args[0],Type::string_type()))->get()));
             }catch(...){
                 return std::make_shared<FloatValue>(0);
             }
@@ -207,11 +207,11 @@ namespace Interpreter {
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{Type::int_type(),"ch",false}};
+            return {{Type::char_type(),"ch",false}};
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
-            ::putchar(std::dynamic_pointer_cast<IntValue>(args[0])->get());
+            ::putchar(std::dynamic_pointer_cast<CharValue>(args[0]->get_type()->cast(args[0],Type::char_type()))->get());
             return nullptr;
         }
 

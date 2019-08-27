@@ -43,13 +43,13 @@ std::shared_ptr<Value> UnsignedIntType::cast(std::shared_ptr<Value> self,std::sh
     if(is(self->get_type(),other)){
         return self;
     }else if(CHECKPTR(other,IntType)){
-        return std::make_shared<IntValue>(std::dynamic_pointer_cast<IntValue>(self)->get());
+        return std::make_shared<IntValue>(std::dynamic_pointer_cast<UnsignedIntValue>(self)->get());
     }else if(CHECKPTR(other,FloatType)){
-        return std::make_shared<FloatValue>(std::dynamic_pointer_cast<IntValue>(self)->get());
+        return std::make_shared<FloatValue>(std::dynamic_pointer_cast<UnsignedIntValue>(self)->get());
     }else if(CHECKPTR(other,CharType)){
-        return std::make_shared<CharValue>(std::dynamic_pointer_cast<IntValue>(self)->get());
+        return std::make_shared<CharValue>(std::dynamic_pointer_cast<UnsignedIntValue>(self)->get());
     }else if(CHECKPTR(other,UnsignedCharType)){
-        return std::make_shared<UnsignedCharValue>(std::dynamic_pointer_cast<IntValue>(self)->get());
+        return std::make_shared<UnsignedCharValue>(std::dynamic_pointer_cast<UnsignedIntValue>(self)->get());
     }else{
         return Type::cast(self,other);//throws
     }
