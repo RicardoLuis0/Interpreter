@@ -1,0 +1,6 @@
+void main(){
+	unsigned char c;
+	while((c=getch())!=27){
+		putchar(c);
+	}
+}
