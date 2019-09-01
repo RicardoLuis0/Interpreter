@@ -3,11 +3,15 @@
 #include "symbols_keywords.h"
 
 #include "parser_expression_group.h"
+#include "parser_keyword_function_call.h"
 #include "parser_binary_operation.h"
 #include "interpreter_line_result_simple.h"
 #include "interpreter_expr_part_fn_call.h"
 #include "interpreter_expr_part_var.h"
 #include "interpreter_expr_part_value.h"
+#include "interpreter_expr_part_is.h"
+#include "interpreter_expr_part_cast.h"
+#include "interpreter_expr_part_typeof.h"
 #include "lexer_string_token.h"
 #include "lexer_integer_token.h"
 #include "lexer_char_token.h"
@@ -47,6 +51,30 @@ std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::share
     case Parser::EXPRESSION_TERM_FUNCTION_CALL:
         expr=std::make_shared<ExprPartFnCall>(context,std::static_pointer_cast<Parser::FunctionCall>(term->contents_p));
         break;
+    case Parser::EXPRESSION_TERM_KEYWORD_FUNCTION_CALL:
+        {
+            std::shared_ptr<Parser::KeywordFunctionCall> kfn=std::static_pointer_cast<Parser::KeywordFunctionCall>(term->contents_p);
+            switch(kfn->identifier->get_keyword_type()){
+            case KEYWORD_IS:
+                if(kfn->extra_type==nullptr)throw std::runtime_error("missing type to compare, usage 'is<TYPE>(VALUE)'");
+                if(kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'is<TYPE>(VALUE)'");
+                expr=std::make_shared<ExprPartIs>(Type::from_vartype(context,kfn->extra_type),get_expression(context,kfn->arguments->expression_list[0]));
+                break;
+            case KEYWORD_CAST:
+                if(kfn->extra_type==nullptr)throw std::runtime_error("missing type to cast, usage 'cast<TYPE>(VALUE)'");
+                if(kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'cast<TYPE>(VALUE)'");
+                expr=std::make_shared<ExprPartCast>(Type::from_vartype(context,kfn->extra_type),get_expression(context,kfn->arguments->expression_list[0]));
+                break;
+            case KEYWORD_TYPEOF:
+                if(kfn->extra_type!=nullptr)throw std::runtime_error("invalid type argument, usage 'typeof(VALUE)'");
+                if(kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'typeof(VALUE)'");
+                expr=std::make_shared<ExprPartTypeOf>(get_expression(context,kfn->arguments->expression_list[0]));
+                break;
+            default:
+                throw std::runtime_error("unimplemented Expression Term type keyword function "+kfn->identifier->get_literal());
+            }
+        }
+        break;
     case Parser::EXPRESSION_TERM_IDENTIFIER:
         expr=std::make_shared<ExprPartVar>(context,std::static_pointer_cast<Lexer::WordToken>(term->contents_t)->get_literal(),term->contents_t->line);
         break;
@@ -72,7 +100,7 @@ std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::share
         expr=ExprPartValue::from_int(0);
         break;
     default:
-        throw std::runtime_error("unimplemented Expression term type");//unreachable???
+        throw std::runtime_error("unimplemented Expression Term type");//unreachable???
     }
     for(std::shared_ptr<Lexer::SymbolToken> t:term->unary_post_operators){
         expr=std::make_shared<ExprPartUnaryOp>(expr,t->get_symbol_type(),false,t->line,t->line);

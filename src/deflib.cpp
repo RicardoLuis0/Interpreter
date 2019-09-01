@@ -2,6 +2,7 @@
 #include <iostream>
 #include "interpreter_function.h"
 #include "parser_var_type.h"
+#include "interpreter_type_value.h"
 #include "interpreter_string_value.h"
 #include "interpreter_array_value.h"
 #include "interpreter_int_value.h"
@@ -24,6 +25,7 @@
 //void cls() DONE
 //int getch() DONE
 //int array_size(any[]) DONE
+//string get_type_name(type) DONE
 
 namespace Interpreter {
 
@@ -237,6 +239,26 @@ namespace Interpreter {
 
     };
 
+    class get_type_name : public Function{
+
+        std::string get_name() override {
+            return "get_type_name";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::string_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::type_type(),"t",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            return std::make_shared<StringValue>(std::dynamic_pointer_cast<TypeValue>(args[0])->get()->get_name());
+        }
+
+    };
+
 }
 
 void Interpreter::init_deflib(DefaultFrame * d){
@@ -249,4 +271,5 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::cls>());
     d->register_function(std::make_shared<Interpreter::getch>());
     d->register_function(std::make_shared<Interpreter::array_size>());
+    d->register_function(std::make_shared<Interpreter::get_type_name>());
 }

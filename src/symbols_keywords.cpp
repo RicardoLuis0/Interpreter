@@ -10,6 +10,9 @@ Lexer::symbol_data get_symbol_data(symbol_type_t s){
 }
 
 std::vector<Lexer::keyword_data> base_keywords{
+    {"is","KEYWORD_IS",KEYWORD_IS},
+    {"cast","KEYWORD_CAST",KEYWORD_CAST},
+    {"typeof","KEYWORD_TYPEOF",KEYWORD_TYPEOF},
     {"if","KEYWORD_IF",KEYWORD_IF},
     {"else","KEYWORD_ELSE",KEYWORD_ELSE},
     {"switch","KEYWORD_SWITCH",KEYWORD_SWITCH},
@@ -29,6 +32,7 @@ std::vector<Lexer::keyword_data> base_keywords{
     {"static","KEYWORD_STATIC",KEYWORD_STATIC},
     */
     {"any","KEYWORD_ANY",KEYWORD_ANY},
+    {"type","KEYWORD_TYPE",KEYWORD_TYPE},
     {"void","KEYWORD_VOID",KEYWORD_VOID},
     {"bool","KEYWORD_BOOL",KEYWORD_BOOL},
     {"char","KEYWORD_CHAR",KEYWORD_CHAR},

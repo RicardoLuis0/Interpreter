@@ -15,6 +15,7 @@
 #include "parser_expression_term.h"
 #include "parser_binary_operation.h"
 #include "parser_function_call.h"
+#include "parser_keyword_function_call.h"
 #include "parser_if_statement.h"
 #include "parser_for_statement.h"
 #include "parser_while_statement.h"
@@ -235,6 +236,7 @@ void print_expression(int,std::shared_ptr<Parser::Expression>);
 void print_line(int,std::shared_ptr<Parser::Line>);
 void print_expression_term(int,std::shared_ptr<Parser::ExpressionTerm>);
 void print_variable_definition(int indent,std::shared_ptr<Parser::VariableDefinition> def);
+void print_var_type(int indent,std::shared_ptr<Parser::VarType> type);
 
 void print_expression_list(int indent,std::shared_ptr<Parser::ExpressionList> exprlist){
     std::cout<<get_indent(indent)<<">Expression List\n";
@@ -258,6 +260,20 @@ void print_function_call(int indent,std::shared_ptr<Parser::FunctionCall> call){
     std::cout<<get_indent(indent)<<">Function Call\n";
     std::cout<<get_indent(indent)<<".identifier:\n";
     std::cout<<get_indent(indent+1)<<call->identifier<<"\n";
+    std::cout<<get_indent(indent)<<".arguments:\n";
+    if(call->arguments==nullptr){
+        std::cout<<get_indent(indent+1)<<"No Args\n";
+    }else{
+        print_expression_list(indent+1,call->arguments);
+    }
+}
+
+void print_keyword_function_call(int indent,std::shared_ptr<Parser::KeywordFunctionCall> call){
+    std::cout<<get_indent(indent)<<">Keyword Function Call\n";
+    std::cout<<get_indent(indent)<<".identifier:\n";
+    print_token(indent+1,call->identifier);
+    std::cout<<get_indent(indent)<<".extra_type:\n";
+    print_var_type(indent+1,call->extra_type);
     std::cout<<get_indent(indent)<<".arguments:\n";
     if(call->arguments==nullptr){
         std::cout<<get_indent(indent+1)<<"No Args\n";
@@ -290,6 +306,10 @@ void print_expression_term(int indent,std::shared_ptr<Parser::ExpressionTerm> te
     case Parser::EXPRESSION_TERM_FUNCTION_CALL:
         std::cout<<get_indent(indent)<<".function call:\n";
         print_function_call(indent+1,std::static_pointer_cast<Parser::FunctionCall>(term->contents_p));
+        break;
+    case Parser::EXPRESSION_TERM_KEYWORD_FUNCTION_CALL:
+        std::cout<<get_indent(indent)<<".keyword function call:\n";
+        print_keyword_function_call(indent+1,std::static_pointer_cast<Parser::KeywordFunctionCall>(term->contents_p));
         break;
     case Parser::EXPRESSION_TERM_UNARY_OPERATION:
         std::cout<<get_indent(indent)<<".unary operation:\n";
@@ -451,6 +471,9 @@ void print_primitive(int indent,Parser::ParserPrimitiveType_t primitive){
     switch(primitive){
     case Parser::PRIMITIVE_ANY:
         std::cout<<get_indent(indent)<<"[PRIMITIVE] any\n";
+        break;
+    case Parser::PRIMITIVE_TYPE:
+        std::cout<<get_indent(indent)<<"[PRIMITIVE] type\n";
         break;
     case Parser::PRIMITIVE_CHAR:
         std::cout<<get_indent(indent)<<"[PRIMITIVE] char\n";

@@ -6,6 +6,9 @@
 #include <vector>
 
 enum keyword_type_t{
+    KEYWORD_IS,
+    KEYWORD_CAST,
+    KEYWORD_TYPEOF,
     KEYWORD_IF,
     KEYWORD_ELSE,
     KEYWORD_SWITCH,
@@ -23,6 +26,7 @@ enum keyword_type_t{
     KEYWORD_NULL,
     KEYWORD_STATIC,
     KEYWORD_ANY,
+    KEYWORD_TYPE,
     KEYWORD_VOID,
     KEYWORD_BOOL,
     KEYWORD_CHAR,

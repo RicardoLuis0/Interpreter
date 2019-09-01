@@ -12,6 +12,7 @@ namespace Interpreter {
     class Type {
     public:
         static std::shared_ptr<Type> any_type();
+        static std::shared_ptr<Type> type_type();
         static std::shared_ptr<Type> void_type();
         static std::shared_ptr<Type> char_type();
         static std::shared_ptr<Type> unsigned_char_type();
@@ -36,6 +37,7 @@ namespace Interpreter {
         void check_variable_assignment(int op,std::shared_ptr<Value> self,int line_start,int line_end);
         static std::shared_ptr<Type> from_vartype_ignore_array(class DefaultFrame * context,std::shared_ptr<Parser::VarType> t);
         static std::shared_ptr<Type> any_type_instance;
+        static std::shared_ptr<Type> type_type_instance;
         static std::shared_ptr<Type> void_type_instance;
         static std::shared_ptr<Type> char_type_instance;
         static std::shared_ptr<Type> unsigned_char_type_instance;

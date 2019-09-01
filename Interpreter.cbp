@@ -61,8 +61,11 @@
 		<Unit filename="include/interpreter_dummy_variable.h" />
 		<Unit filename="include/interpreter_exec_frame.h" />
 		<Unit filename="include/interpreter_expr_part.h" />
+		<Unit filename="include/interpreter_expr_part_cast.h" />
 		<Unit filename="include/interpreter_expr_part_fn_call.h" />
+		<Unit filename="include/interpreter_expr_part_is.h" />
 		<Unit filename="include/interpreter_expr_part_op.h" />
+		<Unit filename="include/interpreter_expr_part_typeof.h" />
 		<Unit filename="include/interpreter_expr_part_unary_op.h" />
 		<Unit filename="include/interpreter_expr_part_value.h" />
 		<Unit filename="include/interpreter_expr_part_var.h" />
@@ -89,6 +92,9 @@
 		<Unit filename="include/interpreter_string_value.h" />
 		<Unit filename="include/interpreter_string_variable.h" />
 		<Unit filename="include/interpreter_type.h" />
+		<Unit filename="include/interpreter_type_type.h" />
+		<Unit filename="include/interpreter_type_value.h" />
+		<Unit filename="include/interpreter_type_variable.h" />
 		<Unit filename="include/interpreter_unsigned_char_type.h" />
 		<Unit filename="include/interpreter_unsigned_char_value.h" />
 		<Unit filename="include/interpreter_unsigned_char_variable.h" />
@@ -160,6 +166,8 @@
 		<Unit filename="include/parser_function_definition_parameter_matcher.h" />
 		<Unit filename="include/parser_if_statement.h" />
 		<Unit filename="include/parser_if_statment_matcher.h" />
+		<Unit filename="include/parser_keyword_function_call.h" />
+		<Unit filename="include/parser_keyword_function_call_matcher.h" />
 		<Unit filename="include/parser_line.h" />
 		<Unit filename="include/parser_line_matcher.h" />
 		<Unit filename="include/parser_result_part.h" />
@@ -184,8 +192,11 @@
 		<Unit filename="include/syntax_error.h" />
 		<Unit filename="src/deflib.cpp" />
 		<Unit filename="src/interpreter/expr_part/interpreter_expr_part.cpp" />
+		<Unit filename="src/interpreter/expr_part/interpreter_expr_part_cast.cpp" />
 		<Unit filename="src/interpreter/expr_part/interpreter_expr_part_fn_call.cpp" />
+		<Unit filename="src/interpreter/expr_part/interpreter_expr_part_is.cpp" />
 		<Unit filename="src/interpreter/expr_part/interpreter_expr_part_op.cpp" />
+		<Unit filename="src/interpreter/expr_part/interpreter_expr_part_typeof.cpp" />
 		<Unit filename="src/interpreter/expr_part/interpreter_expr_part_unary_op.cpp" />
 		<Unit filename="src/interpreter/expr_part/interpreter_expr_part_value.cpp" />
 		<Unit filename="src/interpreter/expr_part/interpreter_expr_part_var.cpp" />
@@ -213,6 +224,7 @@
 		<Unit filename="src/interpreter/types/interpreter_primitive_type.cpp" />
 		<Unit filename="src/interpreter/types/interpreter_string_type.cpp" />
 		<Unit filename="src/interpreter/types/interpreter_type.cpp" />
+		<Unit filename="src/interpreter/types/interpreter_type_type.cpp" />
 		<Unit filename="src/interpreter/types/interpreter_unsigned_char_type.cpp" />
 		<Unit filename="src/interpreter/types/interpreter_unsigned_int_type.cpp" />
 		<Unit filename="src/interpreter/types/interpreter_void_type.cpp" />
@@ -231,6 +243,7 @@
 		<Unit filename="src/interpreter/values/interpreter_intlike_simple_math_method.inc.h" />
 		<Unit filename="src/interpreter/values/interpreter_primitive_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_string_value.cpp" />
+		<Unit filename="src/interpreter/values/interpreter_type_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_unsigned_char_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_unsigned_int_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_value.cpp" />
@@ -243,6 +256,7 @@
 		<Unit filename="src/interpreter/variables/interpreter_float_variable.cpp" />
 		<Unit filename="src/interpreter/variables/interpreter_int_variable.cpp" />
 		<Unit filename="src/interpreter/variables/interpreter_string_variable.cpp" />
+		<Unit filename="src/interpreter/variables/interpreter_type_variable.cpp" />
 		<Unit filename="src/interpreter/variables/interpreter_unsigned_char_variable.cpp" />
 		<Unit filename="src/interpreter/variables/interpreter_unsigned_int_variable.cpp" />
 		<Unit filename="src/interpreter/variables/interpreter_variable.cpp" />
@@ -290,6 +304,7 @@
 		<Unit filename="src/parser/component/parser_function_definition_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_function_definition_parameter_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_if_statment_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_keyword_function_call_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_line_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_return_statement_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_statement_matcher.cpp" />
@@ -312,6 +327,7 @@
 		<Unit filename="src/parser/result/parser_function_definition.cpp" />
 		<Unit filename="src/parser/result/parser_function_definition_parameter.cpp" />
 		<Unit filename="src/parser/result/parser_if_statement.cpp" />
+		<Unit filename="src/parser/result/parser_keyword_function_call.cpp" />
 		<Unit filename="src/parser/result/parser_line.cpp" />
 		<Unit filename="src/parser/result/parser_result_part.cpp" />
 		<Unit filename="src/parser/result/parser_return_statement.cpp" />

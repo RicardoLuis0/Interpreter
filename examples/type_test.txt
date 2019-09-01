@@ -1,0 +1,11 @@
+string get_value_type_name(any val){
+	return get_type_name(typeof(val));
+}
+
+int main(){
+	puts(get_value_type_name(0)+"\n");
+	puts(get_value_type_name('a')+"\n");
+	puts(get_value_type_name("a")+"\n");
+	puts(to_string(cast<char>(640))+"\n");
+	puts(to_string(cast<unsigned char>(200))+"\n");
+}

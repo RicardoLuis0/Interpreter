@@ -5,7 +5,7 @@
 #include "my_except.h"
 #include "parser_expression_matcher.h"
 
-//VarType = ( [ keyword 'unsigned' | keyword 'signed' ] , ( keyword 'any' | keyword 'void' | keyword 'int' | keyword 'char' | keyword 'float' | keyword 'string' ) ) , { symbol '[' , [ Expression ] , symbol ']' } ;
+//VarType = ( [ keyword 'unsigned' | keyword 'signed' ] , ( keyword 'any' | keyword 'type' | keyword 'void' | keyword 'int' | keyword 'char' | keyword 'float' | keyword 'string' ) ) , { symbol '[' , [ Expression ] , symbol ']' } ;
 
 using namespace Parser;
 
@@ -19,7 +19,7 @@ std::shared_ptr<VarType> VarTypeMatcher::makeMatch(parserProgress &p){
         has_sign=true;
         sign=kw->get_keyword_type()==KEYWORD_SIGNED;
     }
-    kw=p.isKeyword({KEYWORD_ANY,KEYWORD_VOID,KEYWORD_INT,KEYWORD_CHAR,KEYWORD_FLOAT,KEYWORD_STRING});
+    kw=p.isKeyword({KEYWORD_ANY,KEYWORD_TYPE,KEYWORD_VOID,KEYWORD_INT,KEYWORD_CHAR,KEYWORD_FLOAT,KEYWORD_STRING});
     if(kw){
         vt=std::make_shared<VarType>(kw,has_sign,sign,line_start,p.get_line(-1));
     }else{

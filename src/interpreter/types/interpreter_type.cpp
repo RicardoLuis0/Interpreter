@@ -1,5 +1,6 @@
 #include "interpreter_type.h"
 #include "interpreter_any_type.h"
+#include "interpreter_type_type.h"
 #include "interpreter_void_type.h"
 #include "interpreter_char_type.h"
 #include "interpreter_unsigned_char_type.h"
@@ -18,6 +19,7 @@
 using namespace Interpreter;
 
 std::shared_ptr<Type> Type::any_type_instance(std::make_shared<AnyType>());
+std::shared_ptr<Type> Type::type_type_instance(std::make_shared<TypeType>());
 std::shared_ptr<Type> Type::void_type_instance(std::make_shared<VoidType>());
 std::shared_ptr<Type> Type::char_type_instance(std::make_shared<CharType>());
 std::shared_ptr<Type> Type::unsigned_char_type_instance(std::make_shared<UnsignedCharType>());
@@ -28,6 +30,10 @@ std::shared_ptr<Type> Type::string_type_instance(std::make_shared<StringType>())
 
 std::shared_ptr<Type> Type::any_type(){
     return any_type_instance;
+}
+
+std::shared_ptr<Type> Type::type_type(){
+    return type_type_instance;
 }
 
 std::shared_ptr<Type> Type::void_type(){
@@ -80,6 +86,9 @@ std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std
         case Parser::PRIMITIVE_ANY:
             if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
             return any_type_instance;
+        case Parser::PRIMITIVE_TYPE:
+            if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
+            return type_type_instance;
         case Parser::PRIMITIVE_INT:
             return (t->has_sign&&!t->sign)?unsigned_int_type_instance:int_type_instance;
         case Parser::PRIMITIVE_CHAR:
