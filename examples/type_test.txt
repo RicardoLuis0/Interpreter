@@ -2,10 +2,31 @@ string get_value_type_name(any val){
 	return get_type_name(typeof(val));
 }
 
-int main(){
+void type_test(){
+	type int_type=type<int>();
+	type char_type=type<char>();
+	type unsigned_int_type=type<unsigned int>();
+	type unsigned_char_type=type<unsigned char>();
+	type float_type=type<float>();
+	type string_type=type<string>();
+	type type_type=type<type>();
+	type array_type=type<any[]>();
+	
+	puts(get_type_name(int_type)+"\n");
+	puts(get_type_name(char_type)+"\n");
+	puts(get_type_name(unsigned_int_type)+"\n");
+	puts(get_type_name(unsigned_char_type)+"\n");
+	puts(get_type_name(float_type)+"\n");
+	puts(get_type_name(string_type)+"\n");
+	puts(get_type_name(type_type)+"\n");
+	puts(get_type_name(array_type)+"\n");
+}
+
+void main(){
 	puts(get_value_type_name(0)+"\n");
 	puts(get_value_type_name('a')+"\n");
 	puts(get_value_type_name("a")+"\n");
 	puts(to_string(cast<char>(640))+"\n");
 	puts(to_string(cast<unsigned char>(200))+"\n");
+	type_test();
 }

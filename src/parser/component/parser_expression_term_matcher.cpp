@@ -39,7 +39,7 @@ std::shared_ptr<ExpressionTerm> ExpressionTermMatcher::makeMatch(parserProgress 
                 term=std::make_shared<ExpressionTerm>(KeywordFunctionCallMatcher().makeMatch(p),EXPRESSION_TERM_KEYWORD_FUNCTION_CALL,line_start,p.get_line(-1));
             }catch(MyExcept::NoMatchException &e){
                 p.location=location_backup;
-                if(p.isKeyword({KEYWORD_IS,KEYWORD_CAST,KEYWORD_TYPEOF})){
+                if(p.isKeyword({KEYWORD_IS,KEYWORD_CAST,KEYWORD_TYPEOF,KEYWORD_TYPE})){
                     //if it is definitely a keyword function call, re-throw previous exception
                     throw;
                 }

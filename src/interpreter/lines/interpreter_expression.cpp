@@ -18,6 +18,7 @@
 #include "lexer_float_token.h"
 #include "parser_unary_operation.h"
 #include "interpreter_expr_part_unary_op.h"
+#include "interpreter_type_value.h"
 
 using namespace Interpreter;
 
@@ -56,18 +57,31 @@ std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::share
             std::shared_ptr<Parser::KeywordFunctionCall> kfn=std::static_pointer_cast<Parser::KeywordFunctionCall>(term->contents_p);
             switch(kfn->identifier->get_keyword_type()){
             case KEYWORD_IS:
-                if(kfn->extra_type==nullptr)throw std::runtime_error("missing type to compare, usage 'is<TYPE>(VALUE)'");
-                if(kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'is<TYPE>(VALUE)'");
-                expr=std::make_shared<ExprPartIs>(Type::from_vartype(context,kfn->extra_type),get_expression(context,kfn->arguments->expression_list[0]));
+                if(kfn->extra_type==nullptr){
+                    if(kfn->arguments&&kfn->arguments->expression_list.size()!=2)throw std::runtime_error("missing type to compare, usage 'is<TYPE>(VALUE)' or 'is(TYPE_VALUE,VALUE)'");
+                    expr=std::make_shared<ExprPartIs>(get_expression(context,kfn->arguments->expression_list[0]),get_expression(context,kfn->arguments->expression_list[1]));
+                }else{
+                    if(kfn->arguments&&kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'is<TYPE>(VALUE)' or 'is(TYPE_VALUE,VALUE)'");
+                    expr=std::make_shared<ExprPartIs>(std::make_shared<ExprPartValue>(std::make_shared<TypeValue>(Type::from_vartype(context,kfn->extra_type))),get_expression(context,kfn->arguments->expression_list[0]));
+                }
                 break;
             case KEYWORD_CAST:
-                if(kfn->extra_type==nullptr)throw std::runtime_error("missing type to cast, usage 'cast<TYPE>(VALUE)'");
-                if(kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'cast<TYPE>(VALUE)'");
-                expr=std::make_shared<ExprPartCast>(Type::from_vartype(context,kfn->extra_type),get_expression(context,kfn->arguments->expression_list[0]));
+                if(kfn->extra_type==nullptr){
+                    if(kfn->arguments&&kfn->arguments->expression_list.size()!=2)throw std::runtime_error("missing type to cast, usage 'cast<TYPE>(VALUE)' or 'cast(TYPE_VALUE,VALUE)'");
+                    expr=std::make_shared<ExprPartCast>(get_expression(context,kfn->arguments->expression_list[0]),get_expression(context,kfn->arguments->expression_list[1]));
+                }else{
+                    if(kfn->arguments&&kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'cast<TYPE>(VALUE)' or 'cast(TYPE_VALUE,VALUE)'");
+                    expr=std::make_shared<ExprPartCast>(std::make_shared<ExprPartValue>(std::make_shared<TypeValue>(Type::from_vartype(context,kfn->extra_type))),get_expression(context,kfn->arguments->expression_list[0]));
+                }
+                break;
+            case KEYWORD_TYPE:
+                if(kfn->extra_type==nullptr)throw std::runtime_error("missing type for type literal, usage 'type<TYPE>()'");
+                if(kfn->arguments)throw std::runtime_error("invalid argument count, usage 'type<TYPE>()'");
+                expr=std::make_shared<ExprPartValue>(std::make_shared<TypeValue>(Type::from_vartype(context,kfn->extra_type)));
                 break;
             case KEYWORD_TYPEOF:
                 if(kfn->extra_type!=nullptr)throw std::runtime_error("invalid type argument, usage 'typeof(VALUE)'");
-                if(kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'typeof(VALUE)'");
+                if(kfn->arguments&&kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'typeof(VALUE)'");
                 expr=std::make_shared<ExprPartTypeOf>(get_expression(context,kfn->arguments->expression_list[0]));
                 break;
             default:

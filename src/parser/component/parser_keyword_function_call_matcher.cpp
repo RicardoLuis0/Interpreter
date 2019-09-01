@@ -4,13 +4,13 @@
 #include "parser_expression_list_matcher.h"
 #include "my_except.h"
 
-//KeywordFunctionCall = ( keyword 'cast' | keyword 'is' | keyword 'typeof' ) , [ symbol '<' , VarType , symbol '>' ] , symbol '(' , ExpressionList , symbol ')' ;
+//KeywordFunctionCall = ( keyword 'cast' | keyword 'is' | keyword 'typeof' | keyword 'type' ) , [ symbol '<' , VarType , symbol '>' ] , symbol '(' , ExpressionList , symbol ')' ;
 
 using namespace Parser;
 
 std::shared_ptr<KeywordFunctionCall> KeywordFunctionCallMatcher::makeMatch(parserProgress &p){
     int line_start=p.get_line();
-    std::shared_ptr<Lexer::KeywordToken> identifier=p.isKeyword({KEYWORD_IS,KEYWORD_CAST,KEYWORD_TYPEOF});
+    std::shared_ptr<Lexer::KeywordToken> identifier=p.isKeyword({KEYWORD_IS,KEYWORD_CAST,KEYWORD_TYPEOF,KEYWORD_TYPE});
     if(!identifier)throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"not a keyword function call");
     std::shared_ptr<VarType> type=nullptr;
     if(p.isSymbol(SYMBOL_LOWER)){

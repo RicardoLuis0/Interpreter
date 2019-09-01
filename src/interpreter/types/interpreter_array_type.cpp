@@ -17,7 +17,7 @@ ArrayType::ArrayType(std::shared_ptr<Type> t,int s):type(t),size(s){
 }
 
 std::string ArrayType::get_name(){
-    return "array";
+    return type->get_name()+"["+(size>=0?std::to_string(size):"")+"]";
 }
 
 std::shared_ptr<Value> ArrayType::make_value(std::shared_ptr<Type> self){

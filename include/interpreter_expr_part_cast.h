@@ -6,10 +6,10 @@
 namespace Interpreter {
     class ExprPartCast : public ExprPart {
         public:
-            ExprPartCast(std::shared_ptr<Type> type,std::shared_ptr<ExprPart> value);
+            ExprPartCast(std::shared_ptr<ExprPart> type,std::shared_ptr<ExprPart> value);
             virtual std::shared_ptr<Type> get_type() override;
             virtual std::shared_ptr<Value> eval(ExecFrame * context) override;
-            std::shared_ptr<Type> type_param;
+            std::shared_ptr<ExprPart> type_param;
             std::shared_ptr<ExprPart> param;
     };
 }
