@@ -1,3 +1,14 @@
+string tf(int v){
+	if(v){
+		return "true";
+	}
+	return "false";
+}
+
+int same_type(any val1,any val2){
+	return is(typeof(val1),val2);
+}
+
 string get_value_type_name(any val){
 	return get_type_name(typeof(val));
 }
@@ -28,5 +39,11 @@ void main(){
 	puts(get_value_type_name("a")+"\n");
 	puts(to_string(cast<char>(640))+"\n");
 	puts(to_string(cast<unsigned char>(200))+"\n");
+	puts("same type int&int "+tf(same_type(0,1))+"\n");
+	puts("same type int&float "+tf(same_type(0,1.))+"\n");
+	puts("same type int&string "+tf(same_type(0,"1"))+"\n");
+	puts("same type float&float "+tf(same_type(0.,1.))+"\n");
+	puts("same type float&string "+tf(same_type(0.,"1"))+"\n");
+	puts("same type string&string "+tf(same_type("0","1"))+"\n");
 	type_test();
 }
