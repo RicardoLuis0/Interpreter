@@ -5,6 +5,8 @@
 
 namespace Interpreter {
     class PrimitiveType : public Type {
+        public:
+            PrimitiveType(bool is_const=false);
     };
 }
 

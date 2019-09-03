@@ -10,6 +10,13 @@
 
 using namespace Interpreter;
 
+StringType::StringType(bool c):Type(c){
+}
+
+std::shared_ptr<Type> StringType::change_const(std::shared_ptr<Type> self,bool new_const){
+    return Type::string_type(new_const);
+}
+
 std::string StringType::get_name(){
     return "string";
 }

@@ -13,7 +13,15 @@
 
 using namespace Interpreter;
 
-ArrayType::ArrayType(std::shared_ptr<Type> t,int s):type(t),size(s){
+ArrayType::ArrayType(std::shared_ptr<Type> t,int s,bool c):Type(c),type(t),size(s){
+}
+
+std::shared_ptr<Type> ArrayType::change_const(std::shared_ptr<Type> self,bool new_const){
+    if(is_const==new_const){
+        return self;
+    }else{
+        return std::make_shared<ArrayType>(type,size,new_const);
+    }
 }
 
 std::string ArrayType::get_name(){

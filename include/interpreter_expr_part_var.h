@@ -6,7 +6,7 @@
 namespace Interpreter {
     class ExprPartVar : public ExprPart {
         public:
-            ExprPartVar(DefaultFrame * context,std::string,int line);
+            ExprPartVar(DefaultFrame * context,std::string,int line,bool ignore_const=false);
             std::shared_ptr<Value> get_dummy_type() override;
             std::shared_ptr<Type> get_type() override;
             std::shared_ptr<Value> eval(ExecFrame * context) override;

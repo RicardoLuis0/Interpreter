@@ -9,8 +9,15 @@
 
 using namespace Interpreter;
 
+AnyType::AnyType(bool c):Type(c){
+}
+
 bool AnyType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
     return true;
+}
+
+std::shared_ptr<Type> AnyType::change_const(std::shared_ptr<Type> self,bool new_const){
+    return Type::any_type(new_const);
 }
 
 std::string AnyType::get_name(){

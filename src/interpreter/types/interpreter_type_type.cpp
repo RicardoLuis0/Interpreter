@@ -11,6 +11,13 @@
 
 using namespace Interpreter;
 
+TypeType::TypeType(bool c):Type(c){
+}
+
+std::shared_ptr<Type> TypeType::change_const(std::shared_ptr<Type> self,bool new_const){
+    return Type::type_type(new_const);
+}
+
 std::shared_ptr<Value> TypeType::make_value(std::shared_ptr<Type> self) {
     return std::make_shared<TypeValue>(Type::any_type());
 }

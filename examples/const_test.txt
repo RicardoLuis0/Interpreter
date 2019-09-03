@@ -1,0 +1,6 @@
+const int test=123;
+
+int main(){
+	puts(to_string(test)+"\n");
+	return 0;
+}

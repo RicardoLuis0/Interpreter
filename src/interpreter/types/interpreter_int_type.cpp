@@ -23,6 +23,13 @@ std::string IntType::get_name(){
     return "int";
 }
 
+std::shared_ptr<Type> IntType::change_const(std::shared_ptr<Type> self,bool new_const){
+    return Type::int_type(new_const);
+}
+
+IntType::IntType(bool c):PrimitiveType(c){
+}
+
 std::shared_ptr<Value> IntType::make_value(std::shared_ptr<Type> self){
     return std::make_shared<IntValue>(0);
 }

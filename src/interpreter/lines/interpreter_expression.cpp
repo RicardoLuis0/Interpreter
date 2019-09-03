@@ -22,8 +22,15 @@
 
 using namespace Interpreter;
 
+std::shared_ptr<Expression> Expression::expr_assign_ignore_const(DefaultFrame * context,std::string varname,std::shared_ptr<Parser::Expression> assign_val,int line){
+    return std::make_shared<Expression>(std::make_shared<ExprPartOp>(std::make_shared<ExprPartVar>(context,varname,line,true),SYMBOL_ASSIGNMENT,get_expression(context,assign_val),line,assign_val->line_end),line);
+}
+
 Expression::Expression(DefaultFrame * context,std::shared_ptr<Parser::Expression> e):Line(e->line_start){
     expression=get_expression(context,e);
+}
+
+Expression::Expression(std::shared_ptr<ExprPart> e,int l):Line(l),expression(e){
 }
 
 std::shared_ptr<Type> Expression::get_type(){

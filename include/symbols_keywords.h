@@ -25,6 +25,7 @@ enum keyword_type_t{
     KEYWORD_FALSE,
     KEYWORD_NULL,
     KEYWORD_STATIC,
+    KEYWORD_CONST,
     KEYWORD_ANY,
     KEYWORD_TYPE,
     KEYWORD_VOID,

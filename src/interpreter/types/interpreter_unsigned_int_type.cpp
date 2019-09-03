@@ -19,6 +19,13 @@
 
 using namespace Interpreter;
 
+UnsignedIntType::UnsignedIntType(bool c):PrimitiveType(c){
+}
+
+std::shared_ptr<Type> UnsignedIntType::change_const(std::shared_ptr<Type> self,bool new_const){
+    return Type::unsigned_int_type(new_const);
+}
+
 std::string UnsignedIntType::get_name(){
     return "unsigned int";
 }

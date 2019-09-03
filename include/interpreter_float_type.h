@@ -6,6 +6,8 @@
 namespace Interpreter {
     class FloatType : public PrimitiveType {
     public:
+        FloatType(bool is_const=false);
+        std::shared_ptr<Type> change_const(std::shared_ptr<Type> self,bool new_const) override;
         std::shared_ptr<Value> get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end) override;
         std::shared_ptr<Value> get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end) override;
         std::shared_ptr<Value> call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other) override;

@@ -14,6 +14,7 @@
 #include "parser_expression_term.h"
 #include "lexer_integer_token.h"
 #include "interpreter_util_defines_misc.h"
+#include "interpreter_expression.h"
 #include "my_except.h"
 
 using namespace Interpreter;
@@ -28,44 +29,53 @@ std::shared_ptr<Type> Type::unsigned_int_type_instance(std::make_shared<Unsigned
 std::shared_ptr<Type> Type::float_type_instance(std::make_shared<FloatType>());
 std::shared_ptr<Type> Type::string_type_instance(std::make_shared<StringType>());
 
-std::shared_ptr<Type> Type::any_type(){
-    return any_type_instance;
+std::shared_ptr<Type> Type::const_any_type_instance(std::make_shared<AnyType>(true));
+std::shared_ptr<Type> Type::const_type_type_instance(std::make_shared<TypeType>(true));
+std::shared_ptr<Type> Type::const_void_type_instance(std::make_shared<VoidType>(true));
+std::shared_ptr<Type> Type::const_char_type_instance(std::make_shared<CharType>(true));
+std::shared_ptr<Type> Type::const_unsigned_char_type_instance(std::make_shared<UnsignedCharType>(true));
+std::shared_ptr<Type> Type::const_int_type_instance(std::make_shared<IntType>(true));
+std::shared_ptr<Type> Type::const_unsigned_int_type_instance(std::make_shared<UnsignedIntType>(true));
+std::shared_ptr<Type> Type::const_float_type_instance(std::make_shared<FloatType>(true));
+std::shared_ptr<Type> Type::const_string_type_instance(std::make_shared<StringType>(true));
+
+Type::Type(bool b):is_const(b){
 }
 
-std::shared_ptr<Type> Type::type_type(){
-    return type_type_instance;
+std::shared_ptr<Type> Type::any_type(bool is_const){
+    return is_const?const_any_type_instance:any_type_instance;
 }
 
-std::shared_ptr<Type> Type::void_type(){
-    return void_type_instance;
+std::shared_ptr<Type> Type::type_type(bool is_const){
+    return is_const?const_type_type_instance:type_type_instance;
 }
 
-std::shared_ptr<Type> Type::char_type(){
-    return char_type_instance;
+std::shared_ptr<Type> Type::void_type(bool is_const){
+    return is_const?const_void_type_instance:void_type_instance;
 }
 
-std::shared_ptr<Type> Type::unsigned_char_type(){
-    return unsigned_char_type_instance;
+std::shared_ptr<Type> Type::char_type(bool is_const){
+    return is_const?const_char_type_instance:char_type_instance;
 }
 
-std::shared_ptr<Type> Type::int_type(){
-    return int_type_instance;
+std::shared_ptr<Type> Type::unsigned_char_type(bool is_const){
+    return is_const?const_unsigned_char_type_instance:unsigned_char_type_instance;
 }
 
-std::shared_ptr<Type> Type::unsigned_int_type(){
-    return unsigned_int_type_instance;
+std::shared_ptr<Type> Type::int_type(bool is_const){
+    return is_const?const_int_type_instance:int_type_instance;
 }
 
-std::shared_ptr<Type> Type::float_type(){
-    return float_type_instance;
+std::shared_ptr<Type> Type::unsigned_int_type(bool is_const){
+    return is_const?const_unsigned_int_type_instance:unsigned_int_type_instance;
 }
 
-std::shared_ptr<Type> Type::string_type(){
-    return string_type_instance;
+std::shared_ptr<Type> Type::float_type(bool is_const){
+    return is_const?const_float_type_instance:float_type_instance;
 }
 
-std::shared_ptr<Type> Type::class_type(DefaultFrame * context,std::string name){
-    throw std::runtime_error("classes/structs/typedefs not implemented yet");
+std::shared_ptr<Type> Type::string_type(bool is_const){
+    return is_const?const_string_type_instance:string_type_instance;
 }
 
 bool Type::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
@@ -76,28 +86,28 @@ std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std
     switch(t->type){
     case Parser::VARTYPE_VOID:
         if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
-        return void_type_instance;
+        return void_type(t->is_const);
     case Parser::VARTYPE_IDENTIFIER:
-        return class_type(context,"");//throws
+        throw std::runtime_error("classes/structs/typedefs/etc not implemented yet");
     case Parser::VARTYPE_PRIMITIVE:
         switch(t->primitive){
         case Parser::PRIMITIVE_INVALID:
             throw MyExcept::SyntaxError(t->line_start,t->line_end,"invalid primitive value 'PRIMITIVE_INVALID'");
         case Parser::PRIMITIVE_ANY:
             if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
-            return any_type_instance;
+            return any_type(t->is_const);
         case Parser::PRIMITIVE_TYPE:
             if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
-            return type_type_instance;
+            return type_type(t->is_const);
         case Parser::PRIMITIVE_INT:
-            return (t->has_sign&&!t->sign)?unsigned_int_type_instance:int_type_instance;
+            return (t->has_sign&&!t->sign)?unsigned_int_type(t->is_const):int_type(t->is_const);
         case Parser::PRIMITIVE_CHAR:
-            return (t->has_sign&&!t->sign)?unsigned_char_type_instance:char_type_instance;
+            return (t->has_sign&&!t->sign)?unsigned_char_type(t->is_const):char_type(t->is_const);
         case Parser::PRIMITIVE_FLOAT:
             if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
-            return float_type_instance;
+            return float_type(t->is_const);
         case Parser::PRIMITIVE_STRING:
-            return string_type_instance;
+            return string_type(t->is_const);
         }
     }
     throw std::runtime_error("invalid type");
@@ -178,6 +188,7 @@ void Type::check_variable_assignment(int op,std::shared_ptr<Value> self,int line
         if(std::dynamic_pointer_cast<Variable>(self)==nullptr){
             throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' only available for variables");
         }
+        if(is_const)throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' unavailable for constant variables");
         break;
     }
 }

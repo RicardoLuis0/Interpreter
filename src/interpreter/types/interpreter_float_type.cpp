@@ -22,6 +22,13 @@ std::string FloatType::get_name(){
     return "float";
 }
 
+std::shared_ptr<Type> FloatType::change_const(std::shared_ptr<Type> self,bool new_const){
+    return Type::float_type(new_const);
+}
+
+FloatType::FloatType(bool c):PrimitiveType(c){
+}
+
 std::shared_ptr<Value> FloatType::make_value(std::shared_ptr<Type> self){
     return std::make_shared<FloatValue>(0);
 }

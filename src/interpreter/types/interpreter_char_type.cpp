@@ -23,6 +23,13 @@ std::string CharType::get_name(){
     return "char";
 }
 
+std::shared_ptr<Type> CharType::change_const(std::shared_ptr<Type> self,bool new_const){
+    return Type::char_type(new_const);
+}
+
+CharType::CharType(bool c):PrimitiveType(c){
+}
+
 std::shared_ptr<Value> CharType::make_value(std::shared_ptr<Type> self){
     return std::make_shared<CharValue>(0);
 }
