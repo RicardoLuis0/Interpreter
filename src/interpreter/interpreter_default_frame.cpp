@@ -44,8 +44,8 @@ DefaultFrame::DefaultFrame(DefaultFrame * p,Function * f):parent(p){
 DefaultFrame::DefaultFrame(DefaultFrame * p):parent(p){
 }
 
-std::shared_ptr<Variable> DefaultFrame::get_variable(std::string name){
-    MAP_GET(variable_defaults,name,parent?parent->get_variable(name):nullptr)
+std::shared_ptr<Type> DefaultFrame::get_variable_type(std::string name){
+    MAP_GET(variable_types,name,parent?parent->get_variable_type(name):nullptr)
 }
 
 std::vector<std::vector<FunctionParameter>> DefaultFrame::get_function_variants(std::string name){
@@ -140,7 +140,7 @@ void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool g
 
 void DefaultFrame::add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global){
     if(CHECKPTR(type,VoidType))throw MyExcept::SyntaxError(var->line_start,var->line_start,"variable type can't be void");
-    variable_defaults.insert({var->name,type->make_variable(type,var->name)});
+    variable_types.insert({var->name,type});
     if(global&&var->value){
         if(var->value->type==Parser::EXPRESSION_TERM){
             std::shared_ptr<Parser::ExpressionTerm> term(std::static_pointer_cast<Parser::ExpressionTerm>(var->value->contents));

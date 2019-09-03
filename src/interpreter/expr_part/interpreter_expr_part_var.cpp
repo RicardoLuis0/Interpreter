@@ -4,9 +4,8 @@
 
 using namespace Interpreter;
 
-ExprPartVar::ExprPartVar(DefaultFrame * context,std::string s,int line):ident(s){
-    if(context->get_variable(ident)==nullptr)throw MyExcept::SyntaxError(line,line,"undefined variable "+ident);
-    type=context->get_variable(ident)->get_type();
+ExprPartVar::ExprPartVar(DefaultFrame * context,std::string s,int line):type(context->get_variable_type(ident)),ident(s){
+    if(type==nullptr)throw MyExcept::SyntaxError(line,line,"undefined variable "+ident);
 }
 
 std::shared_ptr<Type> ExprPartVar::get_type(){

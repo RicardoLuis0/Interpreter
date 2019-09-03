@@ -19,10 +19,10 @@
 using namespace Interpreter;
 
 ExecFrame::ExecFrame(ExecFrame * p,DefaultFrame * d):parent(p),defaults(d){
-    for(std::pair<std::string,std::shared_ptr<Variable>> vpair:defaults->variable_defaults){
-        std::shared_ptr<Variable> var=vpair.second->clone_var(vpair.first);
+    for(std::pair<std::string,std::shared_ptr<Type>> vpair:defaults->variable_types){
+        std::shared_ptr<Variable> var=vpair.second->make_variable(vpair.second,vpair.first);
         if(!var){
-            throw std::runtime_error("unexpected nullptr in "+std::string(typeid(*vpair.second).name())+"::clone");
+            throw std::runtime_error("unexpected nullptr in "+std::string(vpair.second->get_name())+"::make_variable");
         }
         variables.insert({vpair.first,var});
     }

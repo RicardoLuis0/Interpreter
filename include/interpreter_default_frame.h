@@ -32,11 +32,11 @@ namespace Interpreter{
             DefaultFrame(DefaultFrame * parent);
             DefaultFrame * parent;
             std::map<std::string,std::unordered_map<std::vector<FunctionParameter>,std::shared_ptr<Function>,fnparam_vec_hash>> functions;
-            std::map<std::string,std::shared_ptr<Variable>> variable_defaults;
+            std::map<std::string,std::shared_ptr<Type>> variable_types;
             std::map<std::string,int> int_values;
             std::map<std::string,float> float_values;
             std::map<std::string,std::string> string_values;
-            std::shared_ptr<Variable> get_variable(std::string);
+            std::shared_ptr<Type> get_variable_type(std::string);
             std::vector<std::vector<FunctionParameter>> get_function_variants(std::string);
             std::shared_ptr<Function> get_function(std::string,std::vector<FunctionParameter>);
             std::shared_ptr<Function> get_function_local(std::string,std::vector<FunctionParameter>);
