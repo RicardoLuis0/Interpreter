@@ -1,7 +1,7 @@
 #ifndef INTERPRETER_ARRAY_TYPE_H
 #define INTERPRETER_ARRAY_TYPE_H
 
-#include "interpreter_primitive_type.h"
+#include "interpreter_type.h"
 
 namespace Interpreter {
     class ArrayType : public Type {

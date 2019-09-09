@@ -1,7 +1,7 @@
 #ifndef INTERPRETER_STRING_TYPE_H
 #define INTERPRETER_STRING_TYPE_H
 
-#include "interpreter_int_type.h"
+#include "interpreter_type.h"
 
 namespace Interpreter {
     class StringType : public Type {
