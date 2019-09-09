@@ -91,6 +91,8 @@ std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std
         throw std::runtime_error("classes/structs/typedefs/etc not implemented yet");
     case Parser::VARTYPE_PRIMITIVE:
         switch(t->primitive){
+        default:
+            throw std::runtime_error("Type::from_vartype_ignore_array() unkown primitive value");
         case Parser::PRIMITIVE_INVALID:
             throw MyExcept::SyntaxError(t->line_start,t->line_end,"invalid primitive value 'PRIMITIVE_INVALID'");
         case Parser::PRIMITIVE_ANY:
