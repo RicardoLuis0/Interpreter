@@ -25,7 +25,7 @@ std::shared_ptr<Type> PointerType::change_const(std::shared_ptr<Type> self,bool 
 }
 
 std::string PointerType::get_name(){
-    return "pointer<"+(type?"?":type->get_name())+">";
+    return "ptr<"+(type?"?":type->get_name())+">";
 }
 
 std::shared_ptr<Value> PointerType::make_value(std::shared_ptr<Type> self){
