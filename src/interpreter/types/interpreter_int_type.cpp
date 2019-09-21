@@ -146,7 +146,7 @@ std::shared_ptr<Value> IntType::get_unary_operator_result(int op,std::shared_ptr
     }else if(op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT||op==SYMBOL_LOGICAL_NOT){
         return std::make_shared<DummyValue>(self->get_type());
     }
-    throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+    return Type::get_unary_operator_result(op,self,pre,line_start,line_end);
 }
 
 std::shared_ptr<Value> IntType::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
@@ -316,7 +316,7 @@ std::shared_ptr<Value> IntType::call_unary_operator(int op,std::shared_ptr<Value
     if(pre){
         switch(op){
         default:
-            throw std::runtime_error("invalid unary pre operator '"+get_op_str(op)+"'");
+            return Type::call_unary_operator(op,self,pre);
         case SYMBOL_INCREMENT:
             self->unary_pre_increment();
             return self;
@@ -333,7 +333,7 @@ std::shared_ptr<Value> IntType::call_unary_operator(int op,std::shared_ptr<Value
     }else{
         switch(op){
         default:
-            throw std::runtime_error("invalid unary post operator '"+get_op_str(op)+"'");
+            return Type::call_unary_operator(op,self,pre);
         case SYMBOL_INCREMENT:
             return self->unary_post_increment();
         case SYMBOL_DECREMENT:

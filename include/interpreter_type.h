@@ -20,6 +20,7 @@ namespace Interpreter {
         static std::shared_ptr<Type> unsigned_int_type(bool is_const=false);
         static std::shared_ptr<Type> float_type(bool is_const=false);
         static std::shared_ptr<Type> string_type(bool is_const=false);
+        static std::shared_ptr<Type> pointer_type(std::shared_ptr<Type> type,bool is_const=false);
         static std::shared_ptr<Type> from_vartype(class DefaultFrame * context,std::shared_ptr<Parser::VarType>);
         Type(bool is_const=false);
         virtual std::shared_ptr<Type> change_const(std::shared_ptr<Type> self,bool new_const)=0;

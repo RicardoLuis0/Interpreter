@@ -7,6 +7,8 @@
 #include "interpreter_float_variable.h"
 #include "interpreter_string_variable.h"
 #include "interpreter_array_variable.h"
+#include "interpreter_pointer_variable.h"
+#include "interpreter_pointer_type.h"
 #include "interpreter_user_function.h"
 #include "interpreter_int_type.h"
 #include "interpreter_float_type.h"
@@ -50,6 +52,8 @@ void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::share
         variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<StringVariable>(val):std::dynamic_pointer_cast<StringValue>(val->get_type()->cast(val,t))->clone_var(s);
     }else if(CHECKPTR(t,ArrayType)){
         variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<ArrayVariable>(val):std::dynamic_pointer_cast<ArrayValue>(val->get_type()->cast(val,t))->clone_var(s);
+    }else if(CHECKPTR(t,PointerType)){
+        variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<PointerVariable>(val):std::dynamic_pointer_cast<PointerValue>(val->get_type()->cast(val,t))->clone_var(s);
     }else{
         throw std::runtime_error("classes not implemented");
     }

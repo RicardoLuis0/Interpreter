@@ -85,6 +85,8 @@
 		<Unit filename="include/interpreter_line_result_return.h" />
 		<Unit filename="include/interpreter_line_result_simple.h" />
 		<Unit filename="include/interpreter_pointer_type.h" />
+		<Unit filename="include/interpreter_pointer_value.h" />
+		<Unit filename="include/interpreter_pointer_variable.h" />
 		<Unit filename="include/interpreter_primitive_type.h" />
 		<Unit filename="include/interpreter_primitive_value.h" />
 		<Unit filename="include/interpreter_return_statement.h" />
@@ -243,6 +245,7 @@
 		<Unit filename="src/interpreter/values/interpreter_intlike_inttype_math_method.inc.h" />
 		<Unit filename="src/interpreter/values/interpreter_intlike_methods.inc.h" />
 		<Unit filename="src/interpreter/values/interpreter_intlike_simple_math_method.inc.h" />
+		<Unit filename="src/interpreter/values/interpreter_pointer_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_primitive_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_string_value.cpp" />
 		<Unit filename="src/interpreter/values/interpreter_type_value.cpp" />
@@ -257,6 +260,7 @@
 		<Unit filename="src/interpreter/variables/interpreter_dummy_variable.cpp" />
 		<Unit filename="src/interpreter/variables/interpreter_float_variable.cpp" />
 		<Unit filename="src/interpreter/variables/interpreter_int_variable.cpp" />
+		<Unit filename="src/interpreter/variables/interpreter_pointer_variable.cpp" />
 		<Unit filename="src/interpreter/variables/interpreter_string_variable.cpp" />
 		<Unit filename="src/interpreter/variables/interpreter_type_variable.cpp" />
 		<Unit filename="src/interpreter/variables/interpreter_unsigned_char_variable.cpp" />

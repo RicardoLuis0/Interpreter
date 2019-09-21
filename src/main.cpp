@@ -85,18 +85,33 @@ int test_exec(){
         std::vector<std::shared_ptr<Lexer::Token>> tokens;
         std::vector<std::shared_ptr<Parser::Definition>> deflist;
         Lexer::Lexer lexer(base_symbols,base_keywords);
+        Console::clear();
+    start:
         while(true){
-            Console::clear();
-            std::cout<<"Filename: ";
+            std::cout<<">";
             std::cin>>filename;
+            if(filename=="q"||filename=="quit"||filename=="exit")return 0;
             try{
                 tokens=lexer.tokenize_from_file(filename);//split file into tokens
             }catch(MyExcept::FileError &e){
-                std::cout<<e.what()<<"\nTry Again, ";
-                continue;
+                try{
+                    tokens=lexer.tokenize_from_file(filename+".txt");
+                }catch(MyExcept::FileError &e2){
+                    try{
+                        tokens=lexer.tokenize_from_file("examples/"+filename);
+                    }catch(MyExcept::FileError &e2){
+                        try{
+                            tokens=lexer.tokenize_from_file("examples/"+filename+".txt");
+                        }catch(MyExcept::FileError &e2){
+                            std::cout<<e.what()<<"\n";
+                            continue;
+                        }
+                    }
+                }
             }
             break;
         }
+        Console::clear();
         Parser::parserProgress p {data:tokens,location:0};
         while(p.get_nothrow()!=nullptr){
             deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
@@ -109,23 +124,28 @@ int test_exec(){
         }else{
             if(CHECKPTR(entrypoint->get_type(),Interpreter::VoidType)){
                 eframe->fn_call(entrypoint,{});
-                return 0;
+                std::cout<<filename<<" finished exeuction\n";
+                goto start;
             }else{
                 if(!CHECKPTR(entrypoint->get_type(),Interpreter::IntType)){
                     throw std::runtime_error("'main' function must return 'int' or 'void'");
                 }
-                return std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,{}))->get();
+                std::cout<<filename<<" returned with value "<<std::to_string(std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,{}))->get())<<"\n";
+                goto start;
             }
         }
     }catch(MyExcept::ParseError &e){
+        std::cout<<e.what();
+        return 0;
+    }catch(MyExcept::SyntaxError &e){
         std::cout<<e.what();
         return 0;
     }catch(MyExcept::NoMatchException &e){
         std::cout<<e.what();
         return 0;
     }catch(std::exception &e){
-        std::cout<<"uncaught exception: "<<e.what();
-        return 1;
+        std::cout<<"uncaught exception: "<<e.what()<<"\n";
+        throw;
     }
     return 1;
 }

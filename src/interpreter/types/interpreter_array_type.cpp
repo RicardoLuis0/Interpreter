@@ -80,29 +80,11 @@ std::shared_ptr<Value> ArrayType::get_operator_result(int op,std::shared_ptr<Val
     }
 }
 
-std::shared_ptr<Value> ArrayType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end){
-    throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
-}
-
 std::shared_ptr<Value> ArrayType::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
     switch(op){
     case SYMBOL_SQUARE_BRACKET_OPEN://[] operator
         return self->access_array(other);
     default:
         throw std::runtime_error("invalid operator '"+get_op_str(op)+"'");
-    }
-}
-
-std::shared_ptr<Value> ArrayType::call_unary_operator(int op,std::shared_ptr<Value> self,bool pre){
-    if(pre){
-        switch(op){
-        default:
-            throw std::runtime_error("invalid unary pre operator '"+get_op_str(op)+"'");
-        }
-    }else{
-        switch(op){
-        default:
-            throw std::runtime_error("invalid unary post operator '"+get_op_str(op)+"'");
-        }
     }
 }

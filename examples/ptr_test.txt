@@ -1,0 +1,11 @@
+void ptr_set(ptr<int> p,int v){
+	*p=v;
+}
+
+int main(){
+	int val=10;
+	ptr<int> test=&val;
+	ptr_set(test,20);
+	puts("val="+to_string(val)+"\n");
+	return 0;
+}

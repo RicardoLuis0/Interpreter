@@ -101,7 +101,7 @@ std::shared_ptr<Value> FloatType::get_unary_operator_result(int op,std::shared_p
     if(pre&&(op==SYMBOL_PLUS||op==SYMBOL_MINUS)){
         return std::make_shared<DummyValue>(Type::float_type());
     }else{
-        throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+        return Type::get_unary_operator_result(op,self,pre,line_start,line_end);
     }
 }
 
@@ -163,13 +163,13 @@ std::shared_ptr<Value> FloatType::call_unary_operator(int op,std::shared_ptr<Val
     if(pre){
         switch(op){
         default:
-            throw std::runtime_error("invalid unary pre operator '"+get_op_str(op)+"'");\
+            return Type::call_unary_operator(op,self,pre);
         case SYMBOL_PLUS:
             return self->unary_pre_plus();
         case SYMBOL_MINUS:
             return self->unary_pre_minus();
         }
     }else{
-        throw std::runtime_error("invalid unary post operator '"+get_op_str(op)+"'");\
+        return Type::call_unary_operator(op,self,pre);
     }
 }

@@ -64,5 +64,5 @@ std::shared_ptr<Value> AnyType::get_unary_operator_result(int op,std::shared_ptr
     }else if(op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT||op==SYMBOL_LOGICAL_NOT){
         return std::make_shared<DummyValue>(Type::any_type());
     }
-    throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+    return Type::get_unary_operator_result(op,self,pre,line_start,line_end);
 }

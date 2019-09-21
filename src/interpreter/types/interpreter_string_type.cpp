@@ -65,14 +65,6 @@ std::shared_ptr<Value> StringType::get_operator_result(int op,std::shared_ptr<Va
     }
 }
 
-std::shared_ptr<Value> StringType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end){
-    if(pre){
-        throw MyExcept::SyntaxError(line_start,line_end,"unary pre operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
-    }else{
-        throw MyExcept::SyntaxError(line_start,line_end,"unary post operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
-    }
-}
-
 std::shared_ptr<Value> StringType::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
     try{
         other=other->get_type()->cast(other,Type::string_type());
@@ -94,13 +86,5 @@ std::shared_ptr<Value> StringType::call_operator(int op,std::shared_ptr<Value> s
         return self->neq(other);
     case SYMBOL_PLUS:
         return self->add(other);
-    }
-}
-
-std::shared_ptr<Value> StringType::call_unary_operator(int op,std::shared_ptr<Value> self,bool pre){
-    if(pre){
-        throw std::runtime_error("invalid unary pre operator '"+get_op_str(op)+"'");
-    }else{
-        throw std::runtime_error("invalid unary post operator '"+get_op_str(op)+"'");
     }
 }

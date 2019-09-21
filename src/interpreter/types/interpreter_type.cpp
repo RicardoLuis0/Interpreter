@@ -9,6 +9,10 @@
 #include "interpreter_float_type.h"
 #include "interpreter_string_type.h"
 #include "interpreter_array_type.h"
+#include "interpreter_pointer_type.h"
+#include "interpreter_pointer_value.h"
+#include "interpreter_dummy_value.h"
+#include "interpreter_variable.h"
 #include "interpreter_default_frame.h"
 #include "parser_expression.h"
 #include "parser_expression_term.h"
@@ -78,6 +82,10 @@ std::shared_ptr<Type> Type::string_type(bool is_const){
     return is_const?const_string_type_instance:string_type_instance;
 }
 
+std::shared_ptr<Type> Type::pointer_type(std::shared_ptr<Type> type,bool is_const){
+    return std::make_shared<PointerType>(type,is_const);
+}
+
 bool Type::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
     return false;
 }
@@ -109,7 +117,11 @@ std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std
             if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
             return float_type(t->is_const);
         case Parser::PRIMITIVE_STRING:
+            if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
             return string_type(t->is_const);
+        case Parser::PRIMITIVE_POINTER:
+            if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
+            return pointer_type(t->extra?from_vartype(context,t->extra):void_type(),t->is_const);
         }
     }
     throw std::runtime_error("invalid type");
@@ -151,7 +163,17 @@ std::shared_ptr<Value> Type::get_operator_result(int op,std::shared_ptr<Value> s
 }
 
 std::shared_ptr<Value> Type::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end){
-    throw MyExcept::SyntaxError(line_start,line_end,"operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+    if(pre){
+        if(op==SYMBOL_BITWISE_AND){
+            if(std::dynamic_pointer_cast<Variable>(self)==nullptr){
+                throw MyExcept::SyntaxError(line_start,line_end,"can't get address of non-variable");//technically possible but nah
+            }
+            return std::make_shared<DummyValue>(pointer_type(self->get_type()));
+        }
+        throw MyExcept::SyntaxError(line_start,line_end,"unary pre operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+    }else{
+        throw MyExcept::SyntaxError(line_start,line_end,"unary post operator '"+get_op_str(op)+"' not available for type "+self->get_type()->get_name());
+    }
 }
 
 std::shared_ptr<Value> Type::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other){
@@ -160,6 +182,9 @@ std::shared_ptr<Value> Type::call_operator(int op,std::shared_ptr<Value> self,st
 
 std::shared_ptr<Value> Type::call_unary_operator(int op,std::shared_ptr<Value> self,bool pre){
     if(pre){
+        if(op==SYMBOL_BITWISE_AND){
+            return std::make_shared<PointerValue>(pointer_type(self->get_type()),self);
+        }
         throw std::runtime_error("invalid unary pre operator '"+get_op_str(op)+"'");
     }else{
         throw std::runtime_error("invalid unary post operator '"+get_op_str(op)+"'");

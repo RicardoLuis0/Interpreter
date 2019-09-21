@@ -13,6 +13,8 @@ std::vector<int> UnaryOperationMatcher::pre_unary_operators{//these might also b
     SYMBOL_INCREMENT,
     SYMBOL_DECREMENT,
     SYMBOL_LOGICAL_NOT,
+    SYMBOL_BITWISE_AND,
+    SYMBOL_MULTIPLY,
 };
 
 std::vector<int> UnaryOperationMatcher::post_unary_operators{//these must not be binary operators
