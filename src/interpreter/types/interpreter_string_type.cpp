@@ -48,7 +48,9 @@ std::shared_ptr<Variable> StringType::make_variable(std::shared_ptr<Type> self,s
 std::shared_ptr<Value> StringType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end){
     check_variable_assignment(op,self,line_start,line_end);
     if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::string_type())){
-        throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+        if(!((op==SYMBOL_ASSIGNMENT||op==SYMBOL_PLUS_ASSIGNMENT||op==SYMBOL_PLUS)&&other->get_type()->allows_implicit_cast(other->get_type(),Type::char_type()))){
+            throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
+        }
     }
     switch(op){
     case SYMBOL_NOT_EQUALS:
@@ -69,7 +71,15 @@ std::shared_ptr<Value> StringType::call_operator(int op,std::shared_ptr<Value> s
     try{
         other=other->get_type()->cast(other,Type::string_type());
     }catch(...){
-        throw std::runtime_error("Invalid type '"+other->get_type()->get_name()+"' for string operator '"+get_op_str(op)+"'");
+        if(op==SYMBOL_ASSIGNMENT||op==SYMBOL_PLUS_ASSIGNMENT||op==SYMBOL_PLUS){
+            try{
+                other=other->get_type()->cast(other,Type::char_type());
+            }catch(...){
+                throw std::runtime_error("Invalid type '"+other->get_type()->get_name()+"' for string operator '"+get_op_str(op)+"'");
+            }
+        }else{
+            throw std::runtime_error("Invalid type '"+other->get_type()->get_name()+"' for string operator '"+get_op_str(op)+"'");
+        }
     }
     switch(op){
     default:

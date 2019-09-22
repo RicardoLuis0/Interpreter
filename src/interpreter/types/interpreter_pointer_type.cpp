@@ -3,7 +3,7 @@
 #include "interpreter_variable.h"
 #include "interpreter_util_defines_misc.h"
 #include "interpreter_int_type.h"
-#include "interpreter_float_type.h"
+#include "interpreter_int_value.h"
 #include "interpreter_dummy_value.h"
 #include "interpreter_dummy_variable.h"
 #include "interpreter_pointer_value.h"
@@ -42,16 +42,18 @@ std::shared_ptr<Type> PointerType::get_type(){
 
 bool PointerType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> o){
     std::shared_ptr<PointerType> other=std::dynamic_pointer_cast<PointerType>(o);
-    return (other&&other->type->is(other->type,type))||(CHECKPTR(other,AnyType));
+    return (other&&(type->is(type,Type::void_type())||other->type->is(other->type,type)||other->type->is(other->type,Type::void_type())))||(CHECKPTR(o,AnyType));
 }
 
 bool PointerType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return is(self,other);
+    return is(self,other)||CHECKPTR(other,IntType);
 }
 
 std::shared_ptr<Value> PointerType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
     if(is(self->get_type(),other)){
         return self;
+    }else if(CHECKPTR(other,IntType)){
+        return std::make_shared<IntValue>(std::dynamic_pointer_cast<PointerValue>(self)->get_value()!=nullptr);
     }else{
         return Type::cast(self,other);//throws
     }
@@ -65,6 +67,13 @@ std::shared_ptr<Value> PointerType::get_operator_result(int op,std::shared_ptr<V
         }else if(other->get_type()->allows_implicit_cast(other->get_type(),self->get_type())){
             return std::make_shared<DummyVariable>(self->get_type());
         }
+    case SYMBOL_EQUALS:
+    case SYMBOL_NOT_EQUALS:
+        if(std::dynamic_pointer_cast<PointerType>(other->get_type())==nullptr){
+            throw MyExcept::SyntaxError(line_start,line_end,"invalid type "+other->get_type()->get_name()+" for operator '=', expected pointer");
+        }else if(other->get_type()->allows_implicit_cast(other->get_type(),self->get_type())){
+            return std::make_shared<DummyVariable>(Type::int_type());
+        }
     default:
         //OP_UNKNOWN/invalid
         throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
@@ -72,8 +81,12 @@ std::shared_ptr<Value> PointerType::get_operator_result(int op,std::shared_ptr<V
 }
 
 std::shared_ptr<Value> PointerType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end){
-    if(pre&&op==SYMBOL_MULTIPLY){
-        return std::make_shared<DummyVariable>(type);
+    if(pre){
+        if(op==SYMBOL_MULTIPLY){
+            return std::make_shared<DummyVariable>(type);
+        }else if(op==SYMBOL_LOGICAL_NOT){
+            return std::make_shared<DummyVariable>(Type::int_type());
+        }
     }
     return Type::get_unary_operator_result(op,self,pre,line_start,line_end);
 }
@@ -84,6 +97,10 @@ std::shared_ptr<Value> PointerType::call_operator(int op,std::shared_ptr<Value> 
     case SYMBOL_ASSIGNMENT://= operator
         std::dynamic_pointer_cast<PointerValue>(self)->get_value()=std::dynamic_pointer_cast<PointerValue>(other)->get_value();
         return self;
+    case SYMBOL_EQUALS:
+        return std::make_shared<IntValue>(std::dynamic_pointer_cast<PointerValue>(self)->get_value().get()==std::dynamic_pointer_cast<PointerValue>(other)->get_value().get());
+    case SYMBOL_NOT_EQUALS:
+        return std::make_shared<IntValue>(std::dynamic_pointer_cast<PointerValue>(self)->get_value().get()!=std::dynamic_pointer_cast<PointerValue>(other)->get_value().get());
     default:
         throw std::runtime_error("invalid operator '"+get_op_str(op)+"'");
     }
@@ -94,6 +111,8 @@ std::shared_ptr<Value> PointerType::call_unary_operator(int op,std::shared_ptr<V
         switch(op){
         case SYMBOL_MULTIPLY:
             return std::dynamic_pointer_cast<PointerValue>(self)->get_value();
+        case SYMBOL_LOGICAL_NOT:
+            return std::make_shared<IntValue>(std::dynamic_pointer_cast<PointerValue>(self)->get_value()==nullptr);
         default:
             return Type::call_unary_operator(op,self,pre);
         }

@@ -1,3 +1,7 @@
+void ptr_void_test(ptr<void> p){
+	ptr<void> t=p;
+}
+
 void ptr_set(ptr<int> p,int v){
 	*p=v;
 }
@@ -6,6 +10,7 @@ int main(){
 	int val=10;
 	ptr<int> test=&val;
 	ptr_set(test,20);
+	ptr_void_test(test);
 	puts("val="+to_string(val)+"\n");
 	return 0;
 }

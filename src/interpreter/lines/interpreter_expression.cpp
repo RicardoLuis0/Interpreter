@@ -19,6 +19,7 @@
 #include "parser_unary_operation.h"
 #include "interpreter_expr_part_unary_op.h"
 #include "interpreter_type_value.h"
+#include "interpreter_pointer_value.h"
 
 using namespace Interpreter;
 
@@ -119,6 +120,9 @@ std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::share
         break;
     case Parser::EXPRESSION_TERM_LITERAL_FALSE:
         expr=ExprPartValue::from_int(0);
+        break;
+    case Parser::EXPRESSION_TERM_LITERAL_NULL:
+        expr=std::make_shared<ExprPartValue>(std::make_shared<PointerValue>(Type::void_type(),nullptr));
         break;
     default:
         throw std::runtime_error("unimplemented Expression Term type");//unreachable???

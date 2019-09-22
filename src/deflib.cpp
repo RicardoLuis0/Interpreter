@@ -3,6 +3,7 @@
 #include "interpreter_function.h"
 #include "parser_var_type.h"
 #include "interpreter_type_value.h"
+#include "interpreter_any_value.h"
 #include "interpreter_string_value.h"
 #include "interpreter_array_value.h"
 #include "interpreter_int_value.h"
@@ -10,8 +11,11 @@
 #include "interpreter_char_value.h"
 #include "interpreter_unsigned_char_value.h"
 #include "interpreter_float_value.h"
+#include "interpreter_pointer_value.h"
 #include "conio.h"
 #include "my_except.h"
+
+#include <cstdlib>
 
 //NOTE native functions to make later
 //int sprintf(string &output,string format, any ... args) TODO, varargs not implemented
@@ -26,6 +30,15 @@
 //int getch() DONE
 //int array_size(any[]) DONE
 //string get_type_name(type) DONE
+//ptr<void> fopen(string filename,int write) DONE //if write true, open as "w", if write false, open as "r"
+//void fclose(ptr<void>) DONE
+//void fputs(string,ptr<void>) DONE
+//void fputs(string,length,ptr<void>) DONE
+//char fgetc(ptr<void>) DONE
+//string fgets(unsigned int len,ptr<void>) DONE
+//void fseek(ptr<void>,unsigned int location) TODO, operates as SEEK_SET
+//void fseek(ptr<void>) TODO operates as SEEK_END
+//int ftell(ptr<void>) TODO
 
 namespace Interpreter {
 
@@ -256,6 +269,240 @@ namespace Interpreter {
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
             return std::make_shared<StringValue>(std::dynamic_pointer_cast<TypeValue>(args[0])->get()->get_name());
         }
+    };
+
+    class FILE_Value : public AnyValue {
+        public:
+            FILE_Value(std::string filename,int mode):FILE_Value(::fopen(filename.c_str(),mode?"w":"r")){
+            }
+            FILE_Value(FILE * fp):f(fp){
+            }
+            ~FILE_Value(){
+                close();
+            }
+            void close(){
+                if(f)::fclose(f);
+                f=nullptr;
+            }
+            FILE * f;
+    };
+
+    class fopen : public Function {
+        std::string get_name() override {
+            return "fopen";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::pointer_type(Type::void_type());
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::string_type(),"filename",false},{Type::int_type(),"readmode",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            return std::make_shared<PointerValue>(Type::void_type(),std::make_shared<FILE_Value>(std::dynamic_pointer_cast<StringValue>(args[0])->get().c_str(),std::dynamic_pointer_cast<IntValue>(args[1])->get()));
+        }
+
+    };
+
+    class fclose : public Function {
+        std::string get_name() override {
+            return "fclose";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::void_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::pointer_type(Type::void_type()),"file",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
+            if(f){
+                f->close();
+            }
+            return nullptr;
+        }
+
+    };
+
+    class fputs : public Function {
+        std::string get_name() override {
+            return "fputs";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::void_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::string_type(),"str",false},{Type::pointer_type(Type::void_type()),"file",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[1])->get_value());
+            if(f){
+                if(f->f){
+                    ::fputs(std::dynamic_pointer_cast<StringValue>(args[0])->get().c_str(),f->f);
+                }
+            }
+            return nullptr;
+        }
+
+    };
+
+    class fputs_len : public Function {
+        std::string get_name() override {
+            return "fputs";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::void_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::string_type(),"str",false},{Type::int_type(),"len",false},{Type::pointer_type(Type::void_type()),"file",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[2])->get_value());
+            if(f){
+                if(f->f){
+                    ::fputs(std::dynamic_pointer_cast<StringValue>(args[0])->get().substr(0,std::dynamic_pointer_cast<IntValue>(args[1])->get()).c_str(),f->f);
+                }
+            }
+            return nullptr;
+        }
+
+    };
+
+    class fgetc : public Function {
+        std::string get_name() override {
+            return "fgetc";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::char_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::pointer_type(Type::void_type()),"file",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
+            if(f){
+                if(f->f){
+                    return std::make_shared<CharValue>(::fgetc(f->f));
+                }
+            }
+            return std::make_shared<CharValue>(-1);
+        }
+
+    };
+
+    class fgets : public Function {
+        std::string get_name() override {
+            return "fgets";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::string_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::unsigned_int_type(),"len",false},{Type::pointer_type(Type::void_type()),"file",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[1])->get_value());
+            if(f){
+                if(f->f){
+                    std::shared_ptr<char> buf((char*)calloc(std::dynamic_pointer_cast<UnsignedIntValue>(args[0])->get()+1,sizeof(char)),free);
+                    ::fgets(buf.get(),std::dynamic_pointer_cast<UnsignedIntValue>(args[0])->get(),f->f);
+                    return std::make_shared<StringValue>(buf.get());
+                }
+            }
+            return std::make_shared<StringValue>("");
+        }
+
+    };
+
+    class fseek : public Function {
+        std::string get_name() override {
+            return "fseek";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::void_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::pointer_type(Type::void_type()),"file",false},{Type::unsigned_int_type(),"len",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
+            if(f){
+                if(f->f){
+                    ::fseek(f->f,std::dynamic_pointer_cast<UnsignedIntValue>(args[1])->get(),SEEK_SET);
+                }
+            }
+            return nullptr;
+        }
+
+    };
+
+    class fseek_end : public Function {
+        std::string get_name() override {
+            return "fseek";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::void_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::pointer_type(Type::void_type()),"file",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
+            if(f){
+                if(f->f){
+                    ::fseek(f->f,0,SEEK_END);
+                }
+            }
+            return nullptr;
+        }
+
+    };
+
+    class ftell : public Function {
+        std::string get_name() override {
+            return "ftell";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::int_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::pointer_type(Type::void_type()),"file",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
+            if(f){
+                if(f->f){
+                    std::make_shared<IntValue>(::ftell(f->f));
+                }
+            }
+            return std::make_shared<IntValue>(-1);
+        }
 
     };
 
@@ -272,4 +519,13 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::getch>());
     d->register_function(std::make_shared<Interpreter::array_size>());
     d->register_function(std::make_shared<Interpreter::get_type_name>());
+    d->register_function(std::make_shared<Interpreter::fopen>());
+    d->register_function(std::make_shared<Interpreter::fclose>());
+    d->register_function(std::make_shared<Interpreter::fputs>());
+    d->register_function(std::make_shared<Interpreter::fputs_len>());
+    d->register_function(std::make_shared<Interpreter::fgetc>());
+    d->register_function(std::make_shared<Interpreter::fgets>());
+    d->register_function(std::make_shared<Interpreter::fseek>());
+    d->register_function(std::make_shared<Interpreter::fseek_end>());
+    d->register_function(std::make_shared<Interpreter::ftell>());
 }

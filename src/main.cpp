@@ -40,6 +40,9 @@
 
 #include "preprocessor.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include "windows.h"
+
 //TODO update docs
 /**
  * @mainpage
@@ -93,17 +96,21 @@ int test_exec(){
             if(filename=="q"||filename=="quit"||filename=="exit")return 0;
             try{
                 tokens=lexer.tokenize_from_file(filename);//split file into tokens
+                SetCurrentDirectoryA(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))).c_str());
             }catch(MyExcept::FileError &e){
                 try{
                     tokens=lexer.tokenize_from_file(filename+".txt");
+                    SetCurrentDirectoryA(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))).c_str());
                 }catch(MyExcept::FileError &e2){
                     try{
                         tokens=lexer.tokenize_from_file("examples/"+filename);
+                        SetCurrentDirectoryA("examples");
                     }catch(MyExcept::FileError &e2){
                         try{
                             tokens=lexer.tokenize_from_file("examples/"+filename+".txt");
+                            SetCurrentDirectoryA("examples");
                         }catch(MyExcept::FileError &e2){
-                            std::cout<<e.what()<<"\n";
+                            std::cout<<e.what()<<", 'exit' 'quit' or 'q' to cancel\n";
                             continue;
                         }
                     }
@@ -113,6 +120,7 @@ int test_exec(){
         }
         Console::clear();
         Parser::parserProgress p {data:tokens,location:0};
+        deflist.clear();
         while(p.get_nothrow()!=nullptr){
             deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
         }

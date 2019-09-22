@@ -27,8 +27,8 @@ std::vector<Lexer::keyword_data> base_keywords{
     {"unsigned","KEYWORD_UNSIGNED",KEYWORD_UNSIGNED},
     {"true","KEYWORD_TRUE",KEYWORD_TRUE},
     {"false","KEYWORD_FALSE",KEYWORD_FALSE},
+    {"nullptr","KEYWORD_NULL",KEYWORD_NULL},
     /*
-    {"null","KEYWORD_NULL",KEYWORD_NULL},
     {"static","KEYWORD_STATIC",KEYWORD_STATIC},
     */
     {"const","KEYWORD_CONST",KEYWORD_CONST},

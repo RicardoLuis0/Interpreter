@@ -32,8 +32,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-std=c++14" />
-			<Add option="-fexceptions" />
+			<Add option="-fexceptions -std=c++17" />
 		</Compiler>
 		<Unit filename="include/Interpreter_Test.h" />
 		<Unit filename="include/console.h" />

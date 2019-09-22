@@ -9,7 +9,7 @@
 #include "parser_expression_matcher.h"
 #include "lexer_keyword_token.h"
 
-//literal = int,float,string,true,false
+//literal = int,float,string,true,false,nullptr
 
 //ExpressionTerm = ( ExpressionGroup | FunctionCall | KeywordFunctionCall | UnaryOperation | literal | identifier ) , { symbol 'unary_post_operator' } , { symbol '[' , Expression , symbol ']' };
 
@@ -56,8 +56,8 @@ std::shared_ptr<ExpressionTerm> ExpressionTermMatcher::makeMatch(parserProgress 
                         term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_FLOAT,line_start,p.get_line(-1));
                     }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_STRING)){//string
                         term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_STRING,line_start,p.get_line(-1));
-                    }else if(temp_token=p.isKeyword({KEYWORD_TRUE,KEYWORD_FALSE})){
-                        term=std::make_shared<ExpressionTerm>(p.get(-1),(std::static_pointer_cast<Lexer::KeywordToken>(temp_token)->get_keyword_type()==KEYWORD_TRUE)?EXPRESSION_TERM_LITERAL_TRUE:EXPRESSION_TERM_LITERAL_FALSE,line_start,p.get_line(-1));
+                    }else if(temp_token=p.isKeyword({KEYWORD_TRUE,KEYWORD_FALSE,KEYWORD_NULL})){
+                        term=std::make_shared<ExpressionTerm>(p.get(-1),(std::static_pointer_cast<Lexer::KeywordToken>(temp_token)->get_keyword_type()==KEYWORD_TRUE)?EXPRESSION_TERM_LITERAL_TRUE:(std::static_pointer_cast<Lexer::KeywordToken>(temp_token)->get_keyword_type()==KEYWORD_NULL?EXPRESSION_TERM_LITERAL_NULL:EXPRESSION_TERM_LITERAL_FALSE),line_start,p.get_line(-1));
                     }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_WORD)){//ident
                         term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_IDENTIFIER,line_start,p.get_line(-1));
                     }else{

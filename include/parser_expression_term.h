@@ -22,6 +22,7 @@ namespace Parser {
         EXPRESSION_TERM_LITERAL_STRING,
         EXPRESSION_TERM_LITERAL_TRUE,
         EXPRESSION_TERM_LITERAL_FALSE,
+        EXPRESSION_TERM_LITERAL_NULL,
         EXPRESSION_TERM_IDENTIFIER,
     };
     class ExpressionTerm:public ParserResultPart {
