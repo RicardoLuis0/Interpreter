@@ -44,8 +44,6 @@ std::shared_ptr<Value> StringValue::assign(std::shared_ptr<Value> &other){
 std::shared_ptr<Value> StringValue::assign_add(std::shared_ptr<Value> &other){
     if(!CHECKPTR(other,StringValue)){
         if(CHECKPTR(other,CharValue)){
-            std::string &v=value;
-            char &c=std::dynamic_pointer_cast<CharValue>(other)->get();
             value+=std::dynamic_pointer_cast<CharValue>(other)->get();
         }else{
             throw std::runtime_error("invalid types for operator '+='");
