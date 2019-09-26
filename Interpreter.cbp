@@ -142,6 +142,8 @@
 		<Unit filename="include/parser.h" />
 		<Unit filename="include/parser_binary_operation.h" />
 		<Unit filename="include/parser_binary_operation_matcher.h" />
+		<Unit filename="include/parser_class_definition.h" />
+		<Unit filename="include/parser_class_definition_matcher.h" />
 		<Unit filename="include/parser_code_block.h" />
 		<Unit filename="include/parser_code_block_matcher.h" />
 		<Unit filename="include/parser_component.h" />
@@ -296,6 +298,7 @@
 		<Unit filename="src/myexcept/parse_error.cpp" />
 		<Unit filename="src/myexcept/syntax_error.cpp" />
 		<Unit filename="src/parser/component/parser_binary_operation_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_class_definition_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_code_block_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_component.cpp" />
 		<Unit filename="src/parser/component/parser_definition_matcher.cpp" />
@@ -320,6 +323,7 @@
 		<Unit filename="src/parser/component/parser_while_statement_matcher.cpp" />
 		<Unit filename="src/parser/parser.cpp" />
 		<Unit filename="src/parser/result/parser_binary_operation.cpp" />
+		<Unit filename="src/parser/result/parser_class_definition.cpp" />
 		<Unit filename="src/parser/result/parser_code_block.cpp" />
 		<Unit filename="src/parser/result/parser_definition.cpp" />
 		<Unit filename="src/parser/result/parser_else_statement.cpp" />
