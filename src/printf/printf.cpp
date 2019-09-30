@@ -176,9 +176,24 @@ static std::string format_param(param_data p,std::vector<std::shared_ptr<ValueCo
         format_stream(p,fmt);
         fmt<<d->getDouble();
         return fmt.str();
-
-FMT_INT(i8,getInt8,Int8Container)
-FMT_INT(ui8,getUInt8,UInt8Container)
+    }else if(auto i8=std::dynamic_pointer_cast<Int8Container>(args[p.index])){
+        if(p.type==PARAM_C){
+            return std::string(1,i8->getInt8());
+        }else{
+            std::ostringstream fmt;
+            format_stream(p,fmt);
+            fmt<<(int32_t)i8->getInt8();
+            return fmt.str();
+        }
+    }else if(auto ui8=std::dynamic_pointer_cast<UInt8Container>(args[p.index])){
+        if(p.type==PARAM_C){
+            return std::string(1,ui8->getUInt8());
+        }else{
+            std::ostringstream fmt;
+            format_stream(p,fmt);
+            fmt<<(uint32_t)ui8->getUInt8();
+            return fmt.str();
+        }
 FMT_INT(i16,getInt16,Int16Container)
 FMT_INT(ui16,getUInt16,UInt16Container)
 FMT_INT(i32,getInt32,Int32Container)
