@@ -132,6 +132,39 @@ namespace Interpreter {
 
     };
 
+    class sprintf : public Function {
+
+        bool is_variadic() override{
+            return true;
+        }
+
+        std::shared_ptr<Type> get_variadic_type() override{
+            return Type::any_type();
+        }
+
+        std::string get_name() override {
+            return "sprintf";
+        }
+
+        std::shared_ptr<Type> get_type() override {
+            return Type::string_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::string_type(),"fmt",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            auto fmt=std::dynamic_pointer_cast<StringValue>(args[0]);
+            std::vector<std::shared_ptr<Printf::ValueContainer>> params;
+            for(size_t i=1;i<args.size();i++){
+                params.push_back(std::dynamic_pointer_cast<Printf::ValueContainer>(args[i]));
+            }
+            return std::make_shared<StringValue>(Printf::vsprintf(fmt->get(),params));
+        }
+
+    };
+
     class printvals : public Function {
 
         bool is_variadic() override{
@@ -635,6 +668,7 @@ namespace Interpreter {
 
 void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::printf>());
+    d->register_function(std::make_shared<Interpreter::sprintf>());
     d->register_function(std::make_shared<Interpreter::printvals>());
     d->register_function(std::make_shared<Interpreter::puts>());
     d->register_function(std::make_shared<Interpreter::putchar>());
