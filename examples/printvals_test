@@ -1,0 +1,8 @@
+void main(){
+    int testa=1;
+    char testb='a';
+    string[2] testc;
+    testc[0]="A123";
+    testc[1]="B456";
+    printvals(testa,10,"aa",testb,0.05,testc);
+}

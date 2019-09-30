@@ -69,7 +69,9 @@ static std::string escape(char c){
 }
 
 std::string Interpreter::valueToString(std::shared_ptr<Value> val){
-    if(auto c=std::dynamic_pointer_cast<CharValue>(val)){
+    if(auto v=std::dynamic_pointer_cast<ArrayValue>(val)){
+        return v->getString();
+    }else if(auto c=std::dynamic_pointer_cast<CharValue>(val)){
         return "'"+std::string(1,c->get())+"'";
     }else if(auto v=std::dynamic_pointer_cast<UnsignedCharValue>(val)){
         return std::to_string(v->get());
@@ -126,6 +128,41 @@ namespace Interpreter {
                 params.push_back(std::dynamic_pointer_cast<Printf::ValueContainer>(args[i]));
             }
             return std::make_shared<IntValue>(Printf::vprintf(fmt->get(),params));
+        }
+
+    };
+
+    class printvals : public Function {
+
+        bool is_variadic() override{
+            return true;
+        }
+
+        std::shared_ptr<Type> get_variadic_type() override{
+            return Type::any_type();
+        }
+
+        std::string get_name() override {
+            return "printvals";
+        }
+
+        std::shared_ptr<Type> get_type() override {
+            return Type::void_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            for(auto v:args){
+                if(auto var=std::dynamic_pointer_cast<Variable>(v)){
+                    std::cout<<v->get_type()->get_name()<<" "<<var->get_name()<<" = "<<valueToString(v)<<"\n";
+                }else{
+                    std::cout<<"("<<v->get_type()->get_name()<<") "<<valueToString(v)<<"\n";
+                }
+            }
+            return nullptr;
         }
 
     };
@@ -598,6 +635,7 @@ namespace Interpreter {
 
 void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::printf>());
+    d->register_function(std::make_shared<Interpreter::printvals>());
     d->register_function(std::make_shared<Interpreter::puts>());
     d->register_function(std::make_shared<Interpreter::putchar>());
     d->register_function(std::make_shared<Interpreter::getline>());
