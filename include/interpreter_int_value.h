@@ -3,10 +3,12 @@
 
 #include "interpreter_primitive_value.h"
 #include "interpreter_type.h"
+#include "printf_value_container.h"
 
 namespace Interpreter {
-    class IntValue : public virtual PrimitiveValue {
+    class IntValue : public virtual PrimitiveValue, public Printf::Int32Container {
         public:
+            virtual int32_t getInt32() override;
             IntValue(int);
             operator int&();
             int &get();

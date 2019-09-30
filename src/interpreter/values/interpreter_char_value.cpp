@@ -7,6 +7,9 @@
 #include "interpreter_char_variable.h"
 #include "interpreter_util_defines_misc.h"
 
+#define PRINTF_CONTAINER_METHOD getInt8
+#define PRINTF_CONTAINER_TYPE int8_t
+
 #define CLASS_NAME CharValue
 #define VARIABLE_CLASS_NAME CharVariable
 #define VALUE_NAME cvalue

@@ -7,6 +7,9 @@
 #include "interpreter_int_variable.h"
 #include "interpreter_util_defines_misc.h"
 
+#define PRINTF_CONTAINER_METHOD getInt32
+#define PRINTF_CONTAINER_TYPE int32_t
+
 #define CLASS_NAME IntValue
 #define VARIABLE_CLASS_NAME IntVariable
 #define VALUE_NAME ivalue

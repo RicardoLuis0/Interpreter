@@ -14,6 +14,7 @@
 #include "interpreter_pointer_value.h"
 #include "conio.h"
 #include "my_except.h"
+#include "interpreter_value_to_string.h"
 
 #include <cstdlib>
 
@@ -40,7 +41,81 @@
 //void fseek(ptr<void>) TODO operates as SEEK_END
 //int ftell(ptr<void>) TODO
 
+
+static std::string escape(char c){
+    switch(c) {
+    case '\a':
+        return "\\a";
+    case '\b':
+        return "\\b";
+    case '\t':
+        return "\\t";
+    case '\n':
+        return "\\n";
+    case '\v':
+        return "\\v";
+    case '\f':
+        return "\\f";
+    case '\r':
+        return "\\r";
+    case '\\':
+        return "\\\\";
+    case '\"':
+        return "\\\"";
+    default:
+        return iscntrl(c)?"":std::string(1,c);
+    }
+}
+
+std::string Interpreter::valueToString(std::shared_ptr<Value> val){
+    if(auto c=std::dynamic_pointer_cast<CharValue>(val)){
+        return "'"+std::string(1,c->get())+"'";
+    }else if(auto v=std::dynamic_pointer_cast<UnsignedCharValue>(val)){
+        return std::to_string(v->get());
+    }else if(auto v=std::dynamic_pointer_cast<IntValue>(val)){
+        return std::to_string(v->get());
+    }else if(auto v=std::dynamic_pointer_cast<UnsignedIntValue>(val)){
+        return std::to_string(v->get());
+    }else if(auto v=std::dynamic_pointer_cast<FloatValue>(val)){
+        return std::to_string(v->get());
+    }else if(auto s=std::dynamic_pointer_cast<StringValue>(val)){
+        std::string temp="\"";
+        for(char c:s->get()){
+            temp+=escape(c);
+        }
+        temp+="\"";
+        return temp;
+    }else if(auto p=std::dynamic_pointer_cast<PointerValue>(val)){
+        return (p->get_value()?"* "+valueToString(p->get_value()):"(null)");
+    }else if(auto t=std::dynamic_pointer_cast<TypeValue>(val)){
+        return "type<"+t->get()->get_name()+">";
+    }else{
+        return "("+val->get_type()->get_name()+") unknown";
+    }
+}
+
 namespace Interpreter {
+
+    class printf : public Function {
+
+        std::string get_name() override {
+            return "printf";
+        }
+
+        std::shared_ptr<Type> get_type() override {
+            return Type::int_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::string_type(),"fmt",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            //TODO
+            return nullptr;
+        }
+
+    };
 
     class puts : public Function {
 

@@ -3,10 +3,13 @@
 
 #include "interpreter_value.h"
 #include "interpreter_type.h"
+#include "printf_value_container.h"
 
 namespace Interpreter {
-    class StringValue : public virtual Value {
+    class StringValue : public virtual Value , public Printf::StringContainer {
         public:
+            virtual const std::string & getString() override;
+            
             StringValue(std::string);
             operator std::string&();
             std::string &get();

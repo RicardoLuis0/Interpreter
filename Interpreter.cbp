@@ -34,6 +34,32 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions -std=c++17" />
 		</Compiler>
+		<Unit filename=".gitattributes" />
+		<Unit filename=".gitignore" />
+		<Unit filename="Interpreter.cbp.bak" />
+		<Unit filename="Interpreter.cbp.save" />
+		<Unit filename="Interpreter.cscope_file_list" />
+		<Unit filename="Interpreter.depend" />
+		<Unit filename="Interpreter.layout" />
+		<Unit filename="Interpreter.layout.bak" />
+		<Unit filename="Interpreter.layout.save" />
+		<Unit filename="examples/any_test.txt" />
+		<Unit filename="examples/arr_test.txt" />
+		<Unit filename="examples/break_continue_test.txt" />
+		<Unit filename="examples/char_test.txt" />
+		<Unit filename="examples/const_test.txt" />
+		<Unit filename="examples/file_test.input.txt" />
+		<Unit filename="examples/file_test.output.txt" />
+		<Unit filename="examples/file_test.txt" />
+		<Unit filename="examples/for_test.txt" />
+		<Unit filename="examples/getch_test.txt" />
+		<Unit filename="examples/hello_world.txt" />
+		<Unit filename="examples/lib.txt" />
+		<Unit filename="examples/nested_functions_test.txt" />
+		<Unit filename="examples/ptr_test.txt" />
+		<Unit filename="examples/ref_test.txt" />
+		<Unit filename="examples/tictactoe.txt" />
+		<Unit filename="examples/type_test.txt" />
 		<Unit filename="include/Interpreter_Test.h" />
 		<Unit filename="include/console.h" />
 		<Unit filename="include/deflib.h" />
@@ -106,6 +132,7 @@
 		<Unit filename="include/interpreter_user_function.h" />
 		<Unit filename="include/interpreter_util_defines_misc.h" />
 		<Unit filename="include/interpreter_value.h" />
+		<Unit filename="include/interpreter_value_to_string.h" />
 		<Unit filename="include/interpreter_variable.h" />
 		<Unit filename="include/interpreter_void_type.h" />
 		<Unit filename="include/interpreter_while_statement.h" />
@@ -190,10 +217,14 @@
 		<Unit filename="include/parser_while_statement.h" />
 		<Unit filename="include/parser_while_statement_matcher.h" />
 		<Unit filename="include/preprocessor.h" />
+		<Unit filename="include/printf.h" />
+		<Unit filename="include/printf_value_container.h" />
 		<Unit filename="include/read_file.h" />
 		<Unit filename="include/symbol_data.h" />
 		<Unit filename="include/symbols_keywords.h" />
 		<Unit filename="include/syntax_error.h" />
+		<Unit filename="pre_include_test.txt" />
+		<Unit filename="pre_test.txt" />
 		<Unit filename="src/deflib.cpp" />
 		<Unit filename="src/interpreter/expr_part/interpreter_expr_part.cpp" />
 		<Unit filename="src/interpreter/expr_part/interpreter_expr_part_cast.cpp" />
@@ -348,9 +379,12 @@
 		<Unit filename="src/parser/result/parser_while_statement.cpp" />
 		<Unit filename="src/parser/util/parser_expression_operator_precedence.cpp" />
 		<Unit filename="src/preprocessor.cpp" />
+		<Unit filename="src/printf/printf.cpp" />
+		<Unit filename="src/printf/printf_value_container.cpp" />
 		<Unit filename="src/symbols_keywords.cpp" />
 		<Unit filename="src/util/console.cpp" />
 		<Unit filename="src/util/read_file.cpp" />
+		<Unit filename="todo stuff.txt" />
 		<Extensions>
 			<code_completion />
 			<envvars />

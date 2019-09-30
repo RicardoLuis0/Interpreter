@@ -8,6 +8,9 @@ using namespace Interpreter;
 
 StringValue::StringValue(std::string s):value(s){}
 
+const std::string & StringValue::getString(){
+    return value;
+}
 StringValue::operator std::string&(){
     return value;
 }

@@ -3,10 +3,12 @@
 
 #include "interpreter_primitive_value.h"
 #include "interpreter_type.h"
+#include "printf_value_container.h"
 
 namespace Interpreter {
-    class UnsignedIntValue : public virtual PrimitiveValue {
+    class UnsignedIntValue : public virtual PrimitiveValue, public Printf::UInt32Container {
         public:
+            virtual uint32_t getUInt32() override;
             UnsignedIntValue(unsigned int);
             operator unsigned int&();
             unsigned int &get();

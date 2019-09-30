@@ -9,6 +9,11 @@ TypeValue::TypeValue(std::shared_ptr<Type> t):value(t) {
     
 }
 
+const std::string & TypeValue::getString(){
+    temp="type<"+value->get_name()+">";
+    return temp;
+}
+
 std::shared_ptr<Type>& TypeValue::get() {
     return value;
 }

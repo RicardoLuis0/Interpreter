@@ -3,10 +3,12 @@
 
 #include "interpreter_primitive_value.h"
 #include "interpreter_type.h"
+#include "printf_value_container.h"
 
 namespace Interpreter {
-    class CharValue : public virtual PrimitiveValue {
+    class CharValue : public virtual PrimitiveValue, public Printf::Int8Container {
         public:
+            virtual int8_t getInt8() override;
             CharValue(char);
             operator char&();
             char &get();

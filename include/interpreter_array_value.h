@@ -3,13 +3,15 @@
 
 #include "interpreter_value.h"
 #include "interpreter_array_type.h"
+#include "printf_value_container.h"
 
 namespace Interpreter {
-    class ArrayValue : public virtual Value {
+    class ArrayValue : public virtual Value , public Printf::StringContainer {
         public:
             ArrayValue(std::shared_ptr<ArrayType>);
             ArrayValue(std::shared_ptr<ArrayValue>);
             ArrayValue(std::shared_ptr<ArrayType>,std::vector<std::shared_ptr<Value>>);
+            virtual const std::string & getString() override;
             std::vector<std::shared_ptr<Value>> &get();
             virtual std::shared_ptr<Type> get_type() override;
             virtual std::shared_ptr<Value> clone() override;
@@ -19,6 +21,7 @@ namespace Interpreter {
             std::vector<std::shared_ptr<Value>> clone_array();
             std::shared_ptr<ArrayType> type;
             std::vector<std::shared_ptr<Value>> array;
+            std::string temp;
     };
 }
 

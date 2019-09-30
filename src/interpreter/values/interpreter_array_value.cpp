@@ -3,6 +3,15 @@
 #include "interpreter_int_value.h"
 #include "interpreter_util_defines_misc.h"
 
+#include "interpreter_char_value.h"
+#include "interpreter_unsigned_char_value.h"
+#include "interpreter_int_value.h"
+#include "interpreter_unsigned_int_value.h"
+#include "interpreter_float_value.h"
+#include "interpreter_string_value.h"
+
+#include "interpreter_value_to_string.h"
+
 using namespace Interpreter;
 
 ArrayValue::ArrayValue(std::shared_ptr<ArrayType> t):type(t){
@@ -16,6 +25,24 @@ ArrayValue::ArrayValue(std::shared_ptr<ArrayType> t):type(t){
 }
 
 ArrayValue::ArrayValue(std::shared_ptr<ArrayValue> val):type(val->type),array(val->clone_array()){
+}
+
+const std::string & ArrayValue::getString(){
+    if(array.empty()){
+        temp="{}";
+        return temp;
+    }
+    temp="{ ";
+    bool first=true;
+    for(std::shared_ptr<Value> val:array){
+        if(!first){
+            temp+=", ";
+        }
+        temp+=valueToString(val);
+        if(first)first=false;
+    }
+    temp+=" }";
+    return temp;
 }
 
 ArrayValue::ArrayValue(std::shared_ptr<ArrayType> t,std::vector<std::shared_ptr<Value>> arr):type(t),array(arr){

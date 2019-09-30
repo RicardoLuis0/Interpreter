@@ -3,10 +3,13 @@
 
 #include "interpreter_value.h"
 #include "interpreter_type.h"
+#include "printf_value_container.h"
 
 namespace Interpreter {
-    class TypeValue : public virtual Value {
+    class TypeValue : public virtual Value , public Printf::StringContainer{
         public:
+            virtual const std::string & getString() override;
+            
             TypeValue(std::shared_ptr<Type>);
             std::shared_ptr<Type> &get();
             
@@ -20,6 +23,7 @@ namespace Interpreter {
             virtual std::shared_ptr<Value> assign(std::shared_ptr<Value>&) override;
         protected:
             std::shared_ptr<Type> value;
+            std::string temp;
     };
 }
 

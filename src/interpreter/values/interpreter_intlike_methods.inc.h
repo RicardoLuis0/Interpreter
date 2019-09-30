@@ -1,3 +1,11 @@
+#ifndef PRINTF_CONTAINER_METHOD
+#error Missing PRINTF_CONTAINER_METHOD
+#endif
+
+#ifndef PRINTF_CONTAINER_TYPE
+#error Missing PRINTF_CONTAINER_TYPE
+#endif
+
 #ifndef CLASS_NAME
 #error Missing CLASS_NAME
 #endif
@@ -36,6 +44,11 @@
 #undef UNSIGNED_CHECKS
 
 using namespace Interpreter;
+
+PRINTF_CONTAINER_TYPE CLASS_NAME::PRINTF_CONTAINER_METHOD(){
+    return VALUE_NAME;
+}
+
 
 CLASS_NAME::CLASS_NAME(VALUE_TYPE val){
     VALUE_NAME=val;

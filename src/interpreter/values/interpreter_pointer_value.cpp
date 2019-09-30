@@ -1,12 +1,16 @@
 #include "interpreter_pointer_value.h"
 #include "interpreter_pointer_variable.h"
 #include "interpreter_type.h"
+#include "interpreter_value_to_string.h"
 
 using namespace Interpreter;
 
 PointerValue::PointerValue(std::shared_ptr<Type> t,std::shared_ptr<Value> v):type(Type::pointer_type(t)),value(v){
 }
-
+const std::string & PointerValue::getString(){
+    temp=(value?"* "+valueToString(value):"(null)");
+    return temp;
+}
 std::shared_ptr<Type> PointerValue::get_type(){
     return type;
 }

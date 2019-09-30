@@ -7,6 +7,9 @@
 #include "interpreter_unsigned_char_variable.h"
 #include "interpreter_util_defines_misc.h"
 
+#define PRINTF_CONTAINER_METHOD getUInt8
+#define PRINTF_CONTAINER_TYPE uint8_t
+
 #define CLASS_NAME UnsignedCharValue
 #define VARIABLE_CLASS_NAME UnsignedCharVariable
 #define VALUE_NAME ucvalue
