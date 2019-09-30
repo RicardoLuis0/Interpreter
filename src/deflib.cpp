@@ -20,8 +20,8 @@
 #include <cstdlib>
 
 //NOTE native functions to make later
-//int sprintf(string &output,string format,...) TODO, varargs not implemented
-//int printf(string format, any ... args) TODO
+//string sprintf(string format,...) DONE
+//int printf(string format,...) DONE
 //void puts(string) DONE
 //void putchar(int) DONE
 //string getline() DONE
@@ -34,8 +34,9 @@
 //string get_type_name(type) DONE
 //ptr<void> fopen(string filename,int write) DONE //if write true, open as "w", if write false, open as "r"
 //void fclose(ptr<void>) DONE
-//void fputs(string,ptr<void>) DONE
-//void fputs(string,length,ptr<void>) DONE
+//int fputs(string,ptr<void>) DONE
+//int fputs(string,length,ptr<void>) DONE
+//int fprintf(ptr<void>,string format, any ... args) DONE
 //char fgetc(ptr<void>) DONE
 //string fgets(unsigned int len,ptr<void>) DONE
 //void fseek(ptr<void>,unsigned int location) TODO, operates as SEEK_SET
@@ -493,7 +494,7 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_type(){
-            return Type::void_type();
+            return Type::int_type();
         }
 
         std::vector<FunctionParameter> get_parameters() override {
@@ -504,10 +505,10 @@ namespace Interpreter {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[1])->get_value());
             if(f){
                 if(f->f){
-                    ::fputs(std::dynamic_pointer_cast<StringValue>(args[0])->get().c_str(),f->f);
+                    return std::make_shared<IntValue>(::fputs(std::dynamic_pointer_cast<StringValue>(args[0])->get().c_str(),f->f));
                 }
             }
-            return nullptr;
+            return std::make_shared<IntValue>(0);
         }
 
     };
@@ -518,7 +519,7 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_type(){
-            return Type::void_type();
+            return Type::int_type();
         }
 
         std::vector<FunctionParameter> get_parameters() override {
@@ -529,10 +530,49 @@ namespace Interpreter {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[2])->get_value());
             if(f){
                 if(f->f){
-                    ::fputs(std::dynamic_pointer_cast<StringValue>(args[0])->get().substr(0,std::dynamic_pointer_cast<IntValue>(args[1])->get()).c_str(),f->f);
+                    return std::make_shared<IntValue>(::fputs(std::dynamic_pointer_cast<StringValue>(args[0])->get().substr(0,std::dynamic_pointer_cast<IntValue>(args[1])->get()).c_str(),f->f));
                 }
             }
-            return nullptr;
+            return std::make_shared<IntValue>(0);
+        }
+
+    };
+
+    class fprintf : public Function {
+
+        bool is_variadic() override{
+            return true;
+        }
+
+        std::shared_ptr<Type> get_variadic_type() override{
+            return Type::any_type();
+        }
+
+        std::string get_name() override {
+            return "fprintf";
+        }
+
+        std::shared_ptr<Type> get_type() override {
+            return Type::int_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::pointer_type(Type::void_type()),"file",false},{Type::string_type(),"fmt",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
+            if(f){
+                if(f->f){
+                    auto fmt=std::dynamic_pointer_cast<StringValue>(args[1]);
+                    std::vector<std::shared_ptr<Printf::ValueContainer>> params;
+                    for(size_t i=2;i<args.size();i++){
+                        params.push_back(std::dynamic_pointer_cast<Printf::ValueContainer>(args[i]));
+                    }
+                    return std::make_shared<IntValue>(::fputs(Printf::vsprintf(fmt->get(),params).c_str(),f->f));
+                }
+            }
+            return std::make_shared<IntValue>(0);
         }
 
     };
@@ -684,6 +724,7 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::fclose>());
     d->register_function(std::make_shared<Interpreter::fputs>());
     d->register_function(std::make_shared<Interpreter::fputs_len>());
+    d->register_function(std::make_shared<Interpreter::fprintf>());
     d->register_function(std::make_shared<Interpreter::fgetc>());
     d->register_function(std::make_shared<Interpreter::fgets>());
     d->register_function(std::make_shared<Interpreter::fseek>());
