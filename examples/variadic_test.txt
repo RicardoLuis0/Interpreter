@@ -1,0 +1,6 @@
+void vartest(... args){
+    
+}
+
+void main(){
+}

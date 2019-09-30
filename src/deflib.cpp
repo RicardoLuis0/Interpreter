@@ -20,7 +20,7 @@
 #include <cstdlib>
 
 //NOTE native functions to make later
-//int sprintf(string &output,string format, any ... args) TODO, varargs not implemented
+//int sprintf(string &output,string format,...) TODO, varargs not implemented
 //int printf(string format, any ... args) TODO
 //void puts(string) DONE
 //void putchar(int) DONE

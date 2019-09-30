@@ -96,4 +96,5 @@ std::vector<Lexer::symbol_data> base_symbols{
     {"^=","SYMBOL_BITWISE_XOR_ASSIGNMENT",SYMBOL_BITWISE_XOR_ASSIGNMENT},
     {".","SYMBOL_DOT",SYMBOL_DOT},
     {"->","SYMBOL_ARROW",SYMBOL_ARROW},
+    {"...","SYMBOL_VARIADIC",SYMBOL_VARIADIC},
 };

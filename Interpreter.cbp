@@ -62,6 +62,7 @@
 		<Unit filename="examples/ref_test.txt" />
 		<Unit filename="examples/tictactoe.txt" />
 		<Unit filename="examples/type_test.txt" />
+		<Unit filename="examples/variadic_test.txt" />
 		<Unit filename="include/Interpreter_Test.h" />
 		<Unit filename="include/console.h" />
 		<Unit filename="include/deflib.h" />

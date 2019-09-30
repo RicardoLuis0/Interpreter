@@ -88,6 +88,7 @@ enum symbol_type_t {
     SYMBOL_BITWISE_XOR_ASSIGNMENT,
     SYMBOL_DOT,
     SYMBOL_ARROW,
+    SYMBOL_VARIADIC,
 };
 
 Lexer::symbol_data get_symbol_data(symbol_type_t);
