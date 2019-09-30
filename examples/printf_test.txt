@@ -1,4 +1,9 @@
 int main(){
-    printf("This is a test %{}\n%{}\n%c{}\n",10,"AAA",'a');
+    string[4] arr;
+    arr[0]="arr0";
+    arr[1]="val1";
+    arr[2]="third2";
+    arr[3]="last3";
+    printf("This is a test %c{}\n%{}\n%c{}\n%{}\n",70,"AAA",'a',arr);
     return 0;
 }
