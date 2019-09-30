@@ -4,6 +4,6 @@ int main(){
     arr[1]="val1";
     arr[2]="third2";
     arr[3]="last3";
-    printf("This is a test %c{}\n%{}\n%c{}\n%{}\n",70,"AAA",'a',arr);
+    printf("This is a test\n%{}\n%{}\n%c{}\n%{}\n",10,"AAA",'a',arr);
     return 0;
 }
