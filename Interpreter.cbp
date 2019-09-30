@@ -56,6 +56,7 @@
 		<Unit filename="examples/hello_world.txt" />
 		<Unit filename="examples/lib.txt" />
 		<Unit filename="examples/nested_functions_test.txt" />
+		<Unit filename="examples/printf_test.txt" />
 		<Unit filename="examples/ptr_test.txt" />
 		<Unit filename="examples/ref_test.txt" />
 		<Unit filename="examples/tictactoe.txt" />

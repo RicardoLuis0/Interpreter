@@ -6,7 +6,7 @@
 #include "printf_value_container.h"
 
 namespace Interpreter {
-    class IntValue : public virtual PrimitiveValue, public Printf::Int32Container {
+    class IntValue : public virtual PrimitiveValue, public virtual Printf::Int32Container {
         public:
             virtual int32_t getInt32() override;
             IntValue(int);

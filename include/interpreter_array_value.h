@@ -6,7 +6,7 @@
 #include "printf_value_container.h"
 
 namespace Interpreter {
-    class ArrayValue : public virtual Value , public Printf::StringContainer {
+    class ArrayValue : public virtual Value , public virtual Printf::StringContainer {
         public:
             ArrayValue(std::shared_ptr<ArrayType>);
             ArrayValue(std::shared_ptr<ArrayValue>);

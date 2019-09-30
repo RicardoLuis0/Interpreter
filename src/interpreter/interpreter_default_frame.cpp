@@ -69,11 +69,19 @@ std::shared_ptr<Function> DefaultFrame::get_function_local(std::string name,std:
             return iter2->second;
         }else{
             iter2=std::find_if(iter1->second.begin(),iter1->second.end(),[param_types](const std::pair<std::vector<FunctionParameter>,std::shared_ptr<Function>> &p)->bool{//loose search
-                if(param_types.size()!=p.first.size())return false;
-                for(size_t i=0;i<p.first.size();i++){
-                    if(!p.first[i].type->allows_implicit_cast(p.first[i].type,param_types[i].type))return false;
+                if(param_types.size()==p.first.size()||(p.second->is_variadic()&&param_types.size()>=p.first.size())){
+                    for(size_t i=0;i<p.first.size();i++){
+                        if(!param_types[i].type->allows_implicit_cast(param_types[i].type,p.first[i].type))return false;
+                    }
+                    if(p.second->is_variadic()){//do extra tests
+                        for(size_t i=p.first.size();i<param_types.size();i++){
+                            if(!param_types[i].type->allows_implicit_cast(param_types[i].type,p.second->get_variadic_type()))return false;
+                        }
+                    }
+                    return true;
+                }else{
+                    return false;
                 }
-                return true;
             });
             if(iter2!=iter1->second.end()){
                 return iter2->second;

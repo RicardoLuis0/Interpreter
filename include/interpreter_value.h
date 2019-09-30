@@ -2,9 +2,10 @@
 #define Value_H
 
 #include <memory>
+#include "printf_value_container.h"
 
 namespace Interpreter {
-    class Value {
+    class Value : public virtual Printf::ValueContainer {
         public:
             virtual std::shared_ptr<class Type> get_type()=0;
             virtual std::shared_ptr<Value> clone()=0;

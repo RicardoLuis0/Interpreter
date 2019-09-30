@@ -6,7 +6,7 @@
 #include "printf_value_container.h"
 
 namespace Interpreter {
-    class PointerValue : public virtual Value , public Printf::StringContainer {
+    class PointerValue : public virtual Value , public virtual Printf::StringContainer {
     public:
         virtual const std::string & getString() override;
         PointerValue(std::shared_ptr<class Type> type,std::shared_ptr<Value> value);

@@ -6,7 +6,7 @@
 #include "printf_value_container.h"
 
 namespace Interpreter {
-    class TypeValue : public virtual Value , public Printf::StringContainer{
+    class TypeValue : public virtual Value , public virtual Printf::StringContainer{
         public:
             virtual const std::string & getString() override;
             

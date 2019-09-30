@@ -4,10 +4,13 @@
 #include "interpreter_primitive_value.h"
 #include "parser_var_type.h"
 #include "interpreter_type.h"
+#include "printf_value_container.h"
 
 namespace Interpreter {
-    class FloatValue : public virtual PrimitiveValue {
+    class FloatValue : public virtual PrimitiveValue , public virtual Printf::DoubleContainer{
         public:
+            virtual double getDouble() override;
+            
             FloatValue(double);
             operator double&();
             double &get();

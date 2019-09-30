@@ -138,7 +138,8 @@ int test_exec(){
                 if(!CHECKPTR(entrypoint->get_type(),Interpreter::IntType)){
                     throw std::runtime_error("'main' function must return 'int' or 'void'");
                 }
-                std::cout<<filename<<" returned with value "<<std::to_string(std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,{}))->get())<<"\n";
+                int retval=std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,{}))->get();
+                std::cout<<filename<<" returned with value "<<std::to_string(retval)<<"\n";
                 goto start;
             }
         }

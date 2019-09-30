@@ -15,6 +15,7 @@
 #include "conio.h"
 #include "my_except.h"
 #include "interpreter_value_to_string.h"
+#include "printf.h"
 
 #include <cstdlib>
 
@@ -98,6 +99,14 @@ namespace Interpreter {
 
     class printf : public Function {
 
+        bool is_variadic() override{
+            return true;
+        }
+
+        std::shared_ptr<Type> get_variadic_type() override{
+            return Type::any_type();
+        }
+
         std::string get_name() override {
             return "printf";
         }
@@ -111,8 +120,12 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
-            //TODO
-            return nullptr;
+            auto fmt=std::dynamic_pointer_cast<StringValue>(args[0]);
+            std::vector<std::shared_ptr<Printf::ValueContainer>> params;
+            for(size_t i=1;i<args.size();i++){
+                params.push_back(std::dynamic_pointer_cast<Printf::ValueContainer>(args[i]));
+            }
+            return std::make_shared<IntValue>(Printf::vprintf(fmt->get(),params));
         }
 
     };
@@ -584,6 +597,7 @@ namespace Interpreter {
 }
 
 void Interpreter::init_deflib(DefaultFrame * d){
+    d->register_function(std::make_shared<Interpreter::printf>());
     d->register_function(std::make_shared<Interpreter::puts>());
     d->register_function(std::make_shared<Interpreter::putchar>());
     d->register_function(std::make_shared<Interpreter::getline>());

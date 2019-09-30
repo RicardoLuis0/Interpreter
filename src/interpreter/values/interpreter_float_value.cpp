@@ -13,6 +13,10 @@ FloatValue::operator double&(){
     return dvalue;
 }
 
+double FloatValue::getDouble(){
+    return dvalue;
+}
+
 double& FloatValue::get(){
     return dvalue;
 }

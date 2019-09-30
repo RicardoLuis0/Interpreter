@@ -30,7 +30,7 @@ ExprPartFnCall::ExprPartFnCall(DefaultFrame * context,std::shared_ptr<Parser::Fu
         }
     }
     std::vector<FunctionParameter> params2=fnc->get_parameters();
-    for(size_t i=0;i<params.size();i++){//check reference types
+    for(size_t i=0;i<params2.size();i++){//check reference types
         if(params2[i].is_reference){
             if(CHECKPTR(arguments[i]->get_dummy_type(),Variable)){
                 if(!(params[i].type->is(params[i].type,params2[i].type)))throw MyExcept::SyntaxError(fn->line_start,fn->line_end,"types "+params[i].type->get_name()+" and "+params2[i].type->get_name()+" don't match for reference argument");

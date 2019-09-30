@@ -6,7 +6,7 @@
 #include "printf_value_container.h"
 
 namespace Interpreter {
-    class CharValue : public virtual PrimitiveValue, public Printf::Int8Container {
+    class CharValue : public virtual PrimitiveValue, public virtual Printf::Int8Container {
         public:
             virtual int8_t getInt8() override;
             CharValue(char);
