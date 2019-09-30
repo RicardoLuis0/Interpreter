@@ -57,28 +57,39 @@
 void test_lexer(),test_expressions(),test_lines(),test_definitions();
 
 int exec(std::string filename){
-    Lexer::Lexer lexer(base_symbols,base_keywords);
-    std::vector<std::shared_ptr<Lexer::Token>> tokens(lexer.tokenize_from_file(filename));
-    std::vector<std::shared_ptr<Parser::Definition>> deflist;
-    Parser::parserProgress p {data:tokens,location:0};
-    while(p.get_nothrow()!=nullptr){
-        deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
-    }
-    Interpreter::DefaultFrame dframe(deflist);
-    std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
-    std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
-    if(!entrypoint){
-        throw std::runtime_error("missing 'main()' function");
-    }else{
-        if(CHECKPTR(entrypoint->get_type(),Interpreter::VoidType)){
-            eframe->fn_call(entrypoint,{});
-            return 0;
-        }else{
-            if(!CHECKPTR(entrypoint->get_type(),Interpreter::IntType)){
-                throw std::runtime_error("'main' function must return 'int' or 'void'");
-            }
-            return std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,{}))->get();
+    try{
+        Lexer::Lexer lexer(base_symbols,base_keywords);
+        std::vector<std::shared_ptr<Lexer::Token>> tokens(lexer.tokenize_from_file(filename));
+        std::vector<std::shared_ptr<Parser::Definition>> deflist;
+        Parser::parserProgress p {data:tokens,location:0};
+        while(p.get_nothrow()!=nullptr){
+            deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
         }
+        Interpreter::DefaultFrame dframe(deflist);
+        std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
+        std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
+        if(!entrypoint){
+            throw std::runtime_error("missing 'main()' function");
+        }else{
+            if(CHECKPTR(entrypoint->get_type(),Interpreter::VoidType)){
+                eframe->fn_call(entrypoint,{});
+                return 0;
+            }else{
+                if(!CHECKPTR(entrypoint->get_type(),Interpreter::IntType)){
+                    throw std::runtime_error("'main()' function must return 'int' or 'void'");
+                }
+                return std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,{}))->get();
+            }
+        }
+    }catch(MyExcept::ParseError &e){
+        std::cout<<"\n\n"<<e.what();
+        return 0;
+    }catch(MyExcept::SyntaxError &e){
+        std::cout<<"\n\n"<<e.what();
+        return 0;
+    }catch(MyExcept::NoMatchException &e){
+        std::cout<<"\n\n"<<e.what();
+        return 0;
     }
 }
 
@@ -135,32 +146,32 @@ int test_exec(){
         std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
         std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
         if(!entrypoint){
-            std::cout<<"no main function";
+            std::cout<<"missing main function";
         }else{
             if(CHECKPTR(entrypoint->get_type(),Interpreter::VoidType)){
                 eframe->fn_call(entrypoint,{});
-                std::cout<<filename<<" finished exeuction\n";
+                std::cout<<"\n\n"<<filename<<" finished exeuction\n";
                 goto start;
             }else{
                 if(!CHECKPTR(entrypoint->get_type(),Interpreter::IntType)){
                     throw std::runtime_error("'main' function must return 'int' or 'void'");
                 }
                 int retval=std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,{}))->get();
-                std::cout<<filename<<" returned with value "<<std::to_string(retval)<<"\n";
+                std::cout<<"\n\n"<<filename<<" returned with value "<<std::to_string(retval)<<"\n";
                 goto start;
             }
         }
     }catch(MyExcept::ParseError &e){
-        std::cout<<e.what();
+        std::cout<<"\n\n"<<e.what();
         return 0;
     }catch(MyExcept::SyntaxError &e){
-        std::cout<<e.what();
+        std::cout<<"\n\n"<<e.what();
         return 0;
     }catch(MyExcept::NoMatchException &e){
-        std::cout<<e.what();
+        std::cout<<"\n\n"<<e.what();
         return 0;
     }catch(std::exception &e){
-        std::cout<<"uncaught exception: "<<e.what()<<"\n";
+        std::cout<<"\n\nuncaught exception: "<<e.what()<<"\n";
         throw;
     }
     return 1;
@@ -172,7 +183,7 @@ int test_preprocessor(){
         std::cout<<preprocess_file("pre_test.txt");
         return 0;
     }catch(std::exception &e){
-        std::cout<<"uncaught exception: "<<e.what();
+        std::cout<<"\n\nuncaught exception: "<<e.what();
         return 1;
     }
 }
@@ -220,13 +231,13 @@ int main(int argc,char ** argv){
                 Parser::DefinitionMatcher().makeMatch(p);
             }
         }catch(MyExcept::ParseError &e){
-            std::cout<<e.what();
+            std::cout<<"\n\n"<<e.what();
             return 1;
         }catch(MyExcept::NoMatchException &e){
-            std::cout<<e.what();
+            std::cout<<"\n\n"<<e.what();
             return 1;
         }catch(std::exception &e){
-            std::cout<<"uncaught exception: "<<e.what();
+            std::cout<<"\n\nuncaught exception: "<<e.what();
             return 1;
         }
         std::cout<<"Parse OK";
@@ -255,10 +266,10 @@ void test_lexer(){
             break;
         }
     }catch(MyExcept::ParseError &e){
-        std::cout<<e.what();
+        std::cout<<"\n\n"<<e.what();
         return;
     }catch(std::exception &e){
-        std::cout<<"uncaught exception: "<<e.what();
+        std::cout<<"\n\nuncaught exception: "<<e.what();
         return;
     }
 }
