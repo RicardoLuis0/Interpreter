@@ -19,7 +19,7 @@ std::shared_ptr<FunctionDefinition> FunctionDefinitionMatcher::makeMatch(parserP
     std::vector<std::shared_ptr<FunctionDefinitionParameter>> params;
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '(', got '"+p.get_nothrow_nonull()->get_literal()+"'");
     int location_backup;
-    bool variadic;
+    bool variadic=false;
     std::shared_ptr<VarType> variadic_type=nullptr;
     std::shared_ptr<Lexer::Token> variadic_ident=nullptr;
     try{
