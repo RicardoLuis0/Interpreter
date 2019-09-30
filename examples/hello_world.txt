@@ -1,6 +1,3 @@
-int main(){
-	cls();
-	printf("Hello World!\n\nPress Any Key...\n");
-	getch();
-	return 0;
+void main(){
+    printf("Hello World!");
 }
