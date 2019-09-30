@@ -93,6 +93,13 @@ int test_exec(){
         while(true){
             std::cout<<">";
             std::cin>>filename;
+            if(filename=="cls"){
+                Console::clear();
+                continue;
+            }else if(filename=="help"){
+                std::cout<<"type file path to load program, 'q' 'quit' or 'exit' to leave, 'cls' to clear screen\n";
+                continue;
+            }
             if(filename=="q"||filename=="quit"||filename=="exit")return 0;
             try{
                 tokens=lexer.tokenize_from_file(filename);//split file into tokens
@@ -118,7 +125,7 @@ int test_exec(){
             }
             break;
         }
-        Console::clear();
+        //Console::clear();
         Parser::parserProgress p {data:tokens,location:0};
         deflist.clear();
         while(p.get_nothrow()!=nullptr){
