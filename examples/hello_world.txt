@@ -1,6 +1,6 @@
 int main(){
 	cls();
-	puts("Hello World!\nPress Any Key...");
+	printf("Hello World!\n\nPress Any Key...\n");
 	getch();
 	return 0;
 }
