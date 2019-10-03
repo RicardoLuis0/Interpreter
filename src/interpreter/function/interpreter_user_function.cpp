@@ -59,7 +59,7 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
     if(function->variadic){
         std::vector<std::shared_ptr<Value>> vargs;
         for(size_t i=function->parameters.size();i<args.size();i++){
-            vargs.push_back(args[i]);
+            vargs.push_back(args[i]->clone());
         }
         f->variables[function->variadic_ident]=std::make_shared<ArrayVariable>(function->variadic_ident,std::dynamic_pointer_cast<ArrayType>(frame->variable_types[function->variadic_ident]),vargs);
     }
