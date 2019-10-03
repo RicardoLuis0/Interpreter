@@ -16,4 +16,5 @@ void read_file(std::string filename,std::string &output){
     while((c=fgetc(f))!=EOF){
         output+=c;
     }
+    fclose(f);
 }
