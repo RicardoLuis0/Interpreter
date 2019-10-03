@@ -16,7 +16,7 @@ FunctionDefinition::FunctionDefinition(std::shared_ptr<VarType> ret,
     parameters(p),
     variadic(v),
     variadic_type(vt),
-    variadic_ident(vi->get_literal()),
+    variadic_ident(vi?vi->get_literal():""),
     code(c){
         
 }
