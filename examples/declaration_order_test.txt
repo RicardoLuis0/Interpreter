@@ -1,0 +1,7 @@
+void main(){
+    do_something();
+}
+
+void do_something(){
+    printf("It works!");
+}

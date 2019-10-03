@@ -30,6 +30,13 @@ DefaultFrame::DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>> defs
     for(std::shared_ptr<Parser::Definition> def:defs){
         add_definition(def,true);
     }
+    for(auto fl:functions){
+        for(auto fd:fl.second){
+            if(auto uf=std::dynamic_pointer_cast<UserFunction>(fd.second)){
+                uf->proccess_delayed();
+            }
+        }
+    }
 }
 
 DefaultFrame::DefaultFrame(DefaultFrame * p,std::shared_ptr<Parser::VariableDefinition> def):parent(p){
@@ -126,10 +133,10 @@ void DefaultFrame::register_function(std::shared_ptr<Function> func){
     }
 }
 
-void DefaultFrame::add_function(std::shared_ptr<Parser::FunctionDefinition> func){
+void DefaultFrame::add_function(std::shared_ptr<Parser::FunctionDefinition> func,bool global){
     std::shared_ptr<UserFunction> temp(std::make_shared<UserFunction>(this,func,true));
     register_function(temp);
-    temp->proccess_delayed();//delay code processing until function is registered, fixes recursion
+    if(!global)temp->proccess_delayed();//delay code processing until function is registered, fixes recursion
 }
 
 void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool global,void(*cb)(void*,std::shared_ptr<Parser::VariableDefinitionItem>),void * arg){
@@ -152,7 +159,7 @@ void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool g
         }
         break;
     case Parser::DEFINITION_FUNC:
-        add_function(std::static_pointer_cast<Parser::FunctionDefinition>(def->def));
+        add_function(std::static_pointer_cast<Parser::FunctionDefinition>(def->def),global);
         break;
     }
 }

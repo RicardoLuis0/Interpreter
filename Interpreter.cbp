@@ -48,6 +48,7 @@
 		<Unit filename="examples/break_continue_test.txt" />
 		<Unit filename="examples/char_test.txt" />
 		<Unit filename="examples/const_test.txt" />
+		<Unit filename="examples/declaration_order_test.txt" />
 		<Unit filename="examples/file_test.input.txt" />
 		<Unit filename="examples/file_test.output.txt" />
 		<Unit filename="examples/file_test.txt" />
