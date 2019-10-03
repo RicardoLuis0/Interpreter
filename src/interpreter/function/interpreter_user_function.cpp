@@ -7,7 +7,7 @@
 
 using namespace Interpreter;
 
-UserFunction::UserFunction(DefaultFrame * p,std::shared_ptr<Parser::FunctionDefinition> func,bool delay):function(func),parameters(build_parameters(p)),return_type(Type::from_vartype(p,func->return_type)),frame(std::make_shared<DefaultFrame>(p,this)),code(delay?nullptr:std::make_shared<CodeBlock>(this,func->code)){
+UserFunction::UserFunction(DefaultFrame * p,std::shared_ptr<Parser::FunctionDefinition> func,bool delay):variadic_type(nullptr),function(func),parameters(build_parameters(p)),return_type(Type::from_vartype(p,func->return_type)),frame(std::make_shared<DefaultFrame>(p,this)),code(delay?nullptr:std::make_shared<CodeBlock>(this,func->code)){
     
 }
 
@@ -15,6 +15,14 @@ void UserFunction::proccess_delayed(){
     if(!code){
         code=std::make_shared<CodeBlock>(this,function->code);
     }
+}
+
+bool UserFunction::is_variadic(){
+    return function->variadic;
+}
+
+std::shared_ptr<Type> UserFunction::get_variadic_type(){
+    return variadic_type;
 }
 
 std::string UserFunction::get_name(){

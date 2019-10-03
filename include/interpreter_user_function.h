@@ -16,8 +16,12 @@ namespace Interpreter {
             std::shared_ptr<Type> get_type() override;
             std::vector<FunctionParameter> get_parameters() override;
             std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override;
+            
+            bool is_variadic() override;
+            std::shared_ptr<Type> get_variadic_type() override;
             //std::shared_ptr<ExecFrame> getFrame
         private:
+            std::shared_ptr<Type> variadic_type;
             std::vector<FunctionParameter> build_parameters(DefaultFrame * context);
             std::shared_ptr<Parser::FunctionDefinition> function;
             std::vector<FunctionParameter> parameters;

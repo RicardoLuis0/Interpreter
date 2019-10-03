@@ -20,6 +20,7 @@
 #include "interpreter_void_type.h"
 #include "interpreter_expression.h"
 #include "interpreter_array_type.h"
+#include "interpreter_any_type.h"
 #include "my_except.h"
 
 using namespace Interpreter;
@@ -38,13 +39,12 @@ DefaultFrame::DefaultFrame(DefaultFrame * p,std::shared_ptr<Parser::VariableDefi
 DefaultFrame::DefaultFrame(DefaultFrame * p,Function * f):parent(p){
     if(auto uf=dynamic_cast<UserFunction*>(f)){
         if(uf->function->variadic){
-            std::shared_ptr<Type> t;
             if(uf->function->variadic_type){
-                t=Type::from_vartype(this,uf->function->variadic_type);
+                uf->variadic_type=Type::from_vartype(this,uf->function->variadic_type);
             }else{
-                t=Type::any_type();
+                uf->variadic_type=Type::any_type();
             }
-            variable_types.insert({uf->function->variadic_ident,std::make_shared<ArrayType>(t,-1)});//variadic arguments are sizeless arrays
+            variable_types.insert({uf->function->variadic_ident,std::make_shared<ArrayType>(uf->variadic_type,-1)});//variadic arguments are sizeless arrays
         }
     }
     add_parameters(f->get_parameters());
