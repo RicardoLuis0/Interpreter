@@ -25,6 +25,7 @@ namespace Interpreter {
             std::shared_ptr<DefaultFrame> frame;
             std::shared_ptr<CodeBlock> code;
             friend class CodeBlock;
+            friend class DefaultFrame;
     };
 }
 

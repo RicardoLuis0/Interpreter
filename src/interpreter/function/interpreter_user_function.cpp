@@ -2,6 +2,7 @@
 #include "interpreter_line_result_return.h"
 #include "interpreter_util_defines_misc.h"
 #include "interpreter_void_type.h"
+#include "interpreter_array_variable.h"
 #include "my_except.h"
 
 using namespace Interpreter;
@@ -39,7 +40,7 @@ int UserFunction::get_line(){
 std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args){
     std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>> args_o;
     int i=0;
-    if(function->parameters.size()!=args.size()){
+    if(function->parameters.size()!=args.size()&&(function->variadic&&function->parameters.size()<args.size())){
         throw MyExcept::InterpreterRuntimeError(function->line_start,"wrong parameter count");
     }
     for(std::shared_ptr<Parser::FunctionDefinitionParameter> param:function->parameters){
@@ -47,6 +48,13 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
     }
     std::shared_ptr<ExecFrame> f(code->getContext(parent_frame));
     f->set_args(args_o);
+    if(function->variadic){
+        std::vector<std::shared_ptr<Value>> vargs;
+        for(size_t i=function->parameters.size();i<args.size();i++){
+            vargs.push_back(args[i]);
+        }
+        f->variables.insert({function->variadic_ident,std::make_shared<ArrayVariable>(function->variadic_ident,std::dynamic_pointer_cast<ArrayType>(frame->variable_types[function->variadic_ident]),vargs)});
+    }
     std::shared_ptr<LineResult> result=code->run(f.get());
     switch(result->getAction()){
     case ACTION_RETURN:{

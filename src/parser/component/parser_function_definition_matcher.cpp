@@ -43,5 +43,5 @@ std::shared_ptr<FunctionDefinition> FunctionDefinitionMatcher::makeMatch(parserP
     }
     if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ')', got '"+p.get_nothrow_nonull()->get_literal()+"'");
     std::shared_ptr<CodeBlock> code=CodeBlockMatcher().makeMatch(p);
-    return std::make_shared<FunctionDefinition>(vt,std::static_pointer_cast<Lexer::WordToken>(t),params,variadic,variadic_type,variadic_ident,code,line_start,p.get_line(-1));
+    return std::make_shared<FunctionDefinition>(vt,std::static_pointer_cast<Lexer::WordToken>(t),params,variadic,variadic_type,std::static_pointer_cast<Lexer::WordToken>(variadic_ident),code,line_start,p.get_line(-1));
 }

@@ -36,6 +36,17 @@ DefaultFrame::DefaultFrame(DefaultFrame * p,std::shared_ptr<Parser::VariableDefi
 }
 
 DefaultFrame::DefaultFrame(DefaultFrame * p,Function * f):parent(p){
+    if(auto uf=dynamic_cast<UserFunction*>(f)){
+        if(uf->function->variadic){
+            std::shared_ptr<Type> t;
+            if(uf->function->variadic_type){
+                t=Type::from_vartype(this,uf->function->variadic_type);
+            }else{
+                t=Type::any_type();
+            }
+            variable_types.insert({uf->function->variadic_ident,std::make_shared<ArrayType>(t,-1)});//variadic arguments are sizeless arrays
+        }
+    }
     add_parameters(f->get_parameters());
     is_function=true;
     func=f;
@@ -116,13 +127,9 @@ void DefaultFrame::register_function(std::shared_ptr<Function> func){
 }
 
 void DefaultFrame::add_function(std::shared_ptr<Parser::FunctionDefinition> func){
-    if(func->variadic){
-        throw MyExcept::SyntaxError(func->line_start,func->line_start,"variadic functions not implemented yet");
-    }else{
-        std::shared_ptr<UserFunction> temp(std::make_shared<UserFunction>(this,func,true));
-        register_function(temp);
-        temp->proccess_delayed();//delay code processing until function is registered, fixes recursion
-    }
+    std::shared_ptr<UserFunction> temp(std::make_shared<UserFunction>(this,func,true));
+    register_function(temp);
+    temp->proccess_delayed();//delay code processing until function is registered, fixes recursion
 }
 
 void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool global,void(*cb)(void*,std::shared_ptr<Parser::VariableDefinitionItem>),void * arg){

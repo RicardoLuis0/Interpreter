@@ -7,7 +7,7 @@ FunctionDefinition::FunctionDefinition(std::shared_ptr<VarType> ret,
                                        std::vector<std::shared_ptr<FunctionDefinitionParameter>> p,
                                        bool v,
                                        std::shared_ptr<VarType> vt,
-                                       std::shared_ptr<Lexer::Token> vi,
+                                       std::shared_ptr<Lexer::WordToken> vi,
                                        std::shared_ptr<CodeBlock> c,
                                        int ls,int le):
     ParserResultPart(ls,le),
@@ -16,7 +16,7 @@ FunctionDefinition::FunctionDefinition(std::shared_ptr<VarType> ret,
     parameters(p),
     variadic(v),
     variadic_type(vt),
-    variadic_ident(vi),
+    variadic_ident(vi->get_literal()),
     code(c){
         
 }
