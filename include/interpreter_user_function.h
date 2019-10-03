@@ -10,7 +10,7 @@ namespace Interpreter {
     class UserFunction : public Function {
         public:
             UserFunction(DefaultFrame * parent,std::shared_ptr<Parser::FunctionDefinition>,bool delay=false);
-            void proccess_delayed();
+            virtual void proccess_delayed();//should be safe to call multiple times
             std::string get_name() override;
             int get_line() override;
             std::shared_ptr<Type> get_type() override;
@@ -20,7 +20,7 @@ namespace Interpreter {
             bool is_variadic() override;
             std::shared_ptr<Type> get_variadic_type() override;
             //std::shared_ptr<ExecFrame> getFrame
-        private:
+        protected:
             std::shared_ptr<Type> variadic_type;
             std::vector<FunctionParameter> build_parameters(DefaultFrame * context);
             std::shared_ptr<Parser::FunctionDefinition> function;
