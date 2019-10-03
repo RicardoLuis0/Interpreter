@@ -134,7 +134,7 @@ static void format_stream(param_data p,std::ostringstream &o){
 #define FMT_INT(_V,_T,_C)\
 }else if(auto _V=std::dynamic_pointer_cast<_C>(args[p.index])){\
         if(p.type==PARAM_C){\
-            return std::string(1,(unsigned char)_V->_T());\
+            return std::string(1,static_cast<unsigned char>(_V->_T()));\
         }else{\
             std::ostringstream fmt;\
             format_stream(p,fmt);\
@@ -182,7 +182,7 @@ static std::string format_param(param_data p,std::vector<std::shared_ptr<ValueCo
         }else{
             std::ostringstream fmt;
             format_stream(p,fmt);
-            fmt<<(int32_t)i8->getInt8();
+            fmt<<static_cast<int32_t>(i8->getInt8());
             return fmt.str();
         }
     }else if(auto ui8=std::dynamic_pointer_cast<UInt8Container>(args[p.index])){
@@ -191,7 +191,7 @@ static std::string format_param(param_data p,std::vector<std::shared_ptr<ValueCo
         }else{
             std::ostringstream fmt;
             format_stream(p,fmt);
-            fmt<<(uint32_t)ui8->getUInt8();
+            fmt<<static_cast<uint32_t>(ui8->getUInt8());
             return fmt.str();
         }
 FMT_INT(i16,getInt16,Int16Container)

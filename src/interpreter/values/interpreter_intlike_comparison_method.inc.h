@@ -17,9 +17,9 @@ std::shared_ptr<Value> CLASS_NAME::METHOD_NAME(std::shared_ptr<Value> &other){
     }else if CHECK(UnsignedCharValue) {
         return std::make_shared<IntValue>( VALUE_NAME OPERATOR val->get());
     }else if CHECK(IntValue) {
-        return std::make_shared<IntValue>( VALUE_NAME OPERATOR ((unsigned int)val->get()));
+        return std::make_shared<IntValue>( VALUE_NAME OPERATOR (static_cast<unsigned int>(val->get())));
     }else if CHECK(CharValue) {
-        return std::make_shared<IntValue>( VALUE_NAME OPERATOR ((unsigned char)val->get()));
+        return std::make_shared<IntValue>( VALUE_NAME OPERATOR (static_cast<unsigned char>(val->get())));
     #else
     if CHECK(IntValue) {
         return std::make_shared<IntValue>( VALUE_NAME OPERATOR val->get());

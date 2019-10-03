@@ -619,7 +619,7 @@ namespace Interpreter {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[1])->get_value());
             if(f){
                 if(f->f){
-                    std::shared_ptr<char> buf((char*)calloc(std::dynamic_pointer_cast<UnsignedIntValue>(args[0])->get()+1,sizeof(char)),free);
+                    std::shared_ptr<char> buf(static_cast<char*>(calloc(std::dynamic_pointer_cast<UnsignedIntValue>(args[0])->get()+1,sizeof(char))),free);
                     ::fgets(buf.get(),std::dynamic_pointer_cast<UnsignedIntValue>(args[0])->get(),f->f);
                     return std::make_shared<StringValue>(buf.get());
                 }

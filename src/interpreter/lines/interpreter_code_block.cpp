@@ -15,7 +15,7 @@
 using namespace Interpreter;
 
 static void varDefCallbackCaller(void * ptr,std::shared_ptr<Parser::VariableDefinitionItem> vdef){
-    ((CodeBlock*)ptr)->varDefCallback(vdef);
+    static_cast<CodeBlock*>(ptr)->varDefCallback(vdef);
 }
 
 CodeBlock::CodeBlock(std::shared_ptr<DefaultFrame> frame,std::shared_ptr<Parser::CodeBlock> b):Line(b->line_start),default_frame(frame){
@@ -63,7 +63,7 @@ void CodeBlock::addLine(std::shared_ptr<Parser::Line> l){
         code.push_back(std::make_shared<Expression>(default_frame.get(),std::static_pointer_cast<Parser::Expression>(l->contents)));
         break;
     case Parser::LINE_DEFINITION:
-        default_frame->add_definition(std::static_pointer_cast<Parser::Definition>(l->contents),false,varDefCallbackCaller,this);
+        default_frame->add_definition(std::static_pointer_cast<Parser::Definition>(l->contents),false,varDefCallbackCaller,static_cast<void*>(this));
         break;
     case Parser::LINE_EMPTY://do nothing
         break;
