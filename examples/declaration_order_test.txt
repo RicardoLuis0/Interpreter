@@ -5,3 +5,12 @@ void main(){
 void do_something(){
     printf("It works!");
 }
+
+/*
+void shouldnt_work(){
+    do_something_wrong();
+    void do_something_wrong(){
+        printf("Shouldnt work");
+    }
+}
+*/
