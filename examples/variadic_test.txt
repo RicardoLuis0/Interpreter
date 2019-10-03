@@ -1,6 +1,13 @@
 void vartest(... args){
-    
+    int size=array_size(args);
+    printvals(args);
+    for(int i=0;i<size;i++){
+        printvals(args[i]);
+        printf("\n");
+    }
 }
 
 void main(){
+    int abc=2;
+    vartest(1,2.5,"yyy",abc);
 }
