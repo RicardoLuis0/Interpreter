@@ -61,7 +61,7 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
         for(size_t i=function->parameters.size();i<args.size();i++){
             vargs.push_back(args[i]);
         }
-        f->variables.insert({function->variadic_ident,std::make_shared<ArrayVariable>(function->variadic_ident,std::dynamic_pointer_cast<ArrayType>(frame->variable_types[function->variadic_ident]),vargs)});
+        f->variables[function->variadic_ident]=std::make_shared<ArrayVariable>(function->variadic_ident,std::dynamic_pointer_cast<ArrayType>(frame->variable_types[function->variadic_ident]),vargs);
     }
     std::shared_ptr<LineResult> result=code->run(f.get());
     switch(result->getAction()){
