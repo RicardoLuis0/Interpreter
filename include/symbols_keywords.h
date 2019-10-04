@@ -35,10 +35,13 @@ enum keyword_type_t{
     KEYWORD_INT,
     KEYWORD_FLOAT,
     KEYWORD_STRING,
+    KEYWORD_STRUCT,
     KEYWORD_CLASS,
     KEYWORD_PUBLIC,
     KEYWORD_PROTECTED,
     KEYWORD_PRIVATE,
+    KEYWORD_OVERRIDE,
+    KEYWORD_VIRTUAL,
 };
 
 enum symbol_type_t {

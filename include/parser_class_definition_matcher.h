@@ -1,8 +1,6 @@
 #ifndef PARSER_CLASS_DEFINITION_MATCHER_H
 #define PARSER_CLASS_DEFINITION_MATCHER_H
 
-//TODO
-
 #include <memory>
 #include "parser_component.h"
 #include "parser_class_definition.h"

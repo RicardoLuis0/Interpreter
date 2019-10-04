@@ -41,12 +41,13 @@ std::vector<Lexer::keyword_data> base_keywords{
     {"int","KEYWORD_INT",KEYWORD_INT},
     {"float","KEYWORD_FLOAT",KEYWORD_FLOAT},
     {"string","KEYWORD_STRING",KEYWORD_STRING},
-    /*
+    {"struct","KEYWORD_STRUCT",KEYWORD_STRUCT},
     {"class","KEYWORD_CLASS",KEYWORD_CLASS},
     {"public","KEYWORD_PUBLIC",KEYWORD_PUBLIC},
     {"protected","KEYWORD_PROTECTED",KEYWORD_PROTECTED},
     {"private","KEYWORD_PRIVATE",KEYWORD_PRIVATE},
-    */
+    {"override","KEYWORD_OVERRIDE",KEYWORD_OVERRIDE},
+    {"virtual","KEYWORD_VIRTUAL",KEYWORD_VIRTUAL},
 };
 
 std::vector<Lexer::symbol_data> base_symbols{

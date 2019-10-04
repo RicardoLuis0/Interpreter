@@ -198,11 +198,14 @@
 		<Unit filename="include/parser_keyword_function_call_matcher.h" />
 		<Unit filename="include/parser_line.h" />
 		<Unit filename="include/parser_line_matcher.h" />
+		<Unit filename="include/parser_member_definition.h" />
+		<Unit filename="include/parser_member_definition_matcher.h" />
 		<Unit filename="include/parser_result_part.h" />
 		<Unit filename="include/parser_return_statement.h" />
 		<Unit filename="include/parser_return_statement_matcher.h" />
 		<Unit filename="include/parser_statement.h" />
 		<Unit filename="include/parser_statement_matcher.h" />
+		<Unit filename="include/parser_struct_definition.h" />
 		<Unit filename="include/parser_struct_definition_matcher.h" />
 		<Unit filename="include/parser_unary_operation.h" />
 		<Unit filename="include/parser_unary_operation_matcher.h" />
@@ -341,6 +344,7 @@
 		<Unit filename="src/parser/component/parser_if_statment_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_keyword_function_call_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_line_matcher.cpp" />
+		<Unit filename="src/parser/component/parser_member_definition_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_return_statement_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_statement_matcher.cpp" />
 		<Unit filename="src/parser/component/parser_struct_definition_matcher.cpp" />
@@ -366,9 +370,11 @@
 		<Unit filename="src/parser/result/parser_if_statement.cpp" />
 		<Unit filename="src/parser/result/parser_keyword_function_call.cpp" />
 		<Unit filename="src/parser/result/parser_line.cpp" />
+		<Unit filename="src/parser/result/parser_member_definition.cpp" />
 		<Unit filename="src/parser/result/parser_result_part.cpp" />
 		<Unit filename="src/parser/result/parser_return_statement.cpp" />
 		<Unit filename="src/parser/result/parser_statement.cpp" />
+		<Unit filename="src/parser/result/parser_struct_definition.cpp" />
 		<Unit filename="src/parser/result/parser_unary_operation.cpp" />
 		<Unit filename="src/parser/result/parser_var_type.cpp" />
 		<Unit filename="src/parser/result/parser_variable_definition.cpp" />
