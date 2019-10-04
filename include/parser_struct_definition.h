@@ -1,15 +1,16 @@
 #ifndef PARSER_STRUCT_DEFINITION_H
 #define PARSER_STRUCT_DEFINITION_H
 
+#include <vector>
 #include <memory>
 #include "parser_result_part.h"
+#include "parser_member_definition.h"
 
 namespace Parser{
     class StructDefinition:public ParserResultPart{
         public:
             StructDefinition(int line_start,int line_end);
-            std::vector<std::shared_ptr<MemberDefinition>> vars;
-            std::vector<std::shared_ptr<MethodDefinition>> funcs;
+            std::vector<std::shared_ptr<MemberDefinition>> members;
     };
 }
 
