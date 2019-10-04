@@ -2,5 +2,8 @@
 
 using namespace Parser;
 
-StructDefinition::StructDefinition(int line_start,int line_end):ParserResultPart(line_start,line_end){
+StructDefinition::StructDefinition(std::string n,std::vector<std::shared_ptr<MemberDefinition>> m,int ls,int le):
+    ParserResultPart(ls,le),
+    name(n),
+    members(m){
 }

@@ -9,7 +9,8 @@
 namespace Parser{
     class StructDefinition:public ParserResultPart{
         public:
-            StructDefinition(int line_start,int line_end);
+            StructDefinition(std::string name,std::vector<std::shared_ptr<MemberDefinition>> members,int line_start,int line_end);
+            std::string name;
             std::vector<std::shared_ptr<MemberDefinition>> members;
     };
 }
