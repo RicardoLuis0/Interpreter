@@ -19,7 +19,7 @@ namespace Parser{
     };
     class MemberDefinition:public ParserResultPart{
         public:
-            MemberDefinition(int line_start,int line_end);
+            MemberDefinition(bool is_override,member_scope_t scope,member_type_t type,std::shared_ptr<ParserResultPart> member,int line_start,int line_end);
             bool is_override;
             member_scope_t scope;
             member_type_t type;

@@ -2,5 +2,10 @@
 
 using namespace Parser;
 
-MemberDefinition::MemberDefinition(int line_start,int line_end):ParserResultPart(line_start,line_end){
+MemberDefinition::MemberDefinition(bool o,member_scope_t s,member_type_t t,std::shared_ptr<ParserResultPart> m,int ls,int le):
+    ParserResultPart(ls,le),
+    is_override(o),
+    scope(s),
+    type(t),
+    member(m){
 }
