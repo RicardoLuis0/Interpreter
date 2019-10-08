@@ -100,6 +100,45 @@ std::string Interpreter::valueToString(std::shared_ptr<Value> val){
 
 namespace Interpreter {
 
+    struct prepare_printf_out{
+        std::string fmt;
+        std::vector<std::shared_ptr<Printf::ValueContainer>> params;
+    };
+    static inline prepare_printf_out prepare_printf(std::vector<std::shared_ptr<Value>> args,size_t fmt_index,size_t params_start){
+        prepare_printf_out out;
+        out.fmt=std::dynamic_pointer_cast<StringValue>(args[fmt_index])->get();
+        std::vector<std::shared_ptr<Printf::ValueContainer>> params;
+        for(size_t i=params_start;i<args.size();i++){
+            out.params.push_back(std::dynamic_pointer_cast<Printf::ValueContainer>(args[i]));
+        }
+        for(size_t i=0;i<out.fmt.size();i++){
+            if(out.fmt[i]=='%'){
+                for(;out.fmt[i-1]!='{';i++){
+                    if(i>=out.fmt.size()||out.fmt[i]==' ')goto skip;
+                }
+                if(i<out.fmt.size()&&out.fmt[i]!='}'){
+                    size_t start=i;
+                    size_t len=0;
+                    std::string ntemp;
+                    for(len=0;i+len<out.fmt.size()&&out.fmt[i+len]!='}';len++){
+                        ntemp+=out.fmt[i+len];
+                    }
+                    for(size_t i2=0;i2<out.params.size();i2++){
+                        if(auto v=std::dynamic_pointer_cast<Variable>(out.params[i2])){
+                            //won't work for references, since a reference's get_name will return the name of the original variable it points to
+                            if(v->get_name()==ntemp){
+                                out.fmt.replace(start,len,std::to_string(i2));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        skip:;
+        }
+        return out;
+    }
+
     class printf : public Function {
 
         bool is_variadic() override{
@@ -123,12 +162,8 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
-            auto fmt=std::dynamic_pointer_cast<StringValue>(args[0]);
-            std::vector<std::shared_ptr<Printf::ValueContainer>> params;
-            for(size_t i=1;i<args.size();i++){
-                params.push_back(std::dynamic_pointer_cast<Printf::ValueContainer>(args[i]));
-            }
-            return std::make_shared<IntValue>(Printf::vprintf(fmt->get(),params));
+            prepare_printf_out data=prepare_printf(args,0,1);
+            return std::make_shared<IntValue>(Printf::vprintf(data.fmt,data.params));
         }
 
     };
@@ -156,14 +191,9 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
-            auto fmt=std::dynamic_pointer_cast<StringValue>(args[0]);
-            std::vector<std::shared_ptr<Printf::ValueContainer>> params;
-            for(size_t i=1;i<args.size();i++){
-                params.push_back(std::dynamic_pointer_cast<Printf::ValueContainer>(args[i]));
-            }
-            return std::make_shared<StringValue>(Printf::vsprintf(fmt->get(),params));
+            prepare_printf_out data=prepare_printf(args,0,1);
+            return std::make_shared<StringValue>(Printf::vsprintf(data.fmt,data.params));
         }
-
     };
 
     class printvals : public Function {
@@ -564,12 +594,8 @@ namespace Interpreter {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
             if(f){
                 if(f->f){
-                    auto fmt=std::dynamic_pointer_cast<StringValue>(args[1]);
-                    std::vector<std::shared_ptr<Printf::ValueContainer>> params;
-                    for(size_t i=2;i<args.size();i++){
-                        params.push_back(std::dynamic_pointer_cast<Printf::ValueContainer>(args[i]));
-                    }
-                    return std::make_shared<IntValue>(::fputs(Printf::vsprintf(fmt->get(),params).c_str(),f->f));
+                    prepare_printf_out data=prepare_printf(args,1,2);
+                    return std::make_shared<IntValue>(::fputs(Printf::vsprintf(data.fmt,data.params).c_str(),f->f));
                 }
             }
             return std::make_shared<IntValue>(0);

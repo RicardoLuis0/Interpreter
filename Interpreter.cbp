@@ -32,7 +32,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-fexceptions -std=c++17 -Wold-style-cast" />
+			<Add option="-fexceptions -std=c++17 -Wold-style-cast -Werror=return-type" />
 		</Compiler>
 		<Unit filename=".gitattributes" />
 		<Unit filename=".gitignore" />
