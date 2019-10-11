@@ -618,6 +618,8 @@ void print_definition(int indent,std::shared_ptr<Parser::Definition> def){
     case Parser::DEFINITION_FUNC:
         print_function_definition(indent+1,std::static_pointer_cast<Parser::FunctionDefinition>(def->def));
         break;
+    case Parser::DEFINITION_STRUCT:
+        throw std::runtime_error("structs not supported yet");//TODO struct AST printing
     }
 }
 

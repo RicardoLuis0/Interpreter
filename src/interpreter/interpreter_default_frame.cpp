@@ -161,6 +161,8 @@ void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool g
     case Parser::DEFINITION_FUNC:
         add_function(std::static_pointer_cast<Parser::FunctionDefinition>(def->def),global);
         break;
+    case Parser::DEFINITION_STRUCT:
+        throw std::runtime_error("structs not supported yet");//TODO struct runtime
     }
 }
 
