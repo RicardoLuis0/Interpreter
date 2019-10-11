@@ -33,5 +33,5 @@ std::shared_ptr<FunctionCall> FunctionCallMatcher::makeMatch(parserProgress &p){
     if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
         throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ')', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
     }
-    return std::make_shared<FunctionCall>(std::static_pointer_cast<Lexer::WordToken>(identifier),arguments,line_start,p.get_line(-1));
+    return std::make_shared<FunctionCall>(std::static_pointer_cast<Lexer::WordToken>(identifier)->get_literal(),arguments,line_start,p.get_line(-1));
 }

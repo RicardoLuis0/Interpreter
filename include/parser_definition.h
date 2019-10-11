@@ -11,6 +11,7 @@ namespace Parser{
     enum ParserDefinitionType_t{
         DEFINITION_VAR,
         DEFINITION_FUNC,
+        DEFINITION_STRUCT,
     };
     class Definition : public ParserResultPart {
         public:

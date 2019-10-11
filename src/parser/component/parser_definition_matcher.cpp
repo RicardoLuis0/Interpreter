@@ -5,8 +5,9 @@
 #include "symbols_keywords.h"
 #include "parser_function_definition_matcher.h"
 #include "parser_variable_definition_matcher.h"
+#include "parser_struct_definition_matcher.h"
 
-//Definition = FunctionDefinition | VariableDefinition , symbol ';' ;
+//Definition = StructDefinition | FunctionDefinition | VariableDefinition , symbol ';' ;
 
 using namespace Parser;
 
@@ -15,19 +16,28 @@ std::shared_ptr<Definition> DefinitionMatcher::makeMatch(parserProgress &p){
     int location_backup;
     try{
         location_backup=p.location;
-        return std::make_shared<Definition>(DEFINITION_FUNC,FunctionDefinitionMatcher().makeMatch(p),line_start,p.get_line(-1));
+        auto sdef=StructDefinitionMatcher().makeMatch(p);
+        return std::make_shared<Definition>(DEFINITION_STRUCT,sdef,line_start,p.get_line(-1));
     }catch(MyExcept::NoMatchException &e){
         p.location=location_backup;
-        std::shared_ptr<VarType> vt=nullptr;
+        if(p.peekKeyword(KEYWORD_STRUCT))throw;//rethrow if struct;
         try{
-            vt=VarTypeMatcher().makeMatch(p);
+            location_backup=p.location;
+            auto fdef=FunctionDefinitionMatcher().makeMatch(p);
+            return std::make_shared<Definition>(DEFINITION_FUNC,fdef,line_start,p.get_line(-1));
         }catch(MyExcept::NoMatchException &e){
-            vt=nullptr;
+            p.location=location_backup;
+            std::shared_ptr<VarType> vt=nullptr;
+            try{
+                vt=VarTypeMatcher().makeMatch(p);
+            }catch(MyExcept::NoMatchException &e){
+                vt=nullptr;
+            }
+            if(vt&&p.peekType(Lexer::TOKEN_TYPE_WORD)&&p.peekSymbol(SYMBOL_PARENTHESIS_OPEN,1))throw;//if is function definition rethrow
+            p.location=location_backup;
+            auto vdef=VariableDefinitionMatcher().makeMatch(p);
+            if(!p.isSymbol(SYMBOL_SEMICOLON))MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");//variable definition must end in semicolon
+            return std::make_shared<Definition>(DEFINITION_VAR,vdef,line_start,p.get_line(-1));
         }
-        if(vt&&p.peekType(Lexer::TOKEN_TYPE_WORD)&&p.peekSymbol(SYMBOL_PARENTHESIS_OPEN,1))throw;//if is function definition rethrow
-        p.location=location_backup;
-        std::shared_ptr<VariableDefinition> vdef=VariableDefinitionMatcher().makeMatch(p);
-        if(!p.isSymbol(SYMBOL_SEMICOLON))MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");//variable definition must end in semicolon
-        return std::make_shared<Definition>(DEFINITION_VAR,vdef,line_start,p.get_line(-1));
     }
 }
