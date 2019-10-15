@@ -21,6 +21,7 @@
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="examples/nqueen.txt" />
 				<Compiler>
 					<Add option="-O2" />
 					<Add directory="include" />
@@ -53,6 +54,7 @@
 		<Unit filename="examples/hello_world.txt" />
 		<Unit filename="examples/lib.txt" />
 		<Unit filename="examples/nested_functions_test.txt" />
+		<Unit filename="examples/nqueen.txt" />
 		<Unit filename="examples/printf_test.txt" />
 		<Unit filename="examples/printvals_test.txt" />
 		<Unit filename="examples/ptr_test.txt" />
