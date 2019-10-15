@@ -11,6 +11,6 @@ int main(){
 	ptr<int> test=&val;
 	ptr_set(test,20);
 	ptr_void_test(test);
-	puts("val="+to_string(val)+"\n");
+	print("val="+to_string(val)+"\n");
 	return 0;
 }

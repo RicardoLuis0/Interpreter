@@ -17,8 +17,8 @@ int main(){
 	setvar(i,10);
 	setvar(f,5);
 	setvar(s,"Teste");
-	puts("i="+to_string(i));
-	puts("f="+to_string(f));
-	puts("s="+s);
+	print("i="+to_string(i));
+	print("f="+to_string(f));
+	print("s="+s);
 	return 0;
 }

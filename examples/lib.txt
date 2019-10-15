@@ -1,4 +1,4 @@
-void puts(string)
+void print(string)
 	write string to stdout
 
 void putchar(int)

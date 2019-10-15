@@ -7,15 +7,15 @@ void main(){
 			data+=c;
 		}
 		fclose(f);
-		puts("data:"+data+"\n");
+		print("data:"+data+"\n");
 		f=fopen("file_test.output.txt",true);//open 'file_test.output.txt' in write mode
 		if(f){
 			fputs(data,f);
 			fclose(f);
 		}else{
-			puts("could not open 'file_test.output.txt'\n");
+			print("could not open 'file_test.output.txt'\n");
 		}
 	}else{
-		puts("could not open 'file_test.input.txt'\n");
+		print("could not open 'file_test.input.txt'\n");
 	}
 }

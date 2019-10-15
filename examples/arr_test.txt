@@ -6,6 +6,6 @@ void proccess(int[][] &arr){
 
 int main(){
 	proccess(arr_test);
-	puts(to_string(arr_test[1][12]));
+	print(to_string(arr_test[1][12]));
 	return arr_test[0][1];
 }

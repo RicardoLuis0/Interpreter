@@ -7,7 +7,7 @@ void pause(){
 }
 
 void pauseMsg(string msg){
-	puts(msg);
+	print(msg);
 	pause();
 }
 
@@ -17,22 +17,22 @@ void pauseMsg(){
 
 void render(){
 	cls();
-	puts("TicTacToe\n---\nPlayer "+to_string(turn)+"'s Turn\n+---+\n");
+	print("TicTacToe\n---\nPlayer "+to_string(turn)+"'s Turn\n+---+\n");
 	for(int i=0;i<3;i++){
-	puts("|");
+		print("|");
 		for(int j=0;j<3;j++){
 			int val=board[j][i];
 			if(val==1){
-				puts("O");
+				print("O");
 			}else if(val==2){
-				puts("X");
+				print("X");
 			}else{
-				puts(" ");
+				print(" ");
 			}
 		}
-		puts("|\n");
+		print("|\n");
 	}
-	puts("+---+\n");
+	print("+---+\n");
 }
 
 int checkwin(){
@@ -68,12 +68,12 @@ void game() {
 		render();
 		if(last_invalid){
 			last_invalid=0;
-			puts("Invalid move\n");
+			print("Invalid move\n");
 		}
-		puts("X:");
+		print("X:");
 		int x=stoi(getline());
 		x-=1;
-		puts("Y:");
+		print("Y:");
 		int y=stoi(getline());
 		y-=1;
 		if(y<0||x<0||x>2||y>2){
@@ -110,7 +110,7 @@ int main(){
 	while(do_loop){
 		game();
 		while(true){
-			puts("Play again?(Y/N)\n");
+			print("Play again?(Y/N)\n");
 			int c=getch();
 			if(c=='Y'||c=='y'){
 				break;

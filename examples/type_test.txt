@@ -23,27 +23,27 @@ void type_test(){
 	type type_type=type<type>();
 	type array_type=type<any[]>();
 	
-	puts(get_type_name(int_type)+"\n");
-	puts(get_type_name(char_type)+"\n");
-	puts(get_type_name(unsigned_int_type)+"\n");
-	puts(get_type_name(unsigned_char_type)+"\n");
-	puts(get_type_name(float_type)+"\n");
-	puts(get_type_name(string_type)+"\n");
-	puts(get_type_name(type_type)+"\n");
-	puts(get_type_name(array_type)+"\n");
+	print(get_type_name(int_type)+"\n");
+	print(get_type_name(char_type)+"\n");
+	print(get_type_name(unsigned_int_type)+"\n");
+	print(get_type_name(unsigned_char_type)+"\n");
+	print(get_type_name(float_type)+"\n");
+	print(get_type_name(string_type)+"\n");
+	print(get_type_name(type_type)+"\n");
+	print(get_type_name(array_type)+"\n");
 }
 
 void main(){
-	puts(get_value_type_name(0)+"\n");
-	puts(get_value_type_name('a')+"\n");
-	puts(get_value_type_name("a")+"\n");
-	puts(to_string(cast<char>(640))+"\n");
-	puts(to_string(cast<unsigned char>(200))+"\n");
-	puts("same type int&int "+tf(same_type(0,1))+"\n");
-	puts("same type int&float "+tf(same_type(0,1.))+"\n");
-	puts("same type int&string "+tf(same_type(0,"1"))+"\n");
-	puts("same type float&float "+tf(same_type(0.,1.))+"\n");
-	puts("same type float&string "+tf(same_type(0.,"1"))+"\n");
-	puts("same type string&string "+tf(same_type("0","1"))+"\n");
+	print(get_value_type_name(0)+"\n");
+	print(get_value_type_name('a')+"\n");
+	print(get_value_type_name("a")+"\n");
+	print(to_string(cast<char>(640))+"\n");
+	print(to_string(cast<unsigned char>(200))+"\n");
+	print("same type int&int "+tf(same_type(0,1))+"\n");
+	print("same type int&float "+tf(same_type(0,1.))+"\n");
+	print("same type int&string "+tf(same_type(0,"1"))+"\n");
+	print("same type float&float "+tf(same_type(0.,1.))+"\n");
+	print("same type float&string "+tf(same_type(0.,"1"))+"\n");
+	print("same type string&string "+tf(same_type("0","1"))+"\n");
 	type_test();
 }

@@ -22,7 +22,7 @@
 //NOTE native functions to make later
 //string sprintf(string format,...) DONE
 //int printf(string format,...) DONE
-//void puts(string) DONE
+//void print(string) DONE
 //void putchar(int) DONE
 //string getline() DONE
 //int stoi(string) DONE
@@ -231,10 +231,10 @@ namespace Interpreter {
 
     };
 
-    class puts : public Function {
+    class print : public Function {
 
         std::string get_name() override {
-            return "puts";
+            return "print";
         }
 
         std::shared_ptr<Type> get_type() override {
@@ -246,6 +246,7 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            //todo handle multiple types
             std::cout<<std::dynamic_pointer_cast<StringValue>(args[0]->get_type()->cast(args[0],Type::string_type()))->get();
             return nullptr;
         }
@@ -736,7 +737,7 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::printf>());
     d->register_function(std::make_shared<Interpreter::sprintf>());
     d->register_function(std::make_shared<Interpreter::printvals>());
-    d->register_function(std::make_shared<Interpreter::puts>());
+    d->register_function(std::make_shared<Interpreter::print>());
     d->register_function(std::make_shared<Interpreter::putchar>());
     d->register_function(std::make_shared<Interpreter::getline>());
     d->register_function(std::make_shared<Interpreter::stoi>());

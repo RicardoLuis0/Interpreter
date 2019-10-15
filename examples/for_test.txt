@@ -1,5 +1,5 @@
 void main(){
 	for(int i=0;i<15;i++){
-		puts(to_string(i)+"\n");
+		print(to_string(i)+"\n");
 	}
 }

@@ -7,6 +7,6 @@ void main(){
 		}else if(count>15){
 			break;
 		}
-		puts(to_string(count)+"\n");
+		print(to_string(count)+"\n");
 	}
 }
