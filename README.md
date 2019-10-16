@@ -8,7 +8,7 @@ Examples included in the `/examples` folder. You can execute scripts by passing 
 
 Debugging mode is planned but not implemented yet.
 
-# Features
+## Features
 
 * C-like syntax;
   * C++ style references ( using `&` );
