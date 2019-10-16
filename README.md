@@ -17,3 +17,4 @@ Debugging mode is planned but not implemented yet.
 * File Access ( read/write );
 * Text Formatting;
 * Variable dumping;
+* Pointers ( no memory allocation yet, but since all values are allocated on the heap, you can just pass a local variable down as a pointer and it will be A-OK )
