@@ -139,22 +139,28 @@ void DefaultFrame::add_function(std::shared_ptr<Parser::FunctionDefinition> func
     if(!global)temp->proccess_delayed();//delay code processing until function is registered, fixes recursion
 }
 
-void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool global,void(*cb)(void*,std::shared_ptr<Parser::VariableDefinitionItem>),void * arg){
+void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool global,void(*cb)(void*,std::shared_ptr<Parser::VariableDefinitionItem>,std::shared_ptr<Type>,bool),void * arg){
     switch(def->type){
     case Parser::DEFINITION_VAR:{
             std::shared_ptr<Parser::VariableDefinition> vardef(std::static_pointer_cast<Parser::VariableDefinition>(def->def));
             std::shared_ptr<Type> type = Type::from_vartype(this,vardef->type);
+            bool vla=false;
             if(std::shared_ptr<ArrayType> at=std::dynamic_pointer_cast<ArrayType>(type)){
                 while(at!=nullptr){
-                    if(at->get_size()<=0){
+                    if(at->is_vla()){
+                        vla=true;
+                    }else if(at->get_size()<=0){
                         throw MyExcept::SyntaxError(def->line_start,def->line_start,"invalid size for array");
                     }
                     at=std::dynamic_pointer_cast<ArrayType>(at->get_type());
                 }
+                if(vla&&global){
+                    throw MyExcept::SyntaxError(def->line_start,def->line_start,"global VLA arrays not allowed");
+                }
             }
             for(std::shared_ptr<Parser::VariableDefinitionItem> var:vardef->variables){
                 add_variable(type,var,global);
-                if(cb&&var->value)cb(arg,var);
+                if(cb)cb(arg,var,type,vla);
             }
         }
         break;

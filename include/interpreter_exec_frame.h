@@ -16,6 +16,7 @@ namespace Interpreter {
             class DefaultFrame * defaults;
             friend class ForStatement;
             friend class UserFunction;
+            friend class ExprPartInitVLA;
         public:
             ExecFrame(ExecFrame * parent,class DefaultFrame * defaults);
             std::shared_ptr<Variable> get_variable(std::string);

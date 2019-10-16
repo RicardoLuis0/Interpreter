@@ -11,11 +11,13 @@
 #include "interpreter_while_statement.h"
 #include "interpreter_for_statement.h"
 #include "interpreter_user_function.h"
+#include "interpreter_array_type.h"
+#include "interpreter_expr_part_init_vla.h"
 
 using namespace Interpreter;
 
-static void varDefCallbackCaller(void * ptr,std::shared_ptr<Parser::VariableDefinitionItem> vdef){
-    static_cast<CodeBlock*>(ptr)->varDefCallback(vdef);
+static void varDefCallbackCaller(void * ptr,std::shared_ptr<Parser::VariableDefinitionItem> vdef,std::shared_ptr<Type> type,bool vla){
+    static_cast<CodeBlock*>(ptr)->varDefCallback(vdef,type,vla);
 }
 
 CodeBlock::CodeBlock(std::shared_ptr<DefaultFrame> frame,std::shared_ptr<Parser::CodeBlock> b):Line(b->line_start),default_frame(frame){
@@ -97,6 +99,12 @@ std::shared_ptr<ExecFrame> CodeBlock::getContext(ExecFrame * parent){
     return std::make_shared<ExecFrame>(parent,default_frame.get());
 }
 
-void CodeBlock::varDefCallback(std::shared_ptr<Parser::VariableDefinitionItem> var){
-    code.push_back(default_frame->vardefitem_to_assignment(var));
+void CodeBlock::varDefCallback(std::shared_ptr<Parser::VariableDefinitionItem> var,std::shared_ptr<Type> t,bool vla){
+    if(vla){
+        auto arr=std::dynamic_pointer_cast<ArrayType>(t);
+        code.push_back(std::make_shared<Expression>(std::make_shared<ExprPartInitVLA>(arr,var->name),-1));
+    }
+    if(var->value){
+        code.push_back(default_frame->vardefitem_to_assignment(var));
+    }
 }

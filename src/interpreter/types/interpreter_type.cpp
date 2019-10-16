@@ -132,9 +132,17 @@ std::shared_ptr<Type> Type::from_vartype(DefaultFrame * context,std::shared_ptr<
     for(std::shared_ptr<Parser::Expression> e:t->array_sizes){
         if(e){
             if(e->type==Parser::EXPRESSION_TERM&&std::static_pointer_cast<Parser::ExpressionTerm>(e->contents)->type==Parser::EXPRESSION_TERM_LITERAL_INT){
-                type=std::make_shared<ArrayType>(type,std::static_pointer_cast<Lexer::IntegerToken>(std::static_pointer_cast<Parser::ExpressionTerm>(e->contents)->contents_t)->get_integer());
+                int v=std::static_pointer_cast<Lexer::IntegerToken>(std::static_pointer_cast<Parser::ExpressionTerm>(e->contents)->contents_t)->get_integer();
+                if(v<=0)throw std::runtime_error("invalid size for array");
+                type=std::make_shared<ArrayType>(type,v);
             }else{
-                throw std::runtime_error("invalid type for array size, must be integer literal");
+                //TODO vla support
+                auto expr=std::make_shared<Expression>(context,e);
+                if(expr->get_type()->allows_implicit_cast(expr->get_type(),int_type())){
+                    type=std::make_shared<ArrayType>(type,expr);
+                }else{
+                    throw std::runtime_error("invalid type for array size, must be conversible to integer");
+                }
             }
         }else{//[] array
             type=std::make_shared<ArrayType>(type,-1);

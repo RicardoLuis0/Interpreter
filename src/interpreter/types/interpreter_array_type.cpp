@@ -9,11 +9,19 @@
 #include "interpreter_array_value.h"
 #include "interpreter_array_variable.h"
 #include "interpreter_any_type.h"
+#include "interpreter_int_value.h"
 #include "my_except.h"
 
 using namespace Interpreter;
 
-ArrayType::ArrayType(std::shared_ptr<Type> t,int s,bool c):Type(c),type(t),size(s){
+ArrayType::ArrayType(std::shared_ptr<Type> t,int s,bool c):Type(c),type(t),size(s),len_expr(nullptr){
+    if(size<=0&&size!=-1){
+        throw std::runtime_error("invalid array size");
+    }
+}
+
+ArrayType::ArrayType(std::shared_ptr<Type> t,std::shared_ptr<Expression> expr,bool c):Type(c),type(t),size(-1),len_expr(expr){
+    
 }
 
 std::shared_ptr<Type> ArrayType::change_const(std::shared_ptr<Type> self,bool new_const){
@@ -29,10 +37,12 @@ std::string ArrayType::get_name(){
 }
 
 std::shared_ptr<Value> ArrayType::make_value(std::shared_ptr<Type> self){
+    if(is_vla())throw std::runtime_error("Trying to instantiate VLA array as non-VLA");
     return std::make_shared<ArrayValue>(std::dynamic_pointer_cast<ArrayType>(self));
 }
 
 std::shared_ptr<Variable> ArrayType::make_variable(std::shared_ptr<Type> self,std::string name){
+    if(is_vla())throw std::runtime_error("Trying to instantiate VLA array as non-VLA");
     return std::make_shared<ArrayVariable>(name,std::dynamic_pointer_cast<ArrayType>(self));
 }
 
@@ -85,5 +95,35 @@ std::shared_ptr<Value> ArrayType::call_operator(int op,std::shared_ptr<Value> se
         return self->access_array(other);
     default:
         throw std::runtime_error("invalid operator '"+get_op_str(op)+"'");
+    }
+}
+
+std::shared_ptr<ArrayType> ArrayType::build_vla_array_type(ExecFrame * context){
+    if(is_vla()){
+        auto val=len_expr->eval(context);
+        int new_len=std::dynamic_pointer_cast<IntValue>(val->get_type()->cast(val,Type::int_type()))->get();
+        if(new_len<0){
+            throw std::runtime_error("invalid size for VLA array");
+        }
+        if(auto arrt=std::dynamic_pointer_cast<ArrayType>(type)){
+            if(arrt->is_vla()){
+                return std::make_shared<ArrayType>(arrt->build_vla_array_type(context),new_len,is_const);
+            }
+        }
+        return std::make_shared<ArrayType>(type,new_len,is_const);
+    }else if(auto arrt=std::dynamic_pointer_cast<ArrayType>(type)){
+        return std::make_shared<ArrayType>(arrt->build_vla_array_type(context),size,is_const);
+    }else{
+        throw std::runtime_error("trying to instantiate a non-VLA array as VLA");
+    }
+}
+
+bool ArrayType::is_vla(){
+    if(size==-1&&len_expr){
+        return true;
+    }else if(auto arrt=std::dynamic_pointer_cast<ArrayType>(type)){
+        return arrt->is_vla();
+    }else{
+        return false;
     }
 }

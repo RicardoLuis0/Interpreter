@@ -22,6 +22,9 @@ using namespace Interpreter;
 
 ExecFrame::ExecFrame(ExecFrame * p,DefaultFrame * d):parent(p),defaults(d){
     for(std::pair<std::string,std::shared_ptr<Type>> vpair:defaults->variable_types){
+        if(auto arr=std::dynamic_pointer_cast<ArrayType>(vpair.second)){
+            if(arr->is_vla())continue;
+        }
         std::shared_ptr<Variable> var=vpair.second->make_variable(vpair.second,vpair.first);
         if(!var){
             throw std::runtime_error("unexpected nullptr in "+std::string(vpair.second->get_name())+"::make_variable");

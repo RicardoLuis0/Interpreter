@@ -48,7 +48,7 @@ namespace Interpreter{
             void add_parameters(std::vector<FunctionParameter>);
             void add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global=false);
             void add_function(std::shared_ptr<Parser::FunctionDefinition>,bool global);
-            void add_definition(std::shared_ptr<Parser::Definition>,bool global=false,void(*expr_callback)(void*,std::shared_ptr<Parser::VariableDefinitionItem>)=nullptr,void * callback_arg=nullptr);//expr_callback called when there's an expression definition in VariableDefinitionItem
+            void add_definition(std::shared_ptr<Parser::Definition>,bool global=false,void(*expr_callback)(void*,std::shared_ptr<Parser::VariableDefinitionItem>,std::shared_ptr<Type>,bool)=nullptr,void * callback_arg=nullptr);//expr_callback called when there's an expression definition in VariableDefinitionItem
     };
 }
 
