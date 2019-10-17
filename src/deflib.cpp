@@ -18,6 +18,7 @@
 #include "printf.h"
 
 #include <cstdlib>
+#include <ctime>
 
 //NOTE native functions to make later
 //string sprintf(string format,...) DONE
@@ -39,9 +40,10 @@
 //int fprintf(ptr<void>,string format, any ... args) DONE
 //char fgetc(ptr<void>) DONE
 //string fgets(unsigned int len,ptr<void>) DONE
-//void fseek(ptr<void>,unsigned int location) TODO, operates as SEEK_SET
-//void fseek(ptr<void>) TODO operates as SEEK_END
-//int ftell(ptr<void>) TODO
+//void fseek(ptr<void>,unsigned int location) DONE, operates as SEEK_SET
+//void fseek(ptr<void>) DONE operates as SEEK_END
+//int ftell(ptr<void>) DONE
+//int rand() DONE
 
 
 static std::string escape(char c){
@@ -731,9 +733,29 @@ namespace Interpreter {
 
     };
 
+    class rand : public Function {
+        std::string get_name() override {
+            return "rand";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::int_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            return std::make_shared<IntValue>(::rand());
+        }
+
+    };
+
 }
 
 void Interpreter::init_deflib(DefaultFrame * d){
+    srand(time(NULL));
     d->register_function(std::make_shared<Interpreter::printf>());
     d->register_function(std::make_shared<Interpreter::sprintf>());
     d->register_function(std::make_shared<Interpreter::printvals>());
@@ -757,4 +779,5 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::fseek>());
     d->register_function(std::make_shared<Interpreter::fseek_end>());
     d->register_function(std::make_shared<Interpreter::ftell>());
+    d->register_function(std::make_shared<Interpreter::rand>());
 }
