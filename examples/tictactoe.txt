@@ -160,8 +160,10 @@ void game(int computer){
 			pause();
 			return;
 		}
-		print_board(board,-1,-1,name+"'s Turn Is Over\n","\nPress any Key...");
-		pause();
+		if(!computer){
+			print_board(board,-1,-1,name+"'s Turn Is Over\n","\nPress any Key...");
+			pause();
+		}
 	}
 }
 
@@ -193,7 +195,76 @@ void player_turn(int[3][3] &board,int &x,int &y,int num,string name){
 	}
 }
 
-int computer_turn(int [3][3] &board){
-	print_board(board,x,y,"Comptuer's Turn\n","\nThe Computer Is Thinking...");
-	//TODO
+void computer_turn(int [3][3] &board){
+	print_board(board,-1,-1,"Computer's Turn\n","\nThe Computer Is Thinking...");
+	int best=-9999;
+	int best_x;
+	int best_y;
+	for(int i=0;i<3;i++){//find best move
+		for(int j=0;j<3;j++){
+			if(board[j][i]==0){
+				board[j][i]=2;
+				int new_val=minimax(board,0,true);
+				board[j][i]=0;
+				if(new_val>best){
+					best=new_val;
+					best_x=j;
+					best_y=i;
+				}
+			}
+		}
+	}
+	if(best!=-9999){//execute best move
+		board[best_x][best_y]=2;
+	}
+}
+
+int max(int a,int b){
+	if(a>=b){
+		return a;
+	}
+	return b;
+}
+
+int min(int a,int b){
+	if(a<=b){
+		return a;
+	}
+	return b;
+}
+
+int minimax(int[3][3] &board,int depth,int player){
+	int cw=checkwin(board);
+	if(cw==1){//if endpoint return
+		return depth-10;//player wins
+	}else if(cw==2){
+		return 10-depth;//computer wins
+	}else if(cw==3){
+		return 0;//tie
+	}else{
+		int val;
+		int move;
+		if(player){
+			val=-999;
+			move=1;
+		}else{
+			val=999;
+			move=2;
+		}
+		for(int i=0;i<3;i++){
+			for(int j=0;j<3;j++){
+				if(board[j][i]==0){//if is a valid move
+					board[j][i]=move;
+					int next_val=minimax(board,depth+1,!player);
+					board[j][i]=0;
+					if(player){
+						val=max(val,next_val);
+					}else{
+						val=min(val,next_val);
+					}
+				}
+			}
+		}
+		return val;//return value for best move
+	}
 }
