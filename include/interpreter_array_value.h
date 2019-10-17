@@ -22,6 +22,7 @@ namespace Interpreter {
             std::shared_ptr<ArrayType> type;
             std::vector<std::shared_ptr<Value>> array;
             std::string temp;
+            friend class ArrayType;
     };
 }
 
