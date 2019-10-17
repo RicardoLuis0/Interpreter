@@ -21,6 +21,7 @@
 #include <ctime>
 
 //NOTE native functions to make later
+//void printvals(...) DONE;
 //string sprintf(string format,...) DONE
 //int printf(string format,...) DONE
 //void print(string) DONE

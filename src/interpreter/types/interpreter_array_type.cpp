@@ -15,7 +15,7 @@
 using namespace Interpreter;
 
 ArrayType::ArrayType(std::shared_ptr<Type> t,int s,bool c):Type(c),type(t),size(s),len_expr(nullptr){
-    if(size<=0&&size!=-1){
+    if(size<-2){
         throw std::runtime_error("invalid array size");
     }
 }
