@@ -149,7 +149,7 @@ void DefaultFrame::add_definition(std::shared_ptr<Parser::Definition> def,bool g
                 while(at!=nullptr){
                     if(at->is_vla()){
                         vla=true;
-                    }else if(at->get_size()<=0){
+                    }else if(at->get_size()<-1){
                         throw MyExcept::SyntaxError(def->line_start,def->line_start,"invalid size for array");
                     }
                     at=std::dynamic_pointer_cast<ArrayType>(at->get_type());

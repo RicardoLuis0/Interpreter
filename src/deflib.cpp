@@ -46,6 +46,13 @@
 //int ftell(ptr<void>) DONE
 //int rand() DONE
 
+//void push_front(any[],any) TODO
+//void push_back(any[],any) TODO
+//any pop_front(any[]) TODO
+//any pop_back(any[]) TODO
+//any peek_front(any[]) TODO
+//any peek_back(any[]) TODO
+//void resize(any[]) TODO
 
 static std::string escape(char c){
     switch(c) {
@@ -753,6 +760,236 @@ namespace Interpreter {
 
     };
 
+    class push_front : public Function{
+
+        std::string get_name() override {
+            return "push_front";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::void_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true},{Type::any_type(),"val",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
+            auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
+            if(arrt->get_size()!=-1){
+                throw std::runtime_error("can't push to a sized array");
+            }
+            auto val=args[1]->get_type()->cast(args[1],arrt->get_type());
+            arrv->get().insert(arrv->get().begin(),val);
+            return nullptr;
+        }
+
+    };
+
+    class push_back : public Function{
+
+        std::string get_name() override {
+            return "push_back";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::void_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true},{Type::any_type(),"val",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
+            auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
+            if(arrt->get_size()!=-1){
+                throw std::runtime_error("can't push to a sized array");
+            }
+            auto val=args[1]->get_type()->cast(args[1],arrt->get_type());
+            arrv->get().push_back(val);
+            return nullptr;
+        }
+
+    };
+
+    class pop_front : public Function{
+
+        std::string get_name() override {
+            return "pop_front";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::any_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
+            auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
+            if(arrt->get_size()!=-1){
+                throw std::runtime_error("can't pop a sized array");
+            }else if(arrv->get().size()==0){
+                throw std::runtime_error("can't pop an empty array");
+            }
+            auto val=arrv->get().at(0);
+            arrv->get().erase(arrv->get().begin());
+            return val;
+        }
+
+    };
+
+    class pop_back : public Function{
+
+        std::string get_name() override {
+            return "pop_back";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::any_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
+            auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
+            if(arrt->get_size()!=-1){
+                throw std::runtime_error("can't pop a sized array");
+            }else if(arrv->get().size()==0){
+                throw std::runtime_error("can't pop an empty array");
+            }
+            auto val=arrv->get().back();
+            arrv->get().pop_back();
+            return val;
+        }
+
+    };
+
+    class peek_front : public Function{
+
+        std::string get_name() override {
+            return "peek_front";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::any_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
+            auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
+            if(arrt->get_size()!=-1){
+                throw std::runtime_error("can't peek a sized array");
+            }else if(arrv->get().size()==0){
+                throw std::runtime_error("can't peek an empty array");
+            }
+            return arrv->get().at(0);
+        }
+
+    };
+
+    class peek_back : public Function{
+
+        std::string get_name() override {
+            return "peek_back";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::any_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
+            auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
+            if(arrt->get_size()!=-1){
+                throw std::runtime_error("can't peek a sized array");
+            }else if(arrv->get().size()==0){
+                throw std::runtime_error("can't peek an empty array");
+            }
+            return arrv->get().back();
+        }
+
+    };
+
+    class resize : public Function{
+
+        std::string get_name() override {
+            return "resize";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::void_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true},{Type::int_type(),"size",false}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
+            auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
+            if(arrt->get_size()!=-1){
+                throw std::runtime_error("can't resize a sized array");
+            }
+            auto val=std::dynamic_pointer_cast<IntValue>(args[1]->get_type()->cast(args[1],Type::int_type()));
+            if(val->get()<0){
+                throw std::runtime_error("new size too small");
+            }
+            if(val->get()>int(arrv->get().size())){ 
+                int osz=arrv->get().size();
+                arrv->get().resize(val->get());
+                for(int i=osz;i<val->get();i++){
+                    arrv->get()[i]=arrt->get_type()->make_value(arrt->get_type());
+                }
+            }else{
+                arrv->get().resize(val->get());
+            }
+            return nullptr;
+        }
+
+    };
+
+/*
+    class  : public Function{
+
+        std::string get_name() override {
+            return "";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::void_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
+            if(arrv->get_type()->get_size()!=-1){
+                throw std::runtime_error("can't a sized array");
+            }
+            
+        }
+
+    };
+*/
+
 }
 
 void Interpreter::init_deflib(DefaultFrame * d){
@@ -781,4 +1018,11 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::fseek_end>());
     d->register_function(std::make_shared<Interpreter::ftell>());
     d->register_function(std::make_shared<Interpreter::rand>());
+    d->register_function(std::make_shared<Interpreter::push_front>());
+    d->register_function(std::make_shared<Interpreter::push_back>());
+    d->register_function(std::make_shared<Interpreter::pop_front>());
+    d->register_function(std::make_shared<Interpreter::pop_back>());
+    d->register_function(std::make_shared<Interpreter::peek_front>());
+    d->register_function(std::make_shared<Interpreter::peek_back>());
+    d->register_function(std::make_shared<Interpreter::resize>());
 }

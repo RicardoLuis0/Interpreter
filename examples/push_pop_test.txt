@@ -1,0 +1,12 @@
+void main(){
+	int[] test_arr;
+	push_back(test_arr,15);
+	push_front(test_arr,20);
+	push_back(test_arr,2000);
+	push_front(test_arr,1000);
+	printf("pop_back=%{}\n",pop_back(test_arr));
+	printf("pop_front=%{}\n",pop_front(test_arr));
+	printf("test_arr=%{}\n",test_arr);
+	resize(test_arr,5);
+	printf("resize to 5=%{}\n",test_arr);
+}
