@@ -1,41 +1,93 @@
-int[3][3] board;
-
-int turn;
-
 void pause(){
-	if(getch()==224)getch();//224 == arrow keys
+	if(getch()==224)getch();
 }
 
-void pauseMsg(string msg){
-	print(msg);
-	pause();
-}
-
-void pauseMsg(){
-	pauseMsg("Press any key...");
-}
-
-void render(){
+void game_main_print(int choice){
 	cls();
-	print("TicTacToe\n---\nPlayer "+to_string(turn)+"'s Turn\n+---+\n");
+	print("TicTacToe by Ricardo\n\n");
+	if(choice==0){
+		print("> vs Computer\n- vs Player\n- Exit\n");
+	}else if(choice==1){
+		print("- vs Computer\n> vs Player\n- Exit\n");
+	}else if(choice==2){
+		print("- vs Computer\n- vs Player\n> Exit\n");
+	}
+}
+
+void wrap(int &val,int min,int max){
+	if(val<min)val=max;
+	if(val>max)val=min;
+}
+
+int main(){
+	int choice=0;
+	while(true){
+		game_main_print(choice);
+		int c=getch();
+		if(c==224){
+			c=getch();
+			if(c==72){//up
+				if(choice==0){
+					choice=2;
+				}else{
+					choice--;
+				}
+			}else if(c==80){//down
+				if(choice==2){
+					choice=0;
+				}else{
+					choice++;
+				}
+			}
+		}else if(c=='\r'){
+			if(choice==0){
+				game(true);
+			}else if(choice==1){
+				game(false);
+			}else if(choice==2){
+				return 0;
+			}
+		}
+	}
+}
+
+void print_board(int[3][3] board,int x,int y,string pre,string post){
+	cls();
+	print(pre);
+	print("+-+-+-+\n");
 	for(int i=0;i<3;i++){
-		print("|");
 		for(int j=0;j<3;j++){
-			int val=board[j][i];
-			if(val==1){
-				print("O");
-			}else if(val==2){
+			if(x<0||y<0){
+				print("|");
+			}else if(j==x&&i==y){
+				print("(");
+			}else if(j==x+1&&i==y){
+				print(")");
+			}else{
+				print("|");
+			}
+			if(board[j][i]==1){
 				print("X");
+			}else if(board[j][i]==2){
+				print("O");
 			}else{
 				print(" ");
 			}
 		}
-		print("|\n");
+		if(x<0||y<0){
+			print("|\n");
+		}else if(i==y&&x==2){
+			print(")\n");
+		}else{
+			print("|\n");
+		}
+		print("+-+-+-+\n");
 	}
-	print("+---+\n");
+	print(post);
 }
 
-int checkwin(){
+
+int checkwin(int[3][3] &board){
 	for(int i=0;i<3;i++){
 		if(board[i][0]!=0&&board[i][0]==board[i][1]&&board[i][1]==board[i][2]){
 			return board[i][0];
@@ -60,69 +112,88 @@ int checkwin(){
 	return 0;
 }
 
-void game() {
-	turn=1;
-	int last_invalid=0;
-	int do_loop=1;
-	while(do_loop){
-		render();
-		if(last_invalid){
-			last_invalid=0;
-			print("Invalid move\n");
-		}
-		print("X:");
-		int x=stoi(getline());
-		x-=1;
-		print("Y:");
-		int y=stoi(getline());
-		y-=1;
-		if(y<0||x<0||x>2||y>2){
-			last_invalid=1;
-		}else if(board[x][y]==0){
-			board[x][y]=turn;
-			int check=checkwin();
-			if(check>0){
-				do_loop=0;
-				render();
-				string msg;
-				if(check==3){
-					msg="Tie!\nPress any key...\n";
-				}else{
-					msg="Player "+to_string(check)+" wins\nPress any key...\n";
-				}
-				pauseMsg(msg);
-			}
-			if(turn==1){
-				turn=2;
-			}else{
-				turn=1;
-			}
+
+void game(int computer){
+	int[3][3] board;
+	int turn;
+	string player1;
+	string player2;
+	string winmsg(int num){
+		if(num==1){
+			return player1+" Wins!\n";
+		}else if(num==2){
+			return player2+" Wins!\n";
 		}else{
-			last_invalid=1;
+			return "It's a Tie!\n";
+		}
+	}
+	int p1x,p1y,p2x,p2y;
+	if(computer){
+		print("Player's Name: ");
+		player1=getline();
+		player2="Computer";
+	}else{
+		print("Player 1's Name: ");
+		player1=getline();
+		print("Player 2's Name: ");
+		player2=getline();
+	}
+	int tick=1;
+	while(true){
+		string name;
+		if(tick==1){
+			name=player1;
+			player_turn(board,p1x,p1y,1,player1);
+			tick=2;
+		}else if(tick==2){
+			name=player2;
+			if(computer){
+				computer_turn(board);
+			}else{
+				player_turn(board,p2x,p2y,2,player2);
+			}
+			tick=1;
+		}
+		int cw=checkwin(board);
+		if(cw!=0){
+			print_board(board,-1,-1,winmsg(cw),"\nPress any Key...");
+			pause();
+			return;
+		}
+		print_board(board,-1,-1,name+"'s Turn Is Over\n","\nPress any Key...");
+		pause();
+	}
+}
+
+void player_turn(int[3][3] &board,int &x,int &y,int num,string name){
+	while(true){
+		print_board(board,x,y,name+"'s Turn\n","\nMake your move...");
+		int c=getch();
+		if(c==224){
+			c=getch();
+			if(c==72){//up
+				y--;
+				wrap(y,0,2);
+			}else if(c==80){//down
+				y++;
+				wrap(y,0,2);
+			}else if(c==75){//left
+				x--;
+				wrap(x,0,2);
+			}else if(c==77){//right
+				x++;
+				wrap(x,0,2);
+			}
+		}else if(c=='\r'){
+			if(board[x][y]==0){
+				board[x][y]=num;
+				return;
+			}
 		}
 	}
 }
 
-int main(){
-	cls();
-	pauseMsg("Welcome to TicTacToe, Press any key to begin...");
-	int do_loop=1;
-	while(do_loop){
-		game();
-		while(true){
-			print("Play again?(Y/N)\n");
-			int c=getch();
-			if(c=='Y'||c=='y'){
-				break;
-			}else if(c=='N'||c=='n'){
-				return 0;
-			}
-		}
-		for(int i=0;i<3;i++){
-			for(int j=0;j<3;j++){
-				board[i][j]=0;
-			}
-		}
-	}
-	return 0;
+int computer_turn(int [3][3] &board){
+	print_board(board,x,y,"Comptuer's Turn\n","\nThe Computer Is Thinking...");
+	//TODO
 }
