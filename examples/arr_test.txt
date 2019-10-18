@@ -1,11 +1,11 @@
 int[2][15] arr_test;//default initalized to 0
 
 void proccess(int[][] &arr){
-	arr[1][12]=5;
+    arr[1][12]=5;
 }
 
 int main(){
-	proccess(arr_test);
-	print(to_string(arr_test[1][12]));
-	return arr_test[0][1];
+    proccess(arr_test);
+    print(to_string(arr_test[1][12]));
+    return arr_test[0][1];
 }

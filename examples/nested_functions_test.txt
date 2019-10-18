@@ -1,6 +1,6 @@
 void main(){
-	void test_func(){
-		print("This is a nested function!");
-	}
-	test_func();
+    void test_func(){
+        print("This is a nested function!");
+    }
+    test_func();
 }

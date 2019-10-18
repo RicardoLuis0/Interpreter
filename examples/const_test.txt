@@ -1,6 +1,6 @@
 const int test=123;
 
 int main(){
-	print(to_string(test)+"\n");
-	return 0;
+    print(to_string(test)+"\n");
+    return 0;
 }

@@ -1,21 +1,21 @@
 void main(){
-	string data;
-	ptr<void> f=fopen("file_test.input.txt",false);//open 'file_test.input.txt' in read mode
-	if(f){
-		char c;
-		while((c=fgetc(f))!=-1){
-			data+=c;
-		}
-		fclose(f);
-		print("data:"+data+"\n");
-		f=fopen("file_test.output.txt",true);//open 'file_test.output.txt' in write mode
-		if(f){
-			fputs(data,f);
-			fclose(f);
-		}else{
-			print("could not open 'file_test.output.txt'\n");
-		}
-	}else{
-		print("could not open 'file_test.input.txt'\n");
-	}
+    string data;
+    ptr<void> f=fopen("file_test.input.txt",false);//open 'file_test.input.txt' in read mode
+    if(f){
+        char c;
+        while((c=fgetc(f))!=-1){
+            data+=c;
+        }
+        fclose(f);
+        print("data:"+data+"\n");
+        f=fopen("file_test.output.txt",true);//open 'file_test.output.txt' in write mode
+        if(f){
+            fputs(data,f);
+            fclose(f);
+        }else{
+            print("could not open 'file_test.output.txt'\n");
+        }
+    }else{
+        print("could not open 'file_test.input.txt'\n");
+    }
 }

@@ -1,8 +1,8 @@
 void main(){
-	unsigned char c=255;
-	print(to_string(c)+"\n");
-	c=260;
-	print(to_string(c)+"\n");
-	c=-10;
-	print(to_string(c)+"\n");
+    unsigned char c=255;
+    print(to_string(c)+"\n");
+    c=260;
+    print(to_string(c)+"\n");
+    c=-10;
+    print(to_string(c)+"\n");
 }

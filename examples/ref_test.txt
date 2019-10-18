@@ -1,24 +1,24 @@
 void setvar(string &var,string val){
-	var=val;
+    var=val;
 }
 
 void setvar(int &var,int val){
-	var=val;
+    var=val;
 }
 
 void setvar(float &var,float val){
-	var=val;
+    var=val;
 }
 
 int main(){
-	int i;
-	float f;
-	string s;
-	setvar(i,10);
-	setvar(f,5);
-	setvar(s,"Teste");
-	print("i="+to_string(i));
-	print("f="+to_string(f));
-	print("s="+s);
-	return 0;
+    int i;
+    float f;
+    string s;
+    setvar(i,10);
+    setvar(f,5);
+    setvar(s,"Teste");
+    print("i="+to_string(i));
+    print("f="+to_string(f));
+    print("s="+s);
+    return 0;
 }

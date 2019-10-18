@@ -1,23 +1,23 @@
 void print(string)
-	write string to stdout
+    write string to stdout
 
 void putchar(int)
-	write char to stdout
+    write char to stdout
 
 string getline()
-	get line from stdin
+    get line from stdin
 
 int getch()
-	get char from stdin
+    get char from stdin
 
 void cls()
-	clear screen
+    clear screen
 
 int stoi(string)
-	convert string to int
+    convert string to int
 
 string to_string(any)
-	convert value to string
+    convert value to string
 
 int array_size(any[])
-	return size of array
+    return size of array

@@ -1,49 +1,49 @@
 string tf(int v){
-	if(v){
-		return "true";
-	}
-	return "false";
+    if(v){
+        return "true";
+    }
+    return "false";
 }
 
 int same_type(any val1,any val2){
-	return is(typeof(val1),val2);
+    return is(typeof(val1),val2);
 }
 
 string get_value_type_name(any val){
-	return get_type_name(typeof(val));
+    return get_type_name(typeof(val));
 }
 
 void type_test(){
-	type int_type=type<int>();
-	type char_type=type<char>();
-	type unsigned_int_type=type<unsigned int>();
-	type unsigned_char_type=type<unsigned char>();
-	type float_type=type<float>();
-	type string_type=type<string>();
-	type type_type=type<type>();
-	type array_type=type<any[]>();
-	
-	print(get_type_name(int_type)+"\n");
-	print(get_type_name(char_type)+"\n");
-	print(get_type_name(unsigned_int_type)+"\n");
-	print(get_type_name(unsigned_char_type)+"\n");
-	print(get_type_name(float_type)+"\n");
-	print(get_type_name(string_type)+"\n");
-	print(get_type_name(type_type)+"\n");
-	print(get_type_name(array_type)+"\n");
+    type int_type=type<int>();
+    type char_type=type<char>();
+    type unsigned_int_type=type<unsigned int>();
+    type unsigned_char_type=type<unsigned char>();
+    type float_type=type<float>();
+    type string_type=type<string>();
+    type type_type=type<type>();
+    type array_type=type<any[]>();
+    
+    print(get_type_name(int_type)+"\n");
+    print(get_type_name(char_type)+"\n");
+    print(get_type_name(unsigned_int_type)+"\n");
+    print(get_type_name(unsigned_char_type)+"\n");
+    print(get_type_name(float_type)+"\n");
+    print(get_type_name(string_type)+"\n");
+    print(get_type_name(type_type)+"\n");
+    print(get_type_name(array_type)+"\n");
 }
 
 void main(){
-	print(get_value_type_name(0)+"\n");
-	print(get_value_type_name('a')+"\n");
-	print(get_value_type_name("a")+"\n");
-	print(to_string(cast<char>(640))+"\n");
-	print(to_string(cast<unsigned char>(200))+"\n");
-	print("same type int&int "+tf(same_type(0,1))+"\n");
-	print("same type int&float "+tf(same_type(0,1.))+"\n");
-	print("same type int&string "+tf(same_type(0,"1"))+"\n");
-	print("same type float&float "+tf(same_type(0.,1.))+"\n");
-	print("same type float&string "+tf(same_type(0.,"1"))+"\n");
-	print("same type string&string "+tf(same_type("0","1"))+"\n");
-	type_test();
+    print(get_value_type_name(0)+"\n");
+    print(get_value_type_name('a')+"\n");
+    print(get_value_type_name("a")+"\n");
+    print(to_string(cast<char>(640))+"\n");
+    print(to_string(cast<unsigned char>(200))+"\n");
+    print("same type int&int "+tf(same_type(0,1))+"\n");
+    print("same type int&float "+tf(same_type(0,1.))+"\n");
+    print("same type int&string "+tf(same_type(0,"1"))+"\n");
+    print("same type float&float "+tf(same_type(0.,1.))+"\n");
+    print("same type float&string "+tf(same_type(0.,"1"))+"\n");
+    print("same type string&string "+tf(same_type("0","1"))+"\n");
+    type_test();
 }
