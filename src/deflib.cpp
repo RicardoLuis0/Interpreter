@@ -964,32 +964,6 @@ namespace Interpreter {
 
     };
 
-/*
-    class  : public Function{
-
-        std::string get_name() override {
-            return "";
-        }
-
-        std::shared_ptr<Type> get_type(){
-            return Type::void_type();
-        }
-
-        std::vector<FunctionParameter> get_parameters() override {
-            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true}};
-        }
-
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
-            auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
-            if(arrv->get_type()->get_size()!=-1){
-                throw std::runtime_error("can't a sized array");
-            }
-            
-        }
-
-    };
-*/
-
 }
 
 void Interpreter::init_deflib(DefaultFrame * d){

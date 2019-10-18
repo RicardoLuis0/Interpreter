@@ -40,6 +40,7 @@
 		<Unit filename=".gitattributes" />
 		<Unit filename=".gitignore" />
 		<Unit filename="examples/any_test.txt" />
+		<Unit filename="examples/arg_test.txt" />
 		<Unit filename="examples/arr_test.txt" />
 		<Unit filename="examples/break_continue_test.txt" />
 		<Unit filename="examples/char_test.txt" />
@@ -57,8 +58,10 @@
 		<Unit filename="examples/printf_test.txt" />
 		<Unit filename="examples/printvals_test.txt" />
 		<Unit filename="examples/ptr_test.txt" />
+		<Unit filename="examples/push_pop_test.txt" />
 		<Unit filename="examples/ref_test.txt" />
 		<Unit filename="examples/tictactoe.txt" />
+		<Unit filename="examples/tictactoe_old.txt" />
 		<Unit filename="examples/type_test.txt" />
 		<Unit filename="examples/variadic_test.txt" />
 		<Unit filename="examples/vla_test.txt" />
