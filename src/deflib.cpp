@@ -360,7 +360,6 @@ namespace Interpreter {
                 return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<CharValue>(args[0]->get_type()->cast(args[0],Type::char_type()))->get()));
             }else if(args[0]->get_type()->is(args[0]->get_type(),Type::unsigned_char_type())){
                 return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<UnsignedCharValue>(args[0]->get_type()->cast(args[0],Type::unsigned_char_type()))->get()));
-
             }else if(args[0]->get_type()->is(args[0]->get_type(),Type::float_type())){
                 return std::make_shared<StringValue>(std::to_string(std::dynamic_pointer_cast<FloatValue>(args[0]->get_type()->cast(args[0],Type::float_type()))->get()));
             }else{
