@@ -25,17 +25,17 @@ int main(){
         game_main_print(choice);
         int c=getch();
         if(c=='W'||c=='w'){
-			if(choice==0){
-				choice=2;
-			}else{
-				choice--;
-			}
-		}else if(c=='S'||c=='s'){
-			if(choice==2){
-				choice=0;
-			}else{
-				choice++;
-			}
+            if(choice==0){
+                choice=2;
+            }else{
+                choice--;
+            }
+        }else if(c=='S'||c=='s'){
+            if(choice==2){
+                choice=0;
+            }else{
+                choice++;
+            }
         }else if(c=='\r'||c=='\n'||c=='e'||c=='E'){
             if(choice==0){
                 game(true);
@@ -133,7 +133,7 @@ void game(int computer){
         print("Difficulty (1.Easy,2.Medium,3.Hard): ");
         while(true){
             char c=getch();
-			if(c=='1'){
+            if(c=='1'){
                 difficulty=1;
                 break;
             }else if(c=='2'){
@@ -189,17 +189,17 @@ void player_turn(int[3][3] &board,int &x,int &y,int num,string name){
     while(true){
         print_board(board,x,y,name+"'s Turn\n","\nMake your move...");
         int c=getch();
-		if(c=='W'||c=='w'){
-			y--;
-			wrap(y,0,2);
-		}else if(c=='A'||c=='a'){
-			x--;
+        if(c=='W'||c=='w'){
+            y--;
+            wrap(y,0,2);
+        }else if(c=='A'||c=='a'){
+            x--;
             wrap(x,0,2);
-		}else if(c=='D'||c=='d'){
-			x++;
+        }else if(c=='D'||c=='d'){
+            x++;
             wrap(x,0,2);
-		}else if(c=='S'||c=='s'){
-			y++;
+        }else if(c=='S'||c=='s'){
+            y++;
             wrap(y,0,2);
         }else if(c=='\r'||c=='\n'||c=='e'||c=='E'){
             if(board[x][y]==0){
@@ -246,15 +246,15 @@ int computer_turn_medium_part(int[3][3] &board){
         board[lose_x][lose_y]=2;
         return 1;
     }
-	return 0;
+    return 0;
 }
 
 void computer_turn_medium(int[3][3] &board){
-	if(!computer_turn_medium_part(board))computer_turn_easy(board);//if no immediate wins or losses, play randomly
+    if(!computer_turn_medium_part(board))computer_turn_easy(board);//if no immediate wins or losses, play randomly
 }
 
 void computer_turn_hard(int[3][3] &board){//minimax
-	if(computer_turn_medium_part(board))return;
+    if(computer_turn_medium_part(board))return;
     print_board(board,-1,-1,"Computer's Turn\n","\nThe Computer Is Thinking...");
     int best=-9999;
     int best_x;
