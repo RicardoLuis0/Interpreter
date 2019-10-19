@@ -54,7 +54,7 @@ namespace Console{
         SetCurrentDirectoryA(newdir.c_str());
     }
 
-#elif def __unix__
+#elif defined (__linux__)
 
 #warn operation under linux is still experimental
 
