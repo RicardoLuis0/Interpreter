@@ -47,14 +47,6 @@
 #include <unistd.h>
 #endif // __WIN32__
 
-static void changeDir(std::string newdir){
-#if defined (__WIN32__)
-    SetCurrentDirectoryA(newdir.c_str());
-#else
-    chdir(newdir.c_str());
-#endif // __WIN32__
-}
-
 //TODO update docs
 /**
  * @mainpage
@@ -72,6 +64,7 @@ int exec(std::string filename,int argc,char ** argv){
     try{
         Lexer::Lexer lexer(base_symbols,base_keywords);
         std::vector<std::shared_ptr<Lexer::Token>> tokens(lexer.tokenize_from_file(filename));
+        Console::changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
         std::vector<std::shared_ptr<Parser::Definition>> deflist;
         Parser::parserProgress p {data:tokens,location:0};
         while(p.get_nothrow()!=nullptr){
@@ -161,19 +154,19 @@ int test_exec(){
             if(filename=="q"||filename=="quit"||filename=="exit")return 0;
             try{
                 tokens=lexer.tokenize_from_file(filename);//split file into tokens
-                changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
+                Console::changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
             }catch(MyExcept::FileError &e){
                 try{
                     tokens=lexer.tokenize_from_file(filename+".txt");
-                    changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
+                    Console::changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
                 }catch(MyExcept::FileError &e2){
                     try{
                         tokens=lexer.tokenize_from_file("examples/"+filename);
-                        changeDir("examples");
+                        Console::changeDir("examples");
                     }catch(MyExcept::FileError &e2){
                         try{
                             tokens=lexer.tokenize_from_file("examples/"+filename+".txt");
-                            changeDir("examples");
+                            Console::changeDir("examples");
                         }catch(MyExcept::FileError &e2){
                             std::cout<<e.what()<<", 'exit' 'quit' or 'q' to cancel\n";
                             continue;

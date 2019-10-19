@@ -4,14 +4,20 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <conio.h>
+#else
+#include <sys/unistd.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <sys/socket.h>
+#include <sys/select.h>
+#include <termios.h>
+#include <cstdio>
 #endif
 namespace Console{
-#if defined (__WIN32__)
-    HANDLE hStdOut;
 
-    void waitInput(){
-        if(getch()==224)getch();
-    }
+#if defined (__WIN32__)
+
+    HANDLE hStdOut;
 
     void clear() {
         unsigned long temp;
@@ -29,17 +35,61 @@ namespace Console{
             exit(1);
         }
     }
-#else
-    void waitInput(){
-        //TODO 'pause' for linux
+
+    bool kbhit(){
+        return ::kbhit();
     }
 
+    int getch(){
+        char c=::getch();
+        if(c==224){//ignore arrows
+            ::getch();
+            return 0;
+        }else{
+            return c;
+        }
+    }
+
+    void changeDir(std::string newdir){
+        SetCurrentDirectoryA(newdir.c_str());
+    }
+
+#else
+
     void clear(){
-        std::cout<<"\e[3J";
+        ::printf("\033[H\033[J");
     }
 
     void init(){
         //do nothing
     }
+
+    bool kbhit(){
+        timeval timeout;
+        fd_set rdset;
+        FD_ZERO(&rdset);
+        FD_SET(STDIN, &rdset);
+        timeout.tv_sec  = 0;
+        timeout.tv_usec = 0;
+        return select(STDIN + 1, &rdset, NULL, NULL, &timeout);
+    }
+
+    int getch(){
+        termios oldattr, newattr;
+        int ch;
+        tcgetattr( STDIN_FILENO, &oldattr );
+        newattr = oldattr;
+        newattr.c_lflag &= ~( ICANON | ECHO );
+        tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+        ch = getchar();
+        tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
+        return ch;
+    }
+
+    void changeDir(std::string newdir){
+        chdir(newdir.c_str());
+    }
+
 #endif // __WIN32__
+
 }
