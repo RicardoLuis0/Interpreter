@@ -1,10 +1,10 @@
-#include "parser_function_definition_parameter_matcher.h"
+#include "Parser/FunctionDefinitionParameterMatcher.h"
 
-#include "parser_var_type.h"
-#include "parser_var_type_matcher.h"
-#include "my_except.h"
+#include "Parser/VarType.h"
+#include "Parser/VarTypeMatcher.h"
+#include "MyExcept/MyExcept.h"
 #include "symbols_keywords.h"
-#include "lexer_token_type.h"
+#include "Lexer/token_type.h"
 
 //FunctionDefinitionParameter = VarType , [ symbol '&' ] , identifier ;
 

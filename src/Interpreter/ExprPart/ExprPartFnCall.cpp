@@ -1,7 +1,7 @@
-#include "interpreter_expr_part_fn_call.h"
-#include "interpreter_util_defines_misc.h"
-#include "interpreter_variable.h"
-#include "my_except.h"
+#include "Interpreter/ExprPartFnCall.h"
+#include "Util/InterpreterUtilDefinesMisc.h"
+#include "Interpreter/Variable.h"
+#include "MyExcept/MyExcept.h"
 
 #include <iostream>
 

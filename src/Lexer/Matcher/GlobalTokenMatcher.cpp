@@ -1,9 +1,9 @@
-#include "lexer_global_token_matcher.h"
-#include "lexer_symbols_token_matcher.h"
-#include "lexer_keywords_token_matcher.h"
-#include "lexer_word_token_matcher.h"
-#include "lexer_literals_token_matcher.h"
-#include "lexer_comment_token_matcher.h"
+#include "Lexer/GlobalTokenMatcher.h"
+#include "Lexer/SymbolsTokenMatcher.h"
+#include "Lexer/KeywordsTokenMatcher.h"
+#include "Lexer/WordTokenMatcher.h"
+#include "Lexer/LiteralsTokenMatcher.h"
+#include "Lexer/CommentTokenMatcher.h"
 
 
 Lexer::GlobalTokenMatcher::GlobalTokenMatcher(std::vector<symbol_data> &symbols,std::vector<keyword_data> &keywords){

@@ -1,8 +1,8 @@
 #ifndef SYMBOLS_KEYWORDS_H_INCLUDED
 #define SYMBOLS_KEYWORDS_H_INCLUDED
 
-#include "keyword_data.h"
-#include "symbol_data.h"
+#include "Lexer/keyword_data.h"
+#include "Lexer/symbol_data.h"
 #include <vector>
 
 enum keyword_type_t{

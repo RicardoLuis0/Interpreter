@@ -1,5 +1,5 @@
-#include "interpreter_continue_statement.h"
-#include "interpreter_line_result_simple.h"
+#include "Interpreter/ContinueStatement.h"
+#include "Interpreter/LineResultSimple.h"
 
 using namespace Interpreter;
 

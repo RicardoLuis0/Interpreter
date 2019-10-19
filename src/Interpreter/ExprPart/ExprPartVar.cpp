@@ -1,6 +1,6 @@
-#include "interpreter_expr_part_var.h"
-#include "interpreter_dummy_variable.h"
-#include "my_except.h"
+#include "Interpreter/ExprPartVar.h"
+#include "Interpreter/DummyVariable.h"
+#include "MyExcept/MyExcept.h"
 
 using namespace Interpreter;
 

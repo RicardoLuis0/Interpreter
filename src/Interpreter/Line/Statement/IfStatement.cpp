@@ -1,12 +1,12 @@
-#include "interpreter_util_defines_misc.h"
-#include "interpreter_if_statement.h"
-#include "interpreter_int_value.h"
-#include "interpreter_float_value.h"
-#include "interpreter_line_result_simple.h"
-#include "interpreter_float_type.h"
-#include "interpreter_int_type.h"
-#include "interpreter_string_type.h"
-#include "my_except.h"
+#include "Util/InterpreterUtilDefinesMisc.h"
+#include "Interpreter/IfStatement.h"
+#include "Interpreter/IntValue.h"
+#include "Interpreter/FloatValue.h"
+#include "Interpreter/LineResultSimple.h"
+#include "Interpreter/FloatType.h"
+#include "Interpreter/IntType.h"
+#include "Interpreter/StringType.h"
+#include "MyExcept/MyExcept.h"
 
 using namespace Interpreter;
 

@@ -1,7 +1,7 @@
-#include "lexer_hex_token_matcher.h"
-#include "hex_read_util.h"
-#include "lexer_integer_token.h"
-#include "my_except.h"
+#include "Lexer/HexTokenMatcher.h"
+#include "Lexer/hex_read_util.h"
+#include "Lexer/IntegerToken.h"
+#include "MyExcept/MyExcept.h"
 
 
 bool Lexer::HexTokenMatcher::partialMatch(std::string s){

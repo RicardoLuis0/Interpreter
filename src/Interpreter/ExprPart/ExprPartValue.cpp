@@ -1,8 +1,8 @@
-#include "interpreter_expr_part_value.h"
-#include "interpreter_int_value.h"
-#include "interpreter_char_value.h"
-#include "interpreter_float_value.h"
-#include "interpreter_string_value.h"
+#include "Interpreter/ExprPartValue.h"
+#include "Interpreter/IntValue.h"
+#include "Interpreter/CharValue.h"
+#include "Interpreter/FloatValue.h"
+#include "Interpreter/StringValue.h"
 
 using namespace Interpreter;
 

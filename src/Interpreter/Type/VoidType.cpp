@@ -1,6 +1,6 @@
-#include "interpreter_void_type.h"
-#include "interpreter_any_type.h"
-#include "interpreter_util_defines_misc.h"
+#include "Interpreter/VoidType.h"
+#include "Interpreter/AnyType.h"
+#include "Util/InterpreterUtilDefinesMisc.h"
 
 using namespace Interpreter;
 

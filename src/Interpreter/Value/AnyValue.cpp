@@ -1,6 +1,6 @@
-#include "interpreter_any_value.h"
-#include "interpreter_any_variable.h"
-#include "interpreter_type.h"
+#include "Interpreter/AnyValue.h"
+#include "Interpreter/AnyVariable.h"
+#include "Interpreter/Type.h"
 
 using namespace Interpreter;
 

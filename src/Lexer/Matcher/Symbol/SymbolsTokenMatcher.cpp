@@ -1,6 +1,6 @@
-#include "lexer_symbols_token_matcher.h"
-#include "lexer_symbol_token.h"
-#include "my_except.h"
+#include "Lexer/SymbolsTokenMatcher.h"
+#include "Lexer/SymbolToken.h"
+#include "MyExcept/MyExcept.h"
 
 Lexer::SymbolsTokenMatcher::SymbolsTokenMatcher(std::vector<symbol_data> &symbols):symbol_list(symbols){}
 

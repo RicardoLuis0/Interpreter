@@ -1,4 +1,4 @@
-#include "interpreter_unsigned_char_variable.h"
+#include "Interpreter/UnsignedCharVariable.h"
 
 using namespace Interpreter;
 

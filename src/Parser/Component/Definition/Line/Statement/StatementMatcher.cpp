@@ -1,12 +1,12 @@
-#include "parser_statement_matcher.h"
+#include "Parser/StatementMatcher.h"
 
-#include "lexer_keyword_token.h"
+#include "Lexer/KeywordToken.h"
 #include "symbols_keywords.h"
-#include "my_except.h"
-#include "parser_if_statment_matcher.h"
-#include "parser_for_statement_matcher.h"
-#include "parser_while_statement_matcher.h"
-#include "parser_return_statement_matcher.h"
+#include "MyExcept/MyExcept.h"
+#include "Parser/IfStatementMatcher.h"
+#include "Parser/ForStatementMatcher.h"
+#include "Parser/WhileStatementMatcher.h"
+#include "Parser/ReturnStatementMatcher.h"
 
 //Statement = IfStatement | WhileStatement | ForStatement | ReturnStatement | keyword 'break' | keyword 'continue' ;
 

@@ -1,11 +1,11 @@
-#include "parser_variable_definition_matcher.h"
+#include "Parser/VariableDefinitionMatcher.h"
 
 #include "symbols_keywords.h"
-#include "lexer_token_type.h"
-#include "parser_expression_matcher.h"
-#include "my_except.h"
-#include "parser_var_type_matcher.h"
-#include "parser_variable_definition_item_matcher.h"
+#include "Lexer/token_type.h"
+#include "Parser/ExpressionMatcher.h"
+#include "MyExcept/MyExcept.h"
+#include "Parser/VarTypeMatcher.h"
+#include "Parser/VariableDefinitionItemMatcher.h"
 
 //VariableDefinition = VarType , VariableDefinitionItem { symbol ',' , VariableDefinitionItem } ;
 

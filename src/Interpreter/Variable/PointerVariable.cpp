@@ -1,5 +1,5 @@
-#include "interpreter_pointer_variable.h"
-#include "interpreter_type.h"
+#include "Interpreter/PointerVariable.h"
+#include "Interpreter/Type.h"
 
 using namespace Interpreter;
 

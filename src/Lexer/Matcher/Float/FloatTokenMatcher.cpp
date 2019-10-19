@@ -1,6 +1,6 @@
-#include "lexer_float_token_matcher.h"
-#include "lexer_float_token.h"
-#include "my_except.h"
+#include "Lexer/FloatTokenMatcher.h"
+#include "Lexer/FloatToken.h"
+#include "MyExcept/MyExcept.h"
 
 static int trymatch(std::string s){
     if(s==".")return 0;

@@ -1,10 +1,10 @@
-#include "parser_if_statment_matcher.h"
+#include "Parser/IfStatementMatcher.h"
 
-#include "parser_expression_matcher.h"
-#include "parser_line_matcher.h"
+#include "Parser/ExpressionMatcher.h"
+#include "Parser/LineMatcher.h"
 #include "symbols_keywords.h"
-#include "my_except.h"
-#include "parser_else_statement_matcher.h"
+#include "MyExcept/MyExcept.h"
+#include "Parser/ElseStatementMatcher.h"
 
 //IfStatement = keyword 'if' , symbol '(' , Expression , symbol ')' , Line , [ ElseStatement ] ;
 

@@ -1,4 +1,4 @@
-#include "interpreter_dummy_variable.h"
+#include "Interpreter/DummyVariable.h"
 
 using namespace Interpreter;
 

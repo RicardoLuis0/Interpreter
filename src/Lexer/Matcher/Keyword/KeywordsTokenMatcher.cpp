@@ -1,6 +1,6 @@
-#include "lexer_keywords_token_matcher.h"
-#include "lexer_keyword_token.h"
-#include "my_except.h"
+#include "Lexer/KeywordsTokenMatcher.h"
+#include "Lexer/KeywordToken.h"
+#include "MyExcept/MyExcept.h"
 
 Lexer::KeywordsTokenMatcher::KeywordsTokenMatcher(std::vector<keyword_data> &keywords):keyword_list(keywords){}
 

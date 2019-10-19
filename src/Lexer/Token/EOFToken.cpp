@@ -1,4 +1,4 @@
-#include "lexer_eof_token.h"
+#include "Lexer/EOFToken.h"
 
 
 Lexer::EOFToken::EOFToken(int n):

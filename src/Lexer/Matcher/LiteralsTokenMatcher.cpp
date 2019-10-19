@@ -1,11 +1,11 @@
-#include "lexer_literals_token_matcher.h"
-#include "lexer_integer_token_matcher.h"
-#include "lexer_float_token_matcher.h"
-#include "lexer_string_token_matcher.h"
-#include "lexer_char_token_matcher.h"
-#include "lexer_octal_token_matcher.h"
-#include "lexer_hex_token_matcher.h"
-#include "lexer_binary_token_matcher.h"
+#include "Lexer/LiteralsTokenMatcher.h"
+#include "Lexer/IntegerTokenMatcher.h"
+#include "Lexer/FloatTokenMatcher.h"
+#include "Lexer/StringTokenMatcher.h"
+#include "Lexer/CharTokenMatcher.h"
+#include "Lexer/OctalTokenMatcher.h"
+#include "Lexer/HexTokenMatcher.h"
+#include "Lexer/BinaryTokenMatcher.h"
 
 Lexer::LiteralsTokenMatcher::LiteralsTokenMatcher(){
     list.push_back(std::make_shared<StringTokenMatcher>());

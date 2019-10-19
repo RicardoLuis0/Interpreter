@@ -1,16 +1,16 @@
-#include "interpreter_array_value.h"
-#include "interpreter_array_variable.h"
-#include "interpreter_int_value.h"
-#include "interpreter_util_defines_misc.h"
+#include "Interpreter/ArrayValue.h"
+#include "Interpreter/ArrayVariable.h"
+#include "Interpreter/IntValue.h"
+#include "Util/InterpreterUtilDefinesMisc.h"
 
-#include "interpreter_char_value.h"
-#include "interpreter_unsigned_char_value.h"
-#include "interpreter_int_value.h"
-#include "interpreter_unsigned_int_value.h"
-#include "interpreter_float_value.h"
-#include "interpreter_string_value.h"
+#include "Interpreter/CharValue.h"
+#include "Interpreter/UnsignedCharValue.h"
+#include "Interpreter/IntValue.h"
+#include "Interpreter/UnsignedIntValue.h"
+#include "Interpreter/FloatValue.h"
+#include "Interpreter/StringValue.h"
 
-#include "interpreter_value_to_string.h"
+#include "Interpreter/valueToString.h"
 
 using namespace Interpreter;
 

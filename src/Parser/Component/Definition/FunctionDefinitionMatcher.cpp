@@ -1,11 +1,11 @@
-#include "parser_function_definition_matcher.h"
+#include "Parser/FunctionDefinitionMatcher.h"
 
-#include "my_except.h"
+#include "MyExcept/MyExcept.h"
 #include "symbols_keywords.h"
-#include "lexer_token_type.h"
-#include "parser_function_definition_parameter_matcher.h"
-#include "parser_var_type_matcher.h"
-#include "parser_code_block_matcher.h"
+#include "Lexer/token_type.h"
+#include "Parser/FunctionDefinitionParameterMatcher.h"
+#include "Parser/VarTypeMatcher.h"
+#include "Parser/CodeBlockMatcher.h"
 
 //FunctionDefinition = VarType , identifier , symbol '(' , [ FunctionDefinitionParameter { symbol ',' , FunctionDefinitionParameter } ] , [ [ VarType ] , symbol '...' , identifier ] , symbol ')' , CodeBlock ;
 

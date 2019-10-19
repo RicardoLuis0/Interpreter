@@ -1,9 +1,9 @@
-#include "parser_member_definition_matcher.h"
+#include "Parser/MemberDefinitionMatcher.h"
 #include "symbols_keywords.h"
-#include "parser_var_type_matcher.h"
-#include "my_except.h"
-#include "parser_function_definition_matcher.h"
-#include "parser_variable_definition_matcher.h"
+#include "Parser/VarTypeMatcher.h"
+#include "MyExcept/MyExcept.h"
+#include "Parser/FunctionDefinitionMatcher.h"
+#include "Parser/VariableDefinitionMatcher.h"
 
 using namespace Parser;
 

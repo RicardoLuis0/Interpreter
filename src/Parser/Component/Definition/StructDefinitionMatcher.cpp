@@ -1,8 +1,8 @@
-#include "parser_struct_definition_matcher.h"
+#include "Parser/StructDefinitionMatcher.h"
 #include "symbols_keywords.h"
-#include "my_except.h"
-#include "parser_member_definition_matcher.h"
-#include "lexer_word_token.h"
+#include "MyExcept/MyExcept.h"
+#include "Parser/MemberDefinitionMatcher.h"
+#include "Lexer/WordToken.h"
 
 using namespace Parser;
 

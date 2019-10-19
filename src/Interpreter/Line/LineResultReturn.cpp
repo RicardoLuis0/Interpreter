@@ -1,4 +1,4 @@
-#include "interpreter_line_result_return.h"
+#include "Interpreter/LineResultReturn.h"
 
 using namespace Interpreter;
 

@@ -1,6 +1,6 @@
-#include "lexer.h"
-#include "read_file.h"
-#include "my_except.h"
+#include "Lexer/Lexer.h"
+#include "Util/read_file.h"
+#include "MyExcept/MyExcept.h"
 #include <iostream>
 
 static bool constexpr is_break(char c){

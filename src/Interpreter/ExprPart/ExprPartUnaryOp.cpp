@@ -1,7 +1,6 @@
-#include "interpreter_expr_part_unary_op.h"
+#include "Interpreter/ExprPartUnaryOp.h"
 #include "symbols_keywords.h"
-#include "interpreter_util_defines_misc.h"
-#include "interpreter_expr_part_var.h"
+#include "Util/InterpreterUtilDefinesMisc.h"
 
 using namespace Interpreter;
 

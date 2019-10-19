@@ -1,4 +1,4 @@
-#include "interpreter_type_variable.h"
+#include "Interpreter/TypeVariable.h"
 
 using namespace Interpreter;
 

@@ -1,4 +1,4 @@
-#include "lexer_string_token.h"
+#include "Lexer/StringToken.h"
 
 Lexer::StringToken::StringToken(int n,const std::string &str01,const std::string &str02):
     Token(n,TOKEN_TYPE_STRING),

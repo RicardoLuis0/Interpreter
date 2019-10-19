@@ -1,7 +1,7 @@
-#include "interpreter_float_value.h"
-#include "interpreter_float_variable.h"
-#include "interpreter_int_value.h"
-#include "interpreter_util_defines_misc.h"
+#include "Interpreter/FloatValue.h"
+#include "Interpreter/FloatVariable.h"
+#include "Interpreter/IntValue.h"
+#include "Util/InterpreterUtilDefinesMisc.h"
 
 using namespace Interpreter;
 

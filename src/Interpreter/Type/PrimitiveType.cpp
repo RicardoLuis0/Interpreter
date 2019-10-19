@@ -1,4 +1,4 @@
-#include "interpreter_primitive_type.h"
+#include "Interpreter/PrimitiveType.h"
 
 using namespace Interpreter;
 

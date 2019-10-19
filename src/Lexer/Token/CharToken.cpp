@@ -1,4 +1,4 @@
-#include "lexer_char_token.h"
+#include "Lexer/CharToken.h"
 
 Lexer::CharToken::CharToken(int n,char c2,std::string literal):
     Token(n,TOKEN_TYPE_CHAR),

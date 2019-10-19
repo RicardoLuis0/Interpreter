@@ -1,11 +1,11 @@
-#include "interpreter_int_value.h"
+#include "Interpreter/IntValue.h"
 
-#include "interpreter_unsigned_int_value.h"
-#include "interpreter_char_value.h"
-#include "interpreter_unsigned_char_value.h"
-#include "interpreter_float_value.h"
-#include "interpreter_int_variable.h"
-#include "interpreter_util_defines_misc.h"
+#include "Interpreter/UnsignedIntValue.h"
+#include "Interpreter/CharValue.h"
+#include "Interpreter/UnsignedCharValue.h"
+#include "Interpreter/FloatValue.h"
+#include "Interpreter/IntVariable.h"
+#include "Util/InterpreterUtilDefinesMisc.h"
 
 #define PRINTF_CONTAINER_METHOD getInt32
 #define PRINTF_CONTAINER_TYPE int32_t

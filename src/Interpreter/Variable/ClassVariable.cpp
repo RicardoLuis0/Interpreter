@@ -1,1 +1,1 @@
-#include "interpreter_class_variable.h"
+#include "Interpreter/ClassVariable.h"

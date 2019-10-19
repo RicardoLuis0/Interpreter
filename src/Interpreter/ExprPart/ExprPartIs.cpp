@@ -1,6 +1,6 @@
-#include "interpreter_expr_part_is.h"
-#include "interpreter_int_value.h"
-#include "interpreter_type_value.h"
+#include "Interpreter/ExprPartIs.h"
+#include "Interpreter/IntValue.h"
+#include "Interpreter/TypeValue.h"
 
 using namespace Interpreter;
 

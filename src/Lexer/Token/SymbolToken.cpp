@@ -1,4 +1,4 @@
-#include "lexer_symbol_token.h"
+#include "Lexer/SymbolToken.h"
 
 
 Lexer::SymbolToken::SymbolToken(int n,symbol_data d):

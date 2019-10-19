@@ -1,4 +1,4 @@
-#include "syntax_error.h"
+#include "MyExcept/SyntaxError.h"
 
 using namespace MyExcept;
 

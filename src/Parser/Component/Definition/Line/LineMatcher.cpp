@@ -1,13 +1,13 @@
-#include "parser_line_matcher.h"
+#include "Parser/LineMatcher.h"
 
 #include "symbols_keywords.h"
-#include "parser_code_block_matcher.h"
-#include "parser_statement_matcher.h"
-#include "parser_expression_matcher.h"
-#include "parser_definition_matcher.h"
-#include "parser_var_type_matcher.h"
+#include "Parser/CodeBlockMatcher.h"
+#include "Parser/StatementMatcher.h"
+#include "Parser/ExpressionMatcher.h"
+#include "Parser/DefinitionMatcher.h"
+#include "Parser/VarTypeMatcher.h"
 
-#include "my_except.h"
+#include "MyExcept/MyExcept.h"
 
 //Line = CodeBlock | Statement | Definition | Expression , symbol ';' | symbol ';' ;
 

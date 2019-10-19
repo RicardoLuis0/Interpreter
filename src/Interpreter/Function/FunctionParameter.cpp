@@ -1,6 +1,6 @@
-#include "interpreter_function_parameter.h"
-#include "interpreter_util_defines_misc.h"
-#include "interpreter_default_frame.h"
+#include "Interpreter/FunctionParameter.h"
+#include "Util/InterpreterUtilDefinesMisc.h"
+#include "Interpreter/DefaultFrame.h"
 
 using namespace Interpreter;
 

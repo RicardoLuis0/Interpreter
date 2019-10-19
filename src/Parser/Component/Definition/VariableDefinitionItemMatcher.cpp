@@ -1,9 +1,9 @@
-#include "parser_variable_definition_item_matcher.h"
+#include "Parser/VariableDefinitionItemMatcher.h"
 
 #include "symbols_keywords.h"
-#include "lexer_token_type.h"
-#include "parser_expression_matcher.h"
-#include "my_except.h"
+#include "Lexer/token_type.h"
+#include "Parser/ExpressionMatcher.h"
+#include "MyExcept/MyExcept.h"
 
 //VariableDefinitionItem = identifier , [ symbol '=' , Expression ] ;
 

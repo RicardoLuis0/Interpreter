@@ -1,5 +1,5 @@
-#include "interpreter_expr_part_typeof.h"
-#include "interpreter_type_value.h"
+#include "Interpreter/ExprPartTypeOf.h"
+#include "Interpreter/TypeValue.h"
 
 using namespace Interpreter;
 

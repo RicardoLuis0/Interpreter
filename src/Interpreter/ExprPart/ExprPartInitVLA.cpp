@@ -1,4 +1,4 @@
-#include "interpreter_expr_part_init_vla.h"
+#include "Interpreter/ExprPartInitVLA.h"
 
 using namespace Interpreter;
 

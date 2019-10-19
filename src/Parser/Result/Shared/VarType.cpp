@@ -1,7 +1,7 @@
-#include "parser_var_type.h"
+#include "Parser/VarType.h"
 
 #include "symbols_keywords.h"
-#include "my_except.h"
+#include "MyExcept/MyExcept.h"
 
 using namespace Parser;
 

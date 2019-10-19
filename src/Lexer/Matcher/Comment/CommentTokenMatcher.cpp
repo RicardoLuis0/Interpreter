@@ -1,5 +1,5 @@
-#include "lexer_comment_token_matcher.h"
-#include "my_except.h"
+#include "Lexer/CommentTokenMatcher.h"
+#include "MyExcept/MyExcept.h"
 
 
 bool Lexer::CommentTokenMatcher::partialMatch(std::string s){

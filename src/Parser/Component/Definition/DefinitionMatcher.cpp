@@ -1,11 +1,11 @@
-#include "parser_definition_matcher.h"
+#include "Parser/DefinitionMatcher.h"
 
-#include "parser_var_type_matcher.h"
-#include "my_except.h"
+#include "Parser/VarTypeMatcher.h"
+#include "MyExcept/MyExcept.h"
 #include "symbols_keywords.h"
-#include "parser_function_definition_matcher.h"
-#include "parser_variable_definition_matcher.h"
-#include "parser_struct_definition_matcher.h"
+#include "Parser/FunctionDefinitionMatcher.h"
+#include "Parser/VariableDefinitionMatcher.h"
+#include "Parser/StructDefinitionMatcher.h"
 
 //Definition = StructDefinition | FunctionDefinition | VariableDefinition , symbol ';' ;
 

@@ -1,7 +1,7 @@
-#include "interpreter_type_value.h"
-#include "interpreter_type_variable.h"
-#include "interpreter_type_type.h"
-#include "interpreter_int_value.h"
+#include "Interpreter/TypeValue.h"
+#include "Interpreter/TypeVariable.h"
+#include "Interpreter/TypeType.h"
+#include "Interpreter/IntValue.h"
 
 using namespace Interpreter;
 

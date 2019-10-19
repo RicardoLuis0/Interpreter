@@ -1,9 +1,9 @@
-#include "parser_var_type_matcher.h"
+#include "Parser/VarTypeMatcher.h"
 
-#include "lexer_keyword_token.h"
+#include "Lexer/KeywordToken.h"
 #include "symbols_keywords.h"
-#include "my_except.h"
-#include "parser_expression_matcher.h"
+#include "MyExcept/MyExcept.h"
+#include "Parser/ExpressionMatcher.h"
 
 //VarType = [ keyword 'const' ] [ keyword 'unsigned' | keyword 'signed' ] , ( ( keyword 'pointer' , symbol '<' , ( VarType | symbol '?' ) , symbol '>' ) |  keyword 'any' | keyword 'type' | keyword 'void' | keyword 'int' | keyword 'char' | keyword 'float' | keyword 'string' ) , { symbol '[' , [ Expression ] , symbol ']' } ;
 

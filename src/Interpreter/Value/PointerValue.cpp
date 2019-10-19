@@ -1,7 +1,7 @@
-#include "interpreter_pointer_value.h"
-#include "interpreter_pointer_variable.h"
-#include "interpreter_type.h"
-#include "interpreter_value_to_string.h"
+#include "Interpreter/PointerValue.h"
+#include "Interpreter/PointerVariable.h"
+#include "Interpreter/Type.h"
+#include "Interpreter/valueToString.h"
 
 using namespace Interpreter;
 

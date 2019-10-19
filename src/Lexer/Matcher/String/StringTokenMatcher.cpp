@@ -1,7 +1,7 @@
-#include "lexer_string_token_matcher.h"
-#include "lexer_string_token.h"
-#include "hex_read_util.h"
-#include "my_except.h"
+#include "Lexer/StringTokenMatcher.h"
+#include "Lexer/StringToken.h"
+#include "Lexer/hex_read_util.h"
+#include "MyExcept/MyExcept.h"
 
 bool Lexer::StringTokenMatcher::partialMatchString(std::string s,char c){
     bool reading_escape=false;

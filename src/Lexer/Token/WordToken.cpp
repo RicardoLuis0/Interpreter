@@ -1,4 +1,4 @@
-#include "lexer_word_token.h"
+#include "Lexer/WordToken.h"
 
 
 Lexer::WordToken::WordToken(int n,const std::string &content):

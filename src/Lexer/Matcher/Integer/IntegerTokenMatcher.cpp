@@ -1,6 +1,6 @@
-#include "lexer_integer_token_matcher.h"
-#include "lexer_integer_token.h"
-#include "my_except.h"
+#include "Lexer/IntegerTokenMatcher.h"
+#include "Lexer/IntegerToken.h"
+#include "MyExcept/MyExcept.h"
 
 
 bool Lexer::IntegerTokenMatcher::partialMatch(std::string s){

@@ -1,4 +1,4 @@
-#include "interpreter_string_variable.h"
+#include "Interpreter/StringVariable.h"
 
 using namespace Interpreter;
 

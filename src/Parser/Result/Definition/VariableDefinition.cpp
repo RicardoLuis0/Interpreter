@@ -1,4 +1,4 @@
-#include "parser_variable_definition.h"
+#include "Parser/VariableDefinition.h"
 
 using namespace Parser;
 

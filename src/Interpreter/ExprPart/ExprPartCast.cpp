@@ -1,5 +1,5 @@
-#include "interpreter_expr_part_cast.h"
-#include "interpreter_type_value.h"
+#include "Interpreter/ExprPartCast.h"
+#include "Interpreter/TypeValue.h"
 
 using namespace Interpreter;
 

@@ -1,8 +1,8 @@
-#include "parser.h"
+#include "Parser/Parser.h"
 
-#include "lexer_symbol_token.h"
-#include "lexer_keyword_token.h"
-#include "lexer_eof_token.h"
+#include "Lexer/SymbolToken.h"
+#include "Lexer/KeywordToken.h"
+#include "Lexer/EOFToken.h"
 
 using namespace Parser;
 

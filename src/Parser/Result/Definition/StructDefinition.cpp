@@ -1,4 +1,4 @@
-#include "parser_struct_definition.h"
+#include "Parser/StructDefinition.h"
 
 using namespace Parser;
 

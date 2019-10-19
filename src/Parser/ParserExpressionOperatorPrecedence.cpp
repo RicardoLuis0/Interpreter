@@ -1,12 +1,12 @@
-#include "parser_expression_operator_precedence.h"
+#include "Parser/ParserExpressionOperatorPrecedence.h"
 
 #include <map>
 #include <vector>
 #include "symbols_keywords.h"
-#include "parser_expression_term.h"
-#include "parser_expression_group.h"
-#include "parser_binary_operation.h"
-#include "lexer_symbol_token.h"
+#include "Parser/ExpressionTerm.h"
+#include "Parser/ExpressionGroup.h"
+#include "Parser/BinaryOperation.h"
+#include "Lexer/SymbolToken.h"
 
 using namespace Parser;
 

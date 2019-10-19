@@ -1,6 +1,6 @@
-#include "lexer_word_token_matcher.h"
-#include "lexer_word_token.h"
-#include "my_except.h"
+#include "Lexer/WordTokenMatcher.h"
+#include "Lexer/WordToken.h"
+#include "MyExcept/MyExcept.h"
 
 
 bool Lexer::WordTokenMatcher::partialMatch(std::string s){

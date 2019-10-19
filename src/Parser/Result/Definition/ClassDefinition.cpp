@@ -1,4 +1,4 @@
-#include "parser_class_definition.h"
+#include "Parser/ClassDefinition.h"
 
 using namespace Parser;
 

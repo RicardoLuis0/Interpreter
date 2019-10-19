@@ -1,4 +1,4 @@
-#include "parser_result_part.h"
+#include "Parser/ResultPart.h"
 
 using namespace Parser;
 

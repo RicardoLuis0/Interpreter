@@ -1,4 +1,4 @@
-#include "interpreter_array_variable.h"
+#include "Interpreter/ArrayVariable.h"
 
 using namespace Interpreter;
 

@@ -1,13 +1,13 @@
-#include "interpreter_type_type.h"
+#include "Interpreter/TypeType.h"
 #include "symbols_keywords.h"
-#include "interpreter_variable.h"
-#include "interpreter_any_type.h"
-#include "interpreter_util_defines_misc.h"
-#include "interpreter_dummy_value.h"
-#include "interpreter_dummy_variable.h"
-#include "interpreter_type_value.h"
-#include "interpreter_type_variable.h"
-#include "my_except.h"
+#include "Interpreter/Variable.h"
+#include "Interpreter/AnyType.h"
+#include "Util/InterpreterUtilDefinesMisc.h"
+#include "Interpreter/DummyValue.h"
+#include "Interpreter/DummyVariable.h"
+#include "Interpreter/TypeValue.h"
+#include "Interpreter/TypeVariable.h"
+#include "MyExcept/MyExcept.h"
 
 using namespace Interpreter;
 

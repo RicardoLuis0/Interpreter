@@ -1,9 +1,9 @@
-#include "interpreter_user_function.h"
-#include "interpreter_line_result_return.h"
-#include "interpreter_util_defines_misc.h"
-#include "interpreter_void_type.h"
-#include "interpreter_array_variable.h"
-#include "my_except.h"
+#include "Interpreter/UserFunction.h"
+#include "Interpreter/LineResultReturn.h"
+#include "Util/InterpreterUtilDefinesMisc.h"
+#include "Interpreter/VoidType.h"
+#include "Interpreter/ArrayVariable.h"
+#include "MyExcept/MyExcept.h"
 
 using namespace Interpreter;
 

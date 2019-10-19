@@ -1,7 +1,7 @@
-#include "interpreter_return_statement.h"
-#include "interpreter_line_result_return.h"
-#include "interpreter_user_function.h"
-#include "my_except.h"
+#include "Interpreter/ReturnStatement.h"
+#include "Interpreter/LineResultReturn.h"
+#include "Interpreter/UserFunction.h"
+#include "MyExcept/MyExcept.h"
 
 using namespace Interpreter;
 

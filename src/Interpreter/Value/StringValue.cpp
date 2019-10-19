@@ -1,8 +1,8 @@
-#include "interpreter_string_value.h"
-#include "interpreter_string_variable.h"
-#include "interpreter_int_value.h"
-#include "interpreter_char_value.h"
-#include "interpreter_util_defines_misc.h"
+#include "Interpreter/StringValue.h"
+#include "Interpreter/StringVariable.h"
+#include "Interpreter/IntValue.h"
+#include "Interpreter/CharValue.h"
+#include "Util/InterpreterUtilDefinesMisc.h"
 
 using namespace Interpreter;
 

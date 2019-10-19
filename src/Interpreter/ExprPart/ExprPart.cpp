@@ -1,5 +1,5 @@
-#include "interpreter_expr_part.h"
-#include "interpreter_dummy_value.h"
+#include "Interpreter/ExprPart.h"
+#include "Interpreter/DummyValue.h"
 
 using namespace Interpreter;
 
