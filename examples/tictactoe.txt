@@ -1,5 +1,5 @@
 void pause(){
-    if(getch()==224)getch();
+    getch();
 }
 
 void game_main_print(int choice){
@@ -24,21 +24,18 @@ int main(){
     while(true){
         game_main_print(choice);
         int c=getch();
-        if(c==224){
-            c=getch();
-            if(c==72){//up
-                if(choice==0){
-                    choice=2;
-                }else{
-                    choice--;
-                }
-            }else if(c==80){//down
-                if(choice==2){
-                    choice=0;
-                }else{
-                    choice++;
-                }
-            }
+        if(c=='W'||c=='w'){
+			if(choice==0){
+				choice=2;
+			}else{
+				choice--;
+			}
+		}else if(c=='S'||c=='s'){
+			if(choice==2){
+				choice=0;
+			}else{
+				choice++;
+			}
         }else if(c=='\r'){
             if(choice==0){
                 game(true);
@@ -136,9 +133,7 @@ void game(int computer){
         print("Difficulty (1.Easy,2.Medium,3.Hard): ");
         while(true){
             char c=getch();
-            if(c==224){
-                getch();
-            }else if(c=='1'){
+			if(c=='1'){
                 difficulty=1;
                 break;
             }else if(c=='2'){
@@ -194,21 +189,18 @@ void player_turn(int[3][3] &board,int &x,int &y,int num,string name){
     while(true){
         print_board(board,x,y,name+"'s Turn\n","\nMake your move...");
         int c=getch();
-        if(c==224){
-            c=getch();
-            if(c==72){//up
-                y--;
-                wrap(y,0,2);
-            }else if(c==80){//down
-                y++;
-                wrap(y,0,2);
-            }else if(c==75){//left
-                x--;
-                wrap(x,0,2);
-            }else if(c==77){//right
-                x++;
-                wrap(x,0,2);
-            }
+		if(c=='W'||c=='w'){
+			y--;
+			wrap(y,0,2);
+		}else if(c=='A'||c=='a'){
+			x--;
+            wrap(x,0,2);
+		}else if(c=='D'||c=='d'){
+			x++;
+            wrap(x,0,2);
+		}else if(c=='S'||c=='s'){
+			y++;
+            wrap(y,0,2);
         }else if(c=='\r'){
             if(board[x][y]==0){
                 board[x][y]=num;
@@ -229,7 +221,7 @@ void computer_turn_easy(int[3][3] &board){//random
     }
 }
 
-void computer_turn_medium(int[3][3] &board){
+int computer_turn_medium_part(int[3][3] &board){
     int lose_x=-1;
     int lose_y=-1;
     for(int y=0;y<3;y++){//find winning/losing moves
@@ -237,7 +229,7 @@ void computer_turn_medium(int[3][3] &board){
             if(board[x][y]==0){
                 board[x][y]=2;//check for wins
                 int res=checkwin(board);
-                if(res==2)return;//win
+                if(res==2)return 1;//win
                 if(lose_x==-1){
                     board[x][y]=1;//check for losses
                     res=checkwin(board);
@@ -252,12 +244,17 @@ void computer_turn_medium(int[3][3] &board){
     }
     if(lose_x!=-1){//if would lose, try to prevent it
         board[lose_x][lose_y]=2;
-        return;
+        return 1;
     }
-    computer_turn_easy(board);//if no immediate wins or losses, play randomly
+	return 0;
+}
+
+void computer_turn_medium(int[3][3] &board){
+	if(!computer_turn_medium_part(board))computer_turn_easy(board);//if no immediate wins or losses, play randomly
 }
 
 void computer_turn_hard(int[3][3] &board){//minimax
+	if(computer_turn_medium_part(board))return;
     print_board(board,-1,-1,"Computer's Turn\n","\nThe Computer Is Thinking...");
     int best=-9999;
     int best_x;
