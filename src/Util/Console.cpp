@@ -87,7 +87,7 @@ namespace Console{
     }
 
     void changeDir(std::string newdir){
-        chdir(newdir.c_str());
+        if(chdir(newdir.c_str()));
     }
 
 #endif // __WIN32__
