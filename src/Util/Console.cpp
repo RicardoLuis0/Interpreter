@@ -83,7 +83,7 @@ namespace Console{
         newattr = oldattr;
         newattr.c_lflag &= ~( ICANON | ECHO );
         tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
-        ch=fgetc(STDIN_FILENO);
+        ch=fgetc(stdin);
         tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
         return ch;
     }
