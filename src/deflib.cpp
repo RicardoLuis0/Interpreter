@@ -33,7 +33,8 @@
 //float stof(string) DONE
 //string to_string(any) DONE
 //void cls() DONE
-//int getch() DONE
+//int getch() DONE //only works for characters
+//int getch_wasd() DONE //return arrow keys as 'wasd', might not be available on linux
 //int array_size(any[]) DONE
 //string get_type_name(type) DONE
 //ptr<void> fopen(string filename,int write) DONE //if write true, open as "w", if write false, open as "r"
@@ -408,6 +409,26 @@ namespace Interpreter {
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
             return std::make_shared<IntValue>(Console::getch());
+        }
+
+    };
+
+    class getch_wasd : public Function{
+
+        std::string get_name() override {
+            return "getch_wasd";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::int_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+            return std::make_shared<IntValue>(Console::getch_wasd());
         }
 
     };
@@ -983,6 +1004,7 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::to_string>());
     d->register_function(std::make_shared<Interpreter::cls>());
     d->register_function(std::make_shared<Interpreter::getch>());
+    d->register_function(std::make_shared<Interpreter::getch_wasd>());
     d->register_function(std::make_shared<Interpreter::array_size>());
     d->register_function(std::make_shared<Interpreter::get_type_name>());
     d->register_function(std::make_shared<Interpreter::fopen>());

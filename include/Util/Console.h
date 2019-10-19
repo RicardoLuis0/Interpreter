@@ -8,6 +8,7 @@ namespace Console{
     void init();
     bool kbhit();
     int getch();
+    int getch_wasd();
     void changeDir(std::string newdir);
 }
 

@@ -50,6 +50,21 @@ namespace Console{
         }
     }
 
+    int getch_wasd(){
+        char c=::getch();
+        if(c==224){//ignore arrows
+            switch(::getch()){
+            case 72: return 'w';
+            case 75: return 'a';
+            case 77: return 'd';
+            case 80: return 's';
+            }
+            return 0;
+        }else{
+            return c;
+        }
+    }
+
     void changeDir(std::string newdir){
         SetCurrentDirectoryA(newdir.c_str());
     }
@@ -86,6 +101,11 @@ namespace Console{
         ch=fgetc(stdin);
         tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
         return ch;
+    }
+
+    int getch_wasd(){
+        //unimplemented
+        return getch();
     }
 
     void changeDir(std::string newdir){
