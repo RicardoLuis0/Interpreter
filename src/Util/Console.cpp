@@ -54,7 +54,9 @@ namespace Console{
         SetCurrentDirectoryA(newdir.c_str());
     }
 
-#else
+#elif def __unix__
+
+#warn operation under linux is still experimental
 
     void clear(){
         ::printf("\033[H\033[J");
@@ -81,7 +83,7 @@ namespace Console{
         newattr = oldattr;
         newattr.c_lflag &= ~( ICANON | ECHO );
         tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
-        ch = getchar();
+        while(read(STDIN_FILENO,&ch,1)==0);
         tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
         return ch;
     }
@@ -89,6 +91,10 @@ namespace Console{
     void changeDir(std::string newdir){
         if(chdir(newdir.c_str()));
     }
+
+#else
+
+#error system not supported
 
 #endif // __WIN32__
 
