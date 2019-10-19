@@ -7,3 +7,4 @@ doxygen/
 *.bak
 .vscode/
 *.cscope_file_list
+*.dll
