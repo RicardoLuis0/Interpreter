@@ -12,13 +12,21 @@
 #include "Interpreter/UnsignedCharValue.h"
 #include "Interpreter/FloatValue.h"
 #include "Interpreter/PointerValue.h"
+
+#if defined (__WIN32__)//no getch support outside windows
+
 #include "conio.h"
+
+#endif // __WIN32__
+
 #include "MyExcept/MyExcept.h"
 #include "Interpreter/valueToString.h"
 #include "Printf/Printf.h"
 
 #include <cstdlib>
 #include <ctime>
+
+#include "Util/Console.h"
 
 //NOTE native functions to make later
 //void printvals(...) DONE;
@@ -384,12 +392,12 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
-            system("cls");
+            Console::clear();
             return nullptr;
         }
 
     };
-
+#if defined (__WIN32__)
     class getch : public Function{
 
         std::string get_name() override {
@@ -409,7 +417,7 @@ namespace Interpreter {
         }
 
     };
-
+#endif // __WIN32__
     class putchar : public Function{
 
         std::string get_name() override {
@@ -656,8 +664,11 @@ namespace Interpreter {
             if(f){
                 if(f->f){
                     std::shared_ptr<char> buf(static_cast<char*>(calloc(std::dynamic_pointer_cast<UnsignedIntValue>(args[0])->get()+1,sizeof(char))),free);
-                    ::fgets(buf.get(),std::dynamic_pointer_cast<UnsignedIntValue>(args[0])->get(),f->f);
-                    return std::make_shared<StringValue>(buf.get());
+                    if(::fgets(buf.get(),std::dynamic_pointer_cast<UnsignedIntValue>(args[0])->get(),f->f)){
+                        return std::make_shared<StringValue>(buf.get());
+                    }else{
+                        return std::make_shared<StringValue>("");
+                    }
                 }
             }
             return std::make_shared<StringValue>("");
@@ -949,7 +960,7 @@ namespace Interpreter {
             if(val->get()<0){
                 throw std::runtime_error("new size too small");
             }
-            if(val->get()>int(arrv->get().size())){ 
+            if(val->get()>int(arrv->get().size())){
                 int osz=arrv->get().size();
                 arrv->get().resize(val->get());
                 for(int i=osz;i<val->get();i++){
@@ -977,7 +988,9 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::stof>());
     d->register_function(std::make_shared<Interpreter::to_string>());
     d->register_function(std::make_shared<Interpreter::cls>());
+#if defined (__WIN32__)
     d->register_function(std::make_shared<Interpreter::getch>());
+#endif // __WIN32__
     d->register_function(std::make_shared<Interpreter::array_size>());
     d->register_function(std::make_shared<Interpreter::get_type_name>());
     d->register_function(std::make_shared<Interpreter::fopen>());

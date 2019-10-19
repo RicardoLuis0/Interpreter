@@ -1,10 +1,12 @@
 #include "Util/Console.h"
-#define WIN32_LEAN_AND_MEAN
 #include <iostream>
+#if defined (__WIN32__)
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <conio.h>
-
+#endif
 namespace Console{
+#if defined (__WIN32__)
     HANDLE hStdOut;
 
     void waitInput(){
@@ -27,4 +29,17 @@ namespace Console{
             exit(1);
         }
     }
+#else
+    void waitInput(){
+        //TODO 'pause' for linux
+    }
+
+    void clear(){
+        std::cout<<"\e[3J";
+    }
+
+    void init(){
+        //do nothing
+    }
+#endif // __WIN32__
 }

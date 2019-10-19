@@ -40,16 +40,27 @@
 #include <cstring>
 
 #include "preprocessor.h"
-
+#if defined (__WIN32__)
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"
+#else
+#include <unistd.h>
+#endif // __WIN32__
+
+static void changeDir(std::string newdir){
+#if defined (__WIN32__)
+    SetCurrentDirectoryA(newdir.c_str());
+#else
+    chdir(newdir.c_str());
+#endif // __WIN32__
+}
 
 //TODO update docs
 /**
  * @mainpage
- * 
+ *
  * Interpreted language
- * 
+ *
  * @author Ricardo Luis Vaz Silva
  * @date 2/19/19
  * @version 0.01
@@ -150,19 +161,19 @@ int test_exec(){
             if(filename=="q"||filename=="quit"||filename=="exit")return 0;
             try{
                 tokens=lexer.tokenize_from_file(filename);//split file into tokens
-                SetCurrentDirectoryA(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))).c_str());
+                changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
             }catch(MyExcept::FileError &e){
                 try{
                     tokens=lexer.tokenize_from_file(filename+".txt");
-                    SetCurrentDirectoryA(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))).c_str());
+                    changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
                 }catch(MyExcept::FileError &e2){
                     try{
                         tokens=lexer.tokenize_from_file("examples/"+filename);
-                        SetCurrentDirectoryA("examples");
+                        changeDir("examples");
                     }catch(MyExcept::FileError &e2){
                         try{
                             tokens=lexer.tokenize_from_file("examples/"+filename+".txt");
-                            SetCurrentDirectoryA("examples");
+                            changeDir("examples");
                         }catch(MyExcept::FileError &e2){
                             std::cout<<e.what()<<", 'exit' 'quit' or 'q' to cancel\n";
                             continue;
@@ -220,7 +231,7 @@ int test_exec(){
                 }else{
                     buf+=c;
                 }
-                
+
             }
             if(buf.size()>0)main_args.push_back(std::make_shared<Interpreter::StringValue>(buf));
             fn_args.push_back(std::make_shared<Interpreter::ArrayValue>(std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),main_args.size()),main_args));
