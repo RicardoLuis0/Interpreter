@@ -56,7 +56,7 @@ namespace Console{
 
 #elif defined (__linux__)
 
-#warn operation under linux is still experimental
+#warning operation under linux is still experimental
 
     void clear(){
         ::printf("\033[H\033[J");
