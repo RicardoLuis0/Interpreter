@@ -68,10 +68,10 @@ namespace Console{
         timeval timeout;
         fd_set rdset;
         FD_ZERO(&rdset);
-        FD_SET(STDIN, &rdset);
+        FD_SET(STDIN_FILENO, &rdset);
         timeout.tv_sec  = 0;
         timeout.tv_usec = 0;
-        return select(STDIN + 1, &rdset, NULL, NULL, &timeout);
+        return select(STDIN_FILENO + 1, &rdset, NULL, NULL, &timeout);
     }
 
     int getch(){

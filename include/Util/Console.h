@@ -1,6 +1,8 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
+#include <string>
+
 namespace Console{
     void clear();
     void init();
