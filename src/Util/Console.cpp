@@ -1,10 +1,10 @@
 #include "Util/Console.h"
 #include <iostream>
-#if defined (__WIN32__)
+#if defined (__WIN32__) || defined (__WIN32) || defined (WIN32)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <conio.h>
-#else
+#elif defined (__linux__)
 #include <sys/unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>
@@ -15,7 +15,7 @@
 #endif
 namespace Console{
 
-#if defined (__WIN32__)
+#if defined (__WIN32__) || defined (__WIN32) || defined (WIN32)
 
     HANDLE hStdOut;
 
