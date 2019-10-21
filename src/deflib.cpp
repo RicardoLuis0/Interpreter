@@ -91,22 +91,22 @@ static std::string escape(char c){
 }
 
 std::string Interpreter::valueToString(std::shared_ptr<Value> val){
-    if(auto v=std::dynamic_pointer_cast<ArrayValue>(val)){
-        return v->getString();
-    }else if(auto c=std::dynamic_pointer_cast<CharValue>(val)){
-        return "'"+std::string(1,c->get())+"'";
-    }else if(auto v=std::dynamic_pointer_cast<UnsignedCharValue>(val)){
-        return std::to_string(v->get());
-    }else if(auto v=std::dynamic_pointer_cast<IntValue>(val)){
-        return std::to_string(v->get());
-    }else if(auto v=std::dynamic_pointer_cast<UnsignedIntValue>(val)){
-        return std::to_string(v->get());
-    }else if(auto v=std::dynamic_pointer_cast<FloatValue>(val)){
-        return std::to_string(v->get());
+    if(auto v1=std::dynamic_pointer_cast<ArrayValue>(val)){
+        return v1->getString();
+    }else if(auto c1=std::dynamic_pointer_cast<CharValue>(val)){
+        return "'"+std::string(1,c1->get())+"'";
+    }else if(auto v2=std::dynamic_pointer_cast<UnsignedCharValue>(val)){
+        return std::to_string(v2->get());
+    }else if(auto v3=std::dynamic_pointer_cast<IntValue>(val)){
+        return std::to_string(v3->get());
+    }else if(auto v4=std::dynamic_pointer_cast<UnsignedIntValue>(val)){
+        return std::to_string(v4->get());
+    }else if(auto v5=std::dynamic_pointer_cast<FloatValue>(val)){
+        return std::to_string(v5->get());
     }else if(auto s=std::dynamic_pointer_cast<StringValue>(val)){
         std::string temp="\"";
-        for(char c:s->get()){
-            temp+=escape(c);
+        for(char c2:s->get()){
+            temp+=escape(c2);
         }
         temp+="\"";
         return temp;
@@ -182,7 +182,7 @@ namespace Interpreter {
             return {{Type::string_type(),"fmt",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             prepare_printf_out data=prepare_printf(args,0,1);
             return std::make_shared<IntValue>(Printf::vprintf(data.fmt,data.params));
         }
@@ -211,7 +211,7 @@ namespace Interpreter {
             return {{Type::string_type(),"fmt",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             prepare_printf_out data=prepare_printf(args,0,1);
             return std::make_shared<StringValue>(Printf::vsprintf(data.fmt,data.params));
         }
@@ -239,7 +239,7 @@ namespace Interpreter {
             return {};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             for(auto v:args){
                 if(auto var=std::dynamic_pointer_cast<Variable>(v)){
                     std::cout<<v->get_type()->get_name()<<" "<<var->get_name()<<" = "<<valueToString(v)<<"\n";
@@ -266,7 +266,7 @@ namespace Interpreter {
             return {{Type::string_type(),"str",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             //todo handle multiple types
             std::cout<<std::dynamic_pointer_cast<StringValue>(args[0]->get_type()->cast(args[0],Type::string_type()))->get();
             return nullptr;
@@ -288,7 +288,7 @@ namespace Interpreter {
             return {};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             std::string temp;
             while(std::cin.peek()=='\n')std::cin.ignore();
             std::getline(std::cin,temp,'\n');
@@ -311,7 +311,7 @@ namespace Interpreter {
             return {{Type::string_type(),"str",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             try{
                 return std::make_shared<IntValue>(std::stoi(std::dynamic_pointer_cast<StringValue>(args[0]->get_type()->cast(args[0],Type::string_type()))->get()));
             }catch(...){
@@ -336,7 +336,7 @@ namespace Interpreter {
             return {{Type::string_type(),"str",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             try{
                 return std::make_shared<FloatValue>(std::stod(std::dynamic_pointer_cast<StringValue>(args[0]->get_type()->cast(args[0],Type::string_type()))->get()));
             }catch(...){
@@ -360,7 +360,7 @@ namespace Interpreter {
             return {{Type::any_type(),"val",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             if(args[0]->get_type()->is(args[0]->get_type(),Type::string_type())){
                 return args[0]->get_type()->cast(args[0],Type::string_type());
             }else if(args[0]->get_type()->is(args[0]->get_type(),Type::int_type())){
@@ -394,7 +394,7 @@ namespace Interpreter {
             return {};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             Console::clear();
             return nullptr;
         }
@@ -415,7 +415,7 @@ namespace Interpreter {
             return {};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             return std::make_shared<IntValue>(Console::getch());
         }
 
@@ -435,7 +435,7 @@ namespace Interpreter {
             return {};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             return std::make_shared<IntValue>(Console::getch_wasd());
         }
 
@@ -455,7 +455,7 @@ namespace Interpreter {
             return {{Type::char_type(),"ch",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             ::putchar(std::dynamic_pointer_cast<CharValue>(args[0]->get_type()->cast(args[0],Type::char_type()))->get());
             return nullptr;
         }
@@ -476,7 +476,7 @@ namespace Interpreter {
             return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             return std::make_shared<IntValue>(std::dynamic_pointer_cast<ArrayValue>(args[0])->get().size());
         }
 
@@ -496,7 +496,7 @@ namespace Interpreter {
             return {{Type::type_type(),"t",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             return std::make_shared<StringValue>(std::dynamic_pointer_cast<TypeValue>(args[0])->get()->get_name());
         }
     };
@@ -530,7 +530,7 @@ namespace Interpreter {
             return {{Type::string_type(),"filename",false},{Type::int_type(),"readmode",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             return std::make_shared<PointerValue>(Type::void_type(),std::make_shared<FILE_Value>(std::dynamic_pointer_cast<StringValue>(args[0])->get().c_str(),std::dynamic_pointer_cast<IntValue>(args[1])->get()));
         }
 
@@ -549,7 +549,7 @@ namespace Interpreter {
             return {{Type::pointer_type(Type::void_type()),"file",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
             if(f){
                 f->close();
@@ -572,7 +572,7 @@ namespace Interpreter {
             return {{Type::string_type(),"str",false},{Type::pointer_type(Type::void_type()),"file",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[1])->get_value());
             if(f){
                 if(f->f){
@@ -597,7 +597,7 @@ namespace Interpreter {
             return {{Type::string_type(),"str",false},{Type::int_type(),"len",false},{Type::pointer_type(Type::void_type()),"file",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[2])->get_value());
             if(f){
                 if(f->f){
@@ -631,7 +631,7 @@ namespace Interpreter {
             return {{Type::pointer_type(Type::void_type()),"file",false},{Type::string_type(),"fmt",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
             if(f){
                 if(f->f){
@@ -657,14 +657,14 @@ namespace Interpreter {
             return {{Type::pointer_type(Type::void_type()),"file",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
             if(f){
                 if(f->f){
-                    return std::make_shared<CharValue>(::fgetc(f->f));
+                    return std::make_shared<CharValue>(static_cast<char>(::fgetc(f->f)));
                 }
             }
-            return std::make_shared<CharValue>(-1);
+            return std::make_shared<CharValue>('\0');
         }
 
     };
@@ -682,7 +682,7 @@ namespace Interpreter {
             return {{Type::unsigned_int_type(),"len",false},{Type::pointer_type(Type::void_type()),"file",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[1])->get_value());
             if(f){
                 if(f->f){
@@ -712,7 +712,7 @@ namespace Interpreter {
             return {{Type::pointer_type(Type::void_type()),"file",false},{Type::unsigned_int_type(),"len",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
             if(f){
                 if(f->f){
@@ -737,7 +737,7 @@ namespace Interpreter {
             return {{Type::pointer_type(Type::void_type()),"file",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
             if(f){
                 if(f->f){
@@ -762,7 +762,7 @@ namespace Interpreter {
             return {{Type::pointer_type(Type::void_type()),"file",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
             if(f){
                 if(f->f){
@@ -787,7 +787,7 @@ namespace Interpreter {
             return {};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             return std::make_shared<IntValue>(::rand());
         }
 
@@ -807,7 +807,7 @@ namespace Interpreter {
             return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true},{Type::any_type(),"val",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
             auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
             if(arrt->get_size()!=-1){
@@ -834,7 +834,7 @@ namespace Interpreter {
             return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true},{Type::any_type(),"val",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
             auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
             if(arrt->get_size()!=-1){
@@ -861,7 +861,7 @@ namespace Interpreter {
             return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
             auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
             if(arrt->get_size()!=-1){
@@ -890,7 +890,7 @@ namespace Interpreter {
             return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
             auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
             if(arrt->get_size()!=-1){
@@ -919,7 +919,7 @@ namespace Interpreter {
             return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
             auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
             if(arrt->get_size()!=-1){
@@ -946,7 +946,7 @@ namespace Interpreter {
             return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
             auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
             if(arrt->get_size()!=-1){
@@ -973,7 +973,7 @@ namespace Interpreter {
             return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr",true},{Type::int_type(),"size",false}};
         }
 
-        std::shared_ptr<Value> call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args) override {
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
             auto arrv=std::dynamic_pointer_cast<ArrayValue>(args[0]);
             auto arrt=std::dynamic_pointer_cast<ArrayType>(arrv->get_type());
             if(arrt->get_size()!=-1){

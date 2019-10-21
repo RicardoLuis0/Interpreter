@@ -6,6 +6,6 @@ using namespace Interpreter;
 BreakStatement::BreakStatement(int i):Line(i){
 }
 
-std::shared_ptr<LineResult> BreakStatement::run(ExecFrame * context){
+std::shared_ptr<LineResult> BreakStatement::run(ExecFrame *){
     return std::make_shared<LineResultSimple>(ACTION_BREAK);
 }

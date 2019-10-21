@@ -12,26 +12,26 @@
 
 std::shared_ptr<Value> CLASS_NAME::METHOD_NAME(std::shared_ptr<Value> &other){
     #ifdef UNSIGNED
-    if CHECK(UnsignedIntValue) {
-        return std::make_shared<UnsignedIntValue>( VALUE_NAME OPERATOR val->get());
-    }else if CHECK(UnsignedCharValue) {
+    if CHECK2(UnsignedIntValue,v4) {
+        return std::make_shared<UnsignedIntValue>(static_cast<unsigned int>(VALUE_NAME OPERATOR v4->get()));
+    }else if CHECK2(UnsignedCharValue,v5) {
         #if CLASS_NAME == UnsignedCharValue
-        return std::make_shared<UnsignedCharValue>( VALUE_NAME OPERATOR val->get());
+        return std::make_shared<UnsignedCharValue>(static_cast<unsigned char>(VALUE_NAME OPERATOR v5->get()));
         #else
-        return std::make_shared<UnsignedIntValue>( VALUE_NAME OPERATOR val->get());
+        return std::make_shared<UnsignedIntValue>(static_cast<unsigned int>(VALUE_NAME OPERATOR v5->get()));
         #endif
     }else
     #endif
-    if CHECK(IntValue) {
-        return std::make_shared<IntValue>( VALUE_NAME OPERATOR val->get());
-    }else if CHECK(CharValue) {
+    if CHECK2(IntValue,v1) {
+        return std::make_shared<IntValue>(static_cast<int>(VALUE_NAME OPERATOR v1->get()));
+    }else if CHECK2(CharValue,v2) {
         #if CLASS_NAME == CharValue
-        return std::make_shared<CharValue>( VALUE_NAME OPERATOR val->get());
+        return std::make_shared<CharValue>(static_cast<char>(VALUE_NAME OPERATOR v2->get()));
         #else
-        return std::make_shared<IntValue>( VALUE_NAME OPERATOR val->get());
+        return std::make_shared<IntValue>(static_cast<int>(VALUE_NAME OPERATOR v2->get()));
         #endif
-    }else if CHECK(FloatValue) {
-        return std::make_shared<FloatValue>( VALUE_NAME OPERATOR val->get());
+    }else if CHECK2(FloatValue,v3) {
+        return std::make_shared<FloatValue>(static_cast<float>(VALUE_NAME OPERATOR v3->get()));
     }else{
         throw std::runtime_error("invalid types for operator '" OPERATOR_STRING "'");
     }

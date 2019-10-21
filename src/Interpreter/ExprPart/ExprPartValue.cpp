@@ -30,6 +30,6 @@ std::shared_ptr<Type> ExprPartValue::get_type(){
     return value->get_type();
 }
 
-std::shared_ptr<Value> ExprPartValue::eval(ExecFrame * context){
+std::shared_ptr<Value> ExprPartValue::eval(ExecFrame *){
     return value;
 }

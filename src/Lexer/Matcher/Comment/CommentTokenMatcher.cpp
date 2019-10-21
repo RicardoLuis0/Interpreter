@@ -61,6 +61,6 @@ bool Lexer::CommentTokenMatcher::fullMatch(std::string s){
     return true;
 }
 
-std::shared_ptr<Lexer::Token> Lexer::CommentTokenMatcher::makeMatch(int line,std::string s){
+std::shared_ptr<Lexer::Token> Lexer::CommentTokenMatcher::makeMatch(int,std::string){
     return nullptr;
 }

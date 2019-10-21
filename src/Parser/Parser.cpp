@@ -11,7 +11,7 @@ parserProgress::parserProgress(const std::vector<std::shared_ptr<Lexer::Token>> 
 }
 
 int parserProgress::get_line(int offset){
-    return get_nothrow_nonull()->line;
+    return get_nothrow_nonull(offset)->line;
 }
 
 bool parserProgress::in_range(int offset){
@@ -132,7 +132,7 @@ std::shared_ptr<Lexer::KeywordToken> parserProgress::isKeyword(std::vector<int> 
     return nullptr;
 }
 
-void parse(const std::vector<std::shared_ptr<Lexer::Token>> &data){
+void parse(const std::vector<std::shared_ptr<Lexer::Token>> &){
     //parserProgress progress {data:data,location:0};
     //TODO Parser::parse
     throw std::runtime_error("unimplemented");

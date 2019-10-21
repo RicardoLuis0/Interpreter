@@ -155,8 +155,8 @@ static std::string format_param(param_data p,std::vector<std::shared_ptr<ValueCo
         }else{
             return std::string(str);
         }
-    }else if(auto s=std::dynamic_pointer_cast<CStringContainer>(args[p.index])){
-        std::string str(s->getCString());
+    }else if(auto s2=std::dynamic_pointer_cast<CStringContainer>(args[p.index])){
+        std::string str(s2->getCString());
         if(p.has_size){
             if(p.size>str.size()){
                 return std::string(p.size-str.size(),' ')+str;

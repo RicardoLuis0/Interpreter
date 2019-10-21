@@ -12,18 +12,18 @@
 
 std::shared_ptr<Value> CLASS_NAME::METHOD_NAME(std::shared_ptr<Value> &other){
     #ifdef UNSIGNED
-    if CHECK(UnsignedIntValue) {
-        VALUE_NAME OPERATOR val->get();
-    }else if CHECK(UnsignedCharValue) {
-        VALUE_NAME OPERATOR val->get();
+    if CHECK2(UnsignedIntValue,v4) {
+        VALUE_NAME OPERATOR v4->get();
+    }else if CHECK2(UnsignedCharValue,v5) {
+        VALUE_NAME OPERATOR v5->get();
     }else
     #endif
-    if CHECK(IntValue) {
-        VALUE_NAME OPERATOR val->get();
-    }else if CHECK(CharValue) {
-        VALUE_NAME OPERATOR val->get();
-    }else if CHECK(FloatValue) {
-        VALUE_NAME OPERATOR val->get();
+    if CHECK2(IntValue,v1) {
+        VALUE_NAME OPERATOR v1->get();
+    }else if CHECK2(CharValue,v2) {
+        VALUE_NAME OPERATOR v2->get();
+    }else if CHECK2(FloatValue,v3) {
+        VALUE_NAME OPERATOR v3->get();
     }else{
         throw std::runtime_error("invalid types for operator '" OPERATOR_STRING "'");
     }

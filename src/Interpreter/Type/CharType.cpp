@@ -31,11 +31,11 @@ CharType::CharType(bool c):PrimitiveType(c){
 }
 
 std::shared_ptr<Value> CharType::make_value(std::shared_ptr<Type> self){
-    return std::make_shared<CharValue>(0);
+    return std::make_shared<CharValue>('\0');
 }
 
 std::shared_ptr<Variable> CharType::make_variable(std::shared_ptr<Type> self,std::string name){
-    return std::make_shared<CharVariable>(name,0);
+    return std::make_shared<CharVariable>(name,'\0');
 }
 
 bool CharType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
@@ -50,13 +50,13 @@ std::shared_ptr<Value> CharType::cast(std::shared_ptr<Value> self,std::shared_pt
     if(is(self->get_type(),other)){
         return self;
     }else if(CHECKPTR(other,IntType)){
-        return std::make_shared<IntValue>(std::dynamic_pointer_cast<CharValue>(self)->get());
+        return std::make_shared<IntValue>(static_cast<int>(std::dynamic_pointer_cast<CharValue>(self)->get()));
     }else if(CHECKPTR(other,FloatType)){
-        return std::make_shared<FloatValue>(std::dynamic_pointer_cast<CharValue>(self)->get());
-    }else if(CHECKPTR(other,CharType)){
-        return std::make_shared<UnsignedCharValue>(std::dynamic_pointer_cast<CharValue>(self)->get());
+        return std::make_shared<FloatValue>(static_cast<float>(std::dynamic_pointer_cast<CharValue>(self)->get()));
+    }else if(CHECKPTR(other,UnsignedCharType)){
+        return std::make_shared<UnsignedCharValue>(static_cast<unsigned char>(std::dynamic_pointer_cast<CharValue>(self)->get()));
     }else if(CHECKPTR(other,UnsignedIntType)){
-        return std::make_shared<UnsignedIntValue>(std::dynamic_pointer_cast<CharValue>(self)->get());
+        return std::make_shared<UnsignedIntValue>(static_cast<unsigned int>(std::dynamic_pointer_cast<CharValue>(self)->get()));
     }else{
         return Type::cast(self,other);//throws
     }

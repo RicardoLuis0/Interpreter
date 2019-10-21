@@ -36,6 +36,8 @@
 
 #define CHECK(type) (std::shared_ptr<type> val=std::dynamic_pointer_cast<type>(other))
 
+#define CHECK2(type,name) (std::shared_ptr<type> name=std::dynamic_pointer_cast<type>(other))
+
 #define MATH_OPERATION(type,method_operator) return std::make_shared<type>( VALUE_NAME method_operator val->get())
 
 //simple math operator

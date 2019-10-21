@@ -56,7 +56,7 @@ DefaultFrame::DefaultFrame(DefaultFrame * p,Function * f):parent(p){
     }
     add_parameters(f->get_parameters());
     is_function=true;
-    func=f;
+	self_function=f;
 }
 
 DefaultFrame::DefaultFrame(DefaultFrame * p):parent(p){

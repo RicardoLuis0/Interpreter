@@ -20,9 +20,9 @@ void read_file(std::string filename,std::string &output){
         throw MyExcept::FileError(filename,errno);
     }
     output="";
-    char c;
+	int c;
     while((c=fgetc(f))!=EOF){
-        output+=c;
+        output+=static_cast<char>(c);
     }
     fclose(f);
 }

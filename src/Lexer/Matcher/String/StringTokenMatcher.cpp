@@ -117,11 +117,11 @@ std::shared_ptr<Lexer::StringToken> Lexer::StringTokenMatcher::matchString(int l
                             r+=s[i]-'0';
                         }
                     }
-                    formatted+=r>255?255:r;
+                    formatted+=static_cast<char>(r>255?255:r);
                 }else if(s[i]=='h'&&is_hex(s[i+1])&&is_hex(s[i+2])){
                     int hex=get_hex(s[++i])*16;
                     hex+=get_hex(s[++i]);
-                    formatted+=hex;
+                    formatted+=static_cast<char>(hex);
                 }else{
                     formatted+=s[i];
                 }

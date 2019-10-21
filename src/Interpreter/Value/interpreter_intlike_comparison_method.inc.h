@@ -12,22 +12,22 @@
 
 std::shared_ptr<Value> CLASS_NAME::METHOD_NAME(std::shared_ptr<Value> &other){
     #ifdef UNSIGNED
-    if CHECK(UnsignedIntValue) {
-        return std::make_shared<IntValue>( VALUE_NAME OPERATOR val->get());
-    }else if CHECK(UnsignedCharValue) {
-        return std::make_shared<IntValue>( VALUE_NAME OPERATOR val->get());
-    }else if CHECK(IntValue) {
-        return std::make_shared<IntValue>( VALUE_NAME OPERATOR (static_cast<unsigned int>(val->get())));
-    }else if CHECK(CharValue) {
-        return std::make_shared<IntValue>( VALUE_NAME OPERATOR (static_cast<unsigned char>(val->get())));
+    if CHECK2(UnsignedIntValue,v1) {
+        return std::make_shared<IntValue>(static_cast<int>(VALUE_NAME OPERATOR v1->get()));
+    }else if CHECK2(UnsignedCharValue,v2) {
+        return std::make_shared<IntValue>(static_cast<int>(VALUE_NAME OPERATOR v2->get()));
+    }else if CHECK2(IntValue,v3) {
+        return std::make_shared<IntValue>(static_cast<int>(VALUE_NAME OPERATOR (static_cast<unsigned int>(v3->get()))));
+    }else if CHECK2(CharValue,v4) {
+        return std::make_shared<IntValue>(static_cast<int>(VALUE_NAME OPERATOR (static_cast<unsigned char>(v4->get()))));
     #else
-    if CHECK(IntValue) {
-        return std::make_shared<IntValue>( VALUE_NAME OPERATOR val->get());
-    }else if CHECK(CharValue) {
-        return std::make_shared<IntValue>( VALUE_NAME OPERATOR val->get());
+    if CHECK2(IntValue,v1) {
+        return std::make_shared<IntValue>(static_cast<int>(VALUE_NAME OPERATOR v1->get()));
+    }else if CHECK2(CharValue,v2) {
+        return std::make_shared<IntValue>(static_cast<int>(VALUE_NAME OPERATOR v2->get()));
     #endif
-    }else if CHECK(FloatValue) {
-        return std::make_shared<IntValue>( VALUE_NAME OPERATOR val->get());
+    }else if CHECK2(FloatValue,v5) {
+        return std::make_shared<IntValue>(static_cast<int>(VALUE_NAME OPERATOR v5->get()));
     }else{
         throw std::runtime_error("invalid types for operator '" OPERATOR_STRING "'");
     }

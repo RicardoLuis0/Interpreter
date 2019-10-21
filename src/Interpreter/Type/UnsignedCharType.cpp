@@ -31,11 +31,11 @@ std::string UnsignedCharType::get_name(){
 }
 
 std::shared_ptr<Value> UnsignedCharType::make_value(std::shared_ptr<Type> self){
-    return std::make_shared<UnsignedCharValue>(0);
+    return std::make_shared<UnsignedCharValue>(static_cast<unsigned char>(0));
 }
 
 std::shared_ptr<Variable> UnsignedCharType::make_variable(std::shared_ptr<Type> self,std::string name){
-    return std::make_shared<UnsignedCharVariable>(name,0);
+    return std::make_shared<UnsignedCharVariable>(name,static_cast<unsigned char>(0));
 }
 
 bool UnsignedCharType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
@@ -49,14 +49,14 @@ bool UnsignedCharType::allows_implicit_cast(std::shared_ptr<Type> self,std::shar
 std::shared_ptr<Value> UnsignedCharType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
     if(is(self->get_type(),other)){
         return self;
-    }else if(CHECKPTR(other,IntType)){
-        return std::make_shared<IntValue>(std::dynamic_pointer_cast<UnsignedCharValue>(self)->get());
-    }else if(CHECKPTR(other,FloatType)){
-        return std::make_shared<FloatValue>(std::dynamic_pointer_cast<UnsignedCharValue>(self)->get());
-    }else if(CHECKPTR(other,CharType)){
-        return std::make_shared<CharValue>(std::dynamic_pointer_cast<UnsignedCharValue>(self)->get());
-    }else if(CHECKPTR(other,UnsignedIntType)){
-        return std::make_shared<UnsignedIntValue>(std::dynamic_pointer_cast<UnsignedCharValue>(self)->get());
+	}else if(CHECKPTR(other,IntType)){
+		return std::make_shared<IntValue>(static_cast<int>(std::dynamic_pointer_cast<UnsignedCharValue>(self)->get()));
+	}else if(CHECKPTR(other,CharType)){
+		return std::make_shared<CharValue>(static_cast<char>(std::dynamic_pointer_cast<UnsignedCharValue>(self)->get()));
+	}else if(CHECKPTR(other,FloatType)){
+		return std::make_shared<FloatValue>(static_cast<float>(std::dynamic_pointer_cast<UnsignedCharValue>(self)->get()));
+	}else if(CHECKPTR(other,UnsignedIntType)){
+		return std::make_shared<UnsignedIntValue>(static_cast<unsigned int>(std::dynamic_pointer_cast<UnsignedCharValue>(self)->get()));
     }else{
         return Type::cast(self,other);//throws
     }

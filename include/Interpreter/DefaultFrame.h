@@ -43,7 +43,7 @@ namespace Interpreter{
             std::shared_ptr<class Expression> vardefitem_to_assignment(std::shared_ptr<Parser::VariableDefinitionItem> vardef);
             bool is_function=false;
             DefaultFrame * function_statics=nullptr;
-            Function * func=nullptr;
+            Function * self_function =nullptr;
             void register_function(std::shared_ptr<Function> func);
             void add_parameters(std::vector<FunctionParameter>);
             void add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global=false);

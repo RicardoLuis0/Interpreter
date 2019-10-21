@@ -250,7 +250,7 @@ int test_exec(){
         std::cout<<"\n\nuncaught exception: "<<e.what()<<"\n";
         throw;
     }
-    return 1;
+    //return 1;
 }
 
 int main(int argc,char ** argv){
