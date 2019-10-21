@@ -8,3 +8,4 @@ doxygen/
 .vscode/
 *.cscope_file_list
 *.dll
+.vs/
