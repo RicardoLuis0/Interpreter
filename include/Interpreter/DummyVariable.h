@@ -8,6 +8,9 @@ namespace Interpreter {
     class DummyVariable : public virtual Variable , public virtual DummyValue {
         public:
             DummyVariable(std::shared_ptr<Type>);
+#ifdef _MSC_VER
+            using DummyValue::*;
+#endif
     };
 }
 

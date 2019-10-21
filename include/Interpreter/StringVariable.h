@@ -8,6 +8,9 @@ namespace Interpreter {
     class StringVariable : public virtual Variable , public virtual StringValue {
         public:
             StringVariable(std::string,std::string);
+#ifdef _MSC_VER
+            using StringValue::*;
+#endif
     };
 }
 

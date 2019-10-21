@@ -8,6 +8,9 @@ namespace Interpreter {
     class FloatVariable : public virtual Variable , public virtual FloatValue {
         public:
             FloatVariable(std::string,double);
+#ifdef _MSC_VER
+            using FloatValue::*;
+#endif
     };
 }
 

@@ -8,6 +8,9 @@ namespace Interpreter {
     class CharVariable : public virtual Variable , public virtual CharValue {
         public:
             CharVariable(std::string,char);
+#ifdef _MSC_VER
+            using CharValue::*;
+#endif
     };
 }
 

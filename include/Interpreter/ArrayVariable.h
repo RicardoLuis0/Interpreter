@@ -10,6 +10,9 @@ namespace Interpreter {
             ArrayVariable(std::string,std::shared_ptr<ArrayType>);
             ArrayVariable(std::string,std::shared_ptr<ArrayValue>);
             ArrayVariable(std::string,std::shared_ptr<ArrayType>,std::vector<std::shared_ptr<Value>>);
+#ifdef _MSC_VER
+            using ArrayValue::*;
+#endif
     };
 }
 

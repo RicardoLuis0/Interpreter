@@ -8,6 +8,9 @@ namespace Interpreter {
     class AnyVariable : public virtual Variable , public virtual AnyValue {
         public:
             AnyVariable(std::string);
+#ifdef _MSC_VER
+            using AnyValue::*;
+#endif
     };
 }
 
