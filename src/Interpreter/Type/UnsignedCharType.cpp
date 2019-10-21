@@ -141,7 +141,7 @@ std::shared_ptr<Value> UnsignedCharType::get_unary_operator_result(int op,std::s
         if(op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT||op==SYMBOL_LOGICAL_NOT){
             return std::make_shared<DummyVariable>(self->get_type());
         }else if(op==SYMBOL_PLUS||op==SYMBOL_MINUS){
-            return std::make_shared<DummyValue>(self->get_type());
+            return std::make_shared<DummyValue>(Type::char_type());
         }
     }else if(op==SYMBOL_INCREMENT||op==SYMBOL_DECREMENT||op==SYMBOL_LOGICAL_NOT){
         return std::make_shared<DummyValue>(self->get_type());

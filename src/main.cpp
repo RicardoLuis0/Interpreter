@@ -38,14 +38,9 @@
 #include "Interpreter/ArrayValue.h"
 #include "Interpreter/StringValue.h"
 #include <cstring>
+#include <algorithm>
 
 #include "preprocessor.h"
-#if defined (__WIN32__)
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
-#else
-#include <unistd.h>
-#endif // __WIN32__
 
 //TODO update docs
 /**
@@ -66,7 +61,7 @@ int exec(std::string filename,int argc,char ** argv){
         std::vector<std::shared_ptr<Lexer::Token>> tokens(lexer.tokenize_from_file(filename));
         Console::changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
         std::vector<std::shared_ptr<Parser::Definition>> deflist;
-        Parser::parserProgress p {data:tokens,location:0};
+        Parser::parserProgress p(tokens);
         while(p.get_nothrow()!=nullptr){
             deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
         }
@@ -163,11 +158,11 @@ int test_exec(){
                     try{
                         tokens=lexer.tokenize_from_file("examples/"+filename);
                         Console::changeDir("examples");
-                    }catch(MyExcept::FileError &e2){
+                    }catch(MyExcept::FileError &e3){
                         try{
                             tokens=lexer.tokenize_from_file("examples/"+filename+".txt");
                             Console::changeDir("examples");
-                        }catch(MyExcept::FileError &e2){
+                        }catch(MyExcept::FileError &e4){
                             std::cout<<e.what()<<", 'exit' 'quit' or 'q' to cancel\n";
                             continue;
                         }
@@ -177,7 +172,7 @@ int test_exec(){
             break;
         }
         //Console::clear();
-        Parser::parserProgress p {data:tokens,location:0};
+        Parser::parserProgress p(tokens);
         deflist.clear();
         while(p.get_nothrow()!=nullptr){
             deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
@@ -292,7 +287,7 @@ int main(int argc,char ** argv){
                 std::cout<<e.what()<<"Could not open file '"+filename+"'";
                 return 1;
             }
-            Parser::parserProgress p {data:tokens,location:0};
+            Parser::parserProgress p(tokens);
             while(p.get_nothrow()!=nullptr){
                 Parser::DefinitionMatcher().makeMatch(p);
             }
@@ -731,7 +726,7 @@ void test_expressions(){
             }
             break;
         }
-        Parser::parserProgress p {data:tokens,location:0};
+        Parser::parserProgress p(tokens);
         std::shared_ptr<Parser::Expression> expr=Parser::ExpressionMatcher().makeMatch(p);
         print_expression(0,expr);
     }catch(MyExcept::ParseError &e){
@@ -763,7 +758,7 @@ void test_lines(){
             }
             break;
         }
-        Parser::parserProgress p {data:tokens,location:0};
+        Parser::parserProgress p(tokens);
         std::shared_ptr<Parser::Line> line=Parser::LineMatcher().makeMatch(p);
         print_line(0,line);
     }catch(MyExcept::ParseError &e){
@@ -806,7 +801,7 @@ void test_definitions(){
             }
             break;
         }
-        Parser::parserProgress p {data:tokens,location:0};
+        Parser::parserProgress p(tokens);
         while(p.get_nothrow()!=nullptr){
             deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
         }

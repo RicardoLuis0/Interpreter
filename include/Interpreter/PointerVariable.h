@@ -4,6 +4,14 @@
 #include "Interpreter/Variable.h"
 #include "Interpreter/PointerValue.h"
 
+#ifdef _MSC_VER
+
+//disable inheritance via dominance warning for MSVC
+
+#pragma warning( disable : 4250 )
+
+#endif
+
 namespace Interpreter {
     class PointerVariable : public virtual Variable , public virtual PointerValue {
         public:

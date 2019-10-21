@@ -26,6 +26,14 @@
 #error Missing VALUE_TYPE_TYPE
 #endif
 
+#ifdef _MSC_VER
+
+//disable type conversion loss of data warning for MSVC
+
+#pragma warning( disable : 4244 )
+
+#endif
+
 #define CHECK(type) (std::shared_ptr<type> val=std::dynamic_pointer_cast<type>(other))
 
 #define MATH_OPERATION(type,method_operator) return std::make_shared<type>( VALUE_NAME method_operator val->get())
@@ -236,11 +244,23 @@ std::shared_ptr<Type> CLASS_NAME::get_type(){
 #include "interpreter_intlike_inttype_assignment_method.inc.h"
 
 std::shared_ptr<Value> CLASS_NAME::unary_pre_plus(){
+#if CLASS_NAME == UnsignedIntValue
+	return std::make_shared<IntValue>(static_cast<int>(VALUE_NAME));
+#elif CLASS_NAME == UnsignedCharValue
+	return std::make_shared<CharValue>(static_cast<char>(VALUE_NAME));
+#else
     return std::make_shared<CLASS_NAME>(VALUE_NAME);
+#endif
 }
 
 std::shared_ptr<Value> CLASS_NAME::unary_pre_minus(){
+#if CLASS_NAME == UnsignedIntValue
+	return std::make_shared<IntValue>(-static_cast<int>(VALUE_NAME));
+#elif CLASS_NAME == UnsignedCharValue
+	return std::make_shared<CharValue>(-static_cast<char>(VALUE_NAME));
+#else
     return std::make_shared<CLASS_NAME>(-VALUE_NAME);
+#endif
 }
 
 std::shared_ptr<Value> CLASS_NAME::unary_pre_logical_not(){

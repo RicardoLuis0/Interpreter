@@ -6,6 +6,10 @@
 
 using namespace Parser;
 
+parserProgress::parserProgress(const std::vector<std::shared_ptr<Lexer::Token>> &d, int l):data(d),location(l) {
+
+}
+
 int parserProgress::get_line(int offset){
     return get_nothrow_nonull()->line;
 }
