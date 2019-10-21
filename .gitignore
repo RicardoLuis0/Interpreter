@@ -14,3 +14,4 @@ obj/
 bin/
 Debug/
 Release/
+*.vcxproj.user
