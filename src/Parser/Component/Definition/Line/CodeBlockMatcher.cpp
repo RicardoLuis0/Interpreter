@@ -15,8 +15,10 @@ std::shared_ptr<CodeBlock> CodeBlockMatcher::makeMatch(parserProgress &p){
     bool is_symbol=false;
     if(p.isSymbol(SYMBOL_CURLY_BRACKET_OPEN)){
         while(p.in_range(0)){
-			is_symbol = p.isSymbol(SYMBOL_CURLY_BRACKET_CLOSE);
-			if(!is_symbol)break;
+			if(p.isSymbol(SYMBOL_CURLY_BRACKET_CLOSE)){
+				is_symbol=true;
+				break;
+			}
             lines.push_back(LineMatcher().makeMatch(p));
         }
         if(!p.in_range(0)&&!is_symbol){

@@ -33,7 +33,6 @@ std::shared_ptr<VarType> VarTypeMatcher::makeMatch(parserProgress &p){
             if(!p.isSymbol(SYMBOL_GREATER)){
                 throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '>', got '"+p.get_nothrow_nonull()->get_literal()+"'");
             }
-            
         }
         vt=std::make_shared<VarType>(kw,is_const,has_sign,sign,vt2,line_start,p.get_line(-1));
     }else{
