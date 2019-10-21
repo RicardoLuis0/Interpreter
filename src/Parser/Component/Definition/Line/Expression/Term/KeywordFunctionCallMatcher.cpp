@@ -26,7 +26,7 @@ std::shared_ptr<KeywordFunctionCall> KeywordFunctionCallMatcher::makeMatch(parse
     std::shared_ptr<ExpressionList> arguments=nullptr;
     try{
         arguments = ExpressionListMatcher().makeMatch(p);
-    }catch(MyExcept::NoMatchException &e){
+    }catch(MyExcept::NoMatchException &){
         p.location=location_backup;
         if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE)){
             throw;

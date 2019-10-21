@@ -22,6 +22,14 @@
 
 #include "Util/Console.h"
 
+#ifdef _MSC_VER
+
+//disable c runtime deprecation warnings for MSVC
+
+#pragma warning( disable : 4996 )
+
+#endif
+
 //NOTE native functions to make later
 //void printvals(...) DONE;
 //string sprintf(string format,...) DONE
@@ -992,7 +1000,7 @@ namespace Interpreter {
 }
 
 void Interpreter::init_deflib(DefaultFrame * d){
-    srand(time(NULL));
+    srand(static_cast<unsigned int>(time(NULL)));
     d->register_function(std::make_shared<Interpreter::printf>());
     d->register_function(std::make_shared<Interpreter::sprintf>());
     d->register_function(std::make_shared<Interpreter::printvals>());

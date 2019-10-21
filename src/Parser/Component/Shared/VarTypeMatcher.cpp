@@ -46,7 +46,7 @@ std::shared_ptr<VarType> VarTypeMatcher::makeMatch(parserProgress &p){
         while(p.isSymbol(SYMBOL_SQUARE_BRACKET_OPEN)){
             try{
                 vt->array_sizes.insert(vt->array_sizes.begin(),ExpressionMatcher().makeMatch(p));
-            }catch(MyExcept::NoMatchException &e){
+            }catch(MyExcept::NoMatchException &){
                 vt->array_sizes.insert(vt->array_sizes.begin(),nullptr);
             }
             if(!p.isSymbol(SYMBOL_SQUARE_BRACKET_CLOSE)){
