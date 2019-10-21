@@ -758,7 +758,7 @@ namespace Interpreter {
             std::shared_ptr<FILE_Value> f=std::dynamic_pointer_cast<FILE_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value());
             if(f){
                 if(f->f){
-                    std::make_shared<IntValue>(::ftell(f->f));
+                    return std::make_shared<IntValue>(::ftell(f->f));
                 }
             }
             return std::make_shared<IntValue>(-1);
