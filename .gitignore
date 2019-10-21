@@ -1,6 +1,5 @@
 *.save
 obj/
-bin/
 doxygen/
 *.depend
 *.layout
@@ -8,4 +7,10 @@ doxygen/
 .vscode/
 *.cscope_file_list
 *.dll
+*.obj
+*.exe
 .vs/
+obj/
+bin/
+Debug/
+Release/
