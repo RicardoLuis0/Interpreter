@@ -8,9 +8,6 @@ namespace Interpreter {
     class UnsignedCharVariable : public virtual Variable , public virtual UnsignedCharValue {
         public:
             UnsignedCharVariable(std::string,unsigned char);
-#ifdef _MSC_VER
-            using UnsignedCharValue::*;
-#endif
     };
 }
 
