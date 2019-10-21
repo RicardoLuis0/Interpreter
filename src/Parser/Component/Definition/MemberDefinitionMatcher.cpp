@@ -47,12 +47,12 @@ std::shared_ptr<MemberDefinition> MemberDefinitionMatcher::makeMatch(parserProgr
     try{
         location_backup=p.location;
         return std::make_shared<MemberDefinition>(is_override,scope,mod,MEMBER_TYPE_FUNCTION,FunctionDefinitionMatcher().makeMatch(p),line_start,p.get_line(-1));
-    }catch(MyExcept::NoMatchException &e){
+    }catch(MyExcept::NoMatchException &){
         p.location=location_backup;
         std::shared_ptr<VarType> vt=nullptr;
         try{
             vt=VarTypeMatcher().makeMatch(p);
-        }catch(MyExcept::NoMatchException &e){
+        }catch(MyExcept::NoMatchException &){
             vt=nullptr;
         }
         if(vt&&p.peekType(Lexer::TOKEN_TYPE_WORD)&&p.peekSymbol(SYMBOL_PARENTHESIS_OPEN,1))throw;//if is function definition rethrow

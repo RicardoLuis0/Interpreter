@@ -21,7 +21,7 @@ std::shared_ptr<LineResult> WhileStatement::run(ExecFrame * context){
         bool do_code=false;
         try{
             do_code=std::dynamic_pointer_cast<IntValue>(val->get_type()->cast(val,Type::int_type()))->get()!=0;
-        }catch(std::runtime_error &e){
+        }catch(std::runtime_error &){
             throw MyExcept::InterpreterRuntimeError(source_line,"failed to cast "+val->get_type()->get_name()+" to int, condition must be convertible to int");
         }
         if(do_code){

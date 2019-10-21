@@ -21,7 +21,7 @@ std::shared_ptr<ExpressionList> ExpressionListMatcher::makeMatch(parserProgress 
             }else{
                 return std::make_shared<ExpressionList>(list,line_start,p.get_line(-1));
             }
-        }catch(MyExcept::NoMatchException &e){
+        }catch(MyExcept::NoMatchException &){
             p.location=location_backup;
             return std::make_shared<ExpressionList>(list,line_start,p.get_line(-1));
         }

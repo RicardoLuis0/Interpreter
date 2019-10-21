@@ -154,15 +154,15 @@ int test_exec(){
                 try{
                     tokens=lexer.tokenize_from_file(filename+".txt");
                     Console::changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
-                }catch(MyExcept::FileError &e2){
+                }catch(MyExcept::FileError &){
                     try{
                         tokens=lexer.tokenize_from_file("examples/"+filename);
                         Console::changeDir("examples");
-                    }catch(MyExcept::FileError &e3){
+                    }catch(MyExcept::FileError &){
                         try{
                             tokens=lexer.tokenize_from_file("examples/"+filename+".txt");
                             Console::changeDir("examples");
-                        }catch(MyExcept::FileError &e4){
+                        }catch(MyExcept::FileError &){
                             std::cout<<e.what()<<", 'exit' 'quit' or 'q' to cancel\n";
                             continue;
                         }

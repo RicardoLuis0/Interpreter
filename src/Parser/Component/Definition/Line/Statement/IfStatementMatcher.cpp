@@ -21,7 +21,7 @@ std::shared_ptr<IfStatement> IfStatementMatcher::makeMatch(parserProgress &p){
     int location_backup=p.location;
     try{
         else_stmt=ElseStatementMatcher().makeMatch(p);
-    }catch(MyExcept::NoMatchException &e){
+    }catch(MyExcept::NoMatchException &){
         p.location=location_backup;
         if(p.isKeyword(KEYWORD_ELSE))throw;
         else_stmt=nullptr;

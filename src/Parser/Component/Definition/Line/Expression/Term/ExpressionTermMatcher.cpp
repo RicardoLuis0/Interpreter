@@ -21,7 +21,7 @@ std::shared_ptr<ExpressionTerm> ExpressionTermMatcher::makeMatch(parserProgress 
     std::shared_ptr<ExpressionTerm> term=nullptr;
     try{
         term=std::make_shared<ExpressionTerm>(ExpressionGroupMatcher().makeMatch(p),EXPRESSION_TERM_EXPRESSION_GROUP,line_start,p.get_line(-1));
-    }catch(MyExcept::NoMatchException &e){
+    }catch(MyExcept::NoMatchException &){
         if(p.peekSymbol(SYMBOL_PARENTHESIS_OPEN)){
             //if it is definitely an expression group, re-throw previous exception
             throw;
@@ -29,7 +29,7 @@ std::shared_ptr<ExpressionTerm> ExpressionTermMatcher::makeMatch(parserProgress 
         p.location=location_backup;
         try{
             term=std::make_shared<ExpressionTerm>(FunctionCallMatcher().makeMatch(p),EXPRESSION_TERM_FUNCTION_CALL,line_start,p.get_line(-1));
-        }catch(MyExcept::NoMatchException &e){
+        }catch(MyExcept::NoMatchException &){
             p.location=location_backup;
             if(p.peekType(Lexer::TOKEN_TYPE_WORD)&&p.peekSymbol(SYMBOL_PARENTHESIS_OPEN,1)){
                 //if it is definitely a function call, re-throw previous exception
@@ -37,7 +37,7 @@ std::shared_ptr<ExpressionTerm> ExpressionTermMatcher::makeMatch(parserProgress 
             }
             try{
                 term=std::make_shared<ExpressionTerm>(KeywordFunctionCallMatcher().makeMatch(p),EXPRESSION_TERM_KEYWORD_FUNCTION_CALL,line_start,p.get_line(-1));
-            }catch(MyExcept::NoMatchException &e){
+            }catch(MyExcept::NoMatchException &){
                 p.location=location_backup;
                 if(p.isKeyword({KEYWORD_IS,KEYWORD_CAST,KEYWORD_TYPEOF,KEYWORD_TYPE})){
                     //if it is definitely a keyword function call, re-throw previous exception
@@ -45,7 +45,7 @@ std::shared_ptr<ExpressionTerm> ExpressionTermMatcher::makeMatch(parserProgress 
                 }
                 try{
                     term=std::make_shared<ExpressionTerm>(UnaryOperationMatcher().makeMatch(p),EXPRESSION_TERM_UNARY_OPERATION,line_start,p.get_line(-1));
-                }catch(MyExcept::NoMatchException &e){
+                }catch(MyExcept::NoMatchException &){
                     p.location=location_backup;
                     std::shared_ptr<Lexer::Token> temp_token;
                     if(temp_token=p.isType(Lexer::TOKEN_TYPE_INTEGER)){//int

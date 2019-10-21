@@ -5,6 +5,14 @@
 
 #include "Util/read_file.h"
 
+#ifdef _MSC_VER
+
+//disable c runtime deprecation warnings for MSVC
+
+#pragma warning( disable : 4996 )
+
+#endif
+
 void read_file(std::string filename,std::string &output){
     FILE * f;
     f=fopen(filename.c_str(),"r");

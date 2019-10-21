@@ -15,7 +15,7 @@ std::shared_ptr<Expression> ExpressionMatcher::makeMatch(parserProgress &p){
     int location_backup=p.location;
     try{
         return order_expression(std::make_shared<Expression>(BinaryOperationMatcher().makeMatch(p),EXPRESSION_BINARY_OPERATION,line_start,p.get_line(-1)));//order with operator precedence, WIP?
-    }catch(MyExcept::NoMatchException &e){
+    }catch(MyExcept::NoMatchException &){
         p.location=location_backup;
         auto term=std::make_shared<Expression>(ExpressionTermMatcher().makeMatch(p),EXPRESSION_TERM,line_start,p.get_line(-1));
         if(BinaryOperationMatcher().checkIsBinaryOperator(p)){

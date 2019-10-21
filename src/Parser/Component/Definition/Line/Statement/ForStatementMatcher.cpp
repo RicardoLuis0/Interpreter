@@ -19,12 +19,12 @@ std::shared_ptr<ForStatement> ForStatementMatcher::makeMatch(parserProgress &p){
     int location_backup=p.location;
     try{
         pre=ExpressionMatcher().makeMatch(p);
-    }catch(MyExcept::NoMatchException &e){
+    }catch(MyExcept::NoMatchException &){
         p.location=location_backup;
         pre=nullptr;
         try{
             vardef_pre=VariableDefinitionMatcher().makeMatch(p);
-        }catch(MyExcept::NoMatchException &e){
+        }catch(MyExcept::NoMatchException &){
             vardef_pre=nullptr;
             p.location=location_backup;
             if(!p.peekSymbol(SYMBOL_SEMICOLON))throw;//if next symbol isn't a semicolon, rethrow
@@ -34,7 +34,7 @@ std::shared_ptr<ForStatement> ForStatementMatcher::makeMatch(parserProgress &p){
     location_backup=p.location;
     try{
         cond=ExpressionMatcher().makeMatch(p);
-    }catch(MyExcept::NoMatchException &e){
+    }catch(MyExcept::NoMatchException &){
         p.location=location_backup;
         if(!p.peekSymbol(SYMBOL_SEMICOLON))throw;//if next symbol isn't a semicolon, rethrow
         cond=nullptr;
@@ -43,7 +43,7 @@ std::shared_ptr<ForStatement> ForStatementMatcher::makeMatch(parserProgress &p){
     location_backup=p.location;
     try{
         inc=ExpressionMatcher().makeMatch(p);
-    }catch(MyExcept::NoMatchException &e){
+    }catch(MyExcept::NoMatchException &){
         p.location=location_backup;
         if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE))throw;//if next symbol isn't a ')', rethrow
         inc=nullptr;

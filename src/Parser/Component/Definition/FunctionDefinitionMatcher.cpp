@@ -27,13 +27,13 @@ std::shared_ptr<FunctionDefinition> FunctionDefinitionMatcher::makeMatch(parserP
             location_backup=p.location;
             params.push_back(FunctionDefinitionParameterMatcher().makeMatch(p));
         }while(p.isSymbol(SYMBOL_COMMA));
-    }catch(MyExcept::NoMatchException &e){
+    }catch(MyExcept::NoMatchException &){
         p.location=location_backup;
         if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE)){
             try{
                 location_backup=p.location;
                 variadic_type=VarTypeMatcher().makeMatch(p);
-            }catch(MyExcept::NoMatchException &e){
+            }catch(MyExcept::NoMatchException &){
                 p.location=location_backup;
             }
             if(!p.isSymbol(SYMBOL_VARIADIC)) throw;

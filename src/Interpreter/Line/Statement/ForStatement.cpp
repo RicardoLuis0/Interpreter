@@ -34,7 +34,7 @@ std::shared_ptr<LineResult> ForStatement::run(ExecFrame * context){
         bool do_code=false;
         try{
             do_code=!condition||std::dynamic_pointer_cast<IntValue>(val->get_type()->cast(val,Type::int_type()))->get()!=0;//if condition is null, treat it as always true
-        }catch(std::runtime_error &e){
+        }catch(std::runtime_error &){
             throw MyExcept::InterpreterRuntimeError(source_line,"failed to cast "+val->get_type()->get_name()+" to int, condition must be convertible to int");
         }
         if(do_code){

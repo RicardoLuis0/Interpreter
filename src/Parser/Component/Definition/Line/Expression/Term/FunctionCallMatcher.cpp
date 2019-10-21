@@ -20,7 +20,7 @@ std::shared_ptr<FunctionCall> FunctionCallMatcher::makeMatch(parserProgress &p){
     std::shared_ptr<ExpressionList> arguments(nullptr);
     try{
         arguments = ExpressionListMatcher().makeMatch(p);
-    }catch(MyExcept::NoMatchException &e){
+    }catch(MyExcept::NoMatchException &){
         p.location=location_backup;
         if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE)){
             throw;

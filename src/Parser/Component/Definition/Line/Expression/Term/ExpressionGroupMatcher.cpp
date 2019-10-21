@@ -14,7 +14,7 @@ std::shared_ptr<ExpressionGroup> ExpressionGroupMatcher::makeMatch(parserProgres
         std::shared_ptr<Expression> expression(nullptr);
         try{
             expression=ExpressionMatcher().makeMatch(p);
-        }catch(MyExcept::NoMatchException &e){
+        }catch(MyExcept::NoMatchException &){
             p.location=location_backup;
             if(p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
                 return std::make_shared<ExpressionGroup>(nullptr,line_start,p.get_line(-1));//don't know if i should still allow empty ExpressionGroups

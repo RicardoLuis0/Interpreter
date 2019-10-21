@@ -13,6 +13,15 @@
 #include <termios.h>
 #include <cstdio>
 #endif
+
+#ifdef _MSC_VER
+
+//disable c runtime deprecation warnings for MSVC
+
+#pragma warning( disable : 4996 )
+
+#endif
+
 namespace Console{
 
 #if defined (__WIN32__) || defined (__WIN32) || defined (WIN32)
