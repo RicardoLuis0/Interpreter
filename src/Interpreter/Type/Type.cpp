@@ -19,6 +19,8 @@
 #include "Lexer/IntegerToken.h"
 #include "Util/InterpreterUtilDefinesMisc.h"
 #include "Interpreter/Expression.h"
+#include "Interpreter/ReferenceType.h"
+#include "Interpreter/ReferenceVariable.h"
 #include "MyExcept/MyExcept.h"
 
 using namespace Interpreter;
@@ -175,6 +177,10 @@ std::shared_ptr<Value> Type::get_unary_operator_result(int op,std::shared_ptr<Va
         if(op==SYMBOL_BITWISE_AND){
             if(std::dynamic_pointer_cast<Variable>(self)==nullptr){
                 throw MyExcept::SyntaxError(line_start,line_end,"can't get address of non-variable");//technically possible but nah
+            }else if(auto dummy=std::dynamic_pointer_cast<DummyValue>(self)){
+                if(auto ref=std::dynamic_pointer_cast<ReferenceType>(dummy->get_type())){
+                    return std::make_shared<DummyValue>(pointer_type(ref->get_type()));//'&' on references returns pointer to original value, not to reference
+                }
             }
             return std::make_shared<DummyValue>(pointer_type(self->get_type()));
         }
@@ -191,6 +197,9 @@ std::shared_ptr<Value> Type::call_operator(int op,std::shared_ptr<Value> self,st
 std::shared_ptr<Value> Type::call_unary_operator(int op,std::shared_ptr<Value> self,bool pre){
     if(pre){
         if(op==SYMBOL_BITWISE_AND){
+            if(auto ref=std::dynamic_pointer_cast<ReferenceVariable>(self)){
+                return std::make_shared<PointerValue>(pointer_type(ref->get_orig_type()),ref->get_value());//'&' on references returns pointer to original value, not to reference
+            }
             return std::make_shared<PointerValue>(pointer_type(self->get_type()),self);
         }
         throw std::runtime_error("invalid unary pre operator '"+get_op_str(op)+"'");

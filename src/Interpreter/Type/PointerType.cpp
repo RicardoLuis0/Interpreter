@@ -41,8 +41,12 @@ std::shared_ptr<Type> PointerType::get_type(){
 }
 
 bool PointerType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> o){
-    std::shared_ptr<PointerType> other=std::dynamic_pointer_cast<PointerType>(o);
-    return (other&&(type->is(type,Type::void_type())||other->type->is(other->type,type)||other->type->is(other->type,Type::void_type())))||(CHECKPTR(o,AnyType));
+    if(auto ptr=std::dynamic_pointer_cast<PointerType>(o)){
+        return type->is(type,Type::void_type())||ptr->type->is(ptr->type,Type::void_type())||ptr->type->is(ptr->type,type);
+        //if this or the other is a void pointer or the same type
+        //TODO restrict more for void pointer, only allow conversion from non-void to void without casting
+    }
+    return CHECKPTR(o,AnyType);
 }
 
 bool PointerType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){

@@ -112,6 +112,8 @@
 		<Unit filename="include/Interpreter/PointerVariable.h" />
 		<Unit filename="include/Interpreter/PrimitiveType.h" />
 		<Unit filename="include/Interpreter/PrimitiveValue.h" />
+		<Unit filename="include/Interpreter/ReferenceType.h" />
+		<Unit filename="include/Interpreter/ReferenceVariable.h" />
 		<Unit filename="include/Interpreter/ReturnStatement.h" />
 		<Unit filename="include/Interpreter/StringType.h" />
 		<Unit filename="include/Interpreter/StringValue.h" />
@@ -262,6 +264,7 @@
 		<Unit filename="src/Interpreter/Type/IntType.cpp" />
 		<Unit filename="src/Interpreter/Type/PointerType.cpp" />
 		<Unit filename="src/Interpreter/Type/PrimitiveType.cpp" />
+		<Unit filename="src/Interpreter/Type/ReferenceType.cpp" />
 		<Unit filename="src/Interpreter/Type/StringType.cpp" />
 		<Unit filename="src/Interpreter/Type/Type.cpp" />
 		<Unit filename="src/Interpreter/Type/TypeType.cpp" />
@@ -296,6 +299,7 @@
 		<Unit filename="src/Interpreter/Variable/FloatVariable.cpp" />
 		<Unit filename="src/Interpreter/Variable/IntVariable.cpp" />
 		<Unit filename="src/Interpreter/Variable/PointerVariable.cpp" />
+		<Unit filename="src/Interpreter/Variable/ReferenceVariable.cpp" />
 		<Unit filename="src/Interpreter/Variable/StringVariable.cpp" />
 		<Unit filename="src/Interpreter/Variable/TypeVariable.cpp" />
 		<Unit filename="src/Interpreter/Variable/UnsignedCharVariable.cpp" />
