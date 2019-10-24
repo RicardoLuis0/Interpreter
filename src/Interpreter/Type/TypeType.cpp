@@ -27,7 +27,7 @@ std::shared_ptr<Variable> TypeType::make_variable(std::shared_ptr<Type> self,std
 }
 
 bool TypeType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other) {
-    return CHECKPTR(other,TypeType)||CHECKPTR(other,AnyType);
+    return CHECKPTR(other,TypeType)||Type::is(self,other);
 }
 
 std::string TypeType::get_name() {

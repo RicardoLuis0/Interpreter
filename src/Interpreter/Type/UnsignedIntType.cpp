@@ -39,7 +39,7 @@ std::shared_ptr<Variable> UnsignedIntType::make_variable(std::shared_ptr<Type> s
 }
 
 bool UnsignedIntType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return CHECKPTR(other,UnsignedIntType)||CHECKPTR(other,AnyType);
+    return CHECKPTR(other,UnsignedIntType)||Type::is(self,other);
 }
 
 bool UnsignedIntType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){

@@ -46,13 +46,13 @@ int UserFunction::get_line(){
 }
 
 std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args){
-    std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>> args_o;
-    int i=0;
-    if(function->parameters.size()!=args.size()&&(function->variadic&&function->parameters.size()>args.size())){
-        throw MyExcept::InterpreterRuntimeError(function->line_start,"wrong parameter count");
+    std::map<std::string,std::pair<std::shared_ptr<Value>,std::shared_ptr<Type>>> args_o;
+    if(((!function->variadic)&&function->parameters.size()!=args.size())||(function->variadic&&function->parameters.size()>args.size())){
+        throw MyExcept::InterpreterRuntimeError(function->line_start,args.size()<parameters.size()?"too few arguments":"too many arguments");
     }
-    for(std::shared_ptr<Parser::FunctionDefinitionParameter> param:function->parameters){
-        args_o.insert({param->name,{args[i++],{param->is_reference,Type::from_vartype(frame->parent,param->type)}}});
+    int i=0;
+    for(auto param:parameters){
+        args_o.insert({param.name,{args[i++],param.type}});
     }
     std::shared_ptr<ExecFrame> f(code->getContext(parent_frame));
     f->set_args(args_o);

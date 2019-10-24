@@ -2,18 +2,11 @@
 
 #include "Util/InterpreterUtilDefinesMisc.h"
 
-#include "Interpreter/AnyType.h"
-#include "Interpreter/IntVariable.h"
-#include "Interpreter/FloatVariable.h"
-#include "Interpreter/StringVariable.h"
-#include "Interpreter/ArrayVariable.h"
-#include "Interpreter/PointerVariable.h"
-#include "Interpreter/PointerType.h"
-#include "Interpreter/UserFunction.h"
-#include "Interpreter/IntType.h"
-#include "Interpreter/FloatType.h"
-#include "Interpreter/StringType.h"
 #include "Interpreter/ArrayType.h"
+#include "Interpreter/Type.h"
+#include "Interpreter/Variable.h"
+#include "Interpreter/ReferenceType.h"
+#include "Interpreter/ReferenceVariable.h"
 #include "Interpreter/Expression.h"
 #include "MyExcept/MyExcept.h"
 #include <typeinfo>
@@ -44,27 +37,24 @@ std::shared_ptr<Function> ExecFrame::get_function(std::string name,std::vector<F
     return defaults->get_function(name,param_types);
 }
 
-void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::shared_ptr<Type> t,bool reference){
-    if(CHECKPTR(t,AnyType)){
-        variables[s]=(reference)?std::dynamic_pointer_cast<Variable>(val):val->clone_var(s);
-    }else if(CHECKPTR(t,IntType)){
-        variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<IntVariable>(val):std::dynamic_pointer_cast<IntValue>(val->get_type()->cast(val,t))->clone_var(s);
-    }else if(CHECKPTR(t,FloatType)){
-        variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<FloatVariable>(val):std::dynamic_pointer_cast<FloatValue>(val->get_type()->cast(val,t))->clone_var(s);
-    }else if(CHECKPTR(t,StringType)){
-        variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<StringVariable>(val):std::dynamic_pointer_cast<StringValue>(val->get_type()->cast(val,t))->clone_var(s);
-    }else if(CHECKPTR(t,ArrayType)){
-        variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<ArrayVariable>(val):std::dynamic_pointer_cast<ArrayValue>(val->get_type()->cast(val,t))->clone_var(s);
-    }else if(CHECKPTR(t,PointerType)){
-        variables[s]=(reference&&val->get_type()->is(val->get_type(),t))?std::dynamic_pointer_cast<PointerVariable>(val):std::dynamic_pointer_cast<PointerValue>(val->get_type()->cast(val,t))->clone_var(s);
+void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::shared_ptr<Type> t){
+    if(auto ref=std::dynamic_pointer_cast<ReferenceType>(t)){
+        if(auto var=std::dynamic_pointer_cast<Variable>(val)){
+            if(var->get_type()->is(var->get_type(),ref->get_type())){
+                variables[s]=std::make_shared<ReferenceVariable>(s,ref,var);
+				return;
+            }
+        }
     }else{
-        throw std::runtime_error("classes not implemented");
+        variables[s]=val->clone_var(s);
+		return;
     }
+    throw std::runtime_error("invalid reference type");
 }
 
-void ExecFrame::set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>> args){
-   for(std::pair<std::string,std::pair<std::shared_ptr<Value>,std::pair<bool,std::shared_ptr<Type>>>> arg:args){
-        set_variable(arg.first,arg.second.first,arg.second.second.second,arg.second.second.first);
+void ExecFrame::set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,std::shared_ptr<Type>>> args){
+   for(std::pair<std::string,std::pair<std::shared_ptr<Value>,std::shared_ptr<Type>>> arg:args){
+        set_variable(arg.first,arg.second.first,arg.second.second);
     }
 }
 

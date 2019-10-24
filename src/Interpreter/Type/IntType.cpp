@@ -39,7 +39,7 @@ std::shared_ptr<Variable> IntType::make_variable(std::shared_ptr<Type> self,std:
 }
 
 bool IntType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return CHECKPTR(other,IntType)||CHECKPTR(other,AnyType);
+    return CHECKPTR(other,IntType)||Type::is(self,other);
 }
 
 bool IntType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){

@@ -2,6 +2,7 @@
 #include "Util/InterpreterUtilDefinesMisc.h"
 #include "Interpreter/Variable.h"
 #include "MyExcept/MyExcept.h"
+#include "Interpreter/ReferenceType.h"
 
 #include <iostream>
 
@@ -22,7 +23,7 @@ ExprPartFnCall::ExprPartFnCall(DefaultFrame * context,std::shared_ptr<Parser::Fu
         if(!vec.empty()){
             std::string error="no match for function '"+ident+"("+FunctionParameter::get_typelist(params)+")'\n\ncandidates:\n";
             for(auto &p:vec){
-                error+="  "+ident+"("+FunctionParameter::get_typelist(p,true)+")\n";
+                error+="  "+ident+"("+FunctionParameter::get_typelist(p)+")\n";
             }
             throw MyExcept::SyntaxError(fn->line_start,fn->line_end,error);
         }else{
@@ -31,9 +32,9 @@ ExprPartFnCall::ExprPartFnCall(DefaultFrame * context,std::shared_ptr<Parser::Fu
     }
     std::vector<FunctionParameter> params2=fnc->get_parameters();
     for(size_t i=0;i<params2.size();i++){//check reference types
-        if(params2[i].is_reference){
+        if(auto ref=std::dynamic_pointer_cast<ReferenceType>(params2[i].type)){
             if(CHECKPTR(arguments[i]->get_dummy_type(),Variable)){
-                if(!(params[i].type->is(params[i].type,params2[i].type)))throw MyExcept::SyntaxError(fn->line_start,fn->line_end,"types "+params[i].type->get_name()+" and "+params2[i].type->get_name()+" don't match for reference argument");
+                if(!(params[i].type->is(params[i].type,ref->get_type())))throw MyExcept::SyntaxError(fn->line_start,fn->line_end,"types "+params[i].type->get_name()+" and "+params2[i].type->get_name()+" don't match");
             }else{
                 throw MyExcept::SyntaxError(fn->line_start,fn->line_end,"argument for reference must be a variable");
             }

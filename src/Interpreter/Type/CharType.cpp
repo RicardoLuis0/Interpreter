@@ -39,7 +39,7 @@ std::shared_ptr<Variable> CharType::make_variable(std::shared_ptr<Type> self,std
 }
 
 bool CharType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return CHECKPTR(other,CharType)||CHECKPTR(other,AnyType);
+    return CHECKPTR(other,CharType)||Type::is(self,other);
 }
 
 bool CharType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){

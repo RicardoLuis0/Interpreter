@@ -46,7 +46,7 @@ bool PointerType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> o){
         //if this or the other is a void pointer or the same type
         //TODO restrict more for void pointer, only allow conversion from non-void to void without casting
     }
-    return CHECKPTR(o,AnyType);
+    return Type::is(self,o);
 }
 
 bool PointerType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){

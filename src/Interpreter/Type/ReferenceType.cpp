@@ -62,7 +62,7 @@ std::shared_ptr<Value> ReferenceType::cast(std::shared_ptr<Value> self,std::shar
 std::shared_ptr<Value> ReferenceType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end){
     if(auto dummy=std::dynamic_pointer_cast<DummyValue>(self)){
         if(auto ref=std::dynamic_pointer_cast<ReferenceType>(dummy->get_type())){
-            return type->get_operator_result(op,std::make_shared<DummyValue>(ref->type),other,line_start,line_end);
+            return type->get_operator_result(op,std::dynamic_pointer_cast<DummyVariable>(self)?std::make_shared<DummyVariable>(ref->type):std::make_shared<DummyValue>(ref->type),other,line_start,line_end);
         }
     }
     throw std::runtime_error("This shouldn't ever happen");
@@ -71,7 +71,7 @@ std::shared_ptr<Value> ReferenceType::get_operator_result(int op,std::shared_ptr
 std::shared_ptr<Value> ReferenceType::get_unary_operator_result(int op,std::shared_ptr<Value> self,bool pre,int line_start,int line_end){
     if(auto dummy=std::dynamic_pointer_cast<DummyValue>(self)){
         if(auto ref=std::dynamic_pointer_cast<ReferenceType>(dummy->get_type())){
-            return type->get_unary_operator_result(op,std::make_shared<DummyValue>(ref->type),pre,line_start,line_end);
+            return type->get_unary_operator_result(op,std::dynamic_pointer_cast<DummyVariable>(self)?std::make_shared<DummyVariable>(ref->type):std::make_shared<DummyValue>(ref->type),pre,line_start,line_end);
         }
     }
     throw std::runtime_error("This shouldn't ever happen");
@@ -79,14 +79,14 @@ std::shared_ptr<Value> ReferenceType::get_unary_operator_result(int op,std::shar
 
 std::shared_ptr<Value> ReferenceType::call_operator(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> o){
     if(auto sref=std::dynamic_pointer_cast<ReferenceVariable>(self)){
-        sref->value->get_type()->call_operator(op,sref->value,o);
+        return sref->value->get_type()->call_operator(op,sref->value,o);
     }
     throw std::runtime_error("This shouldn't ever happen");
 }
 
 std::shared_ptr<Value> ReferenceType::call_unary_operator(int op,std::shared_ptr<Value> self,bool pre){
     if(auto sref=std::dynamic_pointer_cast<ReferenceVariable>(self)){
-        sref->value->get_type()->call_unary_operator(op,sref->value,pre);
+		return sref->value->get_type()->call_unary_operator(op,sref->value,pre);
     }
     throw std::runtime_error("This shouldn't ever happen");
 }

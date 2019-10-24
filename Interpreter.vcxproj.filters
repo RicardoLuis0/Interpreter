@@ -486,6 +486,12 @@
     <ClCompile Include="src\Interpreter\Variable\Variable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Interpreter\Type\ReferenceType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Interpreter\Variable\ReferenceVariable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\deflib.h">
@@ -1002,6 +1008,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Interpreter\Value\interpreter_intlike_simple_math_method.inc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Interpreter\ReferenceType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Interpreter\ReferenceVariable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

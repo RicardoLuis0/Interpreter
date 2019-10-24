@@ -57,10 +57,8 @@ int ArrayType::get_size(){
 bool ArrayType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> o){
     if(auto other=std::dynamic_pointer_cast<ArrayType>(o)){
         return ((size<=0||other->size<0||other->size==size)&&other->type->is(other->type,type));
-    }else if(CHECKPTR(o,AnyType)){
-        return true;
     }else{
-        return false;
+        return Type::is(self,o);
     }
 }
 

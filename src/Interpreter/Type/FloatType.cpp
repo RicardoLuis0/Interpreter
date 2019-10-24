@@ -38,7 +38,7 @@ std::shared_ptr<Variable> FloatType::make_variable(std::shared_ptr<Type> self,st
 }
 
 bool FloatType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return CHECKPTR(other,FloatType)||CHECKPTR(other,AnyType);
+    return CHECKPTR(other,FloatType)||Type::is(self,other);
 }
 
 bool FloatType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){

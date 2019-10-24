@@ -142,6 +142,7 @@
     <ClCompile Include="src\Interpreter\Type\IntType.cpp" />
     <ClCompile Include="src\Interpreter\Type\PointerType.cpp" />
     <ClCompile Include="src\Interpreter\Type\PrimitiveType.cpp" />
+    <ClCompile Include="src\Interpreter\Type\ReferenceType.cpp" />
     <ClCompile Include="src\Interpreter\Type\StringType.cpp" />
     <ClCompile Include="src\Interpreter\Type\Type.cpp" />
     <ClCompile Include="src\Interpreter\Type\TypeType.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="src\Interpreter\Variable\FloatVariable.cpp" />
     <ClCompile Include="src\Interpreter\Variable\IntVariable.cpp" />
     <ClCompile Include="src\Interpreter\Variable\PointerVariable.cpp" />
+    <ClCompile Include="src\Interpreter\Variable\ReferenceVariable.cpp" />
     <ClCompile Include="src\Interpreter\Variable\StringVariable.cpp" />
     <ClCompile Include="src\Interpreter\Variable\TypeVariable.cpp" />
     <ClCompile Include="src\Interpreter\Variable\UnsignedCharVariable.cpp" />
@@ -317,6 +319,8 @@
     <ClInclude Include="include\interpreter\PointerVariable.h" />
     <ClInclude Include="include\interpreter\PrimitiveType.h" />
     <ClInclude Include="include\interpreter\PrimitiveValue.h" />
+    <ClInclude Include="include\Interpreter\ReferenceType.h" />
+    <ClInclude Include="include\Interpreter\ReferenceVariable.h" />
     <ClInclude Include="include\interpreter\ReturnStatement.h" />
     <ClInclude Include="include\interpreter\StringType.h" />
     <ClInclude Include="include\interpreter\StringValue.h" />

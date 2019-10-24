@@ -89,7 +89,11 @@ std::shared_ptr<Type> Type::pointer_type(std::shared_ptr<Type> type,bool is_cons
 }
 
 bool Type::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return false;
+    if(auto ref=std::dynamic_pointer_cast<ReferenceType>(other)){
+        return is(self,ref->get_type());
+    }else{
+		return CHECKPTR(other,AnyType);
+	}
 }
 
 std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std::shared_ptr<Parser::VarType> t){
@@ -165,7 +169,7 @@ std::shared_ptr<Value> Type::cast(std::shared_ptr<Value> self,std::shared_ptr<Ty
     if(is(self->get_type(),other)){
         return self;
     }
-    throw std::runtime_error("illegal cast");
+    throw std::runtime_error("illegal cast from "+self->get_type()->get_name()+" to "+other->get_name());
 }
 
 std::shared_ptr<Value> Type::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end){

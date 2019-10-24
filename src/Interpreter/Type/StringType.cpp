@@ -22,7 +22,7 @@ std::string StringType::get_name(){
 }
 
 bool StringType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return CHECKPTR(other,StringType)||CHECKPTR(other,AnyType);
+    return CHECKPTR(other,StringType)||Type::is(self,other);
 }
 
 bool StringType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
