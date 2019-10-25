@@ -17,8 +17,8 @@ namespace Interpreter {
             std::shared_ptr<Variable> get_value();
         protected:
             friend class ReferenceType;
-            std::shared_ptr<Variable> value;
             std::shared_ptr<ReferenceType> type;
+            std::shared_ptr<Variable> value;
     };
 
 }
