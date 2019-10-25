@@ -84,7 +84,7 @@ std::shared_ptr<Value> ArrayType::get_operator_result(int op,std::shared_ptr<Val
             throw MyExcept::SyntaxError(line_start,line_end,"incompatible types "+self->get_type()->get_name()+" and "+other->get_type()->get_name()+" for operator '"+get_op_str(op)+"'");
         }
     case SYMBOL_SQUARE_BRACKET_OPEN://[] operator
-        if(std::dynamic_pointer_cast<IntType>(other->get_type())==nullptr){
+        if(!other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())){
             throw MyExcept::SyntaxError(line_start,line_end,"invalid type "+other->get_type()->get_name()+" for operator '[]', expected integer");
         }
         return std::make_shared<DummyVariable>(std::dynamic_pointer_cast<ArrayType>(self->get_type())->get_type());
@@ -103,6 +103,7 @@ std::shared_ptr<Value> ArrayType::call_operator(int op,std::shared_ptr<Value> se
         }
         return self;
     case SYMBOL_SQUARE_BRACKET_OPEN://[] operator
+		other=other->get_type()->cast(other,Type::int_type());
         return self->access_array(other);
     default:
         throw std::runtime_error("invalid operator '"+get_op_str(op)+"'");
