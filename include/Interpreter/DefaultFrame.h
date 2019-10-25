@@ -11,8 +11,8 @@
 #include "Interpreter/Function.h"
 #include "Interpreter/Value.h"
 #include "Interpreter/Variable.h"
+#include "Interpreter/Struct.h"
 
-#include <map>
 #include <unordered_map>
 #include <memory>
 
@@ -31,19 +31,22 @@ namespace Interpreter{
             DefaultFrame(DefaultFrame * parent,Function * func);//Function func must be of type UserFunction
             DefaultFrame(DefaultFrame * parent);
             DefaultFrame * parent;
-            std::map<std::string,std::unordered_map<std::vector<FunctionParameter>,std::shared_ptr<Function>,fnparam_vec_hash>> functions;
-            std::map<std::string,std::shared_ptr<Type>> variable_types;
-            std::map<std::string,int> int_values;
-            std::map<std::string,float> float_values;
-            std::map<std::string,std::string> string_values;
+            std::shared_ptr<DefaultFrame> static_frame;
+            std::shared_ptr<ExecFrame> static_exec_frame;
+            std::unordered_map<std::string,std::unordered_map<std::vector<FunctionParameter>,std::shared_ptr<Function>,fnparam_vec_hash>> functions;
+            std::unordered_map<std::string,std::shared_ptr<Type>> variable_types;
+            std::unordered_map<std::string,std::shared_ptr<Struct>> structs;
+            std::unordered_map<std::string,int> int_values;
+            std::unordered_map<std::string,float> float_values;
+            std::unordered_map<std::string,std::string> string_values;
             std::shared_ptr<Type> get_variable_type(std::string);
             std::vector<std::vector<FunctionParameter>> get_function_variants(std::string);
+            std::shared_ptr<Struct> get_struct(std::string);
             std::shared_ptr<Function> get_function(std::string,std::vector<FunctionParameter>);
             std::shared_ptr<Function> get_function_local(std::string,std::vector<FunctionParameter>);
             std::shared_ptr<class Expression> vardefitem_to_assignment(std::shared_ptr<Parser::VariableDefinitionItem> vardef);
             bool is_function=false;
-            DefaultFrame * function_statics=nullptr;
-            Function * self_function =nullptr;
+            Function * self_function=nullptr;
             void register_function(std::shared_ptr<Function> func);
             void add_parameters(std::vector<FunctionParameter>);
             void add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parser::VariableDefinitionItem> var,bool global=false);

@@ -14,6 +14,7 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="include" />
+					<Add directory="include/Interpreter" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -24,6 +25,7 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add directory="include" />
+					<Add directory="include/Interpreter" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -119,6 +121,7 @@
 		<Unit filename="include/Interpreter/StringType.h" />
 		<Unit filename="include/Interpreter/StringValue.h" />
 		<Unit filename="include/Interpreter/StringVariable.h" />
+		<Unit filename="include/Interpreter/Struct.h" />
 		<Unit filename="include/Interpreter/Type.h" />
 		<Unit filename="include/Interpreter/TypeType.h" />
 		<Unit filename="include/Interpreter/TypeValue.h" />
@@ -258,6 +261,7 @@
 		<Unit filename="src/Interpreter/Line/Statement/IfStatement.cpp" />
 		<Unit filename="src/Interpreter/Line/Statement/ReturnStatement.cpp" />
 		<Unit filename="src/Interpreter/Line/Statement/WhileStatement.cpp" />
+		<Unit filename="src/Interpreter/Struct.cpp" />
 		<Unit filename="src/Interpreter/Type/AnyType.cpp" />
 		<Unit filename="src/Interpreter/Type/ArrayType.cpp" />
 		<Unit filename="src/Interpreter/Type/CharType.cpp" />

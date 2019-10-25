@@ -25,7 +25,7 @@
 
 using namespace Interpreter;
 
-DefaultFrame::DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>> defs):parent(nullptr){
+DefaultFrame::DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>> defs):DefaultFrame(nullptr){
     init_deflib(this);
     for(std::shared_ptr<Parser::Definition> def:defs){
         add_definition(def,true);
@@ -39,11 +39,11 @@ DefaultFrame::DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>> defs
     }
 }
 
-DefaultFrame::DefaultFrame(DefaultFrame * p,std::shared_ptr<Parser::VariableDefinition> def):parent(p){
+DefaultFrame::DefaultFrame(DefaultFrame * p,std::shared_ptr<Parser::VariableDefinition> def):DefaultFrame(p){
     add_definition(std::make_shared<Parser::Definition>(Parser::DEFINITION_VAR,def,def->line_start,def->line_end),true);
 }
 
-DefaultFrame::DefaultFrame(DefaultFrame * p,Function * f):parent(p){
+DefaultFrame::DefaultFrame(DefaultFrame * p,Function * f):DefaultFrame(p){
     if(auto uf=dynamic_cast<UserFunction*>(f)){
         if(uf->function->variadic){
             if(uf->function->variadic_type){
@@ -59,7 +59,7 @@ DefaultFrame::DefaultFrame(DefaultFrame * p,Function * f):parent(p){
 	self_function=f;
 }
 
-DefaultFrame::DefaultFrame(DefaultFrame * p):parent(p){
+DefaultFrame::DefaultFrame(DefaultFrame * p):parent(p),static_frame(p?std::make_shared<DefaultFrame>(p->parent?p->static_frame.get():p):nullptr),static_exec_frame(nullptr){//if p is global, static frame's parent is p (allow global values access from static context)
 }
 
 std::shared_ptr<Type> DefaultFrame::get_variable_type(std::string name){
@@ -181,6 +181,10 @@ void DefaultFrame::add_variable(std::shared_ptr<Type> type,std::shared_ptr<Parse
             initialize_globals.push_back(vardefitem_to_assignment(var));
         }
     }
+}
+
+std::shared_ptr<Struct> DefaultFrame::get_struct(std::string){
+    throw std::runtime_error("structs not supported yet");
 }
 
 std::shared_ptr<Expression> DefaultFrame::vardefitem_to_assignment(std::shared_ptr<Parser::VariableDefinitionItem> var){

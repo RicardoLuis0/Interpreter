@@ -46,7 +46,7 @@ int UserFunction::get_line(){
 }
 
 std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<std::shared_ptr<Value>> args){
-    std::map<std::string,std::pair<std::shared_ptr<Value>,std::shared_ptr<Type>>> args_o;
+    std::unordered_map<std::string,std::pair<std::shared_ptr<Value>,std::shared_ptr<Type>>> args_o;
     if(((!function->variadic)&&function->parameters.size()!=args.size())||(function->variadic&&function->parameters.size()>args.size())){
         throw MyExcept::InterpreterRuntimeError(function->line_start,args.size()<parameters.size()?"too few arguments":"too many arguments");
     }

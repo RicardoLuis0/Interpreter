@@ -52,7 +52,7 @@ void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::share
     throw std::runtime_error("invalid reference type");
 }
 
-void ExecFrame::set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,std::shared_ptr<Type>>> args){
+void ExecFrame::set_args(std::unordered_map<std::string,std::pair<std::shared_ptr<Value>,std::shared_ptr<Type>>> args){
    for(std::pair<std::string,std::pair<std::shared_ptr<Value>,std::shared_ptr<Type>>> arg:args){
         set_variable(arg.first,arg.second.first,arg.second.second);
     }

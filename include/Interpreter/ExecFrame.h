@@ -1,7 +1,7 @@
 #ifndef INTERPRETER_EXEC_FRAME_H
 #define INTERPRETER_EXEC_FRAME_H
 
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include "Interpreter/DefaultFrame.h"
 #include "Interpreter/Variable.h"
@@ -11,7 +11,7 @@ namespace Interpreter {
     class ExecFrame{
         protected:
             void set_variable(std::string,std::shared_ptr<Value>,std::shared_ptr<Type>);
-            std::map<std::string,std::shared_ptr<Variable>> variables;
+            std::unordered_map<std::string,std::shared_ptr<Variable>> variables;
             ExecFrame * parent;
             class DefaultFrame * defaults;
             friend class ForStatement;
@@ -21,7 +21,7 @@ namespace Interpreter {
             ExecFrame(ExecFrame * parent,class DefaultFrame * defaults);
             std::shared_ptr<Variable> get_variable(std::string);
             std::shared_ptr<Function> get_function(std::string,std::vector<FunctionParameter>);
-            void set_args(std::map<std::string,std::pair<std::shared_ptr<Value>,std::shared_ptr<Type>>>);
+            void set_args(std::unordered_map<std::string,std::pair<std::shared_ptr<Value>,std::shared_ptr<Type>>>);
             std::shared_ptr<Value> fn_call(std::shared_ptr<Function>,std::vector<std::shared_ptr<Value>>);
     };
 }
