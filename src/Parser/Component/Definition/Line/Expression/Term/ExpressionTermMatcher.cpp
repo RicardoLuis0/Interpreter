@@ -11,7 +11,7 @@
 
 //literal = int,float,string,true,false,nullptr
 
-//ExpressionTerm = ( ExpressionGroup | FunctionCall | KeywordFunctionCall | UnaryOperation | literal | identifier ) , { symbol 'unary_post_operator' } , { symbol '[' , Expression , symbol ']' };
+//ExpressionTerm = ( ExpressionGroup | FunctionCall | KeywordFunctionCall | UnaryOperation | literal | identifier ) , { symbol 'unary_post_operator' } , { symbol '[' , Expression , symbol ']' } , [ ( symbol '.' | symbol '->' ) , ExpressionTerm ] ;
 
 using namespace Parser;
 
@@ -79,6 +79,10 @@ std::shared_ptr<ExpressionTerm> ExpressionTermMatcher::makeMatch(parserProgress 
         if(!p.isSymbol(SYMBOL_SQUARE_BRACKET_CLOSE)){
             throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ']', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
         }
+    }
+    if(auto s=p.isSymbol({SYMBOL_DOT,SYMBOL_ARROW})){
+        term->member_access_type=(s->get_symbol_type()==SYMBOL_ARROW)?MEMBER_ACCESS_POINTER:MEMBER_ACCESS_NORMAL;
+        term->member_access=makeMatch(p);
     }
     return term;
 }

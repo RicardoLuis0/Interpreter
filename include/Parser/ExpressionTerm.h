@@ -23,6 +23,11 @@ namespace Parser {
         EXPRESSION_TERM_LITERAL_NULL,
         EXPRESSION_TERM_IDENTIFIER,
     };
+    enum ExpressionTermMemberAccessType_t{
+        MEMBER_ACCESS_NONE,
+        MEMBER_ACCESS_NORMAL,
+        MEMBER_ACCESS_POINTER,
+    };
     class ExpressionTerm:public ParserResultPart {
         public:
             ExpressionTerm(std::shared_ptr<ParserResultPart>,ExpressionTermType_t type,int line_start,int line_end);
@@ -32,6 +37,8 @@ namespace Parser {
             std::vector<std::shared_ptr<Lexer::SymbolToken>> unary_post_operators;
             std::vector<std::shared_ptr<ParserResultPart>> array_access;//std::shared_ptr<Expression>
             const ExpressionTermType_t type;
+            std::shared_ptr<ExpressionTerm> member_access;
+            ExpressionTermMemberAccessType_t member_access_type=MEMBER_ACCESS_NONE;
         protected:
         private:
     };
