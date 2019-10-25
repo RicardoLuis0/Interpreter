@@ -1,0 +1,10 @@
+struct test{
+    int a;
+}
+
+void main(){
+    test a;
+    a.a=10;
+    ptr<test> b=&a;
+    printf("%{}",b->a);
+}

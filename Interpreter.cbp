@@ -58,6 +58,7 @@
 		<Unit filename="examples/ptr_test.txt" />
 		<Unit filename="examples/push_pop_test.txt" />
 		<Unit filename="examples/ref_test.txt" />
+		<Unit filename="examples/struct_test.txt" />
 		<Unit filename="examples/tictactoe.txt" />
 		<Unit filename="examples/tictactoe_old.txt" />
 		<Unit filename="examples/type_test.txt" />

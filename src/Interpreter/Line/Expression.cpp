@@ -53,6 +53,7 @@ std::shared_ptr<ExprPart> Expression::get_expression(DefaultFrame * context,std:
 }
 
 std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::shared_ptr<Parser::ExpressionTerm> term){
+    if(term->member_access_type!=Parser::MEMBER_ACCESS_NONE)throw std::runtime_error("member access still not supported");
     std::shared_ptr<ExprPart> expr=nullptr;
     switch(term->type){
     case Parser::EXPRESSION_TERM_EXPRESSION_GROUP:
