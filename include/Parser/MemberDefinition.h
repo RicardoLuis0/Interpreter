@@ -2,7 +2,7 @@
 #define PARSER_MEMBER_DEFINITION_H
 
 #include <memory>
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 
 namespace Parser{
     enum member_scope_t{
@@ -29,6 +29,8 @@ namespace Parser{
             member_modifier_t mod;
             member_type_t type;
             std::shared_ptr<ParserResultPart> member;
+            virtual std::string getSource() override;
+            virtual void print(int depth) override;
     };
 }
 

@@ -2,7 +2,7 @@
 #define BINARYOPERATION_H
 
 #include <memory>
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 #include "Parser/ExpressionTerm.h"
 #include "Parser/Expression.h"
 #include "Lexer/SymbolToken.h"
@@ -15,6 +15,8 @@ namespace Parser{
             std::shared_ptr<ExpressionTerm> term1;
             std::shared_ptr<Lexer::SymbolToken> binary_operator;
             std::shared_ptr<Expression> term2;
+            virtual std::string getSource() override;
+            virtual void print(int depth) override;
     };
 }
 #endif // BINARYOPERATION_H

@@ -2,7 +2,7 @@
 #define PARSER_CLASS_DEFINITION_H
 
 #include <memory>
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 
 namespace Parser{
     class ClassDefinition:public ParserResultPart{

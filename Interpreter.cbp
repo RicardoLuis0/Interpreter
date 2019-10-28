@@ -210,7 +210,7 @@
 		<Unit filename="include/Parser/MemberDefinitionMatcher.h" />
 		<Unit filename="include/Parser/Parser.h" />
 		<Unit filename="include/Parser/ParserExpressionOperatorPrecedence.h" />
-		<Unit filename="include/Parser/ResultPart.h" />
+		<Unit filename="include/Parser/ParserResultPart.h" />
 		<Unit filename="include/Parser/ReturnStatement.h" />
 		<Unit filename="include/Parser/ReturnStatementMatcher.h" />
 		<Unit filename="include/Parser/Statement.h" />

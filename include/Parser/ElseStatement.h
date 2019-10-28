@@ -1,7 +1,7 @@
 #ifndef PARSER_ELSE_STATEMENT_H
 #define PARSER_ELSE_STATEMENT_H
 
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 #include "Parser/Line.h"
 
 namespace Parser{
@@ -9,6 +9,8 @@ namespace Parser{
     public:
         ElseStatement(std::shared_ptr<Line> code,int line_start,int line_end);
         std::shared_ptr<Line> code;
+        virtual std::string getSource() override;
+        virtual void print(int depth) override;
     };
 }
 

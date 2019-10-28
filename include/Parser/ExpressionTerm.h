@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <memory>
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 #include "Lexer/SymbolToken.h"
 
 
@@ -39,6 +39,8 @@ namespace Parser {
             const ExpressionTermType_t type;
             std::shared_ptr<ExpressionTerm> member_access;
             ExpressionTermMemberAccessType_t member_access_type=MEMBER_ACCESS_NONE;
+            virtual std::string getSource() override;
+            virtual void print(int depth) override;
         protected:
         private:
     };

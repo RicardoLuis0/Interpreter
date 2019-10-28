@@ -1,7 +1,7 @@
 #ifndef PARSER_IF_STATEMENT_H
 #define PARSER_IF_STATEMENT_H
 
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 #include "Parser/Line.h"
 #include "Parser/Expression.h"
 #include "Parser/ElseStatement.h"
@@ -13,6 +13,8 @@ namespace Parser{
         std::shared_ptr<Expression> condition;
         std::shared_ptr<Line> code;
         std::shared_ptr<ElseStatement> else_stmt;
+        virtual std::string getSource() override;
+        virtual void print(int depth) override;
     };
 }
 

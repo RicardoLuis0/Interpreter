@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 #include "Parser/Parser.h"
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 
 namespace Parser{
     class BaseComponent{

@@ -2,7 +2,7 @@
 #define PARSER_STATEMENT_H
 
 #include <memory>
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 
 namespace Parser{
     enum ParserStatementType_t{
@@ -18,6 +18,8 @@ namespace Parser{
             Statement(std::shared_ptr<ParserResultPart> statement,ParserStatementType_t type,int line_start,int line_end);
             std::shared_ptr<ParserResultPart> statement;
             const ParserStatementType_t type;
+            virtual std::string getSource() override;
+            virtual void print(int depth) override;
         protected:
         private:
     };

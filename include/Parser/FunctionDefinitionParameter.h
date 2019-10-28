@@ -3,7 +3,7 @@
 
 #include "Lexer/WordToken.h"
 
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 #include "Parser/VarType.h"
 #include <vector>
 
@@ -15,6 +15,8 @@ namespace Parser{
             std::shared_ptr<VarType> type;
             std::string name;
             bool is_reference;
+            virtual std::string getSource() override;
+            virtual void print(int depth) override;
         protected:
         private:
     };

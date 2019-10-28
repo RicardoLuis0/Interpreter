@@ -1,5 +1,7 @@
 #include "Parser/FunctionDefinition.h"
 
+#include <iostream>
+
 using namespace Parser;
 
 FunctionDefinition::FunctionDefinition(std::shared_ptr<VarType> ret,
@@ -19,4 +21,51 @@ FunctionDefinition::FunctionDefinition(std::shared_ptr<VarType> ret,
     variadic_ident(vi?vi->get_literal():""),
     code(c){
         
+}
+
+
+std::string FunctionDefinition::getSource(){
+    std::string head=return_type->getSource()+" "+name+"(";
+    bool first=true;
+    for(auto param:parameters){
+        if(!first){
+            head+=",";
+        }else{
+            first=false;
+        }
+        head+=param->getSource();
+    }
+    if(variadic){
+        if(!first){
+            head+=",";
+        }
+        if(variadic_type){
+            head+=variadic_type->getSource()+" ";
+        }
+        head+="... "+variadic_ident;
+    }
+    head+=") ";
+    return head+code->getSource();
+}
+
+void FunctionDefinition::print(int depth){
+    std::string indent0=std::string(depth*2,' ');
+    std::string indent1=std::string((depth+1)*2,' ');
+    std::cout<<indent0<<"FunctionDefinition {\n";
+    std::cout<<indent0<<".return_type:\n";
+    return_type->print(depth+1);
+    std::cout<<indent0<<".name:\n"<<indent1<<name<<"\n"<<indent0<<".parameters:\n";
+    for(int i=0;i<int(parameters.size());i++){
+        std::cout<<indent1<<".param["<<i<<"]:\n";
+        parameters[i]->print(depth+2);
+    }
+    std::cout<<indent0<<".variadic:\n"<<indent1<<(variadic?"true":"false")<<"\n";
+    if(variadic){
+        std::cout<<indent0<<".variadic_type:\n";
+        variadic_type->print(depth+1);
+        std::cout<<indent0<<".variadic_ident:\n"<<indent1<<variadic_ident<<"\n";
+    }
+    std::cout<<indent0<<".code:\n";
+    code->print(depth+1);
+    std::cout<<indent0<<"}\n";
 }

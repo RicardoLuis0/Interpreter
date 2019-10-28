@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 #include "Lexer/KeywordToken.h"
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 #include "Parser/Expression.h"
 
 namespace Parser{
@@ -34,6 +34,8 @@ namespace Parser{
         bool is_const;
         std::vector<std::shared_ptr<Expression>> array_sizes;
         std::shared_ptr<VarType> extra;
+        virtual std::string getSource() override;
+        virtual void print(int depth) override;
     };
 }
 

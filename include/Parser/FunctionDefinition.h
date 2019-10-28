@@ -3,7 +3,7 @@
 
 #include "Lexer/WordToken.h"
 
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 #include "Parser/FunctionDefinitionParameter.h"
 #include "Parser/CodeBlock.h"
 #include <vector>
@@ -19,6 +19,8 @@ namespace Parser{
             std::shared_ptr<VarType> variadic_type;
             std::string variadic_ident;
             std::shared_ptr<CodeBlock> code;
+            virtual std::string getSource() override;
+            virtual void print(int depth) override;
     };
 }
 

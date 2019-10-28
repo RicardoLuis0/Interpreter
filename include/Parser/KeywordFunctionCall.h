@@ -2,7 +2,7 @@
 #define PARSER_KEYWORD_FUNCTION_CALL_H
 
 #include <memory>
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 #include "Lexer/KeywordToken.h"
 #include "Parser/VarType.h"
 #include "Parser/ExpressionList.h"
@@ -14,6 +14,8 @@ namespace Parser {
             std::shared_ptr<Lexer::KeywordToken> identifier;
             std::shared_ptr<VarType> extra_type;
             std::shared_ptr<ExpressionList> arguments;
+            virtual std::string getSource() override;
+            virtual void print(int depth) override;
     };
 }
 

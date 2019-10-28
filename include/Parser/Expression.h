@@ -2,7 +2,7 @@
 #define PARSEREXPRESSION_H
 
 #include <memory>
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 
 namespace Parser{
     enum ExpressionType_t{
@@ -14,6 +14,8 @@ namespace Parser{
             Expression(std::shared_ptr<ParserResultPart>,ExpressionType_t type,int line_start,int line_end);
             std::shared_ptr<ParserResultPart> contents;
             const ExpressionType_t type;
+            virtual std::string getSource() override;
+            virtual void print(int depth) override;
         protected:
         private:
     };

@@ -2,7 +2,7 @@
 #define PARSER_DEFINITION_H
 
 #include <memory>
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 
 namespace Parser{
     enum ParserDefinitionType_t{
@@ -15,6 +15,8 @@ namespace Parser{
             Definition(ParserDefinitionType_t type,std::shared_ptr<ParserResultPart> def,int line_start,int line_end);
             ParserDefinitionType_t type;
             std::shared_ptr<ParserResultPart> def;
+            virtual std::string getSource() override;
+            virtual void print(int depth) override;
     };
 }
 

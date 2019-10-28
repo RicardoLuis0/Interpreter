@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <memory>
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 #include "Parser/MemberDefinition.h"
 
 namespace Parser{
@@ -12,6 +12,8 @@ namespace Parser{
             StructDefinition(std::string name,std::vector<std::shared_ptr<MemberDefinition>> members,int line_start,int line_end);
             std::string name;
             std::vector<std::shared_ptr<MemberDefinition>> members;
+            virtual std::string getSource() override;
+            virtual void print(int depth) override;
     };
 }
 

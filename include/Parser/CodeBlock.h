@@ -2,7 +2,7 @@
 #define PARSER_CODE_BLOCK_H
 
 #include <vector>
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 #include "Parser/Line.h"
 
 namespace Parser{
@@ -10,6 +10,8 @@ namespace Parser{
         public:
             CodeBlock(std::vector<std::shared_ptr<Line>> lines,int line_start,int line_end);
             std::vector<std::shared_ptr<Line>> lines;
+            virtual std::string getSource() override;
+            virtual void print(int depth) override;
         protected:
         private:
     };

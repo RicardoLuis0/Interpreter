@@ -2,7 +2,7 @@
 #define PARSER_LINE_H
 
 #include <memory>
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 
 namespace Parser{
     enum ParserLineType_t{
@@ -17,6 +17,8 @@ namespace Parser{
             Line(std::shared_ptr<ParserResultPart>,ParserLineType_t,int line_start,int line_end);
             std::shared_ptr<ParserResultPart> contents;
             const ParserLineType_t type;
+            virtual std::string getSource() override;
+            virtual void print(int depth) override;
         protected:
         private:
     };

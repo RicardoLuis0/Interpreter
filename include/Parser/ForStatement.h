@@ -1,7 +1,7 @@
 #ifndef PARSER_FOR_STATEMENT_H
 #define PARSER_FOR_STATEMENT_H
 
-#include "Parser/ResultPart.h"
+#include "Parser/ParserResultPart.h"
 #include "Parser/Line.h"
 #include "Parser/Expression.h"
 #include "Parser/VariableDefinition.h"
@@ -13,6 +13,8 @@ namespace Parser{
         std::shared_ptr<Expression> pre,condition,inc;
         std::shared_ptr<VariableDefinition> vardef_pre;
         std::shared_ptr<Line> code;
+        virtual std::string getSource() override;
+        virtual void print(int depth) override;
     };
 }
 
