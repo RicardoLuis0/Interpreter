@@ -9,8 +9,8 @@ namespace Parser{
     public:
         ExpressionList(std::vector<std::shared_ptr<Expression>> expression_list,int line_start,int line_end);
         std::vector<std::shared_ptr<Expression>> expression_list;
-            virtual std::string getSource() override;
-            virtual void print(int depth) override;
+        virtual std::string getSource() override;
+        virtual void print(int depth) override;
     };
 }
 

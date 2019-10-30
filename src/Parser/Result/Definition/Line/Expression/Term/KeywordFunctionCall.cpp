@@ -9,14 +9,15 @@ KeywordFunctionCall::KeywordFunctionCall(std::shared_ptr<Lexer::KeywordToken> id
 }
 
 std::string KeywordFunctionCall::getSource(){
-    throw std::runtime_error("unimplemented");
-    return "";
+    return identifier->get_literal()+(extra_type?"<"+extra_type->getSource()+">":"")+"("+arguments->getSource()+")";
 }
 
 void KeywordFunctionCall::print(int depth){
-    throw std::runtime_error("unimplemented");
-    std::string indent0=std::string(depth*2,' ');
-    std::string indent1=std::string((depth+1)*2,' ');
+    std::string indent0=get_indent(depth);
+    std::string indent1=get_indent(depth+1);
     std::cout<<indent0<<"KeywordFunctionCall {\n";
+    std::cout<<indent0<<".identifier:\n"<<indent1<<identifier->get_formatted()<<"\n";
+    std::cout<<indent0<<".arguments:\n";
+    arguments->print(depth+1);
     std::cout<<indent0<<"}\n";
 }

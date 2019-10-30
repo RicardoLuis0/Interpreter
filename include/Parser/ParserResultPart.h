@@ -12,6 +12,7 @@ namespace Parser{
             int line_start;
             int line_end;
         protected:
+            std::string get_indent(int depth);
         private:
     };
 }

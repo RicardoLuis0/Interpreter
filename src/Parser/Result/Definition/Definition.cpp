@@ -17,8 +17,9 @@ std::string Definition::getSource(){
 }
 
 void Definition::print(int depth){
-    std::string indent=std::string(depth*2,' ');
-    std::cout<<indent<<"Definition {\n";
+    std::string indent0=get_indent(depth);
+    std::string indent1=get_indent(depth+1);
+    std::cout<<indent0<<"Definition {\n";
     def->print(depth+1);
-    std::cout<<indent<<"}\n";
+    std::cout<<indent0<<"}\n";
 }

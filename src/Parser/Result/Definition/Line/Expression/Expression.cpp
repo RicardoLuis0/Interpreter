@@ -9,14 +9,14 @@ Expression::Expression(std::shared_ptr<ParserResultPart> ptr,ExpressionType_t pt
 }
 
 std::string Expression::getSource(){
-    throw std::runtime_error("unimplemented");
-    return "";
+    return contents->getSource();
 }
 
 void Expression::print(int depth){
-    throw std::runtime_error("unimplemented");
-    std::string indent0=std::string(depth*2,' ');
-    std::string indent1=std::string((depth+1)*2,' ');
+    std::string indent0=get_indent(depth);
+    std::string indent1=get_indent(depth+1);
     std::cout<<indent0<<"Expression {\n";
+    std::cout<<indent0<<".contents:\n";
+    contents->print(depth+1);
     std::cout<<indent0<<"}\n";
 }

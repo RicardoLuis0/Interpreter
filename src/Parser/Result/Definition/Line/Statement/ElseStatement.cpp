@@ -12,8 +12,8 @@ std::string ElseStatement::getSource(){
 }
 
 void ElseStatement::print(int depth){
-    std::string indent0=std::string(depth*2,' ');
-    std::string indent1=std::string((depth+1)*2,' ');
+    std::string indent0=get_indent(depth);
+    std::string indent1=get_indent(depth+1);
     std::cout<<indent0<<"ElseStatement {\n";
     std::cout<<indent0<<".code:\n";
     code->print(depth+1);

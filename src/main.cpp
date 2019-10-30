@@ -356,7 +356,7 @@ void test_expressions(){
         }
         Parser::parserProgress p(tokens);
         std::shared_ptr<Parser::Expression> expr=Parser::ExpressionMatcher().makeMatch(p);
-        throw std::runtime_error("Still re-implementing AST printing");
+        expr->print(0);
     }catch(MyExcept::ParseError &e){
         std::cout<<e.what();
         return;
@@ -388,7 +388,7 @@ void test_lines(){
         }
         Parser::parserProgress p(tokens);
         std::shared_ptr<Parser::Line> line=Parser::LineMatcher().makeMatch(p);
-        throw std::runtime_error("Still re-implementing AST printing");
+        line->print(0);
     }catch(MyExcept::ParseError &e){
         std::cout<<e.what();
         return;
@@ -423,8 +423,10 @@ void test_definitions(){
         while(p.get_nothrow()!=nullptr){
             deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
         }
-        throw std::runtime_error("Still re-implementing AST printing");
-        //print_deflist(deflist);
+        for(auto def:deflist){
+            def->print(0);
+            std::cout<<"\n";
+        }
     }catch(MyExcept::ParseError &e){
         std::cout<<e.what();
         return;

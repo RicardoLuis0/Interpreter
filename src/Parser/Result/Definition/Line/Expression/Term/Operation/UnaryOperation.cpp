@@ -8,14 +8,15 @@ UnaryOperation::UnaryOperation(std::shared_ptr<Lexer::SymbolToken> st,std::share
 }
 
 std::string UnaryOperation::getSource(){
-    throw std::runtime_error("unimplemented");
-    return "";
+    return unary_operator->get_literal()+term->getSource();
 }
 
 void UnaryOperation::print(int depth){
-    throw std::runtime_error("unimplemented");
-    std::string indent0=std::string(depth*2,' ');
-    std::string indent1=std::string((depth+1)*2,' ');
-    std::cout<<indent0<<"UnaryOperation {\n";
+    std::string indent0=get_indent(depth);
+    std::string indent1=get_indent(depth+1);
+    std::cout<<indent0<<"UnaryPreOperation {\n";
+    std::cout<<indent0<<".unary_operator:\n"<<indent1<<unary_operator->get_formatted()<<"\n";
+    std::cout<<indent0<<".term:\n";
+    term->print(depth+1);
     std::cout<<indent0<<"}\n";
 }

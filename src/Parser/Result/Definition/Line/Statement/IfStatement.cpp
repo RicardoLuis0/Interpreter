@@ -12,8 +12,8 @@ std::string IfStatement::getSource(){
 }
 
 void IfStatement::print(int depth){
-    std::string indent0=std::string(depth*2,' ');
-    std::string indent1=std::string((depth+1)*2,' ');
+    std::string indent0=get_indent(depth);
+    std::string indent1=get_indent(depth+1);
     std::cout<<indent0<<"IfStatement {\n";
     std::cout<<indent0<<".condition:\n";
     condition->print(depth+1);

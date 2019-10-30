@@ -19,8 +19,8 @@ std::string Line::getSource(){
 }
 
 void Line::print(int depth){
-    std::string indent0=std::string(depth*2,' ');
-    std::string indent1=std::string((depth+1)*2,' ');
+    std::string indent0=get_indent(depth);
+    std::string indent1=get_indent(depth+1);
     std::cout<<indent0<<"Line {\n";
     std::cout<<indent0<<".content:\n";
     if(type==LINE_EMPTY){

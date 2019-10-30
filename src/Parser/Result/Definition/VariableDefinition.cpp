@@ -21,8 +21,8 @@ std::string VariableDefinition::getSource(){
 }
 
 void VariableDefinition::print(int depth){
-    std::string indent0=std::string(depth*2,' ');
-    std::string indent1=std::string((depth+1)*2,' ');
+    std::string indent0=get_indent(depth);
+    std::string indent1=get_indent(depth+1);
     std::cout<<indent0<<"FunctionDefinition {\n";
     std::cout<<indent0<<".type:\n";
     type->print(depth+1);

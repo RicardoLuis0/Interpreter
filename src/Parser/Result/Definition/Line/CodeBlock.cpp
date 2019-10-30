@@ -16,12 +16,12 @@ std::string CodeBlock::getSource(){
 }
 
 void CodeBlock::print(int depth){
-    std::string indent0=std::string(depth*2,' ');
-    std::string indent1=std::string((depth+1)*2,' ');
+    std::string indent0=get_indent(depth);
+    std::string indent1=get_indent(depth+1);
     std::cout<<indent0<<"CodeBlock {\n";
     std::cout<<indent0<<".lines:\n";
     for(int i=0;i<int(lines.size());i++){
-        std::cout<<indent1<<".line["<<i<<"]:";
+        std::cout<<indent1<<".line["<<i<<"]:\n";
         lines[i]->print(depth+2);
     }
     std::cout<<indent0<<"}\n";

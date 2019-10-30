@@ -62,32 +62,41 @@ std::string VarType::getSource(){
 }
 
 void VarType::print(int depth){
-    std::string indent0=std::string(depth*2,' ');
-    std::string indent1=std::string((depth+1)*2,' ');
+    std::string indent0=get_indent(depth);
+    std::string indent1=get_indent(depth+1);
     std::cout<<indent0<<"VariableDefinitionItem {\n";
     std::cout<<indent1<<"type:\n";
     switch(type){
     case VARTYPE_VOID:
         std::cout<<indent1<<"void";
+        break;
     case VARTYPE_PRIMITIVE:
         switch(primitive){
         case PRIMITIVE_INVALID:
             throw std::runtime_error("invalid primitive");
         case PRIMITIVE_POINTER:
             std::cout<<indent1<<"ptr<"+extra->getSource()+">\n";
+            break;
         case PRIMITIVE_ANY:
             std::cout<<indent1<<"any\n";
+            break;
         case PRIMITIVE_TYPE:
             std::cout<<indent1<<"type\n";
+            break;
         case PRIMITIVE_INT:
             std::cout<<indent1<<(has_sign?(sign?"signed int\n":"unsigned int\n"):"int\n");
+            break;
         case PRIMITIVE_CHAR:
             std::cout<<indent1<<(has_sign?(sign?"signed char\n":"unsigned char\n"):"char\n");
+            break;
         case PRIMITIVE_FLOAT:
             std::cout<<indent1<<"float\n";
+            break;
         case PRIMITIVE_STRING:
             std::cout<<indent1<<"string\n";
+            break;
         }
+        break;
     case VARTYPE_IDENTIFIER:
         throw std::runtime_error("unimplemented");
     }
