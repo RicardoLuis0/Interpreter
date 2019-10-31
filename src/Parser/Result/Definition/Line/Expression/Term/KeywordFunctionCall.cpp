@@ -17,7 +17,13 @@ void KeywordFunctionCall::print(int depth){
     std::string indent1=get_indent(depth+1);
     std::cout<<indent0<<"KeywordFunctionCall {\n";
     std::cout<<indent0<<".identifier:\n"<<indent1<<identifier->get_formatted()<<"\n";
-    std::cout<<indent0<<".arguments:\n";
-    arguments->print(depth+1);
+    if(arguments){
+        std::cout<<indent0<<".arguments:\n";
+        arguments->print(depth+1);
+    }
+    if(extra_type){
+        std::cout<<indent0<<".extra_type:\n";
+        extra_type->print(depth+1);
+    }
     std::cout<<indent0<<"}\n";
 }
