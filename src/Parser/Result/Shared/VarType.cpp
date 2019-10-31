@@ -100,10 +100,12 @@ void VarType::print(int depth){
     case VARTYPE_IDENTIFIER:
         throw std::runtime_error("unimplemented");
     }
-    std::cout<<indent0<<".array_sizes:\n";
-    for(int i=array_sizes.size()-1;i>0;i--){
-        std::cout<<indent1<<".as["<<((array_sizes.size()-1)-i)<<"]:\n";
-        array_sizes[i]->print(depth+2);
+    if(array_sizes.size()>0){
+        std::cout<<indent0<<".array_sizes:\n";
+        for(int i=array_sizes.size()-1;i>0;i--){
+            std::cout<<indent1<<".as["<<((array_sizes.size()-1)-i)<<"]:\n";
+            array_sizes[i]->print(depth+2);
+        }
     }
     std::cout<<indent0<<"}\n";
 }
