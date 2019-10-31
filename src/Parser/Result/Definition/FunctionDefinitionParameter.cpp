@@ -20,6 +20,6 @@ void FunctionDefinitionParameter::print(int depth){
     std::cout<<indent0<<".type:\n";
     type->print(depth+1);
     std::cout<<indent0<<".is_reference:\n"<<indent1<<(is_reference?"true":"false")<<"\n";
-    std::cout<<indent0<<".name:\n"<<indent1<<name<<"\n"<<indent0<<".parameters:\n";
+    std::cout<<indent0<<".name:\n"<<indent1<<name<<"\n";
     std::cout<<indent0<<"}\n";
 }
