@@ -65,7 +65,7 @@ void VarType::print(int depth){
     std::string indent0=get_indent(depth);
     std::string indent1=get_indent(depth+1);
     std::cout<<indent0<<"VariableDefinitionItem {\n";
-    std::cout<<indent0<<"type:\n";
+    std::cout<<indent0<<".type:\n";
     switch(type){
     case VARTYPE_VOID:
         std::cout<<indent1<<"void\n";
@@ -100,9 +100,10 @@ void VarType::print(int depth){
     case VARTYPE_IDENTIFIER:
         throw std::runtime_error("unimplemented");
     }
+    std::cout<<indent0<<".array_sizes:\n";
     for(int i=array_sizes.size()-1;i>0;i--){
-        std::cout<<indent1<<"array_sizes["<<((array_sizes.size()-1)-i)<<"]:\n";
-        array_sizes[i]->print(depth+1);
+        std::cout<<indent1<<".as["<<((array_sizes.size()-1)-i)<<"]:\n";
+        array_sizes[i]->print(depth+2);
     }
     std::cout<<indent0<<"}\n";
 }
