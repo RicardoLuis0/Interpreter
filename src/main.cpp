@@ -267,11 +267,11 @@ int main(int argc,char ** argv){
         std::cout<<"Parse OK";
         return 0;
         }else if(argc==3&&strcmp(argv[1],"-AST")==0){
-            std::string filename(argv[2]);
             std::vector<std::shared_ptr<Lexer::Token>> tokens;
             std::vector<std::shared_ptr<Parser::Definition>> deflist;
             Lexer::Lexer lexer(base_symbols,base_keywords);
             Parser::parserProgress p(tokens);
+            tokens=lexer.tokenize_from_file(argv[2]);
             while(p.get_nothrow()!=nullptr){
                 deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
             }
