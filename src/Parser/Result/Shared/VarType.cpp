@@ -68,7 +68,7 @@ void VarType::print(int depth){
     std::cout<<indent1<<"type:\n";
     switch(type){
     case VARTYPE_VOID:
-        std::cout<<indent1<<"void";
+        std::cout<<indent1<<"void\n";
         break;
     case VARTYPE_PRIMITIVE:
         switch(primitive){

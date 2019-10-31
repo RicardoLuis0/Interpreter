@@ -11,7 +11,7 @@ Statement::Statement(std::shared_ptr<ParserResultPart> stmt,ParserStatementType_
 std::string Statement::getSource(){
     if(type==STATEMENT_BREAK){
         return "break;";
-    }else if(STATEMENT_CONTINUE){
+    }else if(type==STATEMENT_CONTINUE){
         return "continue;";
     }else{
         return statement->getSource();
