@@ -24,7 +24,7 @@ void Statement::print(int depth){
     std::cout<<indent0<<"Statement {\n";
     if(type==STATEMENT_BREAK){
         std::cout<<indent0<<".type:\n"<<indent1<<"STATEMENT_BREAK\n";
-    }else if(STATEMENT_CONTINUE){
+    }else if(type==STATEMENT_CONTINUE){
         std::cout<<indent0<<".type:\n"<<indent1<<"STATEMENT_CONTINUE\n";
     }else{
         std::cout<<indent0<<".statement:\n";
