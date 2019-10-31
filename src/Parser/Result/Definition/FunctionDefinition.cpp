@@ -54,10 +54,13 @@ void FunctionDefinition::print(int depth){
     std::cout<<indent0<<"FunctionDefinition {\n";
     std::cout<<indent0<<".return_type:\n";
     return_type->print(depth+1);
-    std::cout<<indent0<<".name:\n"<<indent1<<name<<"\n"<<indent0<<".parameters:\n";
-    for(int i=0;i<int(parameters.size());i++){
-        std::cout<<indent1<<".param["<<i<<"]:\n";
-        parameters[i]->print(depth+2);
+    std::cout<<indent0<<".name:\n"<<indent1<<name<<"\n";
+    if(parameters.size()>0_{
+        std::cout<<indent0<<".parameters:\n";
+        for(int i=0;i<int(parameters.size());i++){
+            std::cout<<indent1<<".param["<<i<<"]:\n";
+            parameters[i]->print(depth+2);
+        }
     }
     std::cout<<indent0<<".variadic:\n"<<indent1<<(variadic?"true":"false")<<"\n";
     if(variadic){
