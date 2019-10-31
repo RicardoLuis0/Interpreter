@@ -271,18 +271,6 @@ int main(int argc,char ** argv){
             std::vector<std::shared_ptr<Lexer::Token>> tokens;
             std::vector<std::shared_ptr<Parser::Definition>> deflist;
             Lexer::Lexer lexer(base_symbols,base_keywords);
-            while(true){
-                Console::clear();
-                std::cout<<"Filename: ";
-                std::cin>>filename;
-                try{
-                    tokens=lexer.tokenize_from_file(filename);//split file into tokens
-                }catch(MyExcept::FileError &e){
-                    std::cout<<e.what()<<"\nTry Again, ";
-                    continue;
-                }
-                break;
-            }
             Parser::parserProgress p(tokens);
             while(p.get_nothrow()!=nullptr){
                 deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
