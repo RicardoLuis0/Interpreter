@@ -1,0 +1,4 @@
+if(array_size(args)==0){
+	print("No Arguments\n");
+}
+printvals(args);

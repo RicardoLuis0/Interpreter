@@ -1,0 +1,13 @@
+string[4] states;
+states[0]="/";
+states[1]="-";
+states[2]="\\";
+states[3]="|";
+int i=0;
+while(!kbhit()){
+	cls();
+	print(states[i++]+" Press any key...");
+	if(i>3)i=0;
+	sleep(100);
+}
+getch();
