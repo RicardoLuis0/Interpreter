@@ -75,12 +75,13 @@ int simple_exec(std::string filename,int argc,char ** argv,int offset){
     std::shared_ptr<Interpreter::CodeBlock> cb(std::make_shared<Interpreter::CodeBlock>(run_frame.get(),std::make_shared<Parser::CodeBlock>(linedeflist,0,p.get_line())));
     run_frame->variable_types.erase("args");
     std::shared_ptr<Interpreter::ExecFrame> run_exec_frame(std::make_shared<Interpreter::ExecFrame>(nullptr,run_frame.get()));
+    std::shared_ptr<Interpreter::ExecFrame> cb_exec_frame=cb->getContext(run_exec_frame.get());
     std::vector<std::shared_ptr<Interpreter::Value>> main_args;
     for(int i=offset;i<argc;i++){
         main_args.push_back(std::make_shared<Interpreter::StringValue>(argv[i]));
     }
     run_exec_frame->variables["args"]=std::make_shared<Interpreter::ArrayVariable>("args",std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),main_args.size()),main_args);
-    std::shared_ptr<Interpreter::LineResult> result=cb->run(run_exec_frame.get());
+    std::shared_ptr<Interpreter::LineResult> result=cb->run(cb_exec_frame.get());
     switch(result->getAction()){
     case Interpreter::ACTION_NONE:
         return 0;
