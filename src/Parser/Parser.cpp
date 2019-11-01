@@ -15,7 +15,7 @@ int parserProgress::get_line(int offset){
 }
 
 bool parserProgress::in_range(int offset){
-    return !(int64_t(location+offset)>=int64_t(data.size()));//to fix signed with unsigned comparison error
+    return !(int64_t(location+offset)>=int64_t(data.size())||int64_t(location+offset)<0);//to fix signed with unsigned comparison error
 }
 
 bool parserProgress::peekType(Lexer::token_type_t id,int offset){
