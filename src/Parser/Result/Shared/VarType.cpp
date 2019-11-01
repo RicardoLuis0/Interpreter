@@ -64,7 +64,7 @@ std::string VarType::getSource(){
 void VarType::print(int depth){
     std::string indent0=get_indent(depth);
     std::string indent1=get_indent(depth+1);
-    std::cout<<indent0<<"VariableDefinitionItem {\n";
+    std::cout<<indent0<<"VarType {\n";
     std::cout<<indent0<<".type:\n";
     switch(type){
     case VARTYPE_VOID:
