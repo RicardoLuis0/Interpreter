@@ -4,6 +4,7 @@
 #include <string>
 
 namespace Console{
+    void sleep(int ms);
     void clear();
     void init();
     bool kbhit();

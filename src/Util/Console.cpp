@@ -27,6 +27,10 @@ namespace Console{
 #if defined (__WIN32__) || defined (__WIN32) || defined (WIN32)
 
     HANDLE hStdOut;
+    
+    void sleep(int ms){
+        ::Sleep(ms);
+    }
 
     void clear() {
         unsigned long temp;
@@ -81,6 +85,10 @@ namespace Console{
 #elif defined (__linux__)
 
 #warning operation under linux is still experimental
+
+    void sleep(int ms){
+        throw std::runtime_error("sleep(ms) unimplemented");
+    }
 
     void clear(){
         ::printf("\033[H\033[J");
