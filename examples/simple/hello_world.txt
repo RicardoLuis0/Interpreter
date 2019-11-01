@@ -1,0 +1,5 @@
+if(array_size(args)>0){
+	printvals(args);
+}else{
+	printf("Hello, World!");
+}

@@ -9,15 +9,11 @@
 
 namespace Interpreter {
     class ExecFrame{
-        protected:
+        public:
             void set_variable(std::string,std::shared_ptr<Value>,std::shared_ptr<Type>);
             std::unordered_map<std::string,std::shared_ptr<Variable>> variables;
             ExecFrame * parent;
             class DefaultFrame * defaults;
-            friend class ForStatement;
-            friend class UserFunction;
-            friend class ExprPartInitVLA;
-        public:
             ExecFrame(ExecFrame * parent,class DefaultFrame * defaults);
             std::shared_ptr<Variable> get_variable(std::string);
             std::shared_ptr<Function> get_function(std::string,std::vector<FunctionParameter>);

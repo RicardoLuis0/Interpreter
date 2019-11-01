@@ -135,6 +135,7 @@
     <ClCompile Include="src\Interpreter\Line\Statement\IfStatement.cpp" />
     <ClCompile Include="src\Interpreter\Line\Statement\ReturnStatement.cpp" />
     <ClCompile Include="src\Interpreter\Line\Statement\WhileStatement.cpp" />
+    <ClCompile Include="src\Interpreter\Struct.cpp" />
     <ClCompile Include="src\Interpreter\Type\AnyType.cpp" />
     <ClCompile Include="src\Interpreter\Type\ArrayType.cpp" />
     <ClCompile Include="src\Interpreter\Type\CharType.cpp" />
@@ -325,6 +326,7 @@
     <ClInclude Include="include\interpreter\StringType.h" />
     <ClInclude Include="include\interpreter\StringValue.h" />
     <ClInclude Include="include\interpreter\StringVariable.h" />
+    <ClInclude Include="include\Interpreter\Struct.h" />
     <ClInclude Include="include\interpreter\Type.h" />
     <ClInclude Include="include\interpreter\TypeType.h" />
     <ClInclude Include="include\interpreter\TypeValue.h" />

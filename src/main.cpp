@@ -31,12 +31,16 @@
 #include "Interpreter/DefaultFrame.h"
 #include "Interpreter/ExecFrame.h"
 #include "Util/InterpreterUtilDefinesMisc.h"
+#include "Interpreter/CodeBlock.h"
 #include "Interpreter/IntValue.h"
 #include "Interpreter/VoidType.h"
 #include "Interpreter/IntType.h"
 #include "Interpreter/ArrayType.h"
 #include "Interpreter/ArrayValue.h"
+#include "Interpreter/ArrayVariable.h"
 #include "Interpreter/StringValue.h"
+#include "Interpreter/LineResultReturn.h"
+#include "deflib.h"
 #include <cstring>
 #include <algorithm>
 
@@ -54,6 +58,48 @@
  */
 
 void test_lexer(),test_expressions(),test_lines(),test_definitions();
+
+int simple_exec(std::string filename,int argc,char ** argv,int offset){
+    std::vector<std::shared_ptr<Lexer::Token>> tokens;
+    std::vector<std::shared_ptr<Parser::Line>> linedeflist;
+    Lexer::Lexer lexer(base_symbols,base_keywords);
+    tokens=lexer.tokenize_from_file(argv[2]);
+    Parser::parserProgress p(tokens);
+    while(p.get_nothrow()!=nullptr){
+        linedeflist.push_back(Parser::LineMatcher().makeMatch(p));
+    }
+    std::shared_ptr<Interpreter::DefaultFrame> run_frame(std::make_shared<Interpreter::DefaultFrame>(nullptr));
+    Interpreter::init_deflib(run_frame.get());
+    std::vector<std::shared_ptr<Interpreter::Line>> lines;
+    run_frame->variable_types["args"]=std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),-1);
+    std::shared_ptr<Interpreter::CodeBlock> cb(std::make_shared<Interpreter::CodeBlock>(run_frame.get(),std::make_shared<Parser::CodeBlock>(linedeflist,0,p.get_line())));
+    run_frame->variable_types.erase("args");
+    std::shared_ptr<Interpreter::ExecFrame> run_exec_frame(std::make_shared<Interpreter::ExecFrame>(nullptr,run_frame.get()));
+    std::vector<std::shared_ptr<Interpreter::Value>> main_args;
+    for(int i=offset;i<argc;i++){
+        main_args.push_back(std::make_shared<Interpreter::StringValue>(argv[i]));
+    }
+    run_exec_frame->variables["args"]=std::make_shared<Interpreter::ArrayVariable>("args",std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),main_args.size()),main_args);
+    std::shared_ptr<Interpreter::LineResult> result=cb->run(run_exec_frame.get());
+    switch(result->getAction()){
+    case Interpreter::ACTION_NONE:
+        return 0;
+    case Interpreter::ACTION_BREAK:
+        throw std::runtime_error("Invalid use of 'break' statement");
+    case Interpreter::ACTION_CONTINUE:
+        throw std::runtime_error("Invalid use of 'continue' statement");
+    case Interpreter::ACTION_RETURN:
+        if(auto ret=std::dynamic_pointer_cast<Interpreter::LineResultReturn>(result)){
+            auto val=ret->get();
+            if(val->get_type()->allows_implicit_cast(val->get_type(),Interpreter::Type::int_type())){
+                return std::dynamic_pointer_cast<Interpreter::IntValue>(val->get_type()->cast(val,Interpreter::Type::int_type()))->get();
+            }else{
+                throw std::runtime_error("Cannot convert return value to int");
+            }
+        }
+    }
+    throw std::runtime_error("Internal error");
+}
 
 int exec(std::string filename,int argc,char ** argv){
     Lexer::Lexer lexer(base_symbols,base_keywords);
@@ -270,8 +316,8 @@ int main(int argc,char ** argv){
             std::vector<std::shared_ptr<Lexer::Token>> tokens;
             std::vector<std::shared_ptr<Parser::Definition>> deflist;
             Lexer::Lexer lexer(base_symbols,base_keywords);
-            Parser::parserProgress p(tokens);
             tokens=lexer.tokenize_from_file(argv[2]);
+            Parser::parserProgress p(tokens);
             while(p.get_nothrow()!=nullptr){
                 deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
             }
@@ -279,6 +325,8 @@ int main(int argc,char ** argv){
                 def->print(0);
                 std::cout<<"\n";
             }
+        }else if(argc>=3&&strcmp(argv[1],"-simple")==0){
+            return simple_exec(argv[2],argc,argv,3);
         }else{
             return exec(argv[1],argc,argv);
         }
