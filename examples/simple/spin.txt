@@ -1,13 +1,21 @@
 string[4] states;
+
 states[0]="/";
 states[1]="-";
 states[2]="\\";
 states[3]="|";
+
 int i=0;
+
+string getspin(){//i [0,4)
+	if(i>3)i=0;
+	return states[i++];
+}
+
 while(!kbhit()){
 	cls();
-	print(states[i++]+" Press any key...");
-	if(i>3)i=0;
+	print(getspin()+" Press any key...");
 	sleep(100);
 }
+
 getch();
