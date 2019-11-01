@@ -56,6 +56,8 @@
 //void fseek(ptr<void>) DONE operates as SEEK_END
 //int ftell(ptr<void>) DONE
 //int rand() DONE
+//void sleep(int ms) DONE
+//int kbhit() DONE
 
 //void push_front(any[],any) TODO
 //void push_back(any[],any) TODO
@@ -997,6 +999,47 @@ namespace Interpreter {
 
     };
 
+
+    class sleep : public Function {
+        std::string get_name() override {
+            return "sleep";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::void_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::int_type()}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
+            Console::sleep(std::dynamic_pointer_cast<IntValue>(args[0]->get_type()->cast(args[0],Type::int_type()))->get());
+            return nullptr;
+        }
+
+    };
+
+    class kbhit : public Function{
+
+        std::string get_name() override {
+            return "kbhit";
+        }
+
+        std::shared_ptr<Type> get_type(){
+            return Type::int_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
+            return std::make_shared<IntValue>(Console::kbhit());
+        }
+
+    };
+
 }
 
 void Interpreter::init_deflib(DefaultFrame * d){
@@ -1033,4 +1076,6 @@ void Interpreter::init_deflib(DefaultFrame * d){
     d->register_function(std::make_shared<Interpreter::peek_front>());
     d->register_function(std::make_shared<Interpreter::peek_back>());
     d->register_function(std::make_shared<Interpreter::resize>());
+    d->register_function(std::make_shared<Interpreter::sleep>());
+    d->register_function(std::make_shared<Interpreter::kbhit>());
 }
