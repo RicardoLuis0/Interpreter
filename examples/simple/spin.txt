@@ -1,3 +1,5 @@
+#simple
+
 string[4] states;
 
 states[0]="/";

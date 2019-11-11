@@ -1,3 +1,5 @@
+#simple
+
 int fib(int n){
 	if(n<=1){
 		return n;
@@ -18,3 +20,6 @@ while(true){
 }
 
 printf("Fib:%{}\n",fib(i));
+
+print("Press any key...");
+getch();

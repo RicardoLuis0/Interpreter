@@ -1,1 +1,7 @@
+#simple
+
 print("Hello, World!");
+
+
+print("\nPress any key...");
+getch();

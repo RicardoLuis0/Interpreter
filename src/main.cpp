@@ -41,6 +41,7 @@
 #include "Interpreter/StringValue.h"
 #include "Interpreter/LineResultReturn.h"
 #include "deflib.h"
+#include "Util/read_file.h"
 #include <cstring>
 #include <algorithm>
 
@@ -59,12 +60,11 @@
 
 void test_lexer(),test_expressions(),test_lines(),test_definitions();
 
-int simple_exec(std::string filename,int argc,char ** argv,int offset){
-    std::vector<std::shared_ptr<Lexer::Token>> tokens;
-    std::vector<std::shared_ptr<Parser::Line>> linedeflist;
+int simple_exec_string(std::string filename,std::string &data,int argc,char ** argv,int offset,int str_offset=0){
     Lexer::Lexer lexer(base_symbols,base_keywords);
-    tokens=lexer.tokenize_from_file(argv[2]);
+    std::vector<std::shared_ptr<Lexer::Token>> tokens(lexer.tokenize_from_string(filename,data));
     Parser::parserProgress p(tokens);
+    std::vector<std::shared_ptr<Parser::Line>> linedeflist;
     while(p.get_nothrow()!=nullptr){
         linedeflist.push_back(Parser::LineMatcher().makeMatch(p));
     }
@@ -102,9 +102,26 @@ int simple_exec(std::string filename,int argc,char ** argv,int offset){
     throw std::runtime_error("Internal error");
 }
 
+int simple_exec(std::string filename,int argc,char ** argv,int offset){
+    std::string data;
+    read_file(filename,data);
+    if(data.substr(0,8)=="#simple\n"){
+        data=data.substr(7);
+        return simple_exec_string(filename,data,argc,argv,offset);
+    }else{
+        return simple_exec_string(filename,data,argc,argv,offset);
+    }
+}
+
 int exec(std::string filename,int argc,char ** argv){
+    std::string data;
+    read_file(filename,data);
+    if(data.substr(0,8)=="#simple\n"){
+        data=data.substr(7);
+        return simple_exec_string(filename,data,argc,argv,2);
+    }
     Lexer::Lexer lexer(base_symbols,base_keywords);
-    std::vector<std::shared_ptr<Lexer::Token>> tokens(lexer.tokenize_from_file(filename));
+    std::vector<std::shared_ptr<Lexer::Token>> tokens(lexer.tokenize_from_string(filename,data));
     Console::changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
     std::vector<std::shared_ptr<Parser::Definition>> deflist;
     Parser::parserProgress p(tokens);
