@@ -22,6 +22,7 @@ namespace Parser {
         EXPRESSION_TERM_LITERAL_FALSE,
         EXPRESSION_TERM_LITERAL_NULL,
         EXPRESSION_TERM_IDENTIFIER,
+        EXPRESSION_TERM_VARTYPE,
     };
     enum ExpressionTermMemberAccessType_t{
         MEMBER_ACCESS_NONE,

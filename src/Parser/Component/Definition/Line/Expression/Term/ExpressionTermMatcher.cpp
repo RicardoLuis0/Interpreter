@@ -8,10 +8,14 @@
 #include "symbols_keywords.h"
 #include "Parser/ExpressionMatcher.h"
 #include "Lexer/KeywordToken.h"
+#include "Parser/VarTypeMatcher.h"
 
 //literal = int,float,string,true,false,nullptr
 
-//ExpressionTerm = ( ExpressionGroup | FunctionCall | KeywordFunctionCall | UnaryOperation | literal | identifier ) , { symbol 'unary_post_operator' } , { symbol '[' , Expression , symbol ']' } , [ ( symbol '.' | symbol '->' ) , ExpressionTerm ] ;
+//ExpressionTerm = ( ExpressionGroup | FunctionCall | UnaryOperation | literal | identifier | VarType | KeywordFunctionCall ) ,
+//                  { symbol 'unary_post_operator' } ,
+//                  { symbol '[' , Expression , symbol ']' } ,
+//                  [ ( symbol '.' | symbol '->' ) , ExpressionTerm ] ;
 
 using namespace Parser;
 
@@ -36,32 +40,37 @@ std::shared_ptr<ExpressionTerm> ExpressionTermMatcher::makeMatch(parserProgress 
                 throw;
             }
             try{
-                term=std::make_shared<ExpressionTerm>(KeywordFunctionCallMatcher().makeMatch(p),EXPRESSION_TERM_KEYWORD_FUNCTION_CALL,line_start,p.get_line(-1));
+                term=std::make_shared<ExpressionTerm>(UnaryOperationMatcher().makeMatch(p),EXPRESSION_TERM_UNARY_OPERATION,line_start,p.get_line(-1));
             }catch(MyExcept::NoMatchException &){
                 p.location=location_backup;
-                if(p.isKeyword({KEYWORD_IS,KEYWORD_CAST,KEYWORD_TYPEOF,KEYWORD_TYPE})){
-                    //if it is definitely a keyword function call, re-throw previous exception
-                    throw;
-                }
-                try{
-                    term=std::make_shared<ExpressionTerm>(UnaryOperationMatcher().makeMatch(p),EXPRESSION_TERM_UNARY_OPERATION,line_start,p.get_line(-1));
-                }catch(MyExcept::NoMatchException &){
-                    p.location=location_backup;
-                    std::shared_ptr<Lexer::Token> temp_token;
-                    if(temp_token=p.isType(Lexer::TOKEN_TYPE_INTEGER)){//int
-                        term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_INT,line_start,p.get_line(-1));
-                    }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_CHAR)){//float
-                        term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_CHAR,line_start,p.get_line(-1));
-                    }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_FLOAT)){//float
-                        term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_FLOAT,line_start,p.get_line(-1));
-                    }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_STRING)){//string
-                        term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_STRING,line_start,p.get_line(-1));
-                    }else if(temp_token=p.isKeyword({KEYWORD_TRUE,KEYWORD_FALSE,KEYWORD_NULL})){
-                        term=std::make_shared<ExpressionTerm>(p.get(-1),(std::static_pointer_cast<Lexer::KeywordToken>(temp_token)->get_keyword_type()==KEYWORD_TRUE)?EXPRESSION_TERM_LITERAL_TRUE:(std::static_pointer_cast<Lexer::KeywordToken>(temp_token)->get_keyword_type()==KEYWORD_NULL?EXPRESSION_TERM_LITERAL_NULL:EXPRESSION_TERM_LITERAL_FALSE),line_start,p.get_line(-1));
-                    }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_WORD)){//ident
-                        term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_IDENTIFIER,line_start,p.get_line(-1));
-                    }else{
-                        throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected literal or identifier, got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+                std::shared_ptr<Lexer::Token> temp_token;
+                if(temp_token=p.isType(Lexer::TOKEN_TYPE_INTEGER)){//int
+                    term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_INT,line_start,p.get_line(-1));
+                }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_CHAR)){//float
+                    term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_CHAR,line_start,p.get_line(-1));
+                }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_FLOAT)){//float
+                    term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_FLOAT,line_start,p.get_line(-1));
+                }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_STRING)){//string
+                    term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_LITERAL_STRING,line_start,p.get_line(-1));
+                }else if(temp_token=p.isKeyword({KEYWORD_TRUE,KEYWORD_FALSE,KEYWORD_NULL})){
+                    term=std::make_shared<ExpressionTerm>(p.get(-1),(std::static_pointer_cast<Lexer::KeywordToken>(temp_token)->get_keyword_type()==KEYWORD_TRUE)?EXPRESSION_TERM_LITERAL_TRUE:(std::static_pointer_cast<Lexer::KeywordToken>(temp_token)->get_keyword_type()==KEYWORD_NULL?EXPRESSION_TERM_LITERAL_NULL:EXPRESSION_TERM_LITERAL_FALSE),line_start,p.get_line(-1));
+                }else if(temp_token=p.isType(Lexer::TOKEN_TYPE_WORD)){//ident
+                    term=std::make_shared<ExpressionTerm>(temp_token,EXPRESSION_TERM_IDENTIFIER,line_start,p.get_line(-1));
+                }else{
+                    try {
+                        p.location=location_backup;
+                        term=std::make_shared<ExpressionTerm>(VarTypeMatcher().makeMatch(p),EXPRESSION_TERM_VARTYPE,line_start,p.get_line(-1));
+                    } catch (MyExcept::NoMatchException &){
+                        try{
+                            term=std::make_shared<ExpressionTerm>(KeywordFunctionCallMatcher().makeMatch(p),EXPRESSION_TERM_KEYWORD_FUNCTION_CALL,line_start,p.get_line(-1));
+                        }catch(MyExcept::NoMatchException &){
+                            p.location=location_backup;
+                            if(p.isKeyword({KEYWORD_IS,KEYWORD_CAST,KEYWORD_TYPEOF,KEYWORD_TYPE})){
+                                //if it is definitely a keyword function call, re-throw previous exception
+                                throw;
+                            }
+                            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected literal, type, or identifier, got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+                        }
                     }
                 }
             }

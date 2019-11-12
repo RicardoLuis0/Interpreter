@@ -126,6 +126,9 @@ std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::share
     case Parser::EXPRESSION_TERM_LITERAL_NULL:
         expr=std::make_shared<ExprPartValue>(std::make_shared<PointerValue>(Type::void_type(),nullptr));
         break;
+    case Parser::EXPRESSION_TERM_VARTYPE:
+        expr=std::make_shared<ExprPartValue>(std::make_shared<TypeValue>(Type::from_vartype(context,std::static_pointer_cast<Parser::VarType>(term->contents_p))));
+        break;
     default:
         throw std::runtime_error("unimplemented Expression Term type");//unreachable???
     }

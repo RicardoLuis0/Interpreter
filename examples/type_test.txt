@@ -14,14 +14,14 @@ string get_value_type_name(any val){
 }
 
 void type_test(){
-    type int_type=type<int>();
-    type char_type=type<char>();
-    type unsigned_int_type=type<unsigned int>();
-    type unsigned_char_type=type<unsigned char>();
-    type float_type=type<float>();
-    type string_type=type<string>();
-    type type_type=type<type>();
-    type array_type=type<any[]>();
+    type int_type=int;
+    type char_type=char;
+    type unsigned_int_type=unsigned int;
+    type unsigned_char_type=unsigned char;
+    type float_type=float;
+    type string_type=string;
+    type type_type=type;
+    type array_type=any[];
     
     print(get_type_name(int_type)+"\n");
     print(get_type_name(char_type)+"\n");
