@@ -33,6 +33,7 @@ Expression::Expression(DefaultFrame * context,std::shared_ptr<Parser::Expression
 }
 
 Expression::Expression(std::shared_ptr<ExprPart> e,int l):Line(l),expression(e){
+    
 }
 
 std::shared_ptr<Type> Expression::get_type(){
