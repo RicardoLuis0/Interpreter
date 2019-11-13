@@ -47,8 +47,11 @@ std::shared_ptr<ExprPart> Expression::get_expression(DefaultFrame * context,std:
     if(e->type==Parser::EXPRESSION_BINARY_OPERATION){
         std::shared_ptr<Parser::BinaryOperation> op(std::static_pointer_cast<Parser::BinaryOperation>(e->contents));
         if(op->is_keyword){
-            //TODO
-            throw std::runtime_error("keyword operators not imeplemented yet");
+            switch(op->binary_keyword_operator->get_keyword_type()){
+            case KEYWORD_IS:
+            default:
+                throw std::runtime_error("keyword operator '"+op->binary_keyword_operator->get_literal()+"' not imeplemented yet");
+            }
         }else{
             return std::make_shared<ExprPartOp>(get_term(context,op->term1),op->binary_operator->get_symbol_type(),get_expression(context,op->term2),e->line_start,e->line_end);
         }
