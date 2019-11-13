@@ -39,6 +39,8 @@ static std::vector<int> binary_operators{
     SYMBOL_RIGHT_SHIFT_ASSIGNMENT,
     SYMBOL_PERCENT,
     SYMBOL_PERCENT_ASSIGNMENT,
+    SYMBOL_DOT,
+    SYMBOL_ARROW,
 };
 
 static std::vector<int> binary_keyword_operators{
