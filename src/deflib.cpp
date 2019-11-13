@@ -59,13 +59,13 @@
 //void sleep(int ms) DONE
 //int kbhit() DONE
 
-//void push_front(any[],any) TODO
-//void push_back(any[],any) TODO
-//any pop_front(any[]) TODO
-//any pop_back(any[]) TODO
-//any peek_front(any[]) TODO
-//any peek_back(any[]) TODO
-//void resize(any[]) TODO
+//void push_front(any[],any) DONE
+//void push_back(any[],any) DONE
+//any pop_front(any[]) DONE
+//any pop_back(any[]) DONE
+//any peek_front(any[]) DONE
+//any peek_back(any[]) DONE
+//void resize(any[]) DONE
 
 static std::string escape(char c){
     switch(c) {

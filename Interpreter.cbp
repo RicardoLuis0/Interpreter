@@ -62,6 +62,10 @@
 		<Unit filename="examples/ptr_test.txt" />
 		<Unit filename="examples/push_pop_test.txt" />
 		<Unit filename="examples/ref_test.txt" />
+		<Unit filename="examples/simple/fibonacci.txt" />
+		<Unit filename="examples/simple/hello_world.txt" />
+		<Unit filename="examples/simple/print_args.txt" />
+		<Unit filename="examples/simple/spin.txt" />
 		<Unit filename="examples/struct_test.txt" />
 		<Unit filename="examples/tictactoe.txt" />
 		<Unit filename="examples/tictactoe_old.txt" />
