@@ -49,6 +49,7 @@ std::shared_ptr<ExprPart> Expression::get_expression(DefaultFrame * context,std:
         if(op->is_keyword){
             switch(op->binary_keyword_operator->get_keyword_type()){
             case KEYWORD_IS:
+                return std::make_shared<ExprPartIs>(get_expression(context,op->term2),get_term(context,op->term1));
             default:
                 throw std::runtime_error("keyword operator '"+op->binary_keyword_operator->get_literal()+"' not imeplemented yet");
             }

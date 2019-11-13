@@ -6,7 +6,7 @@ string tf(int v){
 }
 
 int same_type(any val1,any val2){
-    return is(typeof(val1),val2);
+    return val2 is typeof(val1);
 }
 
 string get_value_type_name(any val){
