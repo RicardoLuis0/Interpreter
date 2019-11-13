@@ -6,7 +6,7 @@
 #include "MyExcept/MyExcept.h"
 #include "Parser/VariableDefinitionMatcher.h"
 
-//ForStatement = keyword 'for' , symbol '(' , [ Expression | VariableDefinition ] , symbol ';' , [ Expression ] , symbol ';' , [ Expression ] , symbol ')' , Line ;
+//ForStatement = keyword 'for' , symbol '(' , [ VariableDefinition  | Expression ] , symbol ';' , [ Expression ] , symbol ';' , [ Expression ] , symbol ')' , Line ;
 
 using namespace Parser;
 
@@ -18,15 +18,15 @@ std::shared_ptr<ForStatement> ForStatementMatcher::makeMatch(parserProgress &p){
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '(', got '"+p.get_nothrow_nonull()->get_literal()+"'");
     int location_backup=p.location;
     try{
-        pre=ExpressionMatcher().makeMatch(p);
+        vardef_pre=VariableDefinitionMatcher().makeMatch(p);
     }catch(MyExcept::NoMatchException &){
         p.location=location_backup;
-        pre=nullptr;
+        vardef_pre=nullptr;
         try{
-            vardef_pre=VariableDefinitionMatcher().makeMatch(p);
+            pre=ExpressionMatcher().makeMatch(p);
         }catch(MyExcept::NoMatchException &){
-            vardef_pre=nullptr;
             p.location=location_backup;
+            pre=nullptr;
             if(!p.peekSymbol(SYMBOL_SEMICOLON))throw;//if next symbol isn't a semicolon, rethrow
         }
     }
