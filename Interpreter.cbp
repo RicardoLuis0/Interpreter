@@ -53,6 +53,7 @@
 		<Unit filename="examples/for_test.txt" />
 		<Unit filename="examples/getch_test.txt" />
 		<Unit filename="examples/hello_world.txt" />
+		<Unit filename="examples/is_test.txt" />
 		<Unit filename="examples/lib.txt" />
 		<Unit filename="examples/nested_functions_test.txt" />
 		<Unit filename="examples/nqueen.txt" />

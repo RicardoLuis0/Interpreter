@@ -11,7 +11,11 @@
 using namespace Parser;
 
 static std::string get_op_str(int op){
-    return get_symbol_data(symbol_type_t(op)).name;
+    if(op<_LAST_KEYWORD_){
+        return get_keyword_data(keyword_type_t(op)).name;
+    }else{
+        return get_symbol_data(symbol_type_t(op)).name;
+    }
 }
 
 static std::map<int,int> operator_precedence{
@@ -44,6 +48,9 @@ static std::map<int,int> operator_precedence{
     {SYMBOL_RIGHT_SHIFT_ASSIGNMENT,11},
     {SYMBOL_PERCENT,1},
     {SYMBOL_PERCENT_ASSIGNMENT,11},
+    {KEYWORD_IS,0},
+    {SYMBOL_DOT,0},
+    {SYMBOL_ARROW,0},
 };
 
 struct element{
@@ -80,20 +87,22 @@ static void add_expr(std::shared_ptr<Expression> e,state &out){
     while(1){
         if(e->type==EXPRESSION_BINARY_OPERATION){
             std::shared_ptr<BinaryOperation> op(std::static_pointer_cast<BinaryOperation>(e->contents));
-            int op_num=op->binary_operator->get_symbol_type();
-            if(operator_precedence[op_num]==0){
-                //unimplemented special handling
-                throw std::runtime_error("unimplemented/unreachable");
+            int op_num;
+            if(op->is_keyword){
+                op_num=op->binary_keyword_operator->get_keyword_type();
+                op->binary_operator=std::make_shared<Lexer::SymbolToken>(op->binary_keyword_operator->line,(Lexer::symbol_data){"","",op_num});
             }else{
-                add_term(op->term1,out);
-                if(operator_precedence.find(op_num)==operator_precedence.end())throw std::runtime_error("unknown operator "+get_op_str(op_num));
-                while(!op_stack.empty()&&operator_precedence[op_stack.back()->get_symbol_type()]<operator_precedence[op_num]){
-                    out.st.emplace_back(op_stack.back());
-                    op_stack.pop_back();
-                }
-                op_stack.push_back(op->binary_operator);
-                e=op->term2;
+                op_num=op->binary_operator->get_symbol_type();
             }
+            add_term(op->term1,out);
+            if(operator_precedence.find(op_num)==operator_precedence.end())throw std::runtime_error("unknown operator "+get_op_str(op_num));
+            while(!op_stack.empty()&&operator_precedence[op_stack.back()->get_symbol_type()]<operator_precedence[op_num]){
+                out.st.emplace_back(op_stack.back());
+                op_stack.pop_back();
+            }
+            op_stack.push_back(op->binary_operator);
+            if(op->binary_keyword_operator)op->binary_operator=nullptr;
+            e=op->term2;
         }else if(e->type==EXPRESSION_TERM){
             add_term(std::static_pointer_cast<ExpressionTerm>(e->contents),out);
             while(!op_stack.empty()){
@@ -122,7 +131,11 @@ static std::shared_ptr<Expression> build_op(state &st,std::shared_ptr<Lexer::Sym
     }else{
         left=std::static_pointer_cast<ExpressionTerm>(e.elem);
     }
-    return std::make_shared<Expression>(std::make_shared<BinaryOperation>(left,op,right,st.line_start,st.line_end),EXPRESSION_BINARY_OPERATION,st.line_start,st.line_end);
+    if(op->get_symbol_type()<_LAST_KEYWORD_){
+        return std::make_shared<Expression>(std::make_shared<BinaryOperation>(left,std::make_shared<Lexer::KeywordToken>(op->line,get_keyword_data(keyword_type_t(op->get_symbol_type()))),right,st.line_start,st.line_end),EXPRESSION_BINARY_OPERATION,st.line_start,st.line_end);
+    }else{
+        return std::make_shared<Expression>(std::make_shared<BinaryOperation>(left,op,right,st.line_start,st.line_end),EXPRESSION_BINARY_OPERATION,st.line_start,st.line_end);
+    }
 }
 
 static std::shared_ptr<Expression> build_expr(state &st){
