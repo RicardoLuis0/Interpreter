@@ -9,6 +9,13 @@ Lexer::symbol_data get_symbol_data(symbol_type_t s){
     throw std::runtime_error("unreachable");
 }
 
+Lexer::keyword_data get_keyword_data(keyword_type_t k){
+    for(auto kd:base_keywords){
+        if(kd.type==k)return kd;
+    }
+    //unreachable
+    throw std::runtime_error("unreachable");
+}
 std::vector<Lexer::keyword_data> base_keywords{
     {"is","KEYWORD_IS",KEYWORD_IS},
     {"cast","KEYWORD_CAST",KEYWORD_CAST},

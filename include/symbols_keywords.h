@@ -42,10 +42,11 @@ enum keyword_type_t{
     KEYWORD_PRIVATE,
     KEYWORD_OVERRIDE,
     KEYWORD_VIRTUAL,
+    _LAST_KEYWORD_,
 };
 
 enum symbol_type_t {
-    SYMBOL_HASHTAG,
+    SYMBOL_HASHTAG=_LAST_KEYWORD_,
     SYMBOL_SEMICOLON,
     SYMBOL_COLON,
     SYMBOL_QUESTION_MARK,
@@ -95,6 +96,7 @@ enum symbol_type_t {
 };
 
 Lexer::symbol_data get_symbol_data(symbol_type_t);
+Lexer::keyword_data get_keyword_data(keyword_type_t);
 
 extern std::vector<Lexer::keyword_data> base_keywords;
 extern std::vector<Lexer::symbol_data> base_symbols;
