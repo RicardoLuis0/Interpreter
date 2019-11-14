@@ -49,8 +49,6 @@ static std::map<int,int> operator_precedence{
     {SYMBOL_PERCENT,1},
     {SYMBOL_PERCENT_ASSIGNMENT,99},
     {KEYWORD_IS,0},
-    {SYMBOL_DOT,98},
-    {SYMBOL_ARROW,98},
 };
 
 struct element{

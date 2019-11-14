@@ -13,7 +13,7 @@ BinaryOperation::BinaryOperation(std::shared_ptr<ExpressionTerm> et,std::shared_
 }
 
 std::string BinaryOperation::getSource(){
-    return term1->getSource()+binary_operator->get_literal()+term2->getSource();
+    return term1->getSource()+(is_keyword?binary_keyword_operator->get_literal():binary_operator->get_literal())+term2->getSource();
 }
 
 void BinaryOperation::print(int depth){

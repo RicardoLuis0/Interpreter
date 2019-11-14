@@ -1,9 +1,9 @@
 #include "Lexer/FloatToken.h"
 
 
-Lexer::FloatToken::FloatToken(int n,double f):
+Lexer::FloatToken::FloatToken(int n,double fv):
     Token(n,TOKEN_TYPE_FLOAT),
-    f(f){
+    f(fv){
 }
 
 const std::string Lexer::FloatToken::get_formatted() const {

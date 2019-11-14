@@ -12,6 +12,7 @@ namespace Parser{
             std::shared_ptr<UnaryOperation> makeMatch(parserProgress&);
             static std::vector<int> post_unary_operators;
             static std::vector<int> pre_unary_operators;
+            static std::vector<int> pre_unary_keyword_operators;
         protected:
         private:
     };

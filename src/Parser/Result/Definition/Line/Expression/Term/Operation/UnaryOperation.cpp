@@ -4,11 +4,14 @@
 
 using namespace Parser;
 
-UnaryOperation::UnaryOperation(std::shared_ptr<Lexer::SymbolToken> st,std::shared_ptr<ExpressionTerm> et,int ls,int le):ParserResultPart(ls,le),unary_operator(st),term(et){
+UnaryOperation::UnaryOperation(std::shared_ptr<Lexer::SymbolToken> st,std::shared_ptr<ExpressionTerm> et,int ls,int le):ParserResultPart(ls,le),unary_operator(st),term(et),is_keyword(false){
+}
+
+UnaryOperation::UnaryOperation(std::shared_ptr<Lexer::KeywordToken> kt,std::shared_ptr<ExpressionTerm> et,int ls,int le):ParserResultPart(ls,le),unary_keyword_operator(kt),term(et),is_keyword(true){
 }
 
 std::string UnaryOperation::getSource(){
-    return unary_operator->get_literal()+term->getSource();
+    return (is_keyword?unary_keyword_operator->get_literal():unary_operator->get_literal())+term->getSource();
 }
 
 void UnaryOperation::print(int depth){

@@ -132,7 +132,20 @@ std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::share
         expr=std::make_shared<ExprPartValue>(std::static_pointer_cast<Lexer::StringToken>(term->contents_t)->get_string());
         break;
     case Parser::EXPRESSION_TERM_UNARY_OPERATION:
-        expr=std::make_shared<ExprPartUnaryOp>(get_term(context,std::static_pointer_cast<Parser::UnaryOperation>(term->contents_p)->term),std::static_pointer_cast<Parser::UnaryOperation>(term->contents_p)->unary_operator->get_symbol_type(),true,term->line_start,term->line_end);
+        {
+            auto op=std::static_pointer_cast<Parser::UnaryOperation>(term->contents_p);
+            if(op->is_keyword){
+                switch(op->unary_keyword_operator->get_keyword_type()){
+                case KEYWORD_TYPEOF:
+                    expr=std::make_shared<ExprPartTypeOf>(get_term(context,op->term));
+                    break;
+                default:
+                    throw std::runtime_error("keyword unary operator '"+op->unary_keyword_operator->get_literal()+"' not imeplemented yet");
+                }
+            }else{
+                expr=std::make_shared<ExprPartUnaryOp>(get_term(context,op->term),op->unary_operator->get_symbol_type(),true,term->line_start,term->line_end);
+            }
+        }
         break;
     case Parser::EXPRESSION_TERM_LITERAL_TRUE:
         expr=ExprPartValue::from_int(1);

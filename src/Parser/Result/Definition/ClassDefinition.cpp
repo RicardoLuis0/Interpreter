@@ -4,5 +4,5 @@
 
 using namespace Parser;
 
-ClassDefinition::ClassDefinition(int line_start,int line_end):ParserResultPart(line_start,line_end){
+ClassDefinition::ClassDefinition(int ls,int le):ParserResultPart(ls,le){
 }

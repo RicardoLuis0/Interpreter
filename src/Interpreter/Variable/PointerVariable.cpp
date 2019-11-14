@@ -3,6 +3,6 @@
 
 using namespace Interpreter;
 
-PointerVariable::PointerVariable(std::string s,std::shared_ptr<Type> type,std::shared_ptr<Value> value):Variable(s),PointerValue(type,value){
+PointerVariable::PointerVariable(std::string s,std::shared_ptr<Type> t,std::shared_ptr<Value> v):Variable(s),PointerValue(t,v){
     
 }

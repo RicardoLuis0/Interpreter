@@ -9,7 +9,7 @@ FunctionParameter::FunctionParameter(std::shared_ptr<Type> t):type(t),name("unde
     
 }
 
-FunctionParameter::FunctionParameter(std::shared_ptr<Type> t,std::string name):type(t),name(name){
+FunctionParameter::FunctionParameter(std::shared_ptr<Type> t,std::string n):type(t),name(n){
     
 }
 
