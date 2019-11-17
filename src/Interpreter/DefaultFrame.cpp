@@ -25,7 +25,10 @@
 
 using namespace Interpreter;
 
-DefaultFrame::DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>> defs):DefaultFrame(nullptr){
+DefaultFrame::DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>> defs,std::vector<std::string> library_imports):DefaultFrame(nullptr){
+    for(std::string library:library_imports){
+        import(this,library);
+    }
     for(std::shared_ptr<Parser::Definition> def:defs){
         add_definition(def,true);
     }

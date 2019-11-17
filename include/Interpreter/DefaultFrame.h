@@ -34,7 +34,7 @@ namespace Interpreter{
             std::vector<std::string> imported_libraries;//keep track of libraries, to prevent double importing
             std::vector<std::shared_ptr<class Expression>> initialize_globals;
             DefaultFrame(DefaultFrame * parent,std::shared_ptr<Parser::VariableDefinition>);//make for statement definition context
-            DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>>);//make global scope
+            DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>>,std::vector<std::string> library_imports);//make global scope
             DefaultFrame(DefaultFrame * parent,Function * func);//Function func must be of type UserFunction
             DefaultFrame(DefaultFrame * parent);
             DefaultFrame * parent;

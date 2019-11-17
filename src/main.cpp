@@ -130,8 +130,7 @@ int exec(std::string filename,int argc,char ** argv){
     while(p.get_nothrow()!=nullptr){
         deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
     }
-    Interpreter::DefaultFrame dframe(deflist);
-    Interpreter::import_all(&dframe);//import everything,TODO change to import only what's asked
+    Interpreter::DefaultFrame dframe(deflist,{"*"});//TODO change to import only what's asked
     std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
     std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
     std::vector<std::shared_ptr<Interpreter::Value>> fn_args;
@@ -190,6 +189,7 @@ int test_exec(){
     Console::clear();
 start:
     while(true){
+    Interpreter::DefaultFrame dframe(deflist,{"*"});//TODO change to import only what's asked
         std::cout<<">";
         std::cout.flush();
         while(std::cin.peek()=='\n')std::cin.ignore();
@@ -232,8 +232,7 @@ start:
     while(p.get_nothrow()!=nullptr){
         deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
     }
-    Interpreter::DefaultFrame dframe(deflist);
-    Interpreter::import_all(&dframe);//import everything,TODO change to import only what's asked
+    Interpreter::DefaultFrame dframe(deflist,{"*"});//TODO change to import only what's asked
     std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
     std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
     std::vector<std::shared_ptr<Interpreter::Value>> fn_args;
