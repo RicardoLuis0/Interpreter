@@ -42,6 +42,8 @@ enum keyword_type_t{
     KEYWORD_PRIVATE,
     KEYWORD_OVERRIDE,
     KEYWORD_VIRTUAL,
+    KEYWORD_IMPORT,
+    KEYWORD_EXPORT,
     _LAST_KEYWORD_,
 };
 

@@ -44,6 +44,8 @@
 #include "Util/read_file.h"
 #include <cstring>
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
 
 #include "preprocessor.h"
 
@@ -69,7 +71,7 @@ int simple_exec_string(std::string filename,std::string &data,int argc,char ** a
         linedeflist.push_back(Parser::LineMatcher().makeMatch(p));
     }
     std::shared_ptr<Interpreter::DefaultFrame> run_frame(std::make_shared<Interpreter::DefaultFrame>(nullptr));
-    Interpreter::init_deflib(run_frame.get());
+    Interpreter::import_all(run_frame.get());//import everything
     std::vector<std::shared_ptr<Interpreter::Line>> lines;
     run_frame->variable_types["args"]=std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),-1);
     std::shared_ptr<Interpreter::CodeBlock> cb(std::make_shared<Interpreter::CodeBlock>(run_frame.get(),std::make_shared<Parser::CodeBlock>(linedeflist,0,p.get_line())));
@@ -129,6 +131,7 @@ int exec(std::string filename,int argc,char ** argv){
         deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
     }
     Interpreter::DefaultFrame dframe(deflist);
+    Interpreter::import_all(&dframe);//import everything,TODO change to import only what's asked
     std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
     std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
     std::vector<std::shared_ptr<Interpreter::Value>> fn_args;
@@ -230,6 +233,7 @@ start:
         deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
     }
     Interpreter::DefaultFrame dframe(deflist);
+    Interpreter::import_all(&dframe);//import everything,TODO change to import only what's asked
     std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
     std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
     std::vector<std::shared_ptr<Interpreter::Value>> fn_args;
@@ -291,6 +295,7 @@ start:
 }
 
 int main(int argc,char ** argv){
+    srand(static_cast<unsigned int>(time(NULL)));
     Console::init();
     try{
         if(argc<2){

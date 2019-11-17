@@ -4,7 +4,9 @@
 #include "Interpreter/DefaultFrame.h"
 
 namespace Interpreter {
-    void init_deflib(DefaultFrame*);
+    void import_min(DefaultFrame*);
+    void import(DefaultFrame*,std::string library);
+    void import_all(DefaultFrame*);
 }
 
 #endif // DEFLIB_H

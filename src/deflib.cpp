@@ -1042,40 +1042,72 @@ namespace Interpreter {
 
 }
 
-void Interpreter::init_deflib(DefaultFrame * d){
-    srand(static_cast<unsigned int>(time(NULL)));
-    d->register_function(std::make_shared<Interpreter::printf>());
-    d->register_function(std::make_shared<Interpreter::sprintf>());
-    d->register_function(std::make_shared<Interpreter::printvals>());
-    d->register_function(std::make_shared<Interpreter::print>());
-    d->register_function(std::make_shared<Interpreter::putchar>());
-    d->register_function(std::make_shared<Interpreter::getline>());
-    d->register_function(std::make_shared<Interpreter::stoi>());
-    d->register_function(std::make_shared<Interpreter::stof>());
-    d->register_function(std::make_shared<Interpreter::to_string>());
-    d->register_function(std::make_shared<Interpreter::cls>());
-    d->register_function(std::make_shared<Interpreter::getch>());
-    d->register_function(std::make_shared<Interpreter::getch_wasd>());
-    d->register_function(std::make_shared<Interpreter::array_size>());
-    d->register_function(std::make_shared<Interpreter::get_type_name>());
-    d->register_function(std::make_shared<Interpreter::fopen>());
-    d->register_function(std::make_shared<Interpreter::fclose>());
-    d->register_function(std::make_shared<Interpreter::fputs>());
-    d->register_function(std::make_shared<Interpreter::fputs_len>());
-    d->register_function(std::make_shared<Interpreter::fprintf>());
-    d->register_function(std::make_shared<Interpreter::fgetc>());
-    d->register_function(std::make_shared<Interpreter::fgets>());
-    d->register_function(std::make_shared<Interpreter::fseek>());
-    d->register_function(std::make_shared<Interpreter::fseek_end>());
-    d->register_function(std::make_shared<Interpreter::ftell>());
-    d->register_function(std::make_shared<Interpreter::rand>());
-    d->register_function(std::make_shared<Interpreter::push_front>());
-    d->register_function(std::make_shared<Interpreter::push_back>());
-    d->register_function(std::make_shared<Interpreter::pop_front>());
-    d->register_function(std::make_shared<Interpreter::pop_back>());
-    d->register_function(std::make_shared<Interpreter::peek_front>());
-    d->register_function(std::make_shared<Interpreter::peek_back>());
-    d->register_function(std::make_shared<Interpreter::resize>());
-    d->register_function(std::make_shared<Interpreter::sleep>());
-    d->register_function(std::make_shared<Interpreter::kbhit>());
+void Interpreter::import_min(DefaultFrame * d){
+    import(d,"default");
+}
+
+void Interpreter::import(DefaultFrame * d,std::string library){
+    if(library=="*"){
+        import_all(d);
+    }else if(library=="default"){
+        if(!d->is_library_imported("default")){
+            d->imported_libraries.push_back("default");
+            d->register_function(std::make_shared<Interpreter::printvals>());
+            d->register_function(std::make_shared<Interpreter::print>());
+            d->register_function(std::make_shared<Interpreter::rand>());
+            //these next functions should be moved to methods/static methods when possible
+            d->register_function(std::make_shared<Interpreter::array_size>());
+            d->register_function(std::make_shared<Interpreter::get_type_name>());
+            d->register_function(std::make_shared<Interpreter::push_front>());
+            d->register_function(std::make_shared<Interpreter::push_back>());
+            d->register_function(std::make_shared<Interpreter::pop_front>());
+            d->register_function(std::make_shared<Interpreter::pop_back>());
+            d->register_function(std::make_shared<Interpreter::peek_front>());
+            d->register_function(std::make_shared<Interpreter::peek_back>());
+            d->register_function(std::make_shared<Interpreter::resize>());
+        }
+    }else if(library=="io"){
+        if(!d->is_library_imported("io")){
+            d->imported_libraries.push_back("io");
+            d->register_function(std::make_shared<Interpreter::printf>());
+            d->register_function(std::make_shared<Interpreter::putchar>());
+            d->register_function(std::make_shared<Interpreter::getline>());
+            d->register_function(std::make_shared<Interpreter::cls>());
+            d->register_function(std::make_shared<Interpreter::getch>());
+            d->register_function(std::make_shared<Interpreter::getch_wasd>());
+            d->register_function(std::make_shared<Interpreter::sleep>());
+            d->register_function(std::make_shared<Interpreter::kbhit>());
+        }
+    }else if(library=="file"){
+        if(!d->is_library_imported("file")){
+            d->imported_libraries.push_back("file");
+            d->register_function(std::make_shared<Interpreter::fopen>());
+            d->register_function(std::make_shared<Interpreter::fclose>());
+            d->register_function(std::make_shared<Interpreter::fputs>());
+            d->register_function(std::make_shared<Interpreter::fputs_len>());
+            d->register_function(std::make_shared<Interpreter::fprintf>());
+            d->register_function(std::make_shared<Interpreter::fgetc>());
+            d->register_function(std::make_shared<Interpreter::fgets>());
+            d->register_function(std::make_shared<Interpreter::fseek>());
+            d->register_function(std::make_shared<Interpreter::fseek_end>());
+            d->register_function(std::make_shared<Interpreter::ftell>());
+        }
+    }else if(library=="str"){
+        if(!d->is_library_imported("str")){
+            d->imported_libraries.push_back("str");
+            d->register_function(std::make_shared<Interpreter::sprintf>());
+            d->register_function(std::make_shared<Interpreter::stoi>());
+            d->register_function(std::make_shared<Interpreter::stof>());
+            d->register_function(std::make_shared<Interpreter::to_string>());
+        }
+    }else{
+        throw std::runtime_error("unknown library '"+library+"'");
+    }
+}
+
+void Interpreter::import_all(DefaultFrame * d){
+    import(d,"default");
+    import(d,"io");
+    import(d,"file");
+    import(d,"str");
 }

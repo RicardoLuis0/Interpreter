@@ -53,6 +53,8 @@ std::vector<Lexer::keyword_data> base_keywords{
     {"private","KEYWORD_PRIVATE",KEYWORD_PRIVATE},
     {"override","KEYWORD_OVERRIDE",KEYWORD_OVERRIDE},
     {"virtual","KEYWORD_VIRTUAL",KEYWORD_VIRTUAL},
+    {"import","KEYWORD_IMPORT",KEYWORD_IMPORT},
+    {"export","KEYWORD_EXPORT",KEYWORD_EXPORT},
 };
 
 std::vector<Lexer::symbol_data> base_symbols{

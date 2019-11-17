@@ -25,6 +25,13 @@ namespace Interpreter{
     };
     class DefaultFrame{
         public:
+            inline bool is_library_imported(std::string name){
+                for(std::string lib:imported_libraries){
+                    if(lib==name)return true;
+                }
+                return false;
+            }
+            std::vector<std::string> imported_libraries;//keep track of libraries, to prevent double importing
             std::vector<std::shared_ptr<class Expression>> initialize_globals;
             DefaultFrame(DefaultFrame * parent,std::shared_ptr<Parser::VariableDefinition>);//make for statement definition context
             DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>>);//make global scope

@@ -26,7 +26,6 @@
 using namespace Interpreter;
 
 DefaultFrame::DefaultFrame(std::vector<std::shared_ptr<Parser::Definition>> defs):DefaultFrame(nullptr){
-    init_deflib(this);
     for(std::shared_ptr<Parser::Definition> def:defs){
         add_definition(def,true);
     }
