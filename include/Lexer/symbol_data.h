@@ -18,6 +18,9 @@ namespace Lexer{
      */
 
     struct symbol_data{
+		symbol_data(std::string s,std::string n,int t):
+		str(s),name(n),type(t){
+		}
         std::string str; /**< @brief Match String for the Symbol */
         std::string name; /**< @brief Enum Name for the Symbol Type */
         int type; /**< @brief Type of the Symbol {@link #Lexer::symbol_type_t} */

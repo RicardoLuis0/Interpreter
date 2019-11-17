@@ -14,6 +14,6 @@ std::string StructDefinition::getSource(){
     throw std::runtime_error("struct definition de-parsing not implemented yet");
 }
 
-void StructDefinition::print(int depth){
+void StructDefinition::print(int){
     throw std::runtime_error("struct definition printing not implemented yet");
 }

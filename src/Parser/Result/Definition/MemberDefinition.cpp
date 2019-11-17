@@ -17,6 +17,6 @@ std::string MemberDefinition::getSource(){
     throw std::runtime_error("member definition de-parsing not implemented yet");
 }
 
-void MemberDefinition::print(int depth){
+void MemberDefinition::print(int){
     throw std::runtime_error("member definition printing not implemented yet");
 }

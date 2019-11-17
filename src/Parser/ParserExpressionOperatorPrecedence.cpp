@@ -88,7 +88,7 @@ static void add_expr(std::shared_ptr<Expression> e,state &out){
             int op_num;
             if(op->is_keyword){
                 op_num=op->binary_keyword_operator->get_keyword_type();
-                op->binary_operator=std::make_shared<Lexer::SymbolToken>(op->binary_keyword_operator->line,(Lexer::symbol_data){"","",op_num});
+                op->binary_operator=std::make_shared<Lexer::SymbolToken>(op->binary_keyword_operator->line,Lexer::symbol_data("","",op_num));
             }else{
                 op_num=op->binary_operator->get_symbol_type();
             }

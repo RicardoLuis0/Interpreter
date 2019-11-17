@@ -63,6 +63,7 @@
 void test_lexer(),test_expressions(),test_lines(),test_definitions();
 
 int simple_exec_string(std::string filename,std::string &data,int argc,char ** argv,int offset,int str_offset=0){
+	if(str_offset)data=data.substr(str_offset);
     Lexer::Lexer lexer(base_symbols,base_keywords);
     std::vector<std::shared_ptr<Lexer::Token>> tokens(lexer.tokenize_from_string(filename,data));
     Parser::parserProgress p(tokens);
