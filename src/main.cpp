@@ -4,44 +4,18 @@
 #include "Util/Console.h"
 #include "symbols_keywords.h"
 
-#include "Parser/Parser.h"
-#include "Parser/ExpressionMatcher.h"
-#include "Parser/LineMatcher.h"
-#include "Parser/Expression.h"
-#include "Parser/ExpressionList.h"
-#include "Parser/ExpressionGroup.h"
-#include "Parser/ExpressionTerm.h"
-#include "Parser/BinaryOperation.h"
-#include "Parser/FunctionCall.h"
-#include "Parser/KeywordFunctionCall.h"
-#include "Parser/IfStatement.h"
-#include "Parser/ForStatement.h"
-#include "Parser/WhileStatement.h"
-#include "Parser/Statement.h"
-#include "Parser/Line.h"
-#include "Parser/CodeBlock.h"
-#include "Parser/Definition.h"
-#include "Parser/VarType.h"
-#include "Parser/VariableDefinition.h"
-#include "Parser/FunctionDefinition.h"
-#include "Parser/FunctionDefinitionParameter.h"
-#include "Parser/ReturnStatement.h"
-#include "Parser/DefinitionMatcher.h"
-#include "Parser/UnaryOperation.h"
 #include "Interpreter/DefaultFrame.h"
 #include "Interpreter/ExecFrame.h"
-#include "Util/InterpreterUtilDefinesMisc.h"
-#include "Interpreter/CodeBlock.h"
-#include "Interpreter/IntValue.h"
-#include "Interpreter/VoidType.h"
-#include "Interpreter/IntType.h"
-#include "Interpreter/ArrayType.h"
-#include "Interpreter/ArrayValue.h"
+#include "Util/read_file.h"
+#include "Parser/Parser.h"
+#include "Parser/LineMatcher.h"
+#include "Parser/DefinitionMatcher.h"
 #include "Interpreter/ArrayVariable.h"
+#include "Interpreter/CodeBlock.h"
 #include "Interpreter/StringValue.h"
 #include "Interpreter/LineResultReturn.h"
+#include "Interpreter/IntValue.h"
 #include "deflib.h"
-#include "Util/read_file.h"
 #include <cstring>
 #include <algorithm>
 #include <cstdlib>
@@ -128,10 +102,19 @@ int exec(std::string filename,int argc,char ** argv){
     Console::changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
     std::vector<std::shared_ptr<Parser::Definition>> deflist;
     Parser::parserProgress p(tokens);
+    //get imports
+    std::vector<std::string> imports({"default"});
+    while(p.isKeyword(KEYWORD_IMPORT)){
+        if(std::shared_ptr<Lexer::WordToken> tk=std::static_pointer_cast<Lexer::WordToken>(p.isType(Lexer::TOKEN_TYPE_WORD))){
+            imports.push_back(tk->get_literal());
+        }else{
+            throw MyExcept::NoMatchException(p.get_line(),"expected library name, got '"+p.get_nothrow_nonull()->get_literal()+"'");
+        }
+    }
     while(p.get_nothrow()!=nullptr){
         deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
     }
-    Interpreter::DefaultFrame dframe(deflist,{"*"});//TODO change to import only what's asked
+    Interpreter::DefaultFrame dframe(deflist,imports);
     std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
     std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
     std::vector<std::shared_ptr<Interpreter::Value>> fn_args;
@@ -146,18 +129,20 @@ int exec(std::string filename,int argc,char ** argv){
         }
         fn_args.push_back(std::make_shared<Interpreter::ArrayValue>(std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),main_args.size()),main_args));
     }
-    if(CHECKPTR(entrypoint->get_type(),Interpreter::VoidType)){
+    auto t=entrypoint->get_type();
+    if(t->is(t,Interpreter::Type::void_type())){
         eframe->fn_call(entrypoint,fn_args);
         return 0;
     }else{
-        if(!CHECKPTR(entrypoint->get_type(),Interpreter::IntType)){
+        if(!t->allows_implicit_cast(t,Interpreter::Type::int_type())){
             throw std::runtime_error("'main()' function must return 'int' or 'void'");
         }
-        return std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,fn_args))->get();
+        auto r=eframe->fn_call(entrypoint,fn_args);
+        return std::dynamic_pointer_cast<Interpreter::IntValue>(r->get_type()->cast(r,Interpreter::Type::int_type()))->get();
     }
 }
 
-char unescape(char c){
+constexpr char unescape(char c){
     switch(c) {
     case 'a':
         return '\a';
@@ -190,7 +175,6 @@ int test_exec(){
     Console::clear();
 start:
     while(true){
-    Interpreter::DefaultFrame dframe(deflist,{"*"});//TODO change to import only what's asked
         std::cout<<">";
         std::cout.flush();
         while(std::cin.peek()=='\n')std::cin.ignore();
@@ -230,10 +214,19 @@ start:
     //Console::clear();
     Parser::parserProgress p(tokens);
     deflist.clear();
+    //get imports
+    std::vector<std::string> imports({"default"});
+    while(p.isKeyword(KEYWORD_IMPORT)){
+        if(std::shared_ptr<Lexer::WordToken> tk=std::static_pointer_cast<Lexer::WordToken>(p.isType(Lexer::TOKEN_TYPE_WORD))){
+            imports.push_back(tk->get_literal());
+        }else{
+            throw MyExcept::NoMatchException(p.get_line(),"expected library name, got '"+p.get_nothrow_nonull()->get_literal()+"'");
+        }
+    }
     while(p.get_nothrow()!=nullptr){
         deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
     }
-    Interpreter::DefaultFrame dframe(deflist,{"*"});//TODO change to import only what's asked
+    Interpreter::DefaultFrame dframe(deflist,imports);
     std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
     std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
     std::vector<std::shared_ptr<Interpreter::Value>> fn_args;
@@ -280,15 +273,16 @@ start:
         fn_args.push_back(std::make_shared<Interpreter::ArrayValue>(std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),main_args.size()),main_args));
         std::cout<<"\n";
     }
-    if(CHECKPTR(entrypoint->get_type(),Interpreter::VoidType)){
+    auto t=entrypoint->get_type();
+    if(t->is(t,Interpreter::Type::void_type())){
         eframe->fn_call(entrypoint,fn_args);
-        std::cout<<"\n\n"<<filename<<" finished exeuction\n";
-        goto start;
+        return 0;
     }else{
-        if(!CHECKPTR(entrypoint->get_type(),Interpreter::IntType)){
-            throw std::runtime_error("'main' function must return 'int' or 'void'");
+        if(!t->allows_implicit_cast(t,Interpreter::Type::int_type())){
+            throw std::runtime_error("'main()' function must return 'int' or 'void'");
         }
-        int retval=std::dynamic_pointer_cast<Interpreter::IntValue>(eframe->fn_call(entrypoint,fn_args))->get();
+        auto r=eframe->fn_call(entrypoint,fn_args);
+        int retval=std::dynamic_pointer_cast<Interpreter::IntValue>(r->get_type()->cast(r,Interpreter::Type::int_type()))->get();
         std::cout<<"\n\n"<<filename<<" returned with value "<<std::to_string(retval)<<"\n";
         goto start;
     }
@@ -301,18 +295,12 @@ int main(int argc,char ** argv){
         if(argc<2){
             while(true){
                 Console::clear();
-                std::cout<<"0> test lexer\n1> test expression parser\n2> test line parser\n3> test whole code parsing\n4> test execution\n\nChoice: ";
+                std::cout<<"0> test lexer\n1> test execution\n\nChoice: ";
                 std::string input;
                 std::cin>>input;
                 if(input.compare("0")==0){
                     test_lexer();
                 }else if(input.compare("1")==0){
-                    test_expressions();
-                }else if(input.compare("2")==0){
-                    test_lines();
-                }else if(input.compare("3")==0){
-                    test_definitions();
-                }else if(input.compare("4")==0){
                     return test_exec();
                 }else{
                     continue;
@@ -333,8 +321,8 @@ int main(int argc,char ** argv){
             while(p.get_nothrow()!=nullptr){
                 Parser::DefinitionMatcher().makeMatch(p);
             }
-        std::cout<<"Parse OK";
-        return 0;
+            std::cout<<"Parse OK";
+            return 0;
         }else if(argc==3&&strcmp(argv[1],"-AST")==0){
             std::vector<std::shared_ptr<Lexer::Token>> tokens;
             std::vector<std::shared_ptr<Parser::Definition>> deflist;
@@ -393,108 +381,6 @@ void test_lexer(){
         return;
     }catch(std::exception &e){
         std::cout<<"\n\nuncaught exception: "<<e.what();
-        return;
-    }
-}
-
-void test_expressions(){
-    try{
-        std::string filename;
-        std::vector<std::shared_ptr<Lexer::Token>> tokens;
-        Lexer::Lexer lexer(base_symbols,base_keywords);
-        while(true){
-            Console::clear();
-            std::cout<<"Filename: ";
-            std::cin>>filename;
-            try{
-                tokens=lexer.tokenize_from_file(filename);//split file into tokens
-            }catch(MyExcept::FileError &e){
-                std::cout<<e.what()<<"\nTry Again, ";
-                continue;
-            }
-            break;
-        }
-        Parser::parserProgress p(tokens);
-        std::shared_ptr<Parser::Expression> expr=Parser::ExpressionMatcher().makeMatch(p);
-        expr->print(0);
-    }catch(MyExcept::ParseError &e){
-        std::cout<<e.what();
-        return;
-    }catch(MyExcept::NoMatchException &e){
-        std::cout<<e.what();
-        return;
-    }catch(std::exception &e){
-        std::cout<<"uncaught exception: "<<e.what();
-        return;
-    }
-}
-
-void test_lines(){
-    try{
-        std::string filename;
-        std::vector<std::shared_ptr<Lexer::Token>> tokens;
-        Lexer::Lexer lexer(base_symbols,base_keywords);
-        while(true){
-            Console::clear();
-            std::cout<<"Filename: ";
-            std::cin>>filename;
-            try{
-                tokens=lexer.tokenize_from_file(filename);//split file into tokens
-            }catch(MyExcept::FileError &e){
-                std::cout<<e.what()<<"\nTry Again, ";
-                continue;
-            }
-            break;
-        }
-        Parser::parserProgress p(tokens);
-        std::shared_ptr<Parser::Line> line=Parser::LineMatcher().makeMatch(p);
-        line->print(0);
-    }catch(MyExcept::ParseError &e){
-        std::cout<<e.what();
-        return;
-    }catch(MyExcept::NoMatchException &e){
-        std::cout<<e.what();
-        return;
-    }catch(std::exception &e){
-        std::cout<<"uncaught exception: "<<e.what();
-        return;
-    }
-}
-
-void test_definitions(){
-    try{
-        std::string filename;
-        std::vector<std::shared_ptr<Lexer::Token>> tokens;
-        std::vector<std::shared_ptr<Parser::Definition>> deflist;
-        Lexer::Lexer lexer(base_symbols,base_keywords);
-        while(true){
-            Console::clear();
-            std::cout<<"Filename: ";
-            std::cin>>filename;
-            try{
-                tokens=lexer.tokenize_from_file(filename);//split file into tokens
-            }catch(MyExcept::FileError &e){
-                std::cout<<e.what()<<"\nTry Again, ";
-                continue;
-            }
-            break;
-        }
-        Parser::parserProgress p(tokens);
-        while(p.get_nothrow()!=nullptr){
-            deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
-        }
-        for(auto def:deflist){
-            def->print(0);
-            std::cout<<"\n";
-        }
-    }catch(MyExcept::ParseError &e){
-        std::cout<<e.what();
-        return;
-    }catch(MyExcept::NoMatchException &e){
-        std::cout<<e.what();
-        return;
-    }catch(std::exception &e){
-        std::cout<<"uncaught exception: "<<e.what();
         return;
     }
 }

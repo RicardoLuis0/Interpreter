@@ -14,7 +14,6 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="include" />
-					<Add directory="include/Interpreter" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -25,7 +24,6 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add directory="include" />
-					<Add directory="include/Interpreter" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
