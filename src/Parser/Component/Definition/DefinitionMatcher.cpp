@@ -36,7 +36,7 @@ std::shared_ptr<Definition> DefinitionMatcher::makeMatch(parserProgress &p){
             if(vt&&p.peekType(Lexer::TOKEN_TYPE_WORD)&&p.peekSymbol(SYMBOL_PARENTHESIS_OPEN,1))throw;//if is function definition rethrow
             p.location=location_backup;
             auto vdef=VariableDefinitionMatcher().makeMatch(p);
-            if(!p.isSymbol(SYMBOL_SEMICOLON))MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");//variable definition must end in semicolon
+            if(!p.isSymbol(SYMBOL_SEMICOLON))throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");//variable definition must end in semicolon
             return std::make_shared<Definition>(DEFINITION_VAR,vdef,line_start,p.get_line(-1));
         }
     }

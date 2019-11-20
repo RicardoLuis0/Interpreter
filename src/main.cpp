@@ -217,10 +217,19 @@ start:
     //get imports
     std::vector<std::string> imports({"default"});
     while(p.isKeyword(KEYWORD_IMPORT)){
-        if(std::shared_ptr<Lexer::WordToken> tk=std::static_pointer_cast<Lexer::WordToken>(p.isType(Lexer::TOKEN_TYPE_WORD))){
-            imports.push_back(tk->get_literal());
-        }else{
-            throw MyExcept::NoMatchException(p.get_line(),"expected library name, got '"+p.get_nothrow_nonull()->get_literal()+"'");
+        do{
+            if(p.isSymbol(SYMBOL_SEMICOLON)){
+                continue;
+            }else if(p.isSymbol(SYMBOL_MULTIPLY)){
+                imports.push_back("*");
+            }else if(std::shared_ptr<Lexer::WordToken> tk=std::static_pointer_cast<Lexer::WordToken>(p.isType(Lexer::TOKEN_TYPE_WORD))){
+                imports.push_back(tk->get_literal());
+            }else{
+                throw MyExcept::NoMatchException(p.get_line(),"expected library name, got '"+p.get_nothrow_nonull()->get_literal()+"'");
+            }
+        }while(p.isSymbol(SYMBOL_COLON));
+        if(!p.isSymbol(SYMBOL_SEMICOLON)){
+            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");
         }
     }
     while(p.get_nothrow()!=nullptr){

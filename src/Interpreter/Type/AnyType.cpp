@@ -5,6 +5,7 @@
 #include "Util/InterpreterUtilDefinesMisc.h"
 #include "Interpreter/DummyValue.h"
 #include "Interpreter/DummyVariable.h"
+#include "Interpreter/VoidType.h"
 #include "MyExcept/MyExcept.h"
 
 using namespace Interpreter;
@@ -13,6 +14,7 @@ AnyType::AnyType(bool c):Type(c){
 }
 
 bool AnyType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
+    if(CHECKPTR(other,VoidType))return false;
     return true;
 }
 
