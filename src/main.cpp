@@ -227,7 +227,7 @@ start:
             }else{
                 throw MyExcept::NoMatchException(p.get_line(),"expected library name, got '"+p.get_nothrow_nonull()->get_literal()+"'");
             }
-        }while(p.isSymbol(SYMBOL_COLON));
+        }while(p.isSymbol(SYMBOL_COMMA));
         if(!p.isSymbol(SYMBOL_SEMICOLON)){
             throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");
         }
