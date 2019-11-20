@@ -1,9 +1,11 @@
+import io,str;
+
 int[3][3] board;
 
 int turn;
 
 void pause(){
-    if(getch()==224)getch();//224 == arrow keys
+    getch();
 }
 
 void pauseMsg(string msg){

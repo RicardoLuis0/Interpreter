@@ -1,6 +1,8 @@
 //https://gist.github.com/rui314/2018964 , slightly modified
 //https://en.wikipedia.org/wiki/Eight_queens_puzzle
 
+import io;
+
 void print_board(int[8][8] board) {
     cls();
     for (int i = 0; i < 8; i++) {

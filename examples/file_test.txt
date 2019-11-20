@@ -1,3 +1,5 @@
+import file;
+
 void main(){
     string data;
     ptr<void> f=fopen("file_test.input.txt",false);//open 'file_test.input.txt' in read mode

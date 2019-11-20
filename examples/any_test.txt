@@ -1,3 +1,5 @@
+import io;
+
 any add(any a,any b){
     return a+b;
 }
@@ -13,18 +15,13 @@ int main(){
     int i1=2,i2=5;
     float f1=2.5,f2=5.2;
     string s1="this is",s2=" a test";
-    print("int1="+to_string(i1)+"\n");
-    print("int2="+to_string(i2)+"\n");
-    print("float1="+to_string(f1)+"\n");
-    print("float2="+to_string(f2)+"\n");
-    print("string1='"+s1+"'\n");
-    print("string2='"+s2+"'\n");
-    print("max(int1,int2)="+to_string(max(i1,i2))+"\n");
-    print("add(int1,int2)="+to_string(add(i1,i2))+"\n");
-    print("max(float1,int1)="+to_string(max(f1,i1))+"\n");
-    print("add(float1,int1)="+to_string(add(f1,i1))+"\n");
-    print("max(float1,float2)="+to_string(max(f1,f2))+"\n");
-    print("add(float1,float2)="+to_string(add(f1,f2))+"\n");
-    print("add(string1,string2)="+add(s1,s2)+"\n");
+    printvals(i1,i2,f1,f2,s1,s2);
+    printf("max(i1,i2)=%{}\n",max(i1,i2));
+    printf("add(int1,int2)=%{}\n",add(i1,i2));
+    printf("max(float1,int1)=%{}\n",max(f1,i1));
+    printf("add(float1,int1)=%{}\n",add(f1,i1));
+    printf("max(float1,float2)=%{}\n",max(f1,f2));
+    printf("add(float1,float2)=%{}\n",add(f1,f2));
+    printf("add(string1,string2)=%{}\n",add(s1,s2));
     return 0;
 }

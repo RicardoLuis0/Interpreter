@@ -1,4 +1,7 @@
 void main(){
     if(1 is int){
+        print("1 is int");
+    }else{
+        print("1 is not int");
     }
 }

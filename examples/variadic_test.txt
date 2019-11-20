@@ -1,3 +1,5 @@
+import io;
+
 void vartest(... args){
     int size=array_size(args);
     printvals(args);

@@ -1,3 +1,5 @@
+import io;
+
 int main(){
     string[4] arr;
     arr[0]="arr0";

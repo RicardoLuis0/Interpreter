@@ -1,3 +1,5 @@
+import io;
+
 void ptr_void_test(ptr<void> p){
     ptr<void> t=p;
 }
@@ -11,6 +13,6 @@ int main(){
     ptr<int> test=&val;
     ptr_set(test,20);
     ptr_void_test(test);
-    print("val="+to_string(val)+"\n");
+    printf("val=%{},test=%{}\n",val,*test);
     return 0;
 }

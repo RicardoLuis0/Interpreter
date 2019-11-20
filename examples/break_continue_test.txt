@@ -1,3 +1,5 @@
+import io;
+
 void main(){
     int count=0;
     while(true){
@@ -7,6 +9,6 @@ void main(){
         }else if(count>15){
             break;
         }
-        print(to_string(count)+"\n");
+        printf("%{}\n",count);
     }
 }

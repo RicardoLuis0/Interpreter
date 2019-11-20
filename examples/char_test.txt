@@ -1,8 +1,10 @@
+import io;
+
 void main(){
     unsigned char c=255;
-    print(to_string(c)+"\n");
+    printf("%{}\n",c);
     c=260;
-    print(to_string(c)+"\n");
+    printf("%{}\n",c);
     c=-10;
-    print(to_string(c)+"\n");
+    printf("%{}\n",c);
 }

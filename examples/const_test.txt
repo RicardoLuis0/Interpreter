@@ -1,6 +1,8 @@
+import io;
+
 const int test=123;
 
 int main(){
-    print(to_string(test)+"\n");
+    printf("%{}\n",test);
     return 0;
 }

@@ -1,6 +1,8 @@
+import io;
+
 void main(){
     int val=20;
     int val2=12;
     int[val][val2] vla;
-    print(to_string(array_size(vla))+"\n"+to_string(array_size(vla[0]))+"\n");
+    printf("%{}\n%{}\n",array_size(vla),array_size(vla[0]));
 }

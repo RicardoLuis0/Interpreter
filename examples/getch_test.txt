@@ -1,3 +1,5 @@
+import io;
+
 void main(){
     unsigned char c;
     while((c=getch())!=27){
