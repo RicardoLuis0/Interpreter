@@ -34,10 +34,8 @@
  * @version 0.01
  */
 
-void test_lexer(),test_expressions(),test_lines(),test_definitions();
-
 int simple_exec_string(std::string filename,std::string &data,int argc,char ** argv,int offset,int str_offset=0){
-	if(str_offset)data=data.substr(str_offset);
+    if(str_offset)data=data.substr(str_offset);
     Lexer::Lexer lexer(base_symbols,base_keywords);
     std::vector<std::shared_ptr<Lexer::Token>> tokens(lexer.tokenize_from_string(filename,data));
     Parser::parserProgress p(tokens);
@@ -174,128 +172,137 @@ int test_exec(){
     Lexer::Lexer lexer(base_symbols,base_keywords);
     Console::clear();
 start:
-    while(true){
-        std::cout<<">";
-        std::cout.flush();
-        while(std::cin.peek()=='\n')std::cin.ignore();
-        std::getline(std::cin,filename,'\n');
-        if(filename=="cls"){
-            Console::clear();
-            continue;
-        }else if(filename=="help"){
-            std::cout<<"type file path to load program, 'q' 'quit' or 'exit' to leave, 'cls' to clear screen\n";
-            continue;
-        }
-        if(filename=="q"||filename=="quit"||filename=="exit")return 0;
-        try{
-            tokens=lexer.tokenize_from_file(filename);//split file into tokens
-            Console::changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
-        }catch(MyExcept::FileError &e){
+    try{
+        while(true){
+            std::cout<<">";
+            std::cout.flush();
+            while(std::cin.peek()=='\n')std::cin.ignore();
+            std::getline(std::cin,filename,'\n');
+            if(filename=="cls"){
+                Console::clear();
+                continue;
+            }else if(filename=="help"){
+                std::cout<<"type file path to load program, 'q' 'quit' or 'exit' to leave, 'cls' to clear screen\n";
+                continue;
+            }
+            if(filename=="q"||filename=="quit"||filename=="exit")return 0;
             try{
-                tokens=lexer.tokenize_from_file(filename+".txt");
+                tokens=lexer.tokenize_from_file(filename);//split file into tokens
                 Console::changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
-            }catch(MyExcept::FileError &){
+            }catch(MyExcept::FileError &e){
                 try{
-                    tokens=lexer.tokenize_from_file("examples/"+filename);
-                    Console::changeDir("examples");
+                    tokens=lexer.tokenize_from_file(filename+".txt");
+                    Console::changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
                 }catch(MyExcept::FileError &){
                     try{
-                        tokens=lexer.tokenize_from_file("examples/"+filename+".txt");
+                        tokens=lexer.tokenize_from_file("examples/"+filename);
                         Console::changeDir("examples");
                     }catch(MyExcept::FileError &){
-                        std::cout<<e.what()<<", 'exit' 'quit' or 'q' to cancel\n";
-                        continue;
+                        try{
+                            tokens=lexer.tokenize_from_file("examples/"+filename+".txt");
+                            Console::changeDir("examples");
+                        }catch(MyExcept::FileError &){
+                            std::cout<<e.what()<<", 'exit' 'quit' or 'q' to cancel\n";
+                            continue;
+                        }
                     }
                 }
             }
+            break;
         }
-        break;
-    }
-    //Console::clear();
-    Parser::parserProgress p(tokens);
-    deflist.clear();
-    //get imports
-    std::vector<std::string> imports({"default"});
-    while(p.isKeyword(KEYWORD_IMPORT)){
-        do{
-            if(p.isSymbol(SYMBOL_SEMICOLON)){
-                continue;
-            }else if(p.isSymbol(SYMBOL_MULTIPLY)){
-                imports.push_back("*");
-            }else if(std::shared_ptr<Lexer::WordToken> tk=std::static_pointer_cast<Lexer::WordToken>(p.isType(Lexer::TOKEN_TYPE_WORD))){
-                imports.push_back(tk->get_literal());
-            }else{
-                throw MyExcept::NoMatchException(p.get_line(),"expected library name, got '"+p.get_nothrow_nonull()->get_literal()+"'");
-            }
-        }while(p.isSymbol(SYMBOL_COMMA));
-        if(!p.isSymbol(SYMBOL_SEMICOLON)){
-            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");
-        }
-    }
-    while(p.get_nothrow()!=nullptr){
-        deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
-    }
-    Interpreter::DefaultFrame dframe(deflist,imports);
-    std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
-    std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
-    std::vector<std::shared_ptr<Interpreter::Value>> fn_args;
-    if(!entrypoint){
-        entrypoint=eframe->get_function("main",{{std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),-1)}});
-        if(!entrypoint){
-            throw std::runtime_error("missing 'main()' or 'main(string[])' function");
-        }
-        std::cout<<filename<<"\nargumens:";
-        std::string temp;
-        while(std::cin.peek()=='\n')std::cin.ignore();
-        std::getline(std::cin,temp,'\n');
-        std::string buf;
-        bool reading_string=false;
-        bool reading_escape=false;
-        std::vector<std::shared_ptr<Interpreter::Value>> main_args;
-        for(char c:temp){
-            if(reading_string){
-                if(reading_escape){
-                    buf+=unescape(c);
-                    reading_escape=false;
+        //Console::clear();
+        Parser::parserProgress p(tokens);
+        deflist.clear();
+        //get imports
+        std::vector<std::string> imports({"default"});
+        while(p.isKeyword(KEYWORD_IMPORT)){
+            do{
+                if(p.isSymbol(SYMBOL_SEMICOLON)){
+                    continue;
+                }else if(p.isSymbol(SYMBOL_MULTIPLY)){
+                    imports.push_back("*");
+                }else if(std::shared_ptr<Lexer::WordToken> tk=std::static_pointer_cast<Lexer::WordToken>(p.isType(Lexer::TOKEN_TYPE_WORD))){
+                    imports.push_back(tk->get_literal());
                 }else{
-                    if(c=='\\'){
-                        reading_escape=true;
-                    }else if(c=='"'){
-                        main_args.push_back(std::make_shared<Interpreter::StringValue>(buf));
-                        buf="";
-                        reading_string=false;
-                    }else{
-                        buf+=c;
-                    }
+                    throw MyExcept::NoMatchException(p.get_line(),"expected library name, got '"+p.get_nothrow_nonull()->get_literal()+"'");
                 }
-            }else if(c=='"'||c==' '){
-                if(buf.size()>0)main_args.push_back(std::make_shared<Interpreter::StringValue>(buf));
-                buf="";
-                if(c=='"'){
-                    reading_string=true;
-                }
-            }else{
-                buf+=c;
+            }while(p.isSymbol(SYMBOL_COMMA));
+            if(!p.isSymbol(SYMBOL_SEMICOLON)){
+                throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");
             }
         }
-        if(buf.size()>0)main_args.push_back(std::make_shared<Interpreter::StringValue>(buf));
-        fn_args.push_back(std::make_shared<Interpreter::ArrayValue>(std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),main_args.size()),main_args));
-        std::cout<<"\n";
-    }
-    auto t=entrypoint->get_type();
-    if(t->is(t,Interpreter::Type::void_type())){
-        eframe->fn_call(entrypoint,fn_args);
-        std::cout<<"\n\n"<<filename<<" finished exeuction\n";
-        goto start;
-    }else{
-        if(!t->allows_implicit_cast(t,Interpreter::Type::int_type())){
-            throw std::runtime_error("'main()' function must return 'int' or 'void'");
+        while(p.get_nothrow()!=nullptr){
+            deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
         }
-        auto r=eframe->fn_call(entrypoint,fn_args);
-        int retval=std::dynamic_pointer_cast<Interpreter::IntValue>(r->get_type()->cast(r,Interpreter::Type::int_type()))->get();
-        std::cout<<"\n\n"<<filename<<" returned with value "<<std::to_string(retval)<<"\n";
-        goto start;
+        Interpreter::DefaultFrame dframe(deflist,imports);
+        std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
+        std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
+        std::vector<std::shared_ptr<Interpreter::Value>> fn_args;
+        if(!entrypoint){
+            entrypoint=eframe->get_function("main",{{std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),-1)}});
+            if(!entrypoint){
+                throw std::runtime_error("missing 'main()' or 'main(string[])' function");
+            }
+            std::cout<<filename<<"\nargumens:";
+            std::string temp;
+            while(std::cin.peek()=='\n')std::cin.ignore();
+            std::getline(std::cin,temp,'\n');
+            std::string buf;
+            bool reading_string=false;
+            bool reading_escape=false;
+            std::vector<std::shared_ptr<Interpreter::Value>> main_args;
+            for(char c:temp){
+                if(reading_string){
+                    if(reading_escape){
+                        buf+=unescape(c);
+                        reading_escape=false;
+                    }else{
+                        if(c=='\\'){
+                            reading_escape=true;
+                        }else if(c=='"'){
+                            main_args.push_back(std::make_shared<Interpreter::StringValue>(buf));
+                            buf="";
+                            reading_string=false;
+                        }else{
+                            buf+=c;
+                        }
+                    }
+                }else if(c=='"'||c==' '){
+                    if(buf.size()>0)main_args.push_back(std::make_shared<Interpreter::StringValue>(buf));
+                    buf="";
+                    if(c=='"'){
+                        reading_string=true;
+                    }
+                }else{
+                    buf+=c;
+                }
+            }
+            if(buf.size()>0)main_args.push_back(std::make_shared<Interpreter::StringValue>(buf));
+            fn_args.push_back(std::make_shared<Interpreter::ArrayValue>(std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),main_args.size()),main_args));
+            std::cout<<"\n";
+        }
+        auto t=entrypoint->get_type();
+        if(t->is(t,Interpreter::Type::void_type())){
+            eframe->fn_call(entrypoint,fn_args);
+            std::cout<<"\n\n"<<filename<<" finished exeuction\n";
+        }else{
+            if(!t->allows_implicit_cast(t,Interpreter::Type::int_type())){
+                throw std::runtime_error("'main()' function must return 'int' or 'void'");
+            }
+            auto r=eframe->fn_call(entrypoint,fn_args);
+            int retval=std::dynamic_pointer_cast<Interpreter::IntValue>(r->get_type()->cast(r,Interpreter::Type::int_type()))->get();
+            std::cout<<"\n\n"<<filename<<" returned with value "<<std::to_string(retval)<<"\n";
+        }
+    }catch(MyExcept::ParseError &e){
+        std::cout<<"\n\n"<<e.what()<<"\n";
+    }catch(MyExcept::NoMatchException &e){
+        std::cout<<"\n\n"<<e.what()<<"\n";
+    }catch(MyExcept::FileError &e){
+        std::cout<<"\n\n"<<e.what()<<"\n";
+    }catch(std::exception &e){
+        std::cout<<"\n\nunknown exception: "<<e.what()<<"\n";
     }
+    goto start;
 }
 
 int main(int argc,char ** argv){
@@ -303,20 +310,8 @@ int main(int argc,char ** argv){
     Console::init();
     try{
         if(argc<2){
-            while(true){
-                Console::clear();
-                std::cout<<"0> test lexer\n1> test execution\n\nChoice: ";
-                std::string input;
-                std::cin>>input;
-                if(input.compare("0")==0){
-                    test_lexer();
-                }else if(input.compare("1")==0){
-                    return test_exec();
-                }else{
-                    continue;
-                }
-                return 0;
-            }
+            Console::clear();
+            return test_exec();
         }else if(argc==3&&strcmp(argv[1],"-checkparse")==0){
             std::string filename(argv[1]);
             std::vector<std::shared_ptr<Lexer::Token>> tokens;
@@ -333,6 +328,14 @@ int main(int argc,char ** argv){
             }
             std::cout<<"Parse OK";
             return 0;
+        }else if(argc==3&&strcmp(argv[1],"-LEXER")==0){
+            std::vector<std::shared_ptr<Lexer::Token>> tokens;
+            std::vector<std::shared_ptr<Parser::Definition>> deflist;
+            Lexer::Lexer lexer(base_symbols,base_keywords);
+            tokens=lexer.tokenize_from_file(argv[2]);
+            for(std::shared_ptr<Lexer::Token> t:tokens){
+                std::cout<<t->get_formatted()<<"\n";
+            }
         }else if(argc==3&&strcmp(argv[1],"-AST")==0){
             std::vector<std::shared_ptr<Lexer::Token>> tokens;
             std::vector<std::shared_ptr<Parser::Definition>> deflist;
@@ -364,33 +367,5 @@ int main(int argc,char ** argv){
     }catch(std::exception &e){
         std::cout<<"\n\nunknown exception: "<<e.what();
         return 1;
-    }
-}
-
-void test_lexer(){
-    try{
-        std::string filename;
-        std::vector<std::shared_ptr<Lexer::Token>> tokens;
-        Lexer::Lexer lexer(base_symbols,base_keywords);
-        while(true){
-            Console::clear();
-            std::cout<<"Filename: ";
-            std::cin>>filename;
-            try{
-                tokens=lexer.tokenize_from_file(filename);//split file into tokens
-                for(std::shared_ptr<Lexer::Token> t:tokens){
-                    std::cout<<t->get_formatted()<<"\n";
-                }
-            }catch(MyExcept::FileError &e){
-                std::cout<<e.what()<<"\nTry Again, ";
-            }
-            break;
-        }
-    }catch(MyExcept::ParseError &e){
-        std::cout<<"\n\n"<<e.what();
-        return;
-    }catch(std::exception &e){
-        std::cout<<"\n\nuncaught exception: "<<e.what();
-        return;
     }
 }
