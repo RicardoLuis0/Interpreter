@@ -285,7 +285,8 @@ start:
     auto t=entrypoint->get_type();
     if(t->is(t,Interpreter::Type::void_type())){
         eframe->fn_call(entrypoint,fn_args);
-        return 0;
+        std::cout<<"\n\n"<<filename<<" finished exeuction\n";
+        goto start;
     }else{
         if(!t->allows_implicit_cast(t,Interpreter::Type::int_type())){
             throw std::runtime_error("'main()' function must return 'int' or 'void'");

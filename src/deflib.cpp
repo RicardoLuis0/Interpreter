@@ -1065,6 +1065,9 @@ void Interpreter::import(DefaultFrame * d,std::string library){
             d->register_function(std::make_shared<Interpreter::peek_front>());
             d->register_function(std::make_shared<Interpreter::peek_back>());
             d->register_function(std::make_shared<Interpreter::resize>());
+            d->register_function(std::make_shared<Interpreter::to_string>());
+            d->register_function(std::make_shared<Interpreter::stoi>());
+            d->register_function(std::make_shared<Interpreter::stof>());
         }
     }else if(library=="io"){
         if(!d->is_library_imported("io")){
@@ -1096,9 +1099,6 @@ void Interpreter::import(DefaultFrame * d,std::string library){
         if(!d->is_library_imported("str")){
             d->imported_libraries.push_back("str");
             d->register_function(std::make_shared<Interpreter::sprintf>());
-            d->register_function(std::make_shared<Interpreter::stoi>());
-            d->register_function(std::make_shared<Interpreter::stof>());
-            d->register_function(std::make_shared<Interpreter::to_string>());
         }
     }else{
         throw std::runtime_error("unknown library '"+library+"'");
