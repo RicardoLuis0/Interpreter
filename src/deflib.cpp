@@ -1058,6 +1058,12 @@ void Interpreter::import(DefaultFrame * d,std::string library){
             //these next functions should be moved to methods/static methods when possible
             d->register_function(std::make_shared<Interpreter::array_size>());
             d->register_function(std::make_shared<Interpreter::get_type_name>());
+            d->register_function(std::make_shared<Interpreter::to_string>());
+            d->register_function(std::make_shared<Interpreter::stoi>());
+            d->register_function(std::make_shared<Interpreter::stof>());
+        }
+    }else if(library=="vector"){
+        if(!d->is_library_imported("vector")){
             d->register_function(std::make_shared<Interpreter::push_front>());
             d->register_function(std::make_shared<Interpreter::push_back>());
             d->register_function(std::make_shared<Interpreter::pop_front>());
@@ -1065,9 +1071,6 @@ void Interpreter::import(DefaultFrame * d,std::string library){
             d->register_function(std::make_shared<Interpreter::peek_front>());
             d->register_function(std::make_shared<Interpreter::peek_back>());
             d->register_function(std::make_shared<Interpreter::resize>());
-            d->register_function(std::make_shared<Interpreter::to_string>());
-            d->register_function(std::make_shared<Interpreter::stoi>());
-            d->register_function(std::make_shared<Interpreter::stof>());
         }
     }else if(library=="io"){
         if(!d->is_library_imported("io")){
