@@ -29,11 +29,10 @@ int exec(std::string filename){
     std::vector<std::shared_ptr<Interpreter::Value>> fn_args;
     auto t=entrypoint->get_type();
     if(t->is(t,Interpreter::Type::void_type())){
-        eframe->fn_call(entrypoint,{});
         return 0;
     }else{
         if(!t->allows_implicit_cast(t,Interpreter::Type::int_type())){
-            throw std::runtime_error("'main()' function must return 'int' or 'void'");
+            return 0;
         }
         auto r=eframe->fn_call(entrypoint,{});
         return std::dynamic_pointer_cast<Interpreter::IntValue>(r->get_type()->cast(r,Interpreter::Type::int_type()))->get();
