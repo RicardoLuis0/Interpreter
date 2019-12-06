@@ -60,6 +60,14 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions -std=c++17 -Wold-style-cast -Werror=return-type" />
 		</Compiler>
+		<Unit filename="Tests/Break.txt" />
+		<Unit filename="Tests/Continue.txt" />
+		<Unit filename="Tests/For1.txt" />
+		<Unit filename="Tests/For2.txt" />
+		<Unit filename="Tests/For3.txt" />
+		<Unit filename="Tests/For4.txt" />
+		<Unit filename="Tests/If.txt" />
+		<Unit filename="Tests/While.txt" />
 		<Unit filename="examples/any_test.txt" />
 		<Unit filename="examples/arg_test.txt" />
 		<Unit filename="examples/arr_test.txt" />

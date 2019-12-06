@@ -1,0 +1,8 @@
+int main(){
+    int i=0;
+    for(;;){
+        if(i>=15)break;
+        i++;
+    }
+    return (i==15);
+}

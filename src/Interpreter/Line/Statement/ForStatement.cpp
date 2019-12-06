@@ -15,7 +15,7 @@ ForStatement::ForStatement(DefaultFrame * context,std::shared_ptr<Parser::ForSta
     pre(nullptr),
     condition(nullptr),
     inc(nullptr),
-    defFrame(stmt->vardef_pre?std::make_shared<DefaultFrame>(context,stmt->vardef_pre):nullptr),
+    defFrame(stmt->vardef_pre?std::make_shared<DefaultFrame>(context,stmt->vardef_pre):std::make_shared<DefaultFrame>(context)),
     code(std::make_shared<CodeBlock>(defFrame?defFrame.get():context,stmt->code))
 {
     if(stmt->pre)pre=std::make_shared<Expression>(context,stmt->pre);
