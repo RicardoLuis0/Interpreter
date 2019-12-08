@@ -1110,6 +1110,7 @@ void Interpreter::import(DefaultFrame * d,std::string library){
 
 void Interpreter::import_all(DefaultFrame * d){
     import(d,"default");
+    import(d,"vector");
     import(d,"io");
     import(d,"file");
     import(d,"str");
