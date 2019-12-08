@@ -73,6 +73,7 @@
 		<Unit filename="Tests/For4.txt" />
 		<Unit filename="Tests/If.txt" />
 		<Unit filename="Tests/Is.txt" />
+		<Unit filename="Tests/Nested.txt" />
 		<Unit filename="Tests/Ptr1.txt" />
 		<Unit filename="Tests/Ptr2.txt" />
 		<Unit filename="Tests/While.txt" />

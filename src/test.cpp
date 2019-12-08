@@ -54,14 +54,19 @@ std::vector<test> tests {
     {"For Statement 2\t\t...\t","Tests/For2.txt",false},
     {"For Statement 3\t\t...\t","Tests/For3.txt",false},
     {"For Statement 4\t\t...\t","Tests/For4.txt",false},
+    {"Nested Functions\t...\t","Tests/Nested.txt",false},
     {"Const 1\t\t\t...\t","Tests/Const1.txt",false},
     {"Const 2\t\t\t...\t","Tests/Const2.txt",true},
     {"Const 3\t\t\t...\t","Tests/Const3.txt",true},
     {"Array 1\t\t\t...\t","Tests/Arr1.txt",false},
     {"Array 2\t\t\t...\t","Tests/Arr2.txt",false},
-    {"Is Expression\t\t...\t","Tests/Is.txt",false},
     {"Pointer 1\t\t...\t","Tests/Ptr1.txt",false},
     {"Pointer 2\t\t...\t","Tests/Ptr2.txt",false},
+    {"Type 1\t\t\t...\t","Tests/Type1.txt",false},
+    {"Type 2\t\t\t...\t","Tests/Type2.txt",false},
+    {"TypeOf 1\t\t...\t","Tests/TypeOf1.txt",false},
+    {"TypeOf 2\t\t...\t","Tests/TypeOf2.txt",false},
+    {"Is Expression\t\t...\t","Tests/Is.txt",false},
 };
 
 int main(){
