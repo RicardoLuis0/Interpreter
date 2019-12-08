@@ -1,0 +1,7 @@
+ptr<int> get_ptr(int a){
+	return &a;
+}
+
+int main(){
+    return *get_ptr(1);
+}

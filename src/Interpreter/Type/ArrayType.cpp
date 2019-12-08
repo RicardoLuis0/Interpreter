@@ -33,7 +33,7 @@ std::shared_ptr<Type> ArrayType::change_const(std::shared_ptr<Type> self,bool ne
 }
 
 std::string ArrayType::get_name(){
-    return type->get_name()+"["+(size>=0?std::to_string(size):"")+"]";
+    return is_const?"const "+type->get_name()+"["+(size>=0?std::to_string(size):"")+"]":type->get_name()+"["+(size>=0?std::to_string(size):"")+"]";
 }
 
 std::shared_ptr<Value> ArrayType::make_value(std::shared_ptr<Type> self){
@@ -103,7 +103,7 @@ std::shared_ptr<Value> ArrayType::call_operator(int op,std::shared_ptr<Value> se
         }
         return self;
     case SYMBOL_SQUARE_BRACKET_OPEN://[] operator
-		other=other->get_type()->cast(other,Type::int_type());
+        other=other->get_type()->cast(other,Type::int_type());
         return self->access_array(other);
     default:
         throw std::runtime_error("invalid operator '"+get_op_str(op)+"'");

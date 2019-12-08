@@ -1,0 +1,3 @@
+int main(){
+    return ((0 is int)&&(.0 is float)&&("" is string));
+}

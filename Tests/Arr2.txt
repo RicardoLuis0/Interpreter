@@ -1,0 +1,9 @@
+int[1] a;
+void test(int[1] arr){
+	arr[0]=0;
+}
+int main(){
+	a[0]=1;
+	test(a);
+	return a[0];
+}

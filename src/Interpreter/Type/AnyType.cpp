@@ -23,7 +23,7 @@ std::shared_ptr<Type> AnyType::change_const(std::shared_ptr<Type> self,bool new_
 }
 
 std::string AnyType::get_name(){
-    return "any";
+    return is_const?"const any":"any";
 }
 
 std::shared_ptr<Value> AnyType::make_value(std::shared_ptr<Type> self){

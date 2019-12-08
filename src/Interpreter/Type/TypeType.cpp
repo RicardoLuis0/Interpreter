@@ -31,7 +31,7 @@ bool TypeType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other) {
 }
 
 std::string TypeType::get_name() {
-    return "type";
+    return is_const?"const type":"type";
 }
 
 std::shared_ptr<Value> TypeType::get_operator_result(int op,std::shared_ptr<Value> self,std::shared_ptr<Value> other,int line_start,int line_end) {

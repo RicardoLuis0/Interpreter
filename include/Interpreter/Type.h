@@ -25,6 +25,7 @@ namespace Interpreter {
         Type(bool is_const=false);
         virtual std::shared_ptr<Type> change_const(std::shared_ptr<Type> self,bool new_const)=0;
         virtual std::string get_name()=0;
+        virtual bool get_const();
         virtual bool is(std::shared_ptr<Type> self,std::shared_ptr<Type> other);
         virtual std::shared_ptr<Value> make_value(std::shared_ptr<Type> self);
         virtual std::shared_ptr<Variable> make_variable(std::shared_ptr<Type> self,std::string name);

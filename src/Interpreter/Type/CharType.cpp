@@ -20,7 +20,7 @@
 using namespace Interpreter;
 
 std::string CharType::get_name(){
-    return "char";
+    return is_const?"const char":"char";
 }
 
 std::shared_ptr<Type> CharType::change_const(std::shared_ptr<Type> self,bool new_const){

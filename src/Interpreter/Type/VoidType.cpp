@@ -5,7 +5,7 @@
 using namespace Interpreter;
 
 std::string VoidType::get_name(){
-    return "void";
+    return is_const?"const void":"void";
 }
 
 VoidType::VoidType(bool c):Type(c){

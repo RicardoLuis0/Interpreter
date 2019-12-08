@@ -1,0 +1,9 @@
+const int a=0;
+void t(int& b){
+	b=1;
+}
+
+int main(){
+	t(a);
+	return a;
+}

@@ -71,6 +71,8 @@ std::shared_ptr<Value> UserFunction::call(ExecFrame * parent_frame,std::vector<s
                 if(CHECKPTR(return_type,VoidType)){
                     throw MyExcept::InterpreterRuntimeError(std::dynamic_pointer_cast<LineResultReturn>(result)->get_line(),"void function "+function->name+" returning a value");
                 }else{
+                    std::string n1=return_type->get_name();
+                    std::string n2=retval->get_type()->get_name();
                     if(retval->get_type()->allows_implicit_cast(retval->get_type(),return_type)){
                         return retval->get_type()->cast(retval,return_type);
                     }else{

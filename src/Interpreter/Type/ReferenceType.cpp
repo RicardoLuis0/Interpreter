@@ -29,7 +29,7 @@ std::shared_ptr<Type> ReferenceType::change_const(std::shared_ptr<Type> self,boo
 }
 
 std::string ReferenceType::get_name(){
-    return type->get_name()+"&";
+    return is_const?"const "+type->get_name()+"&":type->get_name()+"&";
 }
 
 std::shared_ptr<Value> ReferenceType::make_value(std::shared_ptr<Type> self){
@@ -45,7 +45,7 @@ std::shared_ptr<Type> ReferenceType::get_type(){
 }
 
 bool ReferenceType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> o){
-    return type->is(type,o);
+    return type->is(type,o)&&!(o->get_const()&&!self->get_const());//a const type isn't a non-const reference
 }
 
 bool ReferenceType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){

@@ -5,12 +5,14 @@
 
 using namespace Interpreter;
 
-PointerValue::PointerValue(std::shared_ptr<Type> t,std::shared_ptr<Value> v):type(Type::pointer_type(t)),value(v){
+PointerValue::PointerValue(std::shared_ptr<PointerType> t,std::shared_ptr<Value> v):type(t),value(v){
 }
+
 const std::string & PointerValue::getString(){
     temp=(value?"* "+valueToString(value):"(null)");
     return temp;
 }
+
 std::shared_ptr<Type> PointerValue::get_type(){
     return type;
 }

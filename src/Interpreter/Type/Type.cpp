@@ -90,10 +90,10 @@ std::shared_ptr<Type> Type::pointer_type(std::shared_ptr<Type> type,bool is_cons
 
 bool Type::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
     if(auto ref=std::dynamic_pointer_cast<ReferenceType>(other)){
-        return is(self,ref->get_type());
+        return is(self,ref->get_type())&&!(self->get_const()&&!other->get_const());//a const type isn't a non-const reference
     }else{
-		return CHECKPTR(other,AnyType);
-	}
+        return CHECKPTR(other,AnyType);
+    }
 }
 
 std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std::shared_ptr<Parser::VarType> t){
@@ -202,9 +202,9 @@ std::shared_ptr<Value> Type::call_unary_operator(int op,std::shared_ptr<Value> s
     if(pre){
         if(op==SYMBOL_BITWISE_AND){
             if(auto ref=std::dynamic_pointer_cast<ReferenceVariable>(self)){
-                return std::make_shared<PointerValue>(pointer_type(ref->get_orig_type()),ref->get_value());//'&' on references returns pointer to original value, not to reference
+                return std::make_shared<PointerValue>(std::dynamic_pointer_cast<PointerType>(pointer_type(ref->get_orig_type())),ref->get_value());//'&' on references returns pointer to original value, not to reference
             }
-            return std::make_shared<PointerValue>(pointer_type(self->get_type()),self);
+            return std::make_shared<PointerValue>(std::dynamic_pointer_cast<PointerType>(pointer_type(self->get_type())),self);
         }
         throw std::runtime_error("invalid unary pre operator '"+get_op_str(op)+"'");
     }else{
@@ -218,6 +218,10 @@ std::shared_ptr<Value> Type::make_value(std::shared_ptr<Type> self){
 
 std::shared_ptr<Variable> Type::make_variable(std::shared_ptr<Type> self,std::string name){
     throw std::runtime_error("cannot make "+self->get_name()+" variable");
+}
+
+bool Type::get_const(){
+    return is_const;
 }
 
 void Type::check_variable_assignment(int op,std::shared_ptr<Value> self,int line_start,int line_end){

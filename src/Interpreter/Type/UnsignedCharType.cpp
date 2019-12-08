@@ -27,7 +27,7 @@ std::shared_ptr<Type> UnsignedCharType::change_const(std::shared_ptr<Type> self,
 }
 
 std::string UnsignedCharType::get_name(){
-    return "unsigned char";
+    return is_const?"const unsigned char":"unsigned char";
 }
 
 std::shared_ptr<Value> UnsignedCharType::make_value(std::shared_ptr<Type> self){

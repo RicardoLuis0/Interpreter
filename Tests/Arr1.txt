@@ -1,0 +1,6 @@
+int[2] a;
+int main(){
+	a[0]=-1;
+	a[1]=2;
+	return a[0]+a[1];
+}

@@ -18,7 +18,7 @@ std::shared_ptr<Type> StringType::change_const(std::shared_ptr<Type> self,bool n
 }
 
 std::string StringType::get_name(){
-    return "string";
+    return is_const?"const string":"string";
 }
 
 bool StringType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){

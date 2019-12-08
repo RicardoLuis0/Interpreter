@@ -25,7 +25,7 @@ std::shared_ptr<Type> PointerType::change_const(std::shared_ptr<Type> self,bool 
 }
 
 std::string PointerType::get_name(){
-    return "ptr<"+(type?type->get_name():"?")+">";
+    return is_const?"const ptr<"+(type?type->get_name():"?")+">":"ptr<"+(type?type->get_name():"?")+">";
 }
 
 std::shared_ptr<Value> PointerType::make_value(std::shared_ptr<Type> self){
@@ -42,7 +42,10 @@ std::shared_ptr<Type> PointerType::get_type(){
 
 bool PointerType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> o){
     if(auto ptr=std::dynamic_pointer_cast<PointerType>(o)){
-        return type->is(type,Type::void_type())||ptr->type->is(ptr->type,Type::void_type())||ptr->type->is(ptr->type,type);
+        std::string n1=self->get_name();
+        std::string n2=ptr->get_name();
+        bool result=type->is(type,Type::void_type())||ptr->type->is(ptr->type,Type::void_type())||ptr->type->is(ptr->type,type);
+        return result;
         //if this or the other is a void pointer or the same type
         //TODO restrict more for void pointer, only allow conversion from non-void to void without casting
     }

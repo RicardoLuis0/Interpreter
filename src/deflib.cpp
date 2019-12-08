@@ -533,7 +533,7 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
-            return std::make_shared<PointerValue>(Type::void_type(),std::make_shared<FILE_Value>(std::dynamic_pointer_cast<StringValue>(args[0])->get().c_str(),std::dynamic_pointer_cast<IntValue>(args[1])->get()));
+            return std::make_shared<PointerValue>(std::dynamic_pointer_cast<PointerType>(Type::pointer_type(Type::void_type())),std::make_shared<FILE_Value>(std::dynamic_pointer_cast<StringValue>(args[0])->get().c_str(),std::dynamic_pointer_cast<IntValue>(args[1])->get()));
         }
 
     };

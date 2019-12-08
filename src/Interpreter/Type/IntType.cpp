@@ -20,7 +20,7 @@
 using namespace Interpreter;
 
 std::string IntType::get_name(){
-    return "int";
+    return is_const?"const int":"int";
 }
 
 std::shared_ptr<Type> IntType::change_const(std::shared_ptr<Type> self,bool new_const){

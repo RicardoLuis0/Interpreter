@@ -1,0 +1,6 @@
+int main(){
+    int val=0;
+    ptr<int> test=&val;
+	*test=1;
+    return val;
+}

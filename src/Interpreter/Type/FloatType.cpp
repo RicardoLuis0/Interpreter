@@ -19,7 +19,7 @@
 using namespace Interpreter;
 
 std::string FloatType::get_name(){
-    return "float";
+    return is_const?"const float":"float";
 }
 
 std::shared_ptr<Type> FloatType::change_const(std::shared_ptr<Type> self,bool new_const){

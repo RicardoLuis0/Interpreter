@@ -15,7 +15,7 @@
 namespace Interpreter {
     class PointerVariable : public virtual Variable , public virtual PointerValue {
         public:
-            PointerVariable(std::string,std::shared_ptr<class Type> type,std::shared_ptr<Value> value);
+            PointerVariable(std::string,std::shared_ptr<PointerType> type,std::shared_ptr<Value> value);
     };
 }
 
