@@ -76,6 +76,13 @@
 		<Unit filename="Tests/Nested.txt" />
 		<Unit filename="Tests/Ptr1.txt" />
 		<Unit filename="Tests/Ptr2.txt" />
+		<Unit filename="Tests/Type1.txt" />
+		<Unit filename="Tests/Type2.txt" />
+		<Unit filename="Tests/TypeOf1.txt" />
+		<Unit filename="Tests/TypeOf2.txt" />
+		<Unit filename="Tests/Vector1.txt" />
+		<Unit filename="Tests/Vector2.txt" />
+		<Unit filename="Tests/Vector3.txt" />
 		<Unit filename="Tests/While.txt" />
 		<Unit filename="examples/any_test.txt" />
 		<Unit filename="examples/arg_test.txt" />
