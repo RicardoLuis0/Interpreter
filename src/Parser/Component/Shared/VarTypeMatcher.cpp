@@ -5,7 +5,7 @@
 #include "MyExcept/MyExcept.h"
 #include "Parser/ExpressionMatcher.h"
 
-//VarType = [ keyword 'const' ] [ keyword 'unsigned' | keyword 'signed' ] , ( ( keyword 'pointer' , symbol '<' , ( VarType | symbol '?' ) , symbol '>' ) |  keyword 'any' | keyword 'type' | keyword 'void' | keyword 'int' | keyword 'char' | keyword 'float' | keyword 'string' ) , { symbol '[' , [ Expression ] , symbol ']' } ;
+//VarType = [ keyword 'const' ] , [ keyword 'unsigned' | keyword 'signed' ] , ( ( keyword 'pointer' , symbol '<' , ( VarType | symbol '?' ) , symbol '>' ) |  keyword 'any' | keyword 'type' | keyword 'void' | keyword 'int' | keyword 'char' | keyword 'float' | keyword 'string' ) , { symbol '[' , [ Expression ] , symbol ']' } ;
 
 using namespace Parser;
 

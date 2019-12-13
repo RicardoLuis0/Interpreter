@@ -3,7 +3,7 @@
 #include "Parser/ExpressionTermMatcher.h"
 #include "MyExcept/MyExcept.h"
 
-//UnaryOperation = symbol 'any_unary_operator' , ExpressionTerm;
+//UnaryOperation = ( symbol 'unary_pre_operator' | keyword 'unary_pre_keyword_operator' ) , ExpressionTerm;
 
 using namespace Parser;
 

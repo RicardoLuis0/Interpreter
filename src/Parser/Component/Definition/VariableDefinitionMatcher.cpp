@@ -7,7 +7,7 @@
 #include "Parser/VarTypeMatcher.h"
 #include "Parser/VariableDefinitionItemMatcher.h"
 
-//VariableDefinition = VarType , VariableDefinitionItem { symbol ',' , VariableDefinitionItem } ;
+//VariableDefinition = VarType , VariableDefinitionItem , { symbol ',' , VariableDefinitionItem } ;
 
 using namespace Parser;
 

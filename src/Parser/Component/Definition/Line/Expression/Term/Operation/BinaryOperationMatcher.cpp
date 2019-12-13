@@ -5,7 +5,7 @@
 #include "symbols_keywords.h"
 #include "MyExcept/MyExcept.h"
 
-//BinaryOperation = ExpressionTerm , operator 'any_binary_operator' , Expression ;
+//BinaryOperation = ExpressionTerm , ( symbol 'binary_operator' | keyword 'binary_keyword_operator' ) , Expression ;
 
 using namespace Parser;
 
