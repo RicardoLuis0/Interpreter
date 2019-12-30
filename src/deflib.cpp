@@ -136,7 +136,7 @@ namespace Interpreter {
         }
         for(size_t i=0;i<out.fmt.size();i++){
             if(out.fmt[i]=='%'){
-                for(;out.fmt[i-1]!='{';i++){
+                for(i++;out.fmt[i-1]!='{';i++){
                     if(i>=out.fmt.size()||out.fmt[i]==' ')goto skip;
                 }
                 if(i<out.fmt.size()&&out.fmt[i]!='}'){

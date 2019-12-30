@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "Util/read_file.h"
 #include "Lexer/Lexer.h"
 #include "Lexer/WordToken.h"
@@ -76,12 +77,12 @@ int main(){
     for(auto t:tests){
         std::cout<<t.name;
         try{
-            if(exec(t.path)!=t.expected_fail){
+            if((exec(t.path)>0)!=t.expected_fail){
                 std::cout<<"   Ok\n";
             }else{
                 std::cout<<"  Fail\n";
             }
-        }catch(MyExcept::FileError &f){
+        }catch(MyExcept::FileError &){
             std::cout<<"No File\n";
         }catch(...){
             if(t.expected_fail){
