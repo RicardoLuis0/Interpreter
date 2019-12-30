@@ -142,7 +142,6 @@ std::shared_ptr<Type> Type::from_vartype(DefaultFrame * context,std::shared_ptr<
                 if(v<=0)throw std::runtime_error("invalid size for array");
                 type=std::make_shared<ArrayType>(type,v);
             }else{
-                //TODO vla support
                 auto expr=std::make_shared<Expression>(context,e);
                 if(expr->get_type()->allows_implicit_cast(expr->get_type(),int_type())){
                     type=std::make_shared<ArrayType>(type,expr);

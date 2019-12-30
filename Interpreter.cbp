@@ -126,9 +126,6 @@
 		<Unit filename="include/Interpreter/CharType.h" />
 		<Unit filename="include/Interpreter/CharValue.h" />
 		<Unit filename="include/Interpreter/CharVariable.h" />
-		<Unit filename="include/Interpreter/Class.h" />
-		<Unit filename="include/Interpreter/ClassValue.h" />
-		<Unit filename="include/Interpreter/ClassVariable.h" />
 		<Unit filename="include/Interpreter/CodeBlock.h" />
 		<Unit filename="include/Interpreter/ContinueStatement.h" />
 		<Unit filename="include/Interpreter/DefaultFrame.h" />
@@ -285,7 +282,6 @@
 		<Unit filename="include/deflib.h" />
 		<Unit filename="include/preprocessor.h" />
 		<Unit filename="include/symbols_keywords.h" />
-		<Unit filename="src/Interpreter/Class.cpp" />
 		<Unit filename="src/Interpreter/DefaultFrame.cpp" />
 		<Unit filename="src/Interpreter/ExecFrame.cpp" />
 		<Unit filename="src/Interpreter/ExprPart/ExprPart.cpp" />
@@ -329,7 +325,6 @@
 		<Unit filename="src/Interpreter/Value/AnyValue.cpp" />
 		<Unit filename="src/Interpreter/Value/ArrayValue.cpp" />
 		<Unit filename="src/Interpreter/Value/CharValue.cpp" />
-		<Unit filename="src/Interpreter/Value/ClassValue.cpp" />
 		<Unit filename="src/Interpreter/Value/DummyValue.cpp" />
 		<Unit filename="src/Interpreter/Value/FloatValue.cpp" />
 		<Unit filename="src/Interpreter/Value/IntValue.cpp" />
@@ -349,7 +344,6 @@
 		<Unit filename="src/Interpreter/Variable/AnyVariable.cpp" />
 		<Unit filename="src/Interpreter/Variable/ArrayVariable.cpp" />
 		<Unit filename="src/Interpreter/Variable/CharVariable.cpp" />
-		<Unit filename="src/Interpreter/Variable/ClassVariable.cpp" />
 		<Unit filename="src/Interpreter/Variable/DummyVariable.cpp" />
 		<Unit filename="src/Interpreter/Variable/FloatVariable.cpp" />
 		<Unit filename="src/Interpreter/Variable/IntVariable.cpp" />
