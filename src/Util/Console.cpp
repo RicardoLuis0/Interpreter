@@ -64,7 +64,7 @@ namespace Console{
     }
 
     int getch_wasd(){
-		int c=::getch();
+        int c=::getch();
         if(c==224){//ignore arrows
             switch(::getch()){
             case 72: return 'w';
