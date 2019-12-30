@@ -1,6 +1,4 @@
 *.save
-obj/
-doxygen/
 *.depend
 *.layout
 *.bak
@@ -9,10 +7,14 @@ doxygen/
 *.dll
 *.obj
 *.exe
+*.sbr
+doxygen/
 .vs/
 obj/
 bin/
 Debug/
 Release/
+TestDebug/
+TestRelease/
 *.vcxproj.user
 *.dgml

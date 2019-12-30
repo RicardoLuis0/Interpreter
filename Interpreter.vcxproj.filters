@@ -27,9 +27,6 @@
     <ClCompile Include="src\symbols_keywords.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\interpreter\Class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\interpreter\DefaultFrame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -414,9 +411,6 @@
     <ClCompile Include="src\Interpreter\Value\CharValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Interpreter\Value\ClassValue.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Interpreter\Value\DummyValue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -456,9 +450,6 @@
     <ClCompile Include="src\Interpreter\Variable\CharVariable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Interpreter\Variable\ClassVariable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Interpreter\Variable\DummyVariable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -493,6 +484,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Interpreter\Struct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -534,15 +528,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\interpreter\CharVariable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\interpreter\Class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\interpreter\ClassValue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\interpreter\ClassVariable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\interpreter\CodeBlock.h">
@@ -827,9 +812,6 @@
     <ClInclude Include="include\parser\BinaryOperationMatcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\parser\ClassDefinition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\parser\ClassDefinitionMatcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1020,6 +1002,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Interpreter\Struct.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Parser\ClassDefinition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Parser\ParserResultPart.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
