@@ -44,6 +44,7 @@ enum keyword_type_t{
     KEYWORD_VIRTUAL,
     KEYWORD_IMPORT,
     KEYWORD_EXPORT,
+    KEYWORD_DECLTYPE,
     _LAST_KEYWORD_,
 };
 

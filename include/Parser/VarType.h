@@ -12,6 +12,7 @@ namespace Parser{
         VARTYPE_VOID,
         VARTYPE_PRIMITIVE,
         VARTYPE_IDENTIFIER,
+        VARTYPE_DECLTYPE,
     };
     enum ParserPrimitiveType_t{
         PRIMITIVE_INVALID,
@@ -26,14 +27,16 @@ namespace Parser{
     class VarType : public ParserResultPart {
     public:
         VarType(std::shared_ptr<Lexer::KeywordToken> primitive,bool is_const,bool has_sign,bool sign,std::shared_ptr<VarType> extra,int line_start,int line_end);
+        VarType(std::shared_ptr<Expression> decltype_expr,bool is_const,int line_start,int line_end);
         VarType(ParserPrimitiveType_t primitive,bool is_const,bool has_sign,bool sign,std::shared_ptr<VarType> extra,int line_start,int line_end);
-        ParserPrimitiveType_t primitive;
         ParserVarTypeType_t type;
+        ParserPrimitiveType_t primitive;
         bool has_sign;
         bool sign;
         bool is_const;
         std::vector<std::shared_ptr<Expression>> array_sizes;
         std::shared_ptr<VarType> extra;
+        std::shared_ptr<Expression> decltype_expr;
         virtual std::string getSource() override;
         virtual void print(int depth) override;
     };

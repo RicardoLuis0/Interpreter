@@ -55,6 +55,7 @@ std::vector<Lexer::keyword_data> base_keywords{
     {"virtual","KEYWORD_VIRTUAL",KEYWORD_VIRTUAL},
     {"import","KEYWORD_IMPORT",KEYWORD_IMPORT},
     {"export","KEYWORD_EXPORT",KEYWORD_EXPORT},
+    {"decltype","KEYWORD_DECLTYPE",KEYWORD_DECLTYPE},
 };
 
 std::vector<Lexer::symbol_data> base_symbols{

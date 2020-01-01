@@ -98,6 +98,8 @@ bool Type::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
 
 std::shared_ptr<Type> Type::from_vartype_ignore_array(DefaultFrame * context,std::shared_ptr<Parser::VarType> t){
     switch(t->type){
+    case Parser::VARTYPE_DECLTYPE:
+        return Expression(context,t->decltype_expr).get_type();
     case Parser::VARTYPE_VOID:
         if(t->has_sign)throw std::runtime_error("unexpected "+std::string(t->sign?"signed":"unsigned"));
         return void_type(t->is_const);

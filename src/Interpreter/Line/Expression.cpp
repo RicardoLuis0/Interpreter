@@ -85,19 +85,19 @@ std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::share
             switch(kfn->identifier->get_keyword_type()){
             case KEYWORD_IS:
                 if(kfn->extra_type==nullptr){
-                    if(kfn->arguments&&kfn->arguments->expression_list.size()!=2)throw std::runtime_error("missing type to compare, usage 'is<TYPE>(VALUE)' or 'is(TYPE_VALUE,VALUE)'");
+                    if(!kfn->arguments||kfn->arguments->expression_list.size()!=2)throw std::runtime_error("missing type to compare, usage 'is<TYPE>(VALUE)' or 'is(TYPE_VALUE,VALUE)'");
                     expr=std::make_shared<ExprPartIs>(get_expression(context,kfn->arguments->expression_list[0]),get_expression(context,kfn->arguments->expression_list[1]));
                 }else{
-                    if(kfn->arguments&&kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'is<TYPE>(VALUE)' or 'is(TYPE_VALUE,VALUE)'");
+                    if(!kfn->arguments||kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'is<TYPE>(VALUE)' or 'is(TYPE_VALUE,VALUE)'");
                     expr=std::make_shared<ExprPartIs>(std::make_shared<ExprPartValue>(std::make_shared<TypeValue>(Type::from_vartype(context,kfn->extra_type))),get_expression(context,kfn->arguments->expression_list[0]));
                 }
                 break;
             case KEYWORD_CAST:
                 if(kfn->extra_type==nullptr){
-                    if(kfn->arguments&&kfn->arguments->expression_list.size()!=2)throw std::runtime_error("missing type to cast, usage 'cast<TYPE>(VALUE)' or 'cast(TYPE_VALUE,VALUE)'");
+                    if(!kfn->arguments||kfn->arguments->expression_list.size()!=2)throw std::runtime_error("missing type to cast, usage 'cast<TYPE>(VALUE)' or 'cast(TYPE_VALUE,VALUE)'");
                     expr=std::make_shared<ExprPartCast>(get_expression(context,kfn->arguments->expression_list[0]),get_expression(context,kfn->arguments->expression_list[1]));
                 }else{
-                    if(kfn->arguments&&kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'cast<TYPE>(VALUE)' or 'cast(TYPE_VALUE,VALUE)'");
+                    if(!kfn->arguments||kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'cast<TYPE>(VALUE)' or 'cast(TYPE_VALUE,VALUE)'");
                     expr=std::make_shared<ExprPartCast>(std::make_shared<ExprPartValue>(std::make_shared<TypeValue>(Type::from_vartype(context,kfn->extra_type))),get_expression(context,kfn->arguments->expression_list[0]));
                 }
                 break;
@@ -108,8 +108,13 @@ std::shared_ptr<ExprPart> Expression::get_term(DefaultFrame * context,std::share
                 break;
             case KEYWORD_TYPEOF:
                 if(kfn->extra_type!=nullptr)throw std::runtime_error("invalid type argument, usage 'typeof(VALUE)'");
-                if(kfn->arguments&&kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'typeof(VALUE)'");
+                if(!kfn->arguments||kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'typeof(VALUE)'");
                 expr=std::make_shared<ExprPartTypeOf>(get_expression(context,kfn->arguments->expression_list[0]));
+                break;
+            case KEYWORD_DECLTYPE:
+                if(kfn->extra_type!=nullptr)throw std::runtime_error("invalid type argument, usage 'decltype(EXPRESSION)'");
+                if(!kfn->arguments||kfn->arguments->expression_list.size()!=1)throw std::runtime_error("invalid argument count, usage 'decltype(EXPRESSION)'");
+                expr=std::make_shared<ExprPartValue>(std::make_shared<TypeValue>(Expression(context,kfn->arguments->expression_list[0]).get_type()));
                 break;
             default:
                 throw std::runtime_error("unimplemented Expression Term type keyword function "+kfn->identifier->get_literal());

@@ -49,14 +49,14 @@ bool UnsignedIntType::allows_implicit_cast(std::shared_ptr<Type> self,std::share
 std::shared_ptr<Value> UnsignedIntType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
     if(is(self->get_type(),other)){
         return self;
-	}else if(CHECKPTR(other,IntType)){
-		return std::make_shared<IntValue>(static_cast<int>(std::dynamic_pointer_cast<UnsignedIntValue>(self)->get()));
-	}else if(CHECKPTR(other,CharType)){
-		return std::make_shared<CharValue>(static_cast<char>(std::dynamic_pointer_cast<UnsignedIntValue>(self)->get()));
-	}else if(CHECKPTR(other,UnsignedCharType)){
-		return std::make_shared<UnsignedCharValue>(static_cast<unsigned char>(std::dynamic_pointer_cast<UnsignedIntValue>(self)->get()));
-	}else if(CHECKPTR(other,FloatType)){
-		return std::make_shared<FloatValue>(static_cast<float>(std::dynamic_pointer_cast<UnsignedIntValue>(self)->get()));
+    }else if(CHECKPTR(other,IntType)){
+        return std::make_shared<IntValue>(static_cast<int>(std::dynamic_pointer_cast<UnsignedIntValue>(self)->get()));
+    }else if(CHECKPTR(other,CharType)){
+        return std::make_shared<CharValue>(static_cast<char>(std::dynamic_pointer_cast<UnsignedIntValue>(self)->get()));
+    }else if(CHECKPTR(other,UnsignedCharType)){
+        return std::make_shared<UnsignedCharValue>(static_cast<unsigned char>(std::dynamic_pointer_cast<UnsignedIntValue>(self)->get()));
+    }else if(CHECKPTR(other,FloatType)){
+        return std::make_shared<FloatValue>(static_cast<float>(std::dynamic_pointer_cast<UnsignedIntValue>(self)->get()));
     }else{
         return Type::cast(self,other);//throws
     }
@@ -90,10 +90,14 @@ std::shared_ptr<Value> UnsignedIntType::get_operator_result(int op,std::shared_p
     case SYMBOL_MINUS:
     case SYMBOL_MULTIPLY:
     case SYMBOL_DIVIDE:
-        if(other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_int_type())||other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_char_type())){
+        if(other->get_type()->is(other->get_type(),Type::float_type())){
+            return std::make_shared<DummyValue>(Type::float_type());
+        }else if(other->get_type()->is(other->get_type(),Type::unsigned_int_type())||other->get_type()->is(other->get_type(),Type::unsigned_char_type())){
             return std::make_shared<DummyValue>(Type::unsigned_int_type());
         }else if(other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())||other->get_type()->allows_implicit_cast(other->get_type(),Type::char_type())){
             return std::make_shared<DummyValue>(Type::int_type());
+        }else if(other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_int_type())||other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_char_type())){
+            return std::make_shared<DummyValue>(Type::unsigned_int_type());
         }else if(other->get_type()->allows_implicit_cast(other->get_type(),Type::float_type())){
             return std::make_shared<DummyValue>(Type::float_type());
         }else{

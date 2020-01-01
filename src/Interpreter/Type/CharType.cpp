@@ -92,7 +92,9 @@ std::shared_ptr<Value> CharType::get_operator_result(int op,std::shared_ptr<Valu
     case SYMBOL_MINUS:
     case SYMBOL_MULTIPLY:
     case SYMBOL_DIVIDE:
-        if(other->get_type()->allows_implicit_cast(other->get_type(),Type::char_type())){
+        if(other->get_type()->is(other->get_type(),Type::float_type())){
+            return std::make_shared<DummyValue>(Type::float_type());
+        }else if(other->get_type()->is(other->get_type(),Type::char_type())){
             return std::make_shared<DummyValue>(Type::char_type());
         }else if(other->get_type()->allows_implicit_cast(other->get_type(),Type::unsigned_int_type())||
              other->get_type()->allows_implicit_cast(other->get_type(),Type::int_type())||
