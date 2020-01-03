@@ -4,7 +4,7 @@
 #include "Parser/ExpressionListMatcher.h"
 #include "MyExcept/MyExcept.h"
 
-//KeywordFunctionCall = ( keyword 'cast' | keyword 'is' | keyword 'typeof' | keyword 'type' ) , [ symbol '<' , VarType , symbol '>' ] , symbol '(' , ExpressionList , symbol ')' ;
+//KeywordFunctionCall = ( keyword 'cast' | keyword 'is' | keyword 'typeof' | keyword 'type' | keyword 'decltype' ) , [ symbol '<' , VarType , symbol '>' ] , symbol '(' , ExpressionList , symbol ')' ;
 
 using namespace Parser;
 
