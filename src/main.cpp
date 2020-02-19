@@ -68,10 +68,14 @@ int simple_exec_string(std::string filename,std::string &data,int argc,char ** a
     case Interpreter::ACTION_RETURN:
         if(auto ret=std::dynamic_pointer_cast<Interpreter::LineResultReturn>(result)){
             auto val=ret->get();
-            if(val->get_type()->allows_implicit_cast(val->get_type(),Interpreter::Type::int_type())){
-                return std::dynamic_pointer_cast<Interpreter::IntValue>(val->get_type()->cast(val,Interpreter::Type::int_type()))->get();
+            if(val){
+                if(val->get_type()->allows_implicit_cast(val->get_type(),Interpreter::Type::int_type())){
+                    return std::dynamic_pointer_cast<Interpreter::IntValue>(val->get_type()->cast(val,Interpreter::Type::int_type()))->get();
+                }else{
+                    throw std::runtime_error("Cannot convert return value to int");
+                }
             }else{
-                throw std::runtime_error("Cannot convert return value to int");
+                return 0;
             }
         }
     }
@@ -286,10 +290,14 @@ start:
             case Interpreter::ACTION_RETURN:
                 if(auto ret=std::dynamic_pointer_cast<Interpreter::LineResultReturn>(result)){
                     auto val=ret->get();
-                    if(val->get_type()->allows_implicit_cast(val->get_type(),Interpreter::Type::int_type())){
-                        std::cout<<"\n\n"<<filename<<" returned with value "<<std::to_string(std::dynamic_pointer_cast<Interpreter::IntValue>(val->get_type()->cast(val,Interpreter::Type::int_type()))->get())<<"\n";
+                    if(val){
+                        if(val->get_type()->allows_implicit_cast(val->get_type(),Interpreter::Type::int_type())){
+                            std::cout<<"\n\n"<<filename<<" returned with value "<<std::to_string(std::dynamic_pointer_cast<Interpreter::IntValue>(val->get_type()->cast(val,Interpreter::Type::int_type()))->get())<<"\n";
+                        }else{
+                            throw MyExcept::InterpreterRuntimeError("Cannot convert return value to int");
+                        }
                     }else{
-                        throw MyExcept::InterpreterRuntimeError("Cannot convert return value to int");
+                        std::cout<<"\n\n"<<filename<<" finished exeuction\n";
                     }
                 }
                 goto start;
@@ -390,6 +398,8 @@ start:
         std::cout<<"\n\n"<<e.what()<<"\n";
     }catch(MyExcept::FileError &e){
         std::cout<<"\n\n"<<e.what()<<"\n";
+    }catch(MyExcept::SyntaxError &e){
+        std::cout<<"\n\n"<<e.what()<<"\n";
     }catch(std::exception &e){
         std::cout<<"\n\nunknown exception: "<<e.what()<<"\n";
     }
@@ -455,6 +465,10 @@ int main(int argc,char ** argv){
     }catch(MyExcept::FileError &e){
         std::cout<<"\n\n"<<e.what();
         return 1;
+    }catch(MyExcept::InterpreterRuntimeError &e){
+        std::cout<<"\n\n"<<e.what()<<"\n";
+    }catch(MyExcept::SyntaxError &e){
+        std::cout<<"\n\n"<<e.what()<<"\n";
     }catch(std::exception &e){
         std::cout<<"\n\nunknown exception: "<<e.what();
         return 1;
