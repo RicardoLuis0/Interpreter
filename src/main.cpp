@@ -44,6 +44,7 @@ int simple_exec_string(std::string filename,std::string &data,int argc,char ** a
         linedeflist.push_back(Parser::LineMatcher().makeMatch(p));
     }
     std::shared_ptr<Interpreter::DefaultFrame> run_frame(std::make_shared<Interpreter::DefaultFrame>(nullptr));
+    run_frame->is_simple=true;
     Interpreter::import_all(run_frame.get());//import everything
     std::vector<std::shared_ptr<Interpreter::Line>> lines;
     run_frame->variable_types["args"]=std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),-1);
@@ -228,6 +229,7 @@ start:
                 linedeflist.push_back(Parser::LineMatcher().makeMatch(p));
             }
             std::shared_ptr<Interpreter::DefaultFrame> run_frame(std::make_shared<Interpreter::DefaultFrame>(nullptr));
+            run_frame->is_simple=true;
             Interpreter::import_all(run_frame.get());//import everything
             std::vector<std::shared_ptr<Interpreter::Line>> lines;
             run_frame->variable_types["args"]=std::make_shared<Interpreter::ArrayType>(Interpreter::Type::string_type(),-1);

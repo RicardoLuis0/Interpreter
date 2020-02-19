@@ -53,6 +53,7 @@ namespace Interpreter{
             std::shared_ptr<Function> get_function_local(std::string,std::vector<FunctionParameter>);
             std::shared_ptr<class Expression> vardefitem_to_assignment(std::shared_ptr<Parser::VariableDefinitionItem> vardef);
             bool is_function=false;
+            bool is_simple=false;
             Function * self_function=nullptr;
             void register_function(std::shared_ptr<Function> func);
             void add_parameters(std::vector<FunctionParameter>);

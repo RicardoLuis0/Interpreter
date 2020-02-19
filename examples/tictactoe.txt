@@ -132,7 +132,7 @@ void game(int computer){
         print("Player's Name: ");
         player1=getline();
         player2="Computer";
-        print("Difficulty (1.Easy,2.Medium,3.Hard): ");
+        print("Difficulty (1.Easy,2.Hard): ");
         while(true){
             char c=getch();
             if(c=='1'){
@@ -140,9 +140,6 @@ void game(int computer){
                 break;
             }else if(c=='2'){
                 difficulty=2;
-                break;
-            }else if(c=='3'){
-                difficulty=3;
                 break;
             }
         }
@@ -164,8 +161,6 @@ void game(int computer){
             if(computer){
                 if(difficulty==1){
                     computer_turn_easy(board);
-                }else if(difficulty==2){
-                    computer_turn_medium(board);
                 }else{
                     computer_turn_hard(board);
                 }
@@ -223,7 +218,7 @@ void computer_turn_easy(int[3][3] &board){//random
     }
 }
 
-int computer_turn_medium_part(int[3][3] &board){
+int computer_turn_hard_part(int[3][3] &board){
     int lose_x=-1;
     int lose_y=-1;
     for(int y=0;y<3;y++){//find winning/losing moves
@@ -251,33 +246,8 @@ int computer_turn_medium_part(int[3][3] &board){
     return 0;
 }
 
-void computer_turn_medium(int[3][3] &board){
-    if(!computer_turn_medium_part(board))computer_turn_easy(board);//if no immediate wins or losses, play randomly
-}
-
-void computer_turn_hard(int[3][3] &board){//minimax
-    if(computer_turn_medium_part(board))return;
-    print_board(board,-1,-1,"Computer's Turn\n","\nThe Computer Is Thinking...");
-    int best=-9999;
-    int best_x;
-    int best_y;
-    for(int y=0;y<3;y++){//find best move
-        for(int x=0;x<3;x++){
-            if(board[x][y]==0){
-                board[x][y]=2;
-                int new_val=minimax(board,0,true);
-                board[x][y]=0;
-                if(new_val>best){
-                    best=new_val;
-                    best_x=x;
-                    best_y=y;
-                }
-            }
-        }
-    }
-    if(best!=-9999){//execute best move
-        board[best_x][best_y]=2;
-    }
+void computer_turn_hard(int[3][3] &board){
+    if(!computer_turn_hard_part(board))computer_turn_easy(board);//if no immediate wins or losses, play randomly
 }
 
 int max(int a,int b){
@@ -292,40 +262,4 @@ int min(int a,int b){
         return a;
     }
     return b;
-}
-
-int minimax(int[3][3] &board,int depth,int player){
-    int cw=checkwin(board);
-    if(cw==1){//if endpoint return
-        return depth-10;//player wins
-    }else if(cw==2){
-        return 10-depth;//computer wins
-    }else if(cw==3){
-        return 0;//tie
-    }else{
-        int val;
-        int move;
-        if(player){
-            val=-999;
-            move=1;
-        }else{
-            val=999;
-            move=2;
-        }
-        for(int i=0;i<3;i++){
-            for(int j=0;j<3;j++){
-                if(board[j][i]==0){//if is a valid move
-                    board[j][i]=move;
-                    int next_val=minimax(board,depth+1,!player);
-                    board[j][i]=0;
-                    if(player){
-                        val=max(val,next_val);
-                    }else{
-                        val=min(val,next_val);
-                    }
-                }
-            }
-        }
-        return val;//return value for best move
-    }
 }

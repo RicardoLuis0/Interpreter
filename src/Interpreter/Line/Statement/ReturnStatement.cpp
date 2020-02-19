@@ -8,7 +8,7 @@ using namespace Interpreter;
 ReturnStatement::ReturnStatement(DefaultFrame * context,std::shared_ptr<Parser::ReturnStatement> stmt):Line(stmt->line_start),value(nullptr),line(stmt->line_start){
     DefaultFrame * func_frame=context;
     while(!(func_frame->is_function)){
-        if(func_frame->parent==nullptr){
+        if(func_frame->parent==nullptr&&!func_frame->is_simple){
             throw MyExcept::SyntaxError(source_line,source_line,"return statement called outside of a function (HOW\?\?\?)");//shouldn't be possible, EVER
         }
         func_frame=func_frame->parent;
