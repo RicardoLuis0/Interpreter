@@ -55,14 +55,7 @@ std::shared_ptr<ExprPart> Expression::get_expression(DefaultFrame * context,std:
                 throw std::runtime_error("keyword operator '"+op->binary_keyword_operator->get_literal()+"' not imeplemented yet");
             }
         }else{
-            switch(op->binary_operator->get_symbol_type()){
-            case SYMBOL_ARROW:
-            case SYMBOL_DOT:
-                throw std::runtime_error("member access operators not implemented yet");
-                break;
-            default:
-                return std::make_shared<ExprPartOp>(get_term(context,op->term1),op->binary_operator->get_symbol_type(),get_expression(context,op->term2),e->line_start,e->line_end);
-            }
+            return std::make_shared<ExprPartOp>(get_term(context,op->term1),op->binary_operator->get_symbol_type(),get_expression(context,op->term2),e->line_start,e->line_end);
         }
     }else{
         return get_term(context,std::static_pointer_cast<Parser::ExpressionTerm>(e->contents));
