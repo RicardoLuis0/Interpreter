@@ -29,6 +29,7 @@ UnaryOperation::UnaryOperation(parserProgress &p){
             throw MyExcept::NoMatchException(0,"");//this isn't shown
         }
     }
+    term=std::make_shared<ExpressionTerm>(p);
     line_end=p.get_line(-1);
 }
 

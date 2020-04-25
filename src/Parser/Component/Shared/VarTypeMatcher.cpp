@@ -8,7 +8,7 @@
 //VarType = [ keyword 'const' ] ,
 //          (
 //            [ keyword 'unsigned' | keyword 'signed' ] , ( keyword 'any' | keyword 'type' | keyword 'void' | keyword 'int' | keyword 'char' | keyword 'float' | keyword 'string' )
-//          | keyword 'pointer' , symbol '<' , ( VarType | symbol '?' ) , symbol '>'
+//          | keyword 'ptr' , symbol '<' , ( VarType | symbol '?' ) , symbol '>'
 //          | keyword 'decltype' , symbol '(' , Expression , symbol ')'
 //          ) ,
 //          { symbol '[' , [ Expression ] , symbol ']' } ;
