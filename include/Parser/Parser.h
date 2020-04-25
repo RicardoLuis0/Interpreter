@@ -13,6 +13,7 @@ namespace Parser{
         parserProgress(const std::vector<std::shared_ptr<Lexer::Token>> &data, int location=0);
         bool in_range(int offset=0);
         bool peekType(Lexer::token_type_t id,int offset=0);//check if token is of type, don't change location
+        bool peekType(std::vector<Lexer::token_type_t> ids,int offset=0);//check if token is of type, don't change location
         bool peekSymbol(int id,int offset=0);//check if current token is a specific symbol, don't change location
         bool peekSymbol(std::vector<int> ids,int offset=0);//check if current token is one of the symbol inside vector, don't change location
         bool peekKeyword(int id,int offset=0);//check if current token is a specific keyword, don't change location

@@ -23,6 +23,15 @@ bool parserProgress::peekType(Lexer::token_type_t id,int offset){
     return (get(offset)->type==id);
 }
 
+bool parserProgress::peekType(std::vector<Lexer::token_type_t> ids,int offset){
+    if(!in_range(offset))return false;
+    for(auto id:ids){
+        if(get(offset)->type==id)return true;
+    }
+    return false;
+}
+
+
 bool parserProgress::peekSymbol(int id,int offset){
     if(!in_range(offset))return false;
     return (get(offset)->type==Lexer::TOKEN_TYPE_SYMBOL&&std::static_pointer_cast<Lexer::SymbolToken>(get(offset))->get_symbol_type()==id);
