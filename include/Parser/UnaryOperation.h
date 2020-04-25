@@ -1,6 +1,7 @@
 #ifndef PARSER_UNARY_OPERATION_H
 #define PARSER_UNARY_OPERATION_H
 
+#include <vector>
 #include <memory>
 #include "Parser/ParserResultPart.h"
 #include "Parser/ExpressionTerm.h"
@@ -10,6 +11,8 @@
 
 namespace Parser{
     class UnaryOperation:public ParserResultPart{
+        static std::vector<int> pre_unary_operators;
+        static std::vector<int> pre_unary_keyword_operators;
     public:
         UnaryOperation(parserProgress&);
         UnaryOperation(std::shared_ptr<Lexer::SymbolToken> t_operator,std::shared_ptr<ExpressionTerm> expression_term,int line_start,int line_end);

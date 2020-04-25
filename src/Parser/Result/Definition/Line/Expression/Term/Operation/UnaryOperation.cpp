@@ -1,11 +1,35 @@
 #include "Parser/UnaryOperation.h"
+#include "symbols_keywords.h"
+#include "MyExcept/MyExcept.h"
 
 #include <iostream>
 
 using namespace Parser;
 
+std::vector<int> UnaryOperation::pre_unary_operators{//these might also be binary operators
+    SYMBOL_PLUS,
+    SYMBOL_MINUS,
+    SYMBOL_INCREMENT,
+    SYMBOL_DECREMENT,
+    SYMBOL_LOGICAL_NOT,
+    SYMBOL_BITWISE_AND,
+    SYMBOL_MULTIPLY,
+};
+
+std::vector<int> UnaryOperation::pre_unary_keyword_operators {
+    KEYWORD_TYPEOF,
+};
+
 UnaryOperation::UnaryOperation(parserProgress &p){
-    throw std::runtime_error("unimplemented");
+    line_start=p.get_line();
+    is_keyword=true;
+    if(!(unary_keyword_operator=p.isKeyword(pre_unary_keyword_operators))){
+        is_keyword=false;
+        if(!(unary_operator=p.isSymbol(pre_unary_operators))){
+            throw MyExcept::NoMatchException(0,"");//this isn't shown
+        }
+    }
+    line_end=p.get_line(-1);
 }
 
 UnaryOperation::UnaryOperation(std::shared_ptr<Lexer::SymbolToken> st,std::shared_ptr<ExpressionTerm> et,int ls,int le):ParserResultPart(ls,le),unary_operator(st),term(et),is_keyword(false){

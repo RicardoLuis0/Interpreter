@@ -1,11 +1,59 @@
 #include "Parser/BinaryOperation.h"
+#include "symbols_keywords.h"
+#include "MyExcept/MyExcept.h"
 
 #include <iostream>
 
 using namespace Parser;
 
+std::vector<int> BinaryOperation::binary_symbol_operators{
+    SYMBOL_ASSIGNMENT,
+    SYMBOL_EQUALS,
+    SYMBOL_NOT_EQUALS,
+    SYMBOL_GREATER,
+    SYMBOL_GREATER_EQUALS,
+    SYMBOL_LOWER,
+    SYMBOL_LOWER_EQUALS,
+    SYMBOL_PLUS,
+    SYMBOL_PLUS_ASSIGNMENT,
+    SYMBOL_MINUS,
+    SYMBOL_MINUS_ASSIGNMENT,
+    SYMBOL_MULTIPLY,
+    SYMBOL_MULTIPLY_ASSIGNMENT,
+    SYMBOL_DIVIDE,
+    SYMBOL_DIVIDE_ASSIGNMENT,
+    SYMBOL_LOGICAL_AND,
+    SYMBOL_LOGICAL_OR,
+    SYMBOL_BITWISE_AND,
+    SYMBOL_BITWISE_AND_ASSIGNMENT,
+    SYMBOL_BITWISE_OR,
+    SYMBOL_BITWISE_OR_ASSIGNMENT,
+    SYMBOL_BITWISE_XOR,
+    SYMBOL_BITWISE_XOR_ASSIGNMENT,
+    SYMBOL_LEFT_SHIFT,
+    SYMBOL_LEFT_SHIFT_ASSIGNMENT,
+    SYMBOL_RIGHT_SHIFT,
+    SYMBOL_RIGHT_SHIFT_ASSIGNMENT,
+    SYMBOL_PERCENT,
+    SYMBOL_PERCENT_ASSIGNMENT,
+};
+
+std::vector<int> BinaryOperation::binary_keyword_operators{
+    KEYWORD_IS,
+};
+
 BinaryOperation::BinaryOperation(parserProgress &p){
-    throw std::runtime_error("unimplemented");
+    line_start=p.get_line();
+    term1=std::make_shared<ExpressionTerm>(p);
+    is_keyword=true;
+    if(!(binary_keyword_operator=p.isKeyword(binary_keyword_operators))){
+        is_keyword=false;
+        if(!(binary_operator=p.isSymbol(binary_symbol_operators))){
+            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected binary operator, got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+        }
+    }
+    term2=std::make_shared<Expression>(p);
+    line_end=p.get_line(-1);
 }
 
 BinaryOperation::BinaryOperation(std::shared_ptr<ExpressionTerm> et,std::shared_ptr<Lexer::SymbolToken> st,std::shared_ptr<Expression> ex,int ls,int le):ParserResultPart(ls,le),term1(et),binary_operator(st),term2(ex),is_keyword(false){
