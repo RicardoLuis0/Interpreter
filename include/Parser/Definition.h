@@ -12,6 +12,7 @@ namespace Parser{
     };
     class Definition : public ParserResultPart {
         public:
+            Definition(parserProgress&);
             Definition(ParserDefinitionType_t type,std::shared_ptr<ParserResultPart> def,int line_start,int line_end);
             ParserDefinitionType_t type;
             std::shared_ptr<ParserResultPart> def;

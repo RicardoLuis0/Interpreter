@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+Expression::Expression(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 Expression::Expression(std::shared_ptr<ParserResultPart> ptr,ExpressionType_t ptype,int ls,int le):ParserResultPart(ls,le),contents(ptr),type(ptype){
     
 }

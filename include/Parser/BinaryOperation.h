@@ -12,6 +12,7 @@
 namespace Parser{
     class BinaryOperation:public ParserResultPart{
         public:
+            BinaryOperation(parserProgress&);
             BinaryOperation(std::shared_ptr<ExpressionTerm>,std::shared_ptr<Lexer::SymbolToken>,std::shared_ptr<Expression>,int line_start,int line_end);
             BinaryOperation(std::shared_ptr<ExpressionTerm>,std::shared_ptr<Lexer::KeywordToken>,std::shared_ptr<Expression>,int line_start,int line_end);
             std::shared_ptr<ExpressionTerm> term1;

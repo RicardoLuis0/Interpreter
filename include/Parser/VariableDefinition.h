@@ -9,12 +9,13 @@
 
 namespace Parser{
     class VariableDefinition : public ParserResultPart {
-        public:
-            VariableDefinition(std::shared_ptr<VarType> type,std::vector<std::shared_ptr<VariableDefinitionItem>> variables,int line_start,int line_end);
-            std::shared_ptr<VarType> type;
-            std::vector<std::shared_ptr<VariableDefinitionItem>> variables;
-            virtual std::string getSource() override;
-            virtual void print(int depth) override;
+    public:
+        VariableDefinition(parserProgress&);
+        VariableDefinition(std::shared_ptr<VarType> type,std::vector<std::shared_ptr<VariableDefinitionItem>> variables,int line_start,int line_end);
+        std::shared_ptr<VarType> type;
+        std::vector<std::shared_ptr<VariableDefinitionItem>> variables;
+        virtual std::string getSource() override;
+        virtual void print(int depth) override;
     };
 }
 

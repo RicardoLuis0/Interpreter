@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+ElseStatement::ElseStatement(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 ElseStatement::ElseStatement(std::shared_ptr<Line> l,int ls,int le):ParserResultPart(ls,le),code(l){
 }
 

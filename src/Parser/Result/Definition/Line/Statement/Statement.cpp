@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+Statement::Statement(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 Statement::Statement(std::shared_ptr<ParserResultPart> stmt,ParserStatementType_t sttype,int ls,int le):ParserResultPart(ls,le),statement(stmt),type(sttype){
     
 }

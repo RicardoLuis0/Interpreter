@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+ForStatement::ForStatement(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 ForStatement::ForStatement(std::shared_ptr<Expression> p,std::shared_ptr<VariableDefinition> vp,std::shared_ptr<Expression> c,std::shared_ptr<Expression> i,std::shared_ptr<Line> l,int ls,int le):
     ParserResultPart(ls,le),
     pre(p),

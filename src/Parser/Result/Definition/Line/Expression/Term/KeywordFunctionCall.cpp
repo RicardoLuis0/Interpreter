@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+KeywordFunctionCall::KeywordFunctionCall(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 KeywordFunctionCall::KeywordFunctionCall(std::shared_ptr<Lexer::KeywordToken> id,std::shared_ptr<VarType> type,std::shared_ptr<ExpressionList> args,int ls,int le):ParserResultPart(ls,le),identifier(id),extra_type(type),arguments(args){
     
 }

@@ -30,20 +30,21 @@ namespace Parser {
         MEMBER_ACCESS_POINTER,
     };
     class ExpressionTerm:public ParserResultPart {
-        public:
-            ExpressionTerm(std::shared_ptr<ParserResultPart>,ExpressionTermType_t type,int line_start,int line_end);
-            ExpressionTerm(std::shared_ptr<Lexer::Token>,ExpressionTermType_t type,int line_start,int line_end);
-            std::shared_ptr<ParserResultPart> contents_p;
-            std::shared_ptr<Lexer::Token> contents_t;\
-            std::vector<std::shared_ptr<Lexer::SymbolToken>> unary_post_operators;
-            std::vector<std::shared_ptr<ParserResultPart>> array_access;//std::shared_ptr<Expression>
-            const ExpressionTermType_t type;
-            std::shared_ptr<ExpressionTerm> member_access;
-            ExpressionTermMemberAccessType_t member_access_type=MEMBER_ACCESS_NONE;
-            virtual std::string getSource() override;
-            virtual void print(int depth) override;
-        protected:
-        private:
+    public:
+        ExpressionTerm(parserProgress&);
+        ExpressionTerm(std::shared_ptr<ParserResultPart>,ExpressionTermType_t type,int line_start,int line_end);
+        ExpressionTerm(std::shared_ptr<Lexer::Token>,ExpressionTermType_t type,int line_start,int line_end);
+        std::shared_ptr<ParserResultPart> contents_p;
+        std::shared_ptr<Lexer::Token> contents_t;\
+        std::vector<std::shared_ptr<Lexer::SymbolToken>> unary_post_operators;
+        std::vector<std::shared_ptr<ParserResultPart>> array_access;//std::shared_ptr<Expression>
+        ExpressionTermType_t type;
+        std::shared_ptr<ExpressionTerm> member_access;
+        ExpressionTermMemberAccessType_t member_access_type=MEMBER_ACCESS_NONE;
+        virtual std::string getSource() override;
+        virtual void print(int depth) override;
+    protected:
+    private:
     };
 }
 #endif // PARSER_EXPRESSION_TERM_H

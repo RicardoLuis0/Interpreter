@@ -22,15 +22,16 @@ namespace Parser{
         MEMBER_TYPE_FUNCTION,
     };
     class MemberDefinition:public ParserResultPart{
-        public:
-            MemberDefinition(bool is_override,member_scope_t scope,member_modifier_t mod,member_type_t type,std::shared_ptr<ParserResultPart> member,int line_start,int line_end);
-            bool is_override;
-            member_scope_t scope;
-            member_modifier_t mod;
-            member_type_t type;
-            std::shared_ptr<ParserResultPart> member;
-            virtual std::string getSource() override;
-            virtual void print(int depth) override;
+    public:
+        MemberDefinition(parserProgress&);
+        MemberDefinition(bool is_override,member_scope_t scope,member_modifier_t mod,member_type_t type,std::shared_ptr<ParserResultPart> member,int line_start,int line_end);
+        bool is_override;
+        member_scope_t scope;
+        member_modifier_t mod;
+        member_type_t type;
+        std::shared_ptr<ParserResultPart> member;
+        virtual std::string getSource() override;
+        virtual void print(int depth) override;
     };
 }
 

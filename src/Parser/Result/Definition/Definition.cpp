@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+Definition::Definition(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 Definition::Definition(ParserDefinitionType_t t,std::shared_ptr<ParserResultPart> d,int ls,int le):ParserResultPart(ls,le),type(t),def(d){
     
 }

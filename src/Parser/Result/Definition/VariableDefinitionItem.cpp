@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+VariableDefinitionItem::VariableDefinitionItem(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 VariableDefinitionItem::VariableDefinitionItem(std::string s,int ls,int le):ParserResultPart(ls,le),name(s),value(nullptr){
 }
 

@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+ExpressionList::ExpressionList(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 ExpressionList::ExpressionList(std::vector<std::shared_ptr<Expression>> el,int ls,int le):ParserResultPart(ls,le),expression_list(el){
     
 }

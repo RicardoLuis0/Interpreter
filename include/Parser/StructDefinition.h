@@ -8,12 +8,13 @@
 
 namespace Parser{
     class StructDefinition:public ParserResultPart{
-        public:
-            StructDefinition(std::string name,std::vector<std::shared_ptr<MemberDefinition>> members,int line_start,int line_end);
-            std::string name;
-            std::vector<std::shared_ptr<MemberDefinition>> members;
-            virtual std::string getSource() override;
-            virtual void print(int depth) override;
+    public:
+        StructDefinition(parserProgress&);
+        StructDefinition(std::string name,std::vector<std::shared_ptr<MemberDefinition>> members,int line_start,int line_end);
+        std::string name;
+        std::vector<std::shared_ptr<MemberDefinition>> members;
+        virtual std::string getSource() override;
+        virtual void print(int depth) override;
     };
 }
 

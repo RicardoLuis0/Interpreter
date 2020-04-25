@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+FunctionCall::FunctionCall(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 FunctionCall::FunctionCall(std::string id,std::shared_ptr<ExpressionList> args,int ls,int le):ParserResultPart(ls,le),identifier(id),arguments(args){
 }
 

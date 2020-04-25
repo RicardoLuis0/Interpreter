@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+Line::Line(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 Line::Line(std::shared_ptr<ParserResultPart> ptr,ParserLineType_t ptype,int ls,int le):ParserResultPart(ls,le),contents(ptr),type(ptype){
     
 }

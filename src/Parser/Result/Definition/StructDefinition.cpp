@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+StructDefinition::StructDefinition(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 StructDefinition::StructDefinition(std::string n,std::vector<std::shared_ptr<MemberDefinition>> m,int ls,int le):
     ParserResultPart(ls,le),
     name(n),

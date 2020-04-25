@@ -6,11 +6,12 @@
 
 namespace Parser{
     class ReturnStatement : public ParserResultPart {
-        public:
-            ReturnStatement(std::shared_ptr<Expression> value,int line_start,int line_end);
-            std::shared_ptr<Expression> value;
-            virtual std::string getSource() override;
-            virtual void print(int depth) override;
+    public:
+        ReturnStatement(parserProgress&);
+        ReturnStatement(std::shared_ptr<Expression> value,int line_start,int line_end);
+        std::shared_ptr<Expression> value;
+        virtual std::string getSource() override;
+        virtual void print(int depth) override;
     };
 }
 

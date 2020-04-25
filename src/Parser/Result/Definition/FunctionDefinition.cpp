@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+FunctionDefinition::FunctionDefinition(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 FunctionDefinition::FunctionDefinition(std::shared_ptr<VarType> ret,
                                        std::shared_ptr<Lexer::WordToken> t,
                                        std::vector<std::shared_ptr<FunctionDefinitionParameter>> p,

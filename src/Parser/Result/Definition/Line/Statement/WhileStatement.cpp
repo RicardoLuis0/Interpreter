@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+WhileStatement::WhileStatement(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 WhileStatement::WhileStatement(std::shared_ptr<Expression> cond,std::shared_ptr<Line> l,int ls,int le):ParserResultPart(ls,le),condition(cond),code(l){
 }
 

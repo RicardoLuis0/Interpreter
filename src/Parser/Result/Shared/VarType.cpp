@@ -7,6 +7,10 @@
 
 using namespace Parser;
 
+VarType::VarType(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 VarType::VarType(std::shared_ptr<Lexer::KeywordToken> tk,bool c,bool h,bool s,std::shared_ptr<VarType> e,int ls,int le):VarType(
     (tk->get_keyword_type()==KEYWORD_POINTER)?PRIMITIVE_POINTER
     :((tk->get_keyword_type()==KEYWORD_ANY)?PRIMITIVE_ANY

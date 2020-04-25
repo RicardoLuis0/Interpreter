@@ -4,6 +4,10 @@
 
 using namespace Parser;
 
+ReturnStatement::ReturnStatement(parserProgress &p){
+    throw std::runtime_error("unimplemented");
+}
+
 ReturnStatement::ReturnStatement(std::shared_ptr<Expression> expr,int ls,int le):ParserResultPart(ls,le),value(expr){}
 
 std::string ReturnStatement::getSource(){

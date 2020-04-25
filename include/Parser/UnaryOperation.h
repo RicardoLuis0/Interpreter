@@ -11,6 +11,7 @@
 namespace Parser{
     class UnaryOperation:public ParserResultPart{
     public:
+        UnaryOperation(parserProgress&);
         UnaryOperation(std::shared_ptr<Lexer::SymbolToken> t_operator,std::shared_ptr<ExpressionTerm> expression_term,int line_start,int line_end);
         UnaryOperation(std::shared_ptr<Lexer::KeywordToken> t_operator,std::shared_ptr<ExpressionTerm> expression_term,int line_start,int line_end);
         std::shared_ptr<Lexer::SymbolToken> unary_operator;
