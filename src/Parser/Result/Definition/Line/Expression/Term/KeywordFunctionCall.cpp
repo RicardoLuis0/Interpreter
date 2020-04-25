@@ -1,11 +1,32 @@
 #include "Parser/KeywordFunctionCall.h"
+#include "symbols_keywords.h"
+#include "Parser/ExpressionList.h"
+#include "MyExcept/MyExcept.h"
 
 #include <iostream>
 
 using namespace Parser;
 
 KeywordFunctionCall::KeywordFunctionCall(parserProgress &p){
-    throw std::runtime_error("unimplemented");
+    line_start=p.get_line();
+    identifier=p.isKeyword({KEYWORD_IS,KEYWORD_CAST,KEYWORD_TYPEOF,KEYWORD_TYPE,KEYWORD_DECLTYPE});
+    if(!identifier)throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"not a keyword function call");
+    if(p.isSymbol(SYMBOL_LOWER)){
+        extra_type=std::make_shared<VarType>(p);
+        if(!p.isSymbol(SYMBOL_GREATER)){
+            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '>', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+        }
+    }
+    if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
+        throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '(', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+    }
+    if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+        arguments = std::make_shared<ExpressionList>(p);
+        if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ')', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+        }
+    }
+    line_end=p.get_line(-1);
 }
 
 KeywordFunctionCall::KeywordFunctionCall(std::shared_ptr<Lexer::KeywordToken> id,std::shared_ptr<VarType> type,std::shared_ptr<ExpressionList> args,int ls,int le):ParserResultPart(ls,le),identifier(id),extra_type(type),arguments(args){
