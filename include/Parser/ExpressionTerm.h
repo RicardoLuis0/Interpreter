@@ -30,6 +30,7 @@ namespace Parser {
         MEMBER_ACCESS_POINTER,
     };
     class ExpressionTerm:public ParserResultPart {
+        static std::vector<int> post_unary_operators;
     public:
         ExpressionTerm(parserProgress&);
         ExpressionTerm(std::shared_ptr<ParserResultPart>,ExpressionTermType_t type,int line_start,int line_end);
