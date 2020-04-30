@@ -1,11 +1,51 @@
 #include "Parser/ForStatement.h"
 
+#include "Parser/Expression.h"
+#include "Parser/Line.h"
+#include "Parser/VariableDefinition.h"
+
+#include "symbols_keywords.h"
+
+#include "MyExcept/MyExcept.h"
+
 #include <iostream>
 
 using namespace Parser;
 
 ForStatement::ForStatement(parserProgress &p){
-    throw std::runtime_error("unimplemented");
+    line_start=p.get_line();
+    if(!p.isKeyword(KEYWORD_FOR)){
+        throw MyExcept::NoMatchException(p,"'for'");
+    }
+    if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
+        throw MyExcept::NoMatchException(p,"'('");
+    }
+    if(!p.isSymbol(SYMBOL_SEMICOLON)){
+        int i=p.location;
+        try{//TODO improve non-predicting match
+            vardef_pre=std::make_shared<VariableDefinition>(p);
+        }catch(MyExcept::NoMatchException &){
+            p.location=i;
+            pre=std::make_shared<Expression>(p);
+        }
+        if(!p.isSymbol(SYMBOL_SEMICOLON)){
+            throw MyExcept::NoMatchException(p,"';'");
+        }
+    }
+    if(!p.isSymbol(SYMBOL_SEMICOLON)){
+        condition=std::make_shared<Expression>(p);
+        if(!p.isSymbol(SYMBOL_SEMICOLON)){
+            throw MyExcept::NoMatchException(p,"';'");
+        }
+    }
+    if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+        inc=std::make_shared<Expression>(p);
+        if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+            throw MyExcept::NoMatchException(p,"')'");
+        }
+    }
+    code=std::make_shared<Line>(p);
+    line_end=p.get_line(-1);
 }
 
 ForStatement::ForStatement(std::shared_ptr<Expression> p,std::shared_ptr<VariableDefinition> vp,std::shared_ptr<Expression> c,std::shared_ptr<Expression> i,std::shared_ptr<Line> l,int ls,int le):
@@ -15,7 +55,7 @@ ForStatement::ForStatement(std::shared_ptr<Expression> p,std::shared_ptr<Variabl
     inc(i),
     vardef_pre(vp),
     code(l){
-        
+    
 }
 
 std::string ForStatement::getSource(){
