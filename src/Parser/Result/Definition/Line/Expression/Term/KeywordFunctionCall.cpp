@@ -14,16 +14,16 @@ KeywordFunctionCall::KeywordFunctionCall(parserProgress &p){
     if(p.isSymbol(SYMBOL_LOWER)){
         extra_type=std::make_shared<VarType>(p);
         if(!p.isSymbol(SYMBOL_GREATER)){
-            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '>', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+            throw MyExcept::NoMatchException(p,"'>'");
         }
     }
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
-        throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '(', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+        throw MyExcept::NoMatchException(p,"'('");
     }
     if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE)){
         arguments = std::make_shared<ExpressionList>(p);
         if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
-            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ')', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+            throw MyExcept::NoMatchException(p,"')'");
         }
     }
     line_end=p.get_line(-1);

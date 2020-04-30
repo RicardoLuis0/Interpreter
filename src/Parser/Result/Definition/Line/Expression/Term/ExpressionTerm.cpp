@@ -69,7 +69,7 @@ ExpressionTerm::ExpressionTerm(parserProgress &p){
         }else if(contents_t=p.isType(Lexer::TOKEN_TYPE_WORD)){//ident
             type=EXPRESSION_TERM_IDENTIFIER;
         } else {
-            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected literal, type, or identifier, got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+            throw MyExcept::NoMatchException(p,"literal, type, or identifier");
         }
     }
     std::shared_ptr<Lexer::SymbolToken> ptr;
@@ -79,7 +79,7 @@ ExpressionTerm::ExpressionTerm(parserProgress &p){
     while(p.isSymbol(SYMBOL_SQUARE_BRACKET_OPEN)){
         array_access.push_back(std::make_shared<Expression>(p));
         if(!p.isSymbol(SYMBOL_SQUARE_BRACKET_CLOSE)){
-            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ']', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+            throw MyExcept::NoMatchException(p,"']'");
         }
     }
     if(auto s=p.isSymbol({SYMBOL_DOT,SYMBOL_ARROW})){

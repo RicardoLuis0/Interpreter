@@ -9,7 +9,7 @@
 
 using namespace Parser;
 
-Expression::Expression(parserProgress &p){
+Expression::Expression(parserProgress &p){//TODO rework expressions and ordering
     line_start=p.get_line();
     contents=std::make_shared<ExpressionTerm>(p);
     type=EXPRESSION_TERM;
@@ -17,7 +17,7 @@ Expression::Expression(parserProgress &p){
     if(BinaryOperation::peekIsBinaryOperator(p)){
         auto binop=std::make_shared<BinaryOperation>(line_start,std::static_pointer_cast<ExpressionTerm>(contents),p);
         line_end=p.get_line(-1);
-        auto expr=order_expression(std::make_shared<Expression>(binop,EXPRESSION_BINARY_OPERATION,line_start,line_end));//order with operator precedence, WIP?
+        auto expr=order_expression(std::make_shared<Expression>(binop,EXPRESSION_BINARY_OPERATION,line_start,line_end));
         contents=expr->contents;
         type=expr->type;
     }

@@ -7,14 +7,14 @@
 
 using namespace Parser;
 
-ExpressionGroup::ExpressionGroup(parserProgress &p){
+ExpressionGroup::ExpressionGroup(parserProgress &p){//TODO remove expression group, move directly into ExpressionTerm
     line_start=p.get_line();
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
-        throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '(', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+        throw MyExcept::NoMatchException(p,"'('");
     }
     contents=std::make_shared<Expression>(p);
     if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
-        throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ')', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+        throw MyExcept::NoMatchException(p,"')'");
     }
 }
 

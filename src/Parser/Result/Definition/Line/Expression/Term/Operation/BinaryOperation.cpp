@@ -49,7 +49,7 @@ BinaryOperation::BinaryOperation(parserProgress &p){
     if(!(binary_keyword_operator=p.isKeyword(binary_keyword_operators))){
         is_keyword=false;
         if(!(binary_operator=p.isSymbol(binary_symbol_operators))){
-            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected binary operator, got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+            throw MyExcept::NoMatchException(p,"binary operator");
         }
     }
     term2=std::make_shared<Expression>(p);
@@ -67,7 +67,7 @@ BinaryOperation::BinaryOperation(int ls,std::shared_ptr<ExpressionTerm> t1,parse
     if(!(binary_keyword_operator=p.isKeyword(binary_keyword_operators))){
         is_keyword=false;
         if(!(binary_operator=p.isSymbol(binary_symbol_operators))){
-            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected binary operator, got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+            throw MyExcept::NoMatchException(p,"binary operator");
         }
     }
     term2=std::make_shared<Expression>(p);

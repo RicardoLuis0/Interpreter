@@ -26,7 +26,7 @@ UnaryOperation::UnaryOperation(parserProgress &p){
     if(!(unary_keyword_operator=p.isKeyword(pre_unary_keyword_operators))){
         is_keyword=false;
         if(!(unary_operator=p.isSymbol(pre_unary_operators))){
-            throw MyExcept::NoMatchException(0,"");//this isn't shown
+            throw MyExcept::NoMatchException(p,"unary operator");
         }
     }
     term=std::make_shared<ExpressionTerm>(p);

@@ -10,15 +10,15 @@ using namespace Parser;
 FunctionCall::FunctionCall(parserProgress &p){
     line_start=p.get_line();
     std::shared_ptr<Lexer::Token> ident_tk=p.isType(Lexer::TOKEN_TYPE_WORD);
-    if(!ident_tk) throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected identifier, got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+    if(!ident_tk) throw MyExcept::NoMatchException(p,"identifier");
     identifier=std::static_pointer_cast<Lexer::WordToken>(ident_tk)->get_literal();
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
-        throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected '(', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+        throw MyExcept::NoMatchException(p,"'('");
     }
     if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE)){
         arguments = std::make_shared<ExpressionList>(p);
         if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
-            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ')', got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+            throw MyExcept::NoMatchException(p,"')'");
         }
     }
     line_end=p.get_line(-1);
