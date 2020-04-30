@@ -1,11 +1,19 @@
 #include "Parser/ExpressionList.h"
 
+#include "symbols_keywords.h"
+
+#include "Parser/Expression.h"
+
 #include <iostream>
 
 using namespace Parser;
 
 ExpressionList::ExpressionList(parserProgress &p){
-    throw std::runtime_error("unimplemented");
+    line_start=p.get_line();
+    do{
+        expression_list.emplace_back(std::make_shared<Expression>(p));
+    }while(p.isSymbol(SYMBOL_COMMA));
+    line_end=p.get_line(-1);
 }
 
 ExpressionList::ExpressionList(std::vector<std::shared_ptr<Expression>> el,int ls,int le):ParserResultPart(ls,le),expression_list(el){
