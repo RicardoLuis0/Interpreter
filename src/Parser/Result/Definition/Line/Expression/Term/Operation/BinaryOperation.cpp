@@ -56,6 +56,24 @@ BinaryOperation::BinaryOperation(parserProgress &p){
     line_end=p.get_line(-1);
 }
 
+bool BinaryOperation::peekIsBinaryOperator(parserProgress &p){
+    return p.peekSymbol(BinaryOperation::binary_symbol_operators)||p.peekKeyword(BinaryOperation::binary_keyword_operators);
+}
+
+BinaryOperation::BinaryOperation(int ls,std::shared_ptr<ExpressionTerm> t1,parserProgress &p){
+    line_start=ls;
+    term1=t1;
+    is_keyword=true;
+    if(!(binary_keyword_operator=p.isKeyword(binary_keyword_operators))){
+        is_keyword=false;
+        if(!(binary_operator=p.isSymbol(binary_symbol_operators))){
+            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected binary operator, got '"+p.get_nothrow_nonull()->get_formatted()+"'");
+        }
+    }
+    term2=std::make_shared<Expression>(p);
+    line_end=p.get_line(-1);
+}
+
 BinaryOperation::BinaryOperation(std::shared_ptr<ExpressionTerm> et,std::shared_ptr<Lexer::SymbolToken> st,std::shared_ptr<Expression> ex,int ls,int le):ParserResultPart(ls,le),term1(et),binary_operator(st),term2(ex),is_keyword(false){
     
 }
