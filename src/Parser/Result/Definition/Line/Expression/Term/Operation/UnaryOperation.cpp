@@ -6,7 +6,7 @@
 
 using namespace Parser;
 
-std::vector<int> UnaryOperation::pre_unary_operators{//these might also be binary operators
+std::vector<int> UnaryOperation::pre_unary_operators{//these can also be binary operators
     SYMBOL_PLUS,
     SYMBOL_MINUS,
     SYMBOL_INCREMENT,
