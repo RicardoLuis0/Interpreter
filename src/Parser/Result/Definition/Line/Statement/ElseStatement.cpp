@@ -16,8 +16,12 @@ ElseStatement::ElseStatement(parserProgress &p){
     if(!p.isKeyword(KEYWORD_ELSE)){
         throw MyExcept::NoMatchException(p,"'else'");
     }
-    code=std::make_shared<Line>(p);
-    line_end=p.get_line(-1);
+    try{
+        code=std::make_shared<Line>(p);
+        line_end=p.get_line(-1);
+    }catch(MyExcept::NoMatchException &e){
+        throw MyExcept::NoMatchExceptionFatal(e);
+    }
 }
 
 ElseStatement::ElseStatement(std::shared_ptr<Line> l,int ls,int le):ParserResultPart(ls,le),code(l){

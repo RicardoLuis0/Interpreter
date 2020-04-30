@@ -72,19 +72,23 @@ ExpressionTerm::ExpressionTerm(parserProgress &p){
             throw MyExcept::NoMatchException(p,"literal, type, or identifier");
         }
     }
-    std::shared_ptr<Lexer::SymbolToken> ptr;
-    while(ptr=p.isSymbol(post_unary_operators)){
-        unary_post_operators.push_back(ptr);
-    }
-    while(p.isSymbol(SYMBOL_SQUARE_BRACKET_OPEN)){
-        array_access.push_back(std::make_shared<Expression>(p));
-        if(!p.isSymbol(SYMBOL_SQUARE_BRACKET_CLOSE)){
-            throw MyExcept::NoMatchException(p,"']'");
+    try{
+        std::shared_ptr<Lexer::SymbolToken> ptr;
+        while(ptr=p.isSymbol(post_unary_operators)){
+            unary_post_operators.push_back(ptr);
         }
-    }
-    if(auto s=p.isSymbol({SYMBOL_DOT,SYMBOL_ARROW})){
-        member_access_type=(s->get_symbol_type()==SYMBOL_ARROW)?MEMBER_ACCESS_POINTER:MEMBER_ACCESS_NORMAL;
-        member_access=std::make_shared<ExpressionTerm>(p);
+        while(p.isSymbol(SYMBOL_SQUARE_BRACKET_OPEN)){
+            array_access.push_back(std::make_shared<Expression>(p));
+            if(!p.isSymbol(SYMBOL_SQUARE_BRACKET_CLOSE)){
+                throw MyExcept::NoMatchExceptionFatal(p,"']'");
+            }
+        }
+        if(auto s=p.isSymbol({SYMBOL_DOT,SYMBOL_ARROW})){
+            member_access_type=(s->get_symbol_type()==SYMBOL_ARROW)?MEMBER_ACCESS_POINTER:MEMBER_ACCESS_NORMAL;
+            member_access=std::make_shared<ExpressionTerm>(p);
+        }
+    }catch(MyExcept::NoMatchException &e){
+        throw MyExcept::NoMatchExceptionFatal(e);
     }
     line_end=p.get_line(-1);
 }

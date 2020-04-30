@@ -18,33 +18,37 @@ ForStatement::ForStatement(parserProgress &p){
         throw MyExcept::NoMatchException(p,"'for'");
     }
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
-        throw MyExcept::NoMatchException(p,"'('");
+        throw MyExcept::NoMatchExceptionFatal(p,"'('");
     }
-    if(!p.isSymbol(SYMBOL_SEMICOLON)){
-        int i=p.location;
-        try{//TODO improve non-predicting match
-            vardef_pre=std::make_shared<VariableDefinition>(p);
-        }catch(MyExcept::NoMatchException &){
-            p.location=i;
-            pre=std::make_shared<Expression>(p);
+    try{
+        if(!p.isSymbol(SYMBOL_SEMICOLON)){
+            int i=p.location;
+            try{//TODO improve non-predicting match
+                vardef_pre=std::make_shared<VariableDefinition>(p);
+            }catch(MyExcept::NoMatchException &){
+                p.location=i;
+                pre=std::make_shared<Expression>(p);
+            }
+            if(!p.isSymbol(SYMBOL_SEMICOLON)){
+                throw MyExcept::NoMatchExceptionFatal(p,"';'");
+            }
         }
         if(!p.isSymbol(SYMBOL_SEMICOLON)){
-            throw MyExcept::NoMatchException(p,"';'");
+            condition=std::make_shared<Expression>(p);
+            if(!p.isSymbol(SYMBOL_SEMICOLON)){
+                throw MyExcept::NoMatchExceptionFatal(p,"';'");
+            }
         }
-    }
-    if(!p.isSymbol(SYMBOL_SEMICOLON)){
-        condition=std::make_shared<Expression>(p);
-        if(!p.isSymbol(SYMBOL_SEMICOLON)){
-            throw MyExcept::NoMatchException(p,"';'");
-        }
-    }
-    if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
-        inc=std::make_shared<Expression>(p);
         if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
-            throw MyExcept::NoMatchException(p,"')'");
+            inc=std::make_shared<Expression>(p);
+            if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+                throw MyExcept::NoMatchExceptionFatal(p,"')'");
+            }
         }
+        code=std::make_shared<Line>(p);
+    }catch(MyExcept::NoMatchException &e){
+        throw MyExcept::NoMatchExceptionFatal(e);
     }
-    code=std::make_shared<Line>(p);
     line_end=p.get_line(-1);
 }
 

@@ -18,15 +18,19 @@ IfStatement::IfStatement(parserProgress &p){
         throw MyExcept::NoMatchException(p,"'if'");
     }
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
-        throw MyExcept::NoMatchException(p,"'('");
+        throw MyExcept::NoMatchExceptionFatal(p,"'('");
     }
-    condition=std::make_shared<Expression>(p);
-    if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
-        throw MyExcept::NoMatchException(p,"')'");
-    }
-    code=std::make_shared<Line>(p);
-    if(p.peekKeyword(KEYWORD_ELSE)){
-        else_stmt=std::make_shared<ElseStatement>(p);
+    try{
+        condition=std::make_shared<Expression>(p);
+        if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+            throw MyExcept::NoMatchExceptionFatal(p,"')'");
+        }
+        code=std::make_shared<Line>(p);
+        if(p.peekKeyword(KEYWORD_ELSE)){
+            else_stmt=std::make_shared<ElseStatement>(p);
+        }
+    }catch(MyExcept::NoMatchException &e){
+        throw MyExcept::NoMatchExceptionFatal(e);
     }
     line_end=p.get_line(-1);
 }

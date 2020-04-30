@@ -16,7 +16,7 @@ namespace MyExcept{
         public:
             explicit NoMatchExceptionFatal(int line,const std::string& s);
             explicit NoMatchExceptionFatal(Parser::parserProgress &p,const std::string& expected);
-            explicit NoMatchExceptionFatal(NoMatchException &e);
+            explicit NoMatchExceptionFatal(MyExcept::NoMatchException &e);
     };
 };
 

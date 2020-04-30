@@ -1,8 +1,10 @@
 #include "Parser/ExpressionList.h"
 
+#include "Parser/Expression.h"
+
 #include "symbols_keywords.h"
 
-#include "Parser/Expression.h"
+#include "MyExcept/MyExcept.h"
 
 #include <iostream>
 
@@ -10,9 +12,13 @@ using namespace Parser;
 
 ExpressionList::ExpressionList(parserProgress &p){//TODO remove expression list, move directly into FunctionCall/KeywordFunctionCall
     line_start=p.get_line();
-    do{
-        expression_list.emplace_back(std::make_shared<Expression>(p));
-    }while(p.isSymbol(SYMBOL_COMMA));
+    try{
+        do{
+            expression_list.emplace_back(std::make_shared<Expression>(p));
+        }while(p.isSymbol(SYMBOL_COMMA));
+    }catch(MyExcept::NoMatchException &e){
+        throw MyExcept::NoMatchExceptionFatal(e);
+    }
     line_end=p.get_line(-1);
 }
 

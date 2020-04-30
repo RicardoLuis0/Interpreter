@@ -12,7 +12,11 @@ ExpressionGroup::ExpressionGroup(parserProgress &p){//TODO remove expression gro
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
         throw MyExcept::NoMatchException(p,"'('");
     }
-    contents=std::make_shared<Expression>(p);
+    try{
+        contents=std::make_shared<Expression>(p);
+    }catch(MyExcept::NoMatchException &e){
+        throw MyExcept::NoMatchExceptionFatal(e);
+    }
     if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
         throw MyExcept::NoMatchException(p,"')'");
     }

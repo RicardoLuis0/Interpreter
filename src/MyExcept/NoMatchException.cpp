@@ -9,5 +9,5 @@ MyExcept::NoMatchException::NoMatchException(Parser::parserProgress &p,const std
 
 MyExcept::NoMatchExceptionFatal::NoMatchExceptionFatal(int line,const std::string& s):runtime_error(s+" in line "+std::to_string(line)){}
 MyExcept::NoMatchExceptionFatal::NoMatchExceptionFatal(Parser::parserProgress &p,const std::string& x):NoMatchExceptionFatal(p.get_nothrow_nonull()->line,"expected "+x+", got '"+p.get_nothrow_nonull()->get_literal()+"'"){}
-MyExcept::NoMatchExceptionFatal::NoMatchExceptionFatal(NoMatchException &e):runtime_error(e.what()){}
+MyExcept::NoMatchExceptionFatal::NoMatchExceptionFatal(MyExcept::NoMatchException &e):runtime_error(e.what()){}
 

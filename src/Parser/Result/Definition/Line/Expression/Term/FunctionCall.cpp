@@ -16,9 +16,13 @@ FunctionCall::FunctionCall(parserProgress &p){
         throw MyExcept::NoMatchException(p,"'('");
     }
     if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE)){
-        arguments = std::make_shared<ExpressionList>(p);
+        try{
+            arguments = std::make_shared<ExpressionList>(p);
+        }catch(MyExcept::NoMatchException &e){
+            throw MyExcept::NoMatchExceptionFatal(e);
+        }
         if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
-            throw MyExcept::NoMatchException(p,"')'");
+            throw MyExcept::NoMatchExceptionFatal(p,"')'");
         }
     }
     line_end=p.get_line(-1);

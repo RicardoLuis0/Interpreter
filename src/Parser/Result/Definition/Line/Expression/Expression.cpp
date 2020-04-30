@@ -12,14 +12,18 @@ using namespace Parser;
 Expression::Expression(parserProgress &p){//TODO rework expressions and ordering
     line_start=p.get_line();
     contents=std::make_shared<ExpressionTerm>(p);
-    type=EXPRESSION_TERM;
-    line_end=p.get_line(-1);
-    if(BinaryOperation::peekIsBinaryOperator(p)){
-        auto binop=std::make_shared<BinaryOperation>(line_start,std::static_pointer_cast<ExpressionTerm>(contents),p);
+    try{
+        type=EXPRESSION_TERM;
         line_end=p.get_line(-1);
-        auto expr=order_expression(std::make_shared<Expression>(binop,EXPRESSION_BINARY_OPERATION,line_start,line_end));
-        contents=expr->contents;
-        type=expr->type;
+        if(BinaryOperation::peekIsBinaryOperator(p)){
+            auto binop=std::make_shared<BinaryOperation>(line_start,std::static_pointer_cast<ExpressionTerm>(contents),p);
+            line_end=p.get_line(-1);
+            auto expr=order_expression(std::make_shared<Expression>(binop,EXPRESSION_BINARY_OPERATION,line_start,line_end));
+            contents=expr->contents;
+            type=expr->type;
+        }
+    }catch(MyExcept::NoMatchException &e){
+        throw MyExcept::NoMatchExceptionFatal(e);
     }
 }
 

@@ -17,13 +17,17 @@ WhileStatement::WhileStatement(parserProgress &p){
         throw MyExcept::NoMatchException(p,"'while'");
     }
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
-        throw MyExcept::NoMatchException(p,"'('");
+        throw MyExcept::NoMatchExceptionFatal(p,"'('");
     }
-    condition=std::make_shared<Expression>(p);
-    if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
-        throw MyExcept::NoMatchException(p,"')'");
+    try{
+        condition=std::make_shared<Expression>(p);
+        if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+            throw MyExcept::NoMatchExceptionFatal(p,"')'");
+        }
+        code=std::make_shared<Line>(p);
+    }catch(MyExcept::NoMatchException &e){
+        throw MyExcept::NoMatchExceptionFatal(e);
     }
-    code=std::make_shared<Line>(p);
     line_end=p.get_line(-1);
 }
 

@@ -10,21 +10,25 @@ using namespace Parser;
 KeywordFunctionCall::KeywordFunctionCall(parserProgress &p){
     line_start=p.get_line();
     identifier=p.isKeyword({KEYWORD_IS,KEYWORD_CAST,KEYWORD_TYPEOF,KEYWORD_TYPE,KEYWORD_DECLTYPE});
-    if(!identifier)throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"not a keyword function call");
-    if(p.isSymbol(SYMBOL_LOWER)){
-        extra_type=std::make_shared<VarType>(p);
-        if(!p.isSymbol(SYMBOL_GREATER)){
-            throw MyExcept::NoMatchException(p,"'>'");
+    if(!identifier)throw MyExcept::NoMatchException(p,"keyword function call");
+    try{
+        if(p.isSymbol(SYMBOL_LOWER)){
+            extra_type=std::make_shared<VarType>(p);
+            if(!p.isSymbol(SYMBOL_GREATER)){
+                throw MyExcept::NoMatchExceptionFatal(p,"'>'");
+            }
         }
-    }
-    if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
-        throw MyExcept::NoMatchException(p,"'('");
-    }
-    if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE)){
-        arguments = std::make_shared<ExpressionList>(p);
-        if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
-            throw MyExcept::NoMatchException(p,"')'");
+        if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
+            throw MyExcept::NoMatchExceptionFatal(p,"'('");
         }
+        if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+            arguments = std::make_shared<ExpressionList>(p);
+            if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+                throw MyExcept::NoMatchExceptionFatal(p,"')'");
+            }
+        }
+    }catch(MyExcept::NoMatchException &e){
+        throw MyExcept::NoMatchExceptionFatal(e);
     }
     line_end=p.get_line(-1);
 }

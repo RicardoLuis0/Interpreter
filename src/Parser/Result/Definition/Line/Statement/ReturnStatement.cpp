@@ -16,9 +16,13 @@ ReturnStatement::ReturnStatement(parserProgress &p){
         throw MyExcept::NoMatchException(p,"'return'");
     }
     if(!p.isSymbol(SYMBOL_SEMICOLON)){
-        value=std::make_shared<Expression>(p);
+        try{
+            value=std::make_shared<Expression>(p);
+        }catch(MyExcept::NoMatchException &e){
+            throw MyExcept::NoMatchExceptionFatal(e);
+        }
         if(!p.isSymbol(SYMBOL_SEMICOLON)){
-            throw MyExcept::NoMatchException(p,"';'");
+            throw MyExcept::NoMatchExceptionFatal(p,"';'");
         }
     }
     line_end=p.get_line(-1);
