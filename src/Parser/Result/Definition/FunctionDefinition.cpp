@@ -1,11 +1,101 @@
 #include "Parser/FunctionDefinition.h"
 
+#include "Parser/FunctionDefinitionParameter.h"
+#include "Parser/VarType.h"
+#include "Parser/CodeBlock.h"
+
+#include "Lexer/token_type.h"
+
+#include "symbols_keywords.h"
+
+#include "MyExcept/MyExcept.h"
+
 #include <iostream>
 
 using namespace Parser;
 
 FunctionDefinition::FunctionDefinition(parserProgress &p){
-    throw std::runtime_error("unimplemented");
+    line_start=p.get_line();
+    int ls;
+    return_type=std::make_shared<VarType>(p);
+    std::shared_ptr<Lexer::Token> t=p.isType(Lexer::TOKEN_TYPE_WORD);
+    if(!t){
+        throw MyExcept::NoMatchException(p,"identifier");
+    }
+    name=std::static_pointer_cast<Lexer::WordToken>(t)->get_literal();
+    if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN))throw MyExcept::NoMatchException(p,"'('");
+    if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+        ls=p.get_line();
+        auto vt=std::make_shared<VarType>(p);
+        if(p.isSymbol(SYMBOL_VARIADIC)){
+        variadic:
+            variadic_type=vt;
+            t=p.isType(Lexer::TOKEN_TYPE_WORD);
+            if(!t){
+                throw MyExcept::NoMatchExceptionFatal(p,"identifier");
+            }
+            variadic_ident=std::static_pointer_cast<Lexer::WordToken>(t)->get_literal();
+            variadic=true;
+        }else{
+            parameters.emplace_back(std::make_shared<FunctionDefinitionParameter>(ls,vt,p));
+            try{
+                while(p.isSymbol(SYMBOL_COMMA)){
+                    ls=p.get_line();
+                    vt=std::make_shared<VarType>(p);
+                    if(p.isSymbol(SYMBOL_VARIADIC)){
+                        goto variadic;
+                    }else{
+                        parameters.emplace_back(std::make_shared<FunctionDefinitionParameter>(ls,vt,p));
+                    }
+                }
+            }catch(MyExcept::NoMatchException &e){
+                throw MyExcept::NoMatchExceptionFatal(e);
+            }
+        }
+        if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE))throw MyExcept::NoMatchExceptionFatal(p,"')'");
+    }
+    code=std::make_shared<CodeBlock>(p);
+    line_end=p.get_line(-1);
+}
+
+FunctionDefinition::FunctionDefinition(int ls,std::shared_ptr<VarType> vt,std::shared_ptr<Lexer::WordToken> ident,parserProgress &p){
+    line_start=ls;
+    return_type=vt;
+    name=ident->get_literal();
+    std::shared_ptr<Lexer::Token> t;
+    if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN))throw MyExcept::NoMatchException(p,"'('");
+    if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+        ls=p.get_line();
+        auto vt=std::make_shared<VarType>(p);
+        if(p.isSymbol(SYMBOL_VARIADIC)){
+        variadic:
+            variadic_type=vt;
+            t=p.isType(Lexer::TOKEN_TYPE_WORD);
+            if(!t){
+                throw MyExcept::NoMatchExceptionFatal(p,"identifier");
+            }
+            variadic_ident=std::static_pointer_cast<Lexer::WordToken>(t)->get_literal();
+            variadic=true;
+        }else{
+            parameters.emplace_back(std::make_shared<FunctionDefinitionParameter>(ls,vt,p));
+            try{
+                while(p.isSymbol(SYMBOL_COMMA)){
+                    ls=p.get_line();
+                    vt=std::make_shared<VarType>(p);
+                    if(p.isSymbol(SYMBOL_VARIADIC)){
+                        goto variadic;
+                    }else{
+                        parameters.emplace_back(std::make_shared<FunctionDefinitionParameter>(ls,vt,p));
+                    }
+                }
+            }catch(MyExcept::NoMatchException &e){
+                throw MyExcept::NoMatchExceptionFatal(e);
+            }
+        }
+        if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE))throw MyExcept::NoMatchExceptionFatal(p,"')'");
+    }
+    code=std::make_shared<CodeBlock>(p);
+    line_end=p.get_line(-1);
 }
 
 FunctionDefinition::FunctionDefinition(std::shared_ptr<VarType> ret,

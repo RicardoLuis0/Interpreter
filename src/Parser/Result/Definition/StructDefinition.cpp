@@ -5,7 +5,7 @@
 using namespace Parser;
 
 StructDefinition::StructDefinition(parserProgress &p){
-    throw std::runtime_error("unimplemented");
+    throw std::runtime_error("StructDefinition unimplemented");//TODO re-add StructDefinition in new parser
 }
 
 StructDefinition::StructDefinition(std::string n,std::vector<std::shared_ptr<MemberDefinition>> m,int ls,int le):
