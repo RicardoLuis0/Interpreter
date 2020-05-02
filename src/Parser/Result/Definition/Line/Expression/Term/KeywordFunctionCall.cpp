@@ -21,7 +21,7 @@ KeywordFunctionCall::KeywordFunctionCall(parserProgress &p){
         if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
             throw MyExcept::NoMatchExceptionFatal(p,"'('");
         }
-        if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+        if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
             arguments = std::make_shared<ExpressionList>(p);
             if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
                 throw MyExcept::NoMatchExceptionFatal(p,"')'");

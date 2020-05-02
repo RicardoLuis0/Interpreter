@@ -15,7 +15,7 @@ FunctionCall::FunctionCall(parserProgress &p){
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
         throw MyExcept::NoMatchException(p,"'('");
     }
-    if(!p.peekSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+    if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
         try{
             arguments = std::make_shared<ExpressionList>(p);
         }catch(MyExcept::NoMatchException &e){
