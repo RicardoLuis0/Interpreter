@@ -1,11 +1,31 @@
 #include "Parser/CodeBlock.h"
 
+#include "Parser/Line.h"
+
+#include "symbols_keywords.h"
+#include "MyExcept/MyExcept.h"
+
 #include <iostream>
 
 using namespace Parser;
 
 CodeBlock::CodeBlock(parserProgress &p){
-    throw std::runtime_error("unimplemented");
+    line_start=p.get_line();
+    std::vector<std::shared_ptr<Line>> lines;
+    if(!p.isSymbol(SYMBOL_CURLY_BRACKET_OPEN)){
+        throw MyExcept::NoMatchException(p,"'{'");
+    }
+    try{
+        while(!p.isSymbol(SYMBOL_CURLY_BRACKET_CLOSE)){
+            if(!p.in_range(0)){
+                throw MyExcept::NoMatchExceptionFatal(p,"'}'");
+            }
+            lines.emplace_back(std::make_shared<Line>(p));
+        }
+    }catch(MyExcept::NoMatchException &e){
+        throw MyExcept::NoMatchExceptionFatal(e);
+    }
+    line_end=p.get_line(-1);
 }
 
 CodeBlock::CodeBlock(std::vector<std::shared_ptr<Line>> l,int ls,int le):ParserResultPart(ls,le),lines(l){
