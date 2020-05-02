@@ -35,24 +35,7 @@ ExpressionTerm::ExpressionTerm(parserProgress &p){
         type=EXPRESSION_TERM_KEYWORD_FUNCTION_CALL;
     }else if(p.peekType({Lexer::TOKEN_TYPE_KEYWORD,Lexer::TOKEN_TYPE_SYMBOL})){
         int i=p.location;
-        try{
-            contents_p=std::make_shared<UnaryOperation>(p);//TODO refactor UnaryOperation out, add unary-pre operators to ExpressionTerm
-            type=EXPRESSION_TERM_UNARY_OPERATION;
-        }catch(MyExcept::NoMatchException &){
-            p.location=i;
-            contents_p=std::make_shared<VarType>(p);
-            type=EXPRESSION_TERM_VARTYPE;
-        }
-    }else{
-        if(contents_t=p.isType(Lexer::TOKEN_TYPE_INTEGER)){//int
-            type=EXPRESSION_TERM_LITERAL_INT;
-        }else if(contents_t=p.isType(Lexer::TOKEN_TYPE_CHAR)){//float
-            type=EXPRESSION_TERM_LITERAL_CHAR;
-        }else if(contents_t=p.isType(Lexer::TOKEN_TYPE_FLOAT)){//float
-            type=EXPRESSION_TERM_LITERAL_FLOAT;
-        }else if(contents_t=p.isType(Lexer::TOKEN_TYPE_STRING)){//string
-            type=EXPRESSION_TERM_LITERAL_STRING;
-        }else if(contents_t=p.isKeyword({KEYWORD_TRUE,KEYWORD_FALSE,KEYWORD_NULL})){
+        if(contents_t=p.isKeyword({KEYWORD_TRUE,KEYWORD_FALSE,KEYWORD_NULL})){
             switch(std::static_pointer_cast<Lexer::KeywordToken>(contents_t)->get_keyword_type()){
             case KEYWORD_TRUE:
                 type=EXPRESSION_TERM_LITERAL_TRUE;
@@ -63,10 +46,27 @@ ExpressionTerm::ExpressionTerm(parserProgress &p){
             case KEYWORD_NULL:
                 type=EXPRESSION_TERM_LITERAL_NULL;
                 break;
-            default:
-                break;//unreachable
             }
-        }else if(contents_t=p.isType(Lexer::TOKEN_TYPE_WORD)){//ident
+        }else{
+            try{
+                contents_p=std::make_shared<UnaryOperation>(p);//TODO refactor UnaryOperation out, add unary-pre operators to ExpressionTerm
+                type=EXPRESSION_TERM_UNARY_OPERATION;
+            }catch(MyExcept::NoMatchException &){
+                p.location=i;
+                contents_p=std::make_shared<VarType>(p);
+                type=EXPRESSION_TERM_VARTYPE;
+            }
+        }
+    }else{
+        if(contents_t=p.isType(Lexer::TOKEN_TYPE_INTEGER)){//int
+            type=EXPRESSION_TERM_LITERAL_INT;
+        }else if(contents_t=p.isType(Lexer::TOKEN_TYPE_CHAR)){//float
+            type=EXPRESSION_TERM_LITERAL_CHAR;
+        }else if(contents_t=p.isType(Lexer::TOKEN_TYPE_FLOAT)){//float
+            type=EXPRESSION_TERM_LITERAL_FLOAT;
+        }else if(contents_t=p.isType(Lexer::TOKEN_TYPE_STRING)){//string
+            type=EXPRESSION_TERM_LITERAL_STRING;
+        }else  if(contents_t=p.isType(Lexer::TOKEN_TYPE_WORD)){//ident
             type=EXPRESSION_TERM_IDENTIFIER;
         } else {
             throw MyExcept::NoMatchException(p,"literal, type, or identifier");

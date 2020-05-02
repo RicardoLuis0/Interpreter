@@ -140,18 +140,25 @@ std::string VarType::getSource(){
             throw std::runtime_error("invalid primitive");
         case PRIMITIVE_POINTER:
             t+="ptr<"+extra->getSource()+">";
+            break;
         case PRIMITIVE_ANY:
             t+="any";
+            break;
         case PRIMITIVE_TYPE:
             t+="type";
+            break;
         case PRIMITIVE_INT:
             t+=(has_sign?(sign?"signed int":"unsigned int"):"int");
+            break;
         case PRIMITIVE_CHAR:
             t+=(has_sign?(sign?"signed char":"unsigned char"):"char");
+            break;
         case PRIMITIVE_FLOAT:
             t+="float";
+            break;
         case PRIMITIVE_STRING:
             t+="string";
+            break;
         }
         break;
     case VARTYPE_IDENTIFIER:

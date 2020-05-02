@@ -16,6 +16,7 @@ using namespace Parser;
 
 FunctionDefinition::FunctionDefinition(parserProgress &p){
     line_start=p.get_line();
+    variadic=false;
     int ls;
     return_type=std::make_shared<VarType>(p);
     std::shared_ptr<Lexer::Token> t=p.isType(Lexer::TOKEN_TYPE_WORD);
@@ -28,7 +29,7 @@ FunctionDefinition::FunctionDefinition(parserProgress &p){
         ls=p.get_line();
         auto vt=std::make_shared<VarType>(p);
         if(p.isSymbol(SYMBOL_VARIADIC)){
-        variadic:
+        pvariadic:
             variadic_type=vt;
             t=p.isType(Lexer::TOKEN_TYPE_WORD);
             if(!t){
@@ -43,7 +44,7 @@ FunctionDefinition::FunctionDefinition(parserProgress &p){
                     ls=p.get_line();
                     vt=std::make_shared<VarType>(p);
                     if(p.isSymbol(SYMBOL_VARIADIC)){
-                        goto variadic;
+                        goto pvariadic;
                     }else{
                         parameters.emplace_back(std::make_shared<FunctionDefinitionParameter>(ls,vt,p));
                     }
@@ -61,6 +62,7 @@ FunctionDefinition::FunctionDefinition(parserProgress &p){
 FunctionDefinition::FunctionDefinition(int ls,std::shared_ptr<VarType> vt,std::shared_ptr<Lexer::WordToken> ident,parserProgress &p){
     line_start=ls;
     return_type=vt;
+    variadic=false;
     name=ident->get_literal();
     std::shared_ptr<Lexer::Token> t;
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN))throw MyExcept::NoMatchException(p,"'('");
@@ -68,7 +70,7 @@ FunctionDefinition::FunctionDefinition(int ls,std::shared_ptr<VarType> vt,std::s
         ls=p.get_line();
         auto vt=std::make_shared<VarType>(p);
         if(p.isSymbol(SYMBOL_VARIADIC)){
-        variadic:
+        pvariadic:
             variadic_type=vt;
             t=p.isType(Lexer::TOKEN_TYPE_WORD);
             if(!t){
@@ -83,7 +85,7 @@ FunctionDefinition::FunctionDefinition(int ls,std::shared_ptr<VarType> vt,std::s
                     ls=p.get_line();
                     vt=std::make_shared<VarType>(p);
                     if(p.isSymbol(SYMBOL_VARIADIC)){
-                        goto variadic;
+                        goto pvariadic;
                     }else{
                         parameters.emplace_back(std::make_shared<FunctionDefinitionParameter>(ls,vt,p));
                     }
