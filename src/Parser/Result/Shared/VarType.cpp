@@ -8,7 +8,98 @@
 using namespace Parser;
 
 VarType::VarType(parserProgress &p){
-    throw std::runtime_error("unimplemented");
+    line_start=p.get_line();
+    is_const=p.isKeyword(KEYWORD_CONST);
+    has_sign=false;
+    sign=true;
+    primitive=PRIMITIVE_INVALID;
+    std::shared_ptr<Lexer::KeywordToken> kw=p.isKeyword({KEYWORD_POINTER,KEYWORD_DECLTYPE});
+    if(kw){
+        switch(kw->get_keyword_type()){
+        case KEYWORD_POINTER:
+            if(!p.isSymbol(SYMBOL_LOWER)){
+                throw MyExcept::NoMatchExceptionFatal(p,"'<'");
+            }
+            if(!p.isSymbol(SYMBOL_QUESTION_MARK)){
+                try{
+                    extra=std::make_shared<VarType>(p);
+                }catch(MyExcept::NoMatchException &e){
+                    throw MyExcept::NoMatchExceptionFatal(e);
+                }
+            }
+            if(!p.isSymbol(SYMBOL_GREATER)){
+                throw MyExcept::NoMatchExceptionFatal(p,"'>'");
+            }
+            type=VARTYPE_PRIMITIVE;
+            primitive=PRIMITIVE_POINTER;
+            break;
+        case KEYWORD_DECLTYPE:
+            if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN)){
+                throw MyExcept::NoMatchExceptionFatal(p,"'('");
+            }
+            try{
+                decltype_expr=std::make_shared<Expression>(p);
+            }catch(MyExcept::NoMatchException &e){
+                throw MyExcept::NoMatchExceptionFatal(e);
+            }
+            if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
+                throw MyExcept::NoMatchExceptionFatal(p,"')'");
+            }
+            type=VARTYPE_DECLTYPE;
+            break;
+        }
+    }else{
+        if((kw=p.isKeyword({KEYWORD_SIGNED,KEYWORD_UNSIGNED}))){
+            has_sign=true;
+            sign=kw->get_keyword_type()==KEYWORD_SIGNED;
+            kw=p.isKeyword({KEYWORD_INT,KEYWORD_CHAR});
+        }else{
+            kw=p.isKeyword({KEYWORD_ANY,KEYWORD_TYPE,KEYWORD_VOID,KEYWORD_INT,KEYWORD_CHAR,KEYWORD_FLOAT,KEYWORD_STRING});
+        }
+        if(kw){
+            type=VARTYPE_PRIMITIVE;
+            switch(kw->get_keyword_type()){
+            case KEYWORD_ANY:
+                primitive=PRIMITIVE_ANY;
+                break;
+            case KEYWORD_TYPE:
+                primitive=PRIMITIVE_TYPE;
+                break;
+            case KEYWORD_VOID:
+                type=VARTYPE_VOID;
+                break;
+            case KEYWORD_INT:
+                primitive=PRIMITIVE_INT;
+                break;
+            case KEYWORD_CHAR:
+                primitive=PRIMITIVE_CHAR;
+                break;
+            case KEYWORD_FLOAT:
+                primitive=PRIMITIVE_FLOAT;
+                break;
+            case KEYWORD_STRING:
+                primitive=PRIMITIVE_STRING;
+                break;
+            }
+        }else{
+            if(has_sign){
+                throw MyExcept::NoMatchExceptionFatal(p,"int or char");
+            }else{
+                throw MyExcept::NoMatchException(p,"variable type");
+            }
+        }
+    }
+    while(p.isSymbol(SYMBOL_SQUARE_BRACKET_OPEN)){
+        if(!p.isSymbol(SYMBOL_SQUARE_BRACKET_CLOSE)){
+            array_sizes.insert(array_sizes.begin(),std::make_shared<Expression>(p));
+            if(!p.isSymbol(SYMBOL_SQUARE_BRACKET_CLOSE)){
+                throw MyExcept::NoMatchExceptionFatal(p,"']'");
+            }
+        }else{
+            array_sizes.insert(array_sizes.begin(),nullptr);
+        }
+    }
+    line_end=p.get_line(-1);
 }
 
 VarType::VarType(std::shared_ptr<Lexer::KeywordToken> tk,bool c,bool h,bool s,std::shared_ptr<VarType> e,int ls,int le):VarType(
