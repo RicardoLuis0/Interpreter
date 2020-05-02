@@ -11,7 +11,6 @@ using namespace Parser;
 
 CodeBlock::CodeBlock(parserProgress &p){
     line_start=p.get_line();
-    std::vector<std::shared_ptr<Line>> lines;
     if(!p.isSymbol(SYMBOL_CURLY_BRACKET_OPEN)){
         throw MyExcept::NoMatchException(p,"'{'");
     }

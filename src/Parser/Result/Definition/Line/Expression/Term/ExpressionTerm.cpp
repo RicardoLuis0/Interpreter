@@ -23,7 +23,6 @@ std::vector<int> ExpressionTerm::post_unary_operators{//these must not be binary
 
 ExpressionTerm::ExpressionTerm(parserProgress &p){
     line_start=p.get_line();
-    std::shared_ptr<ExpressionTerm> term=nullptr;
     if(p.peekSymbol(SYMBOL_PARENTHESIS_OPEN)){
         contents_p=std::make_shared<ExpressionGroup>(p);
         type=EXPRESSION_TERM_EXPRESSION_GROUP;
