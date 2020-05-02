@@ -30,7 +30,7 @@ namespace Parser{
         member_modifier_t mod;
         member_type_t type;
         std::shared_ptr<ParserResultPart> member;
-        virtual std::string getSource() override;
+        virtual std::string getSource(int indent) override;
         virtual void print(int depth) override;
     };
 }

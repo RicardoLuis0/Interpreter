@@ -100,18 +100,18 @@ ExpressionTerm::ExpressionTerm(std::shared_ptr<Lexer::Token> ptr,ExpressionTermT
     
 }
 
-std::string ExpressionTerm::getSource(){
+std::string ExpressionTerm::getSource(int indent){
     std::string s;
     if(type>EXPRESSION_TERM_LITERAL){
         s=contents_t->get_literal();
     }else{
-        s=contents_p->getSource();
+        s=contents_p->getSource(indent);
     }
     for(auto op:unary_post_operators){
         s+=op->get_literal();
     }
     for(auto aa:array_access){
-        s+="["+aa->getSource()+"]";
+        s+="["+aa->getSource(indent)+"]";
     }
     if(member_access_type!=MEMBER_ACCESS_NONE){
         if(member_access_type==MEMBER_ACCESS_NORMAL){
@@ -119,7 +119,7 @@ std::string ExpressionTerm::getSource(){
         }else{
             s+="->";
         }
-        s+=member_access->getSource();
+        s+=member_access->getSource(indent);
     }
     return s;
 }

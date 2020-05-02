@@ -55,13 +55,13 @@ Statement::Statement(std::shared_ptr<ParserResultPart> stmt,ParserStatementType_
     
 }
 
-std::string Statement::getSource(){
+std::string Statement::getSource(int indent){
     if(type==STATEMENT_BREAK){
         return "break;";
     }else if(type==STATEMENT_CONTINUE){
         return "continue;";
     }else{
-        return statement->getSource();
+        return statement->getSource(indent);
     }
 }
 

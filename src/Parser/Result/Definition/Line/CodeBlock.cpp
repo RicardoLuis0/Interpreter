@@ -31,12 +31,13 @@ CodeBlock::CodeBlock(std::vector<std::shared_ptr<Line>> l,int ls,int le):ParserR
     
 }
 
-std::string CodeBlock::getSource(){
+std::string CodeBlock::getSource(int indent){
     std::string c="{\n";
+    std::string i_s=std::string((indent)*4,' ');
     for(auto l:lines){
-        c+=l->getSource()+"\n";
+        c+=i_s+"    "+l->getSource(indent+1)+"\n";
     }
-    return c+"}";
+    return c+i_s+"}";
 }
 
 void CodeBlock::print(int depth){

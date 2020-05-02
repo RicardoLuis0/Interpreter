@@ -14,7 +14,7 @@ StructDefinition::StructDefinition(std::string n,std::vector<std::shared_ptr<Mem
     members(m){
 }
 
-std::string StructDefinition::getSource(){
+std::string StructDefinition::getSource(int indent){
     throw std::runtime_error("struct definition de-parsing not implemented yet");
 }
 

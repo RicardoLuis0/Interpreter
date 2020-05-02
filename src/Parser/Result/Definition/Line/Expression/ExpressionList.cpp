@@ -26,7 +26,7 @@ ExpressionList::ExpressionList(std::vector<std::shared_ptr<Expression>> el,int l
     
 }
 
-std::string ExpressionList::getSource(){
+std::string ExpressionList::getSource(int indent){
     std::string s="";
     bool first=true;
     for(auto e:expression_list){
@@ -35,9 +35,9 @@ std::string ExpressionList::getSource(){
         }else{
             first=false;
         }
-        s+=e->getSource();
+        s+=e->getSource(indent);
     }
-    return "";
+    return s;
 }
 
 void ExpressionList::print(int depth){

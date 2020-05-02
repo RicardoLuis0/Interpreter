@@ -38,7 +38,7 @@ namespace Parser{
         std::vector<std::shared_ptr<Expression>> array_sizes;
         std::shared_ptr<VarType> extra;
         std::shared_ptr<Expression> decltype_expr;
-        virtual std::string getSource() override;
+        virtual std::string getSource(int indent) override;
         virtual void print(int depth) override;
     };
 }

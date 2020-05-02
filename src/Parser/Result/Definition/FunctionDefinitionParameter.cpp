@@ -49,8 +49,8 @@ FunctionDefinitionParameter::FunctionDefinitionParameter(std::shared_ptr<VarType
 FunctionDefinitionParameter::FunctionDefinitionParameter(std::shared_ptr<VarType> vt,std::string n,bool ref,int ls,int le):ParserResultPart(ls,le),type(vt),name(n),is_reference(ref){}
 
 
-std::string FunctionDefinitionParameter::getSource(){
-    return type->getSource()+(is_reference?" & ":" ")+name;
+std::string FunctionDefinitionParameter::getSource(int indent){
+    return type->getSource(indent)+(is_reference?" & ":" ")+name;
 }
 
 void FunctionDefinitionParameter::print(int depth){

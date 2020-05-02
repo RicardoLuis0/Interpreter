@@ -37,8 +37,8 @@ KeywordFunctionCall::KeywordFunctionCall(std::shared_ptr<Lexer::KeywordToken> id
     
 }
 
-std::string KeywordFunctionCall::getSource(){
-    return identifier->get_literal()+(extra_type?"<"+extra_type->getSource()+">":"")+"("+arguments->getSource()+")";
+std::string KeywordFunctionCall::getSource(int indent){
+    return identifier->get_literal()+(extra_type?"<"+extra_type->getSource(indent)+">":"")+"("+arguments->getSource(indent)+")";
 }
 
 void KeywordFunctionCall::print(int depth){

@@ -82,8 +82,8 @@ BinaryOperation::BinaryOperation(std::shared_ptr<ExpressionTerm> et,std::shared_
     
 }
 
-std::string BinaryOperation::getSource(){
-    return term1->getSource()+(is_keyword?binary_keyword_operator->get_literal():binary_operator->get_literal())+term2->getSource();
+std::string BinaryOperation::getSource(int indent){
+    return term1->getSource(indent)+(is_keyword?binary_keyword_operator->get_literal():binary_operator->get_literal())+term2->getSource(indent);
 }
 
 void BinaryOperation::print(int depth){

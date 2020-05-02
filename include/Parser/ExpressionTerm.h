@@ -42,7 +42,7 @@ namespace Parser {
         ExpressionTermType_t type;
         std::shared_ptr<ExpressionTerm> member_access;
         ExpressionTermMemberAccessType_t member_access_type=MEMBER_ACCESS_NONE;
-        virtual std::string getSource() override;
+        virtual std::string getSource(int indent) override;
         virtual void print(int depth) override;
     protected:
     private:

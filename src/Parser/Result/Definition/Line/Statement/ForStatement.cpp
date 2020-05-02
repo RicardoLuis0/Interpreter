@@ -62,8 +62,8 @@ ForStatement::ForStatement(std::shared_ptr<Expression> p,std::shared_ptr<Variabl
     
 }
 
-std::string ForStatement::getSource(){
-    return "for("+(pre?pre->getSource():(vardef_pre?vardef_pre->getSource():""))+";"+(condition?condition->getSource():"")+";"+(inc?inc->getSource():"")+")"+code->getSource();
+std::string ForStatement::getSource(int indent){
+    return "for("+(pre?pre->getSource(indent):(vardef_pre?vardef_pre->getSource(indent):""))+";"+(condition?condition->getSource(indent):"")+";"+(inc?inc->getSource(indent):"")+")"+code->getSource(indent);
 }
 
 void ForStatement::print(int depth){

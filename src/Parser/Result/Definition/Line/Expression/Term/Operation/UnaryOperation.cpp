@@ -39,8 +39,8 @@ UnaryOperation::UnaryOperation(std::shared_ptr<Lexer::SymbolToken> st,std::share
 UnaryOperation::UnaryOperation(std::shared_ptr<Lexer::KeywordToken> kt,std::shared_ptr<ExpressionTerm> et,int ls,int le):ParserResultPart(ls,le),unary_keyword_operator(kt),term(et),is_keyword(true){
 }
 
-std::string UnaryOperation::getSource(){
-    return (is_keyword?unary_keyword_operator->get_literal():unary_operator->get_literal())+term->getSource();
+std::string UnaryOperation::getSource(int indent){
+    return (is_keyword?unary_keyword_operator->get_literal():unary_operator->get_literal())+term->getSource(indent);
 }
 
 void UnaryOperation::print(int depth){

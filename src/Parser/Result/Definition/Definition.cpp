@@ -48,11 +48,11 @@ Definition::Definition(ParserDefinitionType_t t,std::shared_ptr<ParserResultPart
     
 }
 
-std::string Definition::getSource(){
+std::string Definition::getSource(int indent){
     if(type==DEFINITION_VAR){
-        return def->getSource()+";";
+        return def->getSource(indent)+";";
     }else{
-        return def->getSource();
+        return def->getSource(indent);
     }
 }
 

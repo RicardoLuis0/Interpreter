@@ -45,13 +45,13 @@ Line::Line(std::shared_ptr<ParserResultPart> ptr,ParserLineType_t ptype,int ls,i
     
 }
 
-std::string Line::getSource(){
+std::string Line::getSource(int indent){
     if(type==LINE_EMPTY){
         return ";";
     }else if(type==LINE_EXPRESSION){
-        return contents->getSource()+";";
+        return contents->getSource(indent)+";";
     }else{
-        return contents->getSource();
+        return contents->getSource(indent);
     }
 }
 

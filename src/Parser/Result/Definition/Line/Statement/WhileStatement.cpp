@@ -35,8 +35,8 @@ WhileStatement::WhileStatement(std::shared_ptr<Expression> cond,std::shared_ptr<
     
 }
 
-std::string WhileStatement::getSource(){
-    return "while("+condition->getSource()+") "+code->getSource();
+std::string WhileStatement::getSource(int indent){
+    return "while("+condition->getSource(indent)+") "+code->getSource(indent);
 }
 
 void WhileStatement::print(int depth){

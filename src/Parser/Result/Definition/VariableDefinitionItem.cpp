@@ -40,9 +40,9 @@ VariableDefinitionItem::VariableDefinitionItem(std::string s,int ls,int le):Pars
 VariableDefinitionItem::VariableDefinitionItem(std::shared_ptr<Lexer::WordToken> t,std::shared_ptr<Expression> e,int ls,int le):ParserResultPart(ls,le),name(t->get_literal()),value(e){
 }
 
-std::string VariableDefinitionItem::getSource(){
+std::string VariableDefinitionItem::getSource(int indent){
     if(value){
-        return name+"="+value->getSource();
+        return name+"="+value->getSource(indent);
     }else{
         return name;
     }

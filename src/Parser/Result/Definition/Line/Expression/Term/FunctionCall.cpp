@@ -31,8 +31,8 @@ FunctionCall::FunctionCall(parserProgress &p){
 FunctionCall::FunctionCall(std::string id,std::shared_ptr<ExpressionList> args,int ls,int le):ParserResultPart(ls,le),identifier(id),arguments(args){
 }
 
-std::string FunctionCall::getSource(){
-    return identifier+"("+(arguments?arguments->getSource():"")+")";
+std::string FunctionCall::getSource(int indent){
+    return identifier+"("+(arguments?arguments->getSource(indent):"")+")";
 }
 
 void FunctionCall::print(int depth){

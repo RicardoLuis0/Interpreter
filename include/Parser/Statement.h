@@ -19,7 +19,7 @@ namespace Parser{
         Statement(std::shared_ptr<ParserResultPart> statement,ParserStatementType_t type,int line_start,int line_end);
         std::shared_ptr<ParserResultPart> statement;
         ParserStatementType_t type;
-        virtual std::string getSource() override;
+        virtual std::string getSource(int indent) override;
         virtual void print(int depth) override;
     protected:
     private:

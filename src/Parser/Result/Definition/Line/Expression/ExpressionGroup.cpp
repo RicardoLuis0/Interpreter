@@ -26,8 +26,8 @@ ExpressionGroup::ExpressionGroup(std::shared_ptr<Expression> expr,int ls,int le)
     
 }
 
-std::string ExpressionGroup::getSource(){
-    return "("+contents->getSource()+")";
+std::string ExpressionGroup::getSource(int indent){
+    return "("+contents->getSource(indent)+")";
 }
 
 void ExpressionGroup::print(int depth){

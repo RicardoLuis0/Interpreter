@@ -43,8 +43,8 @@ VariableDefinition::VariableDefinition(int ls,std::shared_ptr<VarType> vt,int ls
 
 VariableDefinition::VariableDefinition(std::shared_ptr<VarType> t,std::vector<std::shared_ptr<VariableDefinitionItem>> v,int ls,int le):ParserResultPart(ls,le),type(t),variables(v){}
 
-std::string VariableDefinition::getSource(){
-    std::string str=type->getSource()+" ";
+std::string VariableDefinition::getSource(int indent){
+    std::string str=type->getSource(indent)+" ";
     bool first=true;
     for(auto var:variables){
         if(!first){
@@ -52,7 +52,7 @@ std::string VariableDefinition::getSource(){
         }else{
             first=false;
         }
-        str+=var->getSource();
+        str+=var->getSource(indent);
     }
     return str;
 }

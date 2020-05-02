@@ -39,8 +39,8 @@ IfStatement::IfStatement(std::shared_ptr<Expression> cond,std::shared_ptr<Line> 
     
 }
 
-std::string IfStatement::getSource(){
-    return "if("+condition->getSource()+") "+code->getSource()+(else_stmt?else_stmt->getSource():"");
+std::string IfStatement::getSource(int indent){
+    return "if("+condition->getSource(indent)+") "+code->getSource(indent)+(else_stmt?else_stmt->getSource(indent):"");
 }
 
 void IfStatement::print(int depth){

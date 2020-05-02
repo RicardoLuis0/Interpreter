@@ -120,8 +120,8 @@ FunctionDefinition::FunctionDefinition(std::shared_ptr<VarType> ret,
 }
 
 
-std::string FunctionDefinition::getSource(){
-    std::string head=return_type->getSource()+" "+name+"(";
+std::string FunctionDefinition::getSource(int indent){
+    std::string head=return_type->getSource(indent)+" "+name+"(";
     bool first=true;
     for(auto param:parameters){
         if(!first){
@@ -129,19 +129,19 @@ std::string FunctionDefinition::getSource(){
         }else{
             first=false;
         }
-        head+=param->getSource();
+        head+=param->getSource(indent);
     }
     if(variadic){
         if(!first){
             head+=",";
         }
         if(variadic_type){
-            head+=variadic_type->getSource()+" ";
+            head+=variadic_type->getSource(indent)+" ";
         }
         head+="... "+variadic_ident;
     }
     head+=") ";
-    return head+code->getSource();
+    return head+code->getSource(indent)+"\n";
 }
 
 void FunctionDefinition::print(int depth){

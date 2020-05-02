@@ -18,7 +18,7 @@ namespace Parser{
         Line(std::shared_ptr<ParserResultPart>,ParserLineType_t,int line_start,int line_end);
         std::shared_ptr<ParserResultPart> contents;
         ParserLineType_t type;
-        virtual std::string getSource() override;
+        virtual std::string getSource(int indent) override;
         virtual void print(int depth) override;
     protected:
     private:

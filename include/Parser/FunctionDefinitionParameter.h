@@ -17,7 +17,7 @@ namespace Parser{
         std::shared_ptr<VarType> type;
         std::string name;
         bool is_reference;
-        virtual std::string getSource() override;
+        virtual std::string getSource(int indent) override;
         virtual void print(int depth) override;
     protected:
     private:

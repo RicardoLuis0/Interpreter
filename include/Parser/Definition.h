@@ -16,7 +16,7 @@ namespace Parser{
             Definition(ParserDefinitionType_t type,std::shared_ptr<ParserResultPart> def,int line_start,int line_end);
             ParserDefinitionType_t type;
             std::shared_ptr<ParserResultPart> def;
-            virtual std::string getSource() override;
+            virtual std::string getSource(int indent) override;
             virtual void print(int depth) override;
     };
 }

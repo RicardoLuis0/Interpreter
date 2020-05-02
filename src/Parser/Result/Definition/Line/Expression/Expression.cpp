@@ -31,8 +31,8 @@ Expression::Expression(std::shared_ptr<ParserResultPart> ptr,ExpressionType_t pt
     
 }
 
-std::string Expression::getSource(){
-    return contents->getSource();
+std::string Expression::getSource(int indent){
+    return contents->getSource(indent);
 }
 
 void Expression::print(int depth){

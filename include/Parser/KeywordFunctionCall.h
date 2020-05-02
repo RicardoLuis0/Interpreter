@@ -15,7 +15,7 @@ namespace Parser {
         std::shared_ptr<Lexer::KeywordToken> identifier;
         std::shared_ptr<VarType> extra_type;
         std::shared_ptr<ExpressionList> arguments;
-        virtual std::string getSource() override;
+        virtual std::string getSource(int indent) override;
         virtual void print(int depth) override;
     };
 }

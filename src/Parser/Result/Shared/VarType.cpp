@@ -128,7 +128,7 @@ VarType::VarType(ParserPrimitiveType_t p,bool c,bool h,bool s,std::shared_ptr<Va
     
 }
 
-std::string VarType::getSource(){
+std::string VarType::getSource(int indent){
     std::string t=is_const?"const ":"";
     switch(type){
     case VARTYPE_VOID:
@@ -139,7 +139,7 @@ std::string VarType::getSource(){
         case PRIMITIVE_INVALID:
             throw std::runtime_error("invalid primitive");
         case PRIMITIVE_POINTER:
-            t+="ptr<"+extra->getSource()+">";
+            t+="ptr<"+extra->getSource(indent)+">";
             break;
         case PRIMITIVE_ANY:
             t+="any";
@@ -164,11 +164,11 @@ std::string VarType::getSource(){
     case VARTYPE_IDENTIFIER:
         throw std::runtime_error("unimplemented");
     case VARTYPE_DECLTYPE:
-        t+="decltype("+decltype_expr->getSource()+")";
+        t+="decltype("+decltype_expr->getSource(indent)+")";
         break;
     }
-    for(int i=array_sizes.size()-1;i>0;i--){
-        t+="["+array_sizes[i]->getSource()+"]";
+    for(int i=array_sizes.size()-1;i>=0;i--){
+        t+="["+array_sizes[i]->getSource(indent)+"]";
     }
     return t;
 }
