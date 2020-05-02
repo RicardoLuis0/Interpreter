@@ -8,8 +8,8 @@
 #include "Interpreter/ExecFrame.h"
 #include "Util/read_file.h"
 #include "Parser/Parser.h"
-#include "Parser/LineMatcher.h"
-#include "Parser/DefinitionMatcher.h"
+#include "Parser/Line.h"
+#include "Parser/Definition.h"
 #include "Interpreter/ArrayVariable.h"
 #include "Interpreter/CodeBlock.h"
 #include "Interpreter/StringValue.h"
@@ -42,11 +42,7 @@ int simple_exec_string(std::string filename,std::string &data,int argc,char ** a
     Parser::parserProgress p(tokens);
     std::vector<std::shared_ptr<Parser::Line>> linedeflist;
     while(p.get_nothrow()!=nullptr){
-        #ifdef OLD_PARSER
-        linedeflist.push_back(Parser::LineMatcher().makeMatch(p));
-        #else
         linedeflist.push_back(std::make_shared<Parser::Line>(p));
-        #endif // OLD_PARSER
     }
     std::shared_ptr<Interpreter::DefaultFrame> run_frame(std::make_shared<Interpreter::DefaultFrame>(nullptr));
     run_frame->is_simple=true;
@@ -129,11 +125,7 @@ int exec(std::string filename,int argc,char ** argv){
         }
     }
     while(p.get_nothrow()!=nullptr){
-        #ifdef OLD_PARSER
-        deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
-        #else
         deflist.push_back(std::make_shared<Parser::Definition>(p));
-        #endif // OLD_PARSER
     }
     Interpreter::DefaultFrame dframe(deflist,imports);
     std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
@@ -239,11 +231,7 @@ start:
             Parser::parserProgress p(tokens);
             std::vector<std::shared_ptr<Parser::Line>> linedeflist;
             while(p.get_nothrow()!=nullptr){
-                #ifdef OLD_PARSER
-                linedeflist.push_back(Parser::LineMatcher().makeMatch(p));
-                #else
                 linedeflist.push_back(std::make_shared<Parser::Line>(p));
-                #endif // OLD_PARSER
             }
             std::shared_ptr<Interpreter::DefaultFrame> run_frame(std::make_shared<Interpreter::DefaultFrame>(nullptr));
             run_frame->is_simple=true;
@@ -341,11 +329,7 @@ start:
                 }
             }
             while(p.get_nothrow()!=nullptr){
-                #ifdef OLD_PARSER
-                deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
-                #else
                 deflist.push_back(std::make_shared<Parser::Definition>(p));
-                #endif // OLD_PARSER
             }
             /*
             {
@@ -454,11 +438,7 @@ int main(int argc,char ** argv){
             }
             Parser::parserProgress p(tokens);
             while(p.get_nothrow()!=nullptr){
-                #ifdef OLD_PARSER
-                Parser::DefinitionMatcher().makeMatch(p);
-                #else
                 std::make_shared<Parser::Definition>(p);
-                #endif // OLD_PARSER
             }
             std::cout<<"Parse OK";
             return 0;
@@ -477,7 +457,7 @@ int main(int argc,char ** argv){
             tokens=lexer.tokenize_from_file(argv[2]);
             Parser::parserProgress p(tokens);
             while(p.get_nothrow()!=nullptr){
-                deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
+                deflist.push_back(std::make_shared<Parser::Definition>(p));
             }
             for(auto def:deflist){
                 def->print(0);

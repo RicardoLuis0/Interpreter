@@ -8,7 +8,7 @@
 #include "MyExcept/MyExcept.h"
 #include "symbols_keywords.h"
 #include "Util/Console.h"
-#include "Parser/DefinitionMatcher.h"
+#include "Parser/Definition.h"
 #include "Interpreter/DefaultFrame.h"
 #include "Interpreter/ExecFrame.h"
 #include "Interpreter/IntValue.h"
@@ -22,7 +22,7 @@ int exec(std::string filename){
     std::vector<std::shared_ptr<Parser::Definition>> deflist;
     Parser::parserProgress p(tokens);
     while(p.get_nothrow()!=nullptr){
-        deflist.push_back(Parser::DefinitionMatcher().makeMatch(p));
+        deflist.push_back(std::make_shared<Parser::Definition>(p));
     }
     Interpreter::DefaultFrame dframe(deflist,{"*"});
     std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
