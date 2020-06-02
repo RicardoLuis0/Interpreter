@@ -1,18 +1,7 @@
 #ifndef TOKEN_TYPE_H
 #define TOKEN_TYPE_H
 
-/** @file token_type.h */
-
-/**
- * @namespace Lexer
- * @brief Main Namespace for Lexer
- */
 namespace Lexer{
-
-    /**
-     * @enum token_type_t
-     * @brief Token types
-     */
     enum token_type_t {
         TOKEN_TYPE_INVALID,
         TOKEN_TYPE_KEYWORD,
@@ -23,7 +12,6 @@ namespace Lexer{
         TOKEN_TYPE_CHAR,
         TOKEN_TYPE_FLOAT,
     };
-
 }
 
 #endif // TOKEN_TYPE_H

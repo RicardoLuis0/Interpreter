@@ -24,17 +24,6 @@
 
 #include "preprocessor.h"
 
-//TODO update docs
-/**
- * @mainpage
- *
- * Interpreted language
- *
- * @author Ricardo Luis Vaz Silva
- * @date 2/19/19
- * @version 0.01
- */
-
 int simple_exec_string(std::string filename,std::string &data,int argc,char ** argv,int offset,int str_offset=0){
     if(str_offset)data=data.substr(str_offset);
     Lexer::Lexer lexer(base_symbols,base_keywords);
