@@ -9,11 +9,12 @@
 namespace Parser{
     class IfStatement:public ParserResultPart{
     public:
+        IfStatement(parserProgress&);
         IfStatement(std::shared_ptr<Expression> condition,std::shared_ptr<Line> code,std::shared_ptr<ElseStatement> else_stmt,int line_start,int line_end);
         std::shared_ptr<Expression> condition;
         std::shared_ptr<Line> code;
         std::shared_ptr<ElseStatement> else_stmt;
-        virtual std::string getSource() override;
+        virtual std::string getSource(int indent) override;
         virtual void print(int depth) override;
     };
 }

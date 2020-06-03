@@ -18,3 +18,7 @@ std::shared_ptr<Type> VoidType::change_const(std::shared_ptr<Type> self,bool new
 bool VoidType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
     return CHECKPTR(other,VoidType)||Type::is(self,other);
 }
+
+bool VoidType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
+    return is(self,other);
+}

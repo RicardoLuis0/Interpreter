@@ -23,6 +23,15 @@ bool parserProgress::peekType(Lexer::token_type_t id,int offset){
     return (get(offset)->type==id);
 }
 
+bool parserProgress::peekType(std::vector<Lexer::token_type_t> ids,int offset){
+    if(!in_range(offset))return false;
+    for(auto id:ids){
+        if(get(offset)->type==id)return true;
+    }
+    return false;
+}
+
+
 bool parserProgress::peekSymbol(int id,int offset){
     if(!in_range(offset))return false;
     return (get(offset)->type==Lexer::TOKEN_TYPE_SYMBOL&&std::static_pointer_cast<Lexer::SymbolToken>(get(offset))->get_symbol_type()==id);
@@ -58,6 +67,20 @@ bool parserProgress::peekKeyword(std::vector<int> ids,int offset){
     }
     return false;
 }
+
+int parserProgress::peekKeywordGet(std::vector<int> ids,int offset){
+    if(!in_range(offset))return 0;
+    if(get(offset)->type==Lexer::TOKEN_TYPE_KEYWORD){
+        int id=std::static_pointer_cast<Lexer::KeywordToken>(get(offset))->get_keyword_type();
+        for(int id2:ids){
+            if(id==id2){
+                return id;
+            }
+        }
+    }
+    return 0;
+}
+
 
 std::shared_ptr<Lexer::Token> parserProgress::get(int offset){
     if(!in_range(offset))throw std::out_of_range("token out of range");

@@ -9,13 +9,14 @@
 
 namespace Parser {
     class KeywordFunctionCall : public ParserResultPart {
-        public:
-            KeywordFunctionCall(std::shared_ptr<Lexer::KeywordToken> id,std::shared_ptr<VarType> type,std::shared_ptr<ExpressionList> args,int line_start,int line_end);
-            std::shared_ptr<Lexer::KeywordToken> identifier;
-            std::shared_ptr<VarType> extra_type;
-            std::shared_ptr<ExpressionList> arguments;
-            virtual std::string getSource() override;
-            virtual void print(int depth) override;
+    public:
+        KeywordFunctionCall(parserProgress&);
+        KeywordFunctionCall(std::shared_ptr<Lexer::KeywordToken> id,std::shared_ptr<VarType> type,std::shared_ptr<ExpressionList> args,int line_start,int line_end);
+        std::shared_ptr<Lexer::KeywordToken> identifier;
+        std::shared_ptr<VarType> extra_type;
+        std::shared_ptr<ExpressionList> arguments;
+        virtual std::string getSource(int indent) override;
+        virtual void print(int depth) override;
     };
 }
 

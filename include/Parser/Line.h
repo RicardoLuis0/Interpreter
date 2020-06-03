@@ -13,14 +13,15 @@ namespace Parser{
         LINE_EMPTY,
     };
     class Line : public ParserResultPart {
-        public:
-            Line(std::shared_ptr<ParserResultPart>,ParserLineType_t,int line_start,int line_end);
-            std::shared_ptr<ParserResultPart> contents;
-            const ParserLineType_t type;
-            virtual std::string getSource() override;
-            virtual void print(int depth) override;
-        protected:
-        private:
+    public:
+        Line(parserProgress&);
+        Line(std::shared_ptr<ParserResultPart>,ParserLineType_t,int line_start,int line_end);
+        std::shared_ptr<ParserResultPart> contents;
+        ParserLineType_t type;
+        virtual std::string getSource(int indent) override;
+        virtual void print(int depth) override;
+    protected:
+    private:
     };
 }
 

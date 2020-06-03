@@ -14,14 +14,15 @@ namespace Parser{
         STATEMENT_CONTINUE,
     };
     class Statement : public ParserResultPart {
-        public:
-            Statement(std::shared_ptr<ParserResultPart> statement,ParserStatementType_t type,int line_start,int line_end);
-            std::shared_ptr<ParserResultPart> statement;
-            const ParserStatementType_t type;
-            virtual std::string getSource() override;
-            virtual void print(int depth) override;
-        protected:
-        private:
+    public:
+        Statement(parserProgress&);
+        Statement(std::shared_ptr<ParserResultPart> statement,ParserStatementType_t type,int line_start,int line_end);
+        std::shared_ptr<ParserResultPart> statement;
+        ParserStatementType_t type;
+        virtual std::string getSource(int indent) override;
+        virtual void print(int depth) override;
+    protected:
+    private:
     };
 }
 #endif // PARSER_STATEMENT_H

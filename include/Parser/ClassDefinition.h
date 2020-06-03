@@ -7,6 +7,7 @@
 namespace Parser{
     class ClassDefinition:public ParserResultPart{
         public:
+            ClassDefinition(parserProgress&);
             ClassDefinition(int line_start,int line_end);
     };
 }

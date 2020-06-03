@@ -26,6 +26,7 @@ namespace Parser{
     };
     class VarType : public ParserResultPart {
     public:
+        VarType(parserProgress&);
         VarType(std::shared_ptr<Lexer::KeywordToken> primitive,bool is_const,bool has_sign,bool sign,std::shared_ptr<VarType> extra,int line_start,int line_end);
         VarType(std::shared_ptr<Expression> decltype_expr,bool is_const,int line_start,int line_end);
         VarType(ParserPrimitiveType_t primitive,bool is_const,bool has_sign,bool sign,std::shared_ptr<VarType> extra,int line_start,int line_end);
@@ -37,7 +38,7 @@ namespace Parser{
         std::vector<std::shared_ptr<Expression>> array_sizes;
         std::shared_ptr<VarType> extra;
         std::shared_ptr<Expression> decltype_expr;
-        virtual std::string getSource() override;
+        virtual std::string getSource(int indent) override;
         virtual void print(int depth) override;
     };
 }

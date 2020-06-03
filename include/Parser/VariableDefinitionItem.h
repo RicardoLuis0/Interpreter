@@ -7,15 +7,17 @@
 
 namespace Parser{
     class VariableDefinitionItem : public ParserResultPart {
-        public:
-            VariableDefinitionItem(std::string,int line_start,int line_end);
-            VariableDefinitionItem(std::shared_ptr<Lexer::WordToken>,std::shared_ptr<Expression>,int line_start,int line_end);
-            std::string name;
-            std::shared_ptr<Expression> value;
-            virtual std::string getSource() override;
-            virtual void print(int depth) override;
-        protected:
-        private:
+    public:
+        VariableDefinitionItem(parserProgress&);
+        VariableDefinitionItem(int line_start,std::shared_ptr<Lexer::WordToken>,parserProgress&);//partial constructor
+        VariableDefinitionItem(std::string,int line_start,int line_end);
+        VariableDefinitionItem(std::shared_ptr<Lexer::WordToken>,std::shared_ptr<Expression>,int line_start,int line_end);
+        std::string name;
+        std::shared_ptr<Expression> value;
+        virtual std::string getSource(int indent) override;
+        virtual void print(int depth) override;
+    protected:
+    private:
     };
 }
 

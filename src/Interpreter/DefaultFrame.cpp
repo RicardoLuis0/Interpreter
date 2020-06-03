@@ -58,13 +58,13 @@ DefaultFrame::DefaultFrame(DefaultFrame * p,Function * f):DefaultFrame(p){
     }
     add_parameters(f->get_parameters());
     is_function=true;
-	self_function=f;
+    self_function=f;
 }
 
 DefaultFrame::DefaultFrame(DefaultFrame * p):parent(p),static_frame(p?std::make_shared<DefaultFrame>(p->parent?p->static_frame.get():nullptr):nullptr),static_exec_frame(nullptr){//if p is global, static frame's parent is p (allow global values access from static context)
-	if(p&&!p->parent){
-		static_frame->parent=p;
-	}
+    if(p&&!p->parent){
+        static_frame->parent=p;
+    }
 }
 
 std::shared_ptr<Type> DefaultFrame::get_variable_type(std::string name){

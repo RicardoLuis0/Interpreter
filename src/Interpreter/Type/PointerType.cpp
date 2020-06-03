@@ -53,7 +53,7 @@ bool PointerType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> o){
 }
 
 bool PointerType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return is(self,other)||CHECKPTR(other,IntType);
+    return CHECKPTR(other,IntType)||Type::allows_implicit_cast(self,other);
 }
 
 std::shared_ptr<Value> PointerType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){

@@ -25,6 +25,7 @@
 
 using namespace Interpreter;
 
+std::shared_ptr<Type> Type::true_any_type_instance(std::make_shared<AnyType>(false,true));
 std::shared_ptr<Type> Type::any_type_instance(std::make_shared<AnyType>());
 std::shared_ptr<Type> Type::type_type_instance(std::make_shared<TypeType>());
 std::shared_ptr<Type> Type::void_type_instance(std::make_shared<VoidType>());
@@ -35,6 +36,7 @@ std::shared_ptr<Type> Type::unsigned_int_type_instance(std::make_shared<Unsigned
 std::shared_ptr<Type> Type::float_type_instance(std::make_shared<FloatType>());
 std::shared_ptr<Type> Type::string_type_instance(std::make_shared<StringType>());
 
+std::shared_ptr<Type> Type::const_true_any_type_instance(std::make_shared<AnyType>(true,true));
 std::shared_ptr<Type> Type::const_any_type_instance(std::make_shared<AnyType>(true));
 std::shared_ptr<Type> Type::const_type_type_instance(std::make_shared<TypeType>(true));
 std::shared_ptr<Type> Type::const_void_type_instance(std::make_shared<VoidType>(true));
@@ -46,6 +48,10 @@ std::shared_ptr<Type> Type::const_float_type_instance(std::make_shared<FloatType
 std::shared_ptr<Type> Type::const_string_type_instance(std::make_shared<StringType>(true));
 
 Type::Type(bool b):is_const(b){
+}
+
+std::shared_ptr<Type> Type::true_any_type(bool is_const){
+    return is_const?const_true_any_type_instance:true_any_type_instance;
 }
 
 std::shared_ptr<Type> Type::any_type(bool is_const){
@@ -92,7 +98,7 @@ bool Type::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
     if(auto ref=std::dynamic_pointer_cast<ReferenceType>(other)){
         return is(self,ref->get_type())&&!(self->get_const()&&!other->get_const());//a const type isn't a non-const reference
     }else{
-        return CHECKPTR(other,AnyType);
+        return false;
     }
 }
 
@@ -159,7 +165,7 @@ std::shared_ptr<Type> Type::from_vartype(DefaultFrame * context,std::shared_ptr<
 }
 
 bool Type::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return is(self,other);
+    return CHECKPTR(other,AnyType)||is(self,other);
 }
 
 bool Type::has_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){

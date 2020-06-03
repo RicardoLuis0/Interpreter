@@ -48,10 +48,6 @@ bool ReferenceType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> o){
     return type->is(type,o)&&!(o->get_const()&&!self->get_const());//a const type isn't a non-const reference
 }
 
-bool ReferenceType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return is(self,other);
-}
-
 std::shared_ptr<Value> ReferenceType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> o){
     if(auto sref=std::dynamic_pointer_cast<ReferenceVariable>(self)){
         return sref->value->get_type()->cast(sref->value,o);

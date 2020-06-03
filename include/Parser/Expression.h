@@ -11,10 +11,11 @@ namespace Parser{
     };
     class Expression:public ParserResultPart {
         public:
+            Expression(parserProgress&);
             Expression(std::shared_ptr<ParserResultPart>,ExpressionType_t type,int line_start,int line_end);
             std::shared_ptr<ParserResultPart> contents;
-            const ExpressionType_t type;
-            virtual std::string getSource() override;
+            ExpressionType_t type;
+            virtual std::string getSource(int indent) override;
             virtual void print(int depth) override;
         protected:
         private:

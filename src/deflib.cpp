@@ -169,7 +169,7 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_variadic_type() override{
-            return Type::any_type();
+            return Type::true_any_type();
         }
 
         std::string get_name() override {
@@ -198,7 +198,7 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_variadic_type() override{
-            return Type::any_type();
+            return Type::true_any_type();
         }
 
         std::string get_name() override {
@@ -226,7 +226,7 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_variadic_type() override{
-            return Type::any_type();
+            return Type::true_any_type();
         }
 
         std::string get_name() override {
@@ -359,7 +359,7 @@ namespace Interpreter {
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{Type::any_type(),"val"}};
+            return {{Type::true_any_type(),"val"}};
         }
 
         std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
@@ -475,7 +475,7 @@ namespace Interpreter {
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr"}};
+            return {{std::make_shared<ArrayType>(Type::true_any_type(),-1),"arr"}};
         }
 
         std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
@@ -618,7 +618,7 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_variadic_type() override{
-            return Type::any_type();
+            return Type::true_any_type();
         }
 
         std::string get_name() override {
@@ -806,7 +806,7 @@ namespace Interpreter {
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr"},{Type::any_type(),"val"}};
+            return {{std::make_shared<ArrayType>(Type::true_any_type(),-1),"arr"},{Type::true_any_type(),"val"}};
         }
 
         std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
@@ -833,7 +833,7 @@ namespace Interpreter {
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr"},{Type::any_type(),"val"}};
+            return {{std::make_shared<ArrayType>(Type::true_any_type(),-1),"arr"},{Type::true_any_type(),"val"}};
         }
 
         std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
@@ -856,11 +856,11 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_type(){
-            return Type::any_type();
+            return Type::true_any_type();
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr"}};
+            return {{std::make_shared<ArrayType>(Type::true_any_type(),-1),"arr"}};
         }
 
         std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
@@ -885,11 +885,11 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_type(){
-            return Type::any_type();
+            return Type::true_any_type();
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr"}};
+            return {{std::make_shared<ArrayType>(Type::true_any_type(),-1),"arr"}};
         }
 
         std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
@@ -914,11 +914,11 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_type(){
-            return Type::any_type();
+            return Type::true_any_type();
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr"}};
+            return {{std::make_shared<ArrayType>(Type::true_any_type(),-1),"arr"}};
         }
 
         std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
@@ -941,11 +941,11 @@ namespace Interpreter {
         }
 
         std::shared_ptr<Type> get_type(){
-            return Type::any_type();
+            return Type::true_any_type();
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr"}};
+            return {{std::make_shared<ArrayType>(Type::true_any_type(),-1),"arr"}};
         }
 
         std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
@@ -972,7 +972,7 @@ namespace Interpreter {
         }
 
         std::vector<FunctionParameter> get_parameters() override {
-            return {{std::make_shared<ArrayType>(Type::any_type(),-1),"arr"},{Type::int_type(),"size"}};
+            return {{std::make_shared<ArrayType>(Type::true_any_type(),-1),"arr"},{Type::int_type(),"size"}};
         }
 
         std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
