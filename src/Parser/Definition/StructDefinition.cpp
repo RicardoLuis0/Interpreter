@@ -4,7 +4,7 @@
 
 using namespace Parser;
 
-StructDefinition::StructDefinition(parserProgress &p){
+StructDefinition::StructDefinition(parserProgress &){
     throw std::runtime_error("StructDefinition unimplemented");//TODO re-add StructDefinition in new parser
 }
 
@@ -14,7 +14,7 @@ StructDefinition::StructDefinition(std::string n,std::vector<std::shared_ptr<Mem
     members(m){
 }
 
-std::string StructDefinition::getSource(int indent){
+std::string StructDefinition::getSource(int){
     throw std::runtime_error("struct definition de-parsing not implemented yet");
 }
 

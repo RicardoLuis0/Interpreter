@@ -68,10 +68,10 @@ FunctionDefinition::FunctionDefinition(int ls,std::shared_ptr<VarType> vt,std::s
     if(!p.isSymbol(SYMBOL_PARENTHESIS_OPEN))throw MyExcept::NoMatchException(p,"'('");
     if(!p.isSymbol(SYMBOL_PARENTHESIS_CLOSE)){
         ls=p.get_line();
-        auto vt=std::make_shared<VarType>(p);
+        auto vt2=std::make_shared<VarType>(p);
         if(p.isSymbol(SYMBOL_VARIADIC)){
         pvariadic:
-            variadic_type=vt;
+            variadic_type=vt2;
             t=p.isType(Lexer::TOKEN_TYPE_WORD);
             if(!t){
                 throw MyExcept::NoMatchExceptionFatal(p,"identifier");
@@ -79,15 +79,15 @@ FunctionDefinition::FunctionDefinition(int ls,std::shared_ptr<VarType> vt,std::s
             variadic_ident=std::static_pointer_cast<Lexer::WordToken>(t)->get_literal();
             variadic=true;
         }else{
-            parameters.emplace_back(std::make_shared<FunctionDefinitionParameter>(ls,vt,p));
+            parameters.emplace_back(std::make_shared<FunctionDefinitionParameter>(ls,vt2,p));
             try{
                 while(p.isSymbol(SYMBOL_COMMA)){
                     ls=p.get_line();
-                    vt=std::make_shared<VarType>(p);
+                    vt2=std::make_shared<VarType>(p);
                     if(p.isSymbol(SYMBOL_VARIADIC)){
                         goto pvariadic;
                     }else{
-                        parameters.emplace_back(std::make_shared<FunctionDefinitionParameter>(ls,vt,p));
+                        parameters.emplace_back(std::make_shared<FunctionDefinitionParameter>(ls,vt2,p));
                     }
                 }
             }catch(MyExcept::NoMatchException &e){

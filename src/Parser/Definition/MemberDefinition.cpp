@@ -4,7 +4,7 @@
 
 using namespace Parser;
 
-MemberDefinition::MemberDefinition(parserProgress &p){
+MemberDefinition::MemberDefinition(parserProgress &){
     throw std::runtime_error("unimplemented");
 }
 
@@ -17,7 +17,7 @@ MemberDefinition::MemberDefinition(bool o,member_scope_t s,member_modifier_t m,m
     member(mb){
 }
 
-std::string MemberDefinition::getSource(int indent){
+std::string MemberDefinition::getSource(int){
     throw std::runtime_error("member definition de-parsing not implemented yet");
 }
 

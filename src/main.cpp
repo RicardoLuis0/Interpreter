@@ -427,7 +427,7 @@ int main(int argc,char ** argv){
             }
             Parser::parserProgress p(tokens);
             while(p.get_nothrow()!=nullptr){
-                std::make_shared<Parser::Definition>(p);
+                (Parser::Definition(p));
             }
             std::cout<<"Parse OK";
             return 0;

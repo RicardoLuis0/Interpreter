@@ -4,7 +4,7 @@
 
 using namespace Parser;
 
-ClassDefinition::ClassDefinition(parserProgress &p){
+ClassDefinition::ClassDefinition(parserProgress &){
     throw std::runtime_error("unimplemented");
 }
 
