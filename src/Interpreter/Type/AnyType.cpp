@@ -14,11 +14,11 @@ AnyType::AnyType(bool c,bool ta):Type(c),true_any(ta){
 }
 
 bool AnyType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return true_any&&(!CHECKPTR(other,VoidType));
+    return CHECKPTR(other,AnyType)||(true_any&&(!CHECKPTR(other,VoidType)));
 }
 
 bool AnyType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return true_any&&(!CHECKPTR(other,VoidType));
+    return is(self,other);
 }
 
 bool AnyType::has_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){

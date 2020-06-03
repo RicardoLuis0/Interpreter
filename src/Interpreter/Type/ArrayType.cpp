@@ -66,7 +66,7 @@ bool ArrayType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<
     if(auto other=std::dynamic_pointer_cast<ArrayType>(o)){
         return (CHECKPTR(other->type,AnyType)&&(other->size<0||other->size==size))||is(self,o);
     } else {
-        return false;
+        return Type::allows_implicit_cast(self,o);
     }
 }
 

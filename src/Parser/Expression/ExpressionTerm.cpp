@@ -29,11 +29,10 @@ ExpressionTerm::ExpressionTerm(parserProgress &p){
     }else if(p.peekType(Lexer::TOKEN_TYPE_WORD)&&p.peekSymbol(SYMBOL_PARENTHESIS_OPEN,1)){
         contents_p=std::make_shared<FunctionCall>(p);
         type=EXPRESSION_TERM_FUNCTION_CALL;
-    }else if(p.peekKeyword({KEYWORD_IS,KEYWORD_CAST,KEYWORD_TYPEOF,KEYWORD_TYPE})){
+    }else if(p.peekKeyword({KEYWORD_IS,KEYWORD_CAST,KEYWORD_TYPEOF,KEYWORD_TYPE,KEYWORD_DECLTYPE})&&p.peekSymbol({SYMBOL_PARENTHESIS_OPEN,SYMBOL_LOWER},1)){
         contents_p=std::make_shared<KeywordFunctionCall>(p);
         type=EXPRESSION_TERM_KEYWORD_FUNCTION_CALL;
     }else if(p.peekType({Lexer::TOKEN_TYPE_KEYWORD,Lexer::TOKEN_TYPE_SYMBOL})){
-        int i=p.location;
         if(contents_t=p.isKeyword({KEYWORD_TRUE,KEYWORD_FALSE,KEYWORD_NULL})){
             switch(std::static_pointer_cast<Lexer::KeywordToken>(contents_t)->get_keyword_type()){
             case KEYWORD_TRUE:
@@ -51,7 +50,6 @@ ExpressionTerm::ExpressionTerm(parserProgress &p){
                 contents_p=std::make_shared<UnaryOperation>(p);//TODO refactor UnaryOperation out, add unary-pre operators to ExpressionTerm
                 type=EXPRESSION_TERM_UNARY_OPERATION;
             }catch(MyExcept::NoMatchException &){
-                p.location=i;
                 contents_p=std::make_shared<VarType>(p);
                 type=EXPRESSION_TERM_VARTYPE;
             }

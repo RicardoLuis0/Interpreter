@@ -20,7 +20,7 @@ ExecFrame::ExecFrame(ExecFrame * p,DefaultFrame * d):parent(p),defaults(d){
         }
         std::shared_ptr<Variable> var=vpair.second->make_variable(vpair.second,vpair.first);
         if(!var){
-            throw std::runtime_error("unexpected nullptr in "+std::string(vpair.second->get_name())+"::make_variable");
+            throw std::runtime_error("fatal internal error, unexpected nullptr in "+std::string(vpair.second->get_name())+"::make_variable");
         }
         variables.insert({vpair.first,var});
     }
@@ -42,14 +42,14 @@ void ExecFrame::set_variable(std::string s,std::shared_ptr<Value> val,std::share
         if(auto var=std::dynamic_pointer_cast<Variable>(val)){
             if(var->get_type()->is(var->get_type(),ref->get_type())){
                 variables[s]=std::make_shared<ReferenceVariable>(s,ref,var);
-				return;
+                return;
             }
         }
+        throw std::runtime_error("fatal internal error, invalid reference type");
     }else{
         variables[s]=val->clone_var(s);
-		return;
+        return;
     }
-    throw std::runtime_error("invalid reference type");
 }
 
 void ExecFrame::set_args(std::unordered_map<std::string,std::pair<std::shared_ptr<Value>,std::shared_ptr<Type>>> args){
@@ -62,6 +62,7 @@ std::shared_ptr<Value> ExecFrame::fn_call(std::shared_ptr<Function> fn,std::vect
     if(defaults->get_function_local(fn->get_name(),fn->get_parameters())){
         return fn->call(this,args);
     }else{
+        if(!parent)throw std::runtime_error("fatal internal error, cannot find function "+fn->get_name()+"("+FunctionParameter::get_typelist(fn->get_parameters())+") to call in current context, aborting");
         return parent->fn_call(fn,args);
     }
 }
