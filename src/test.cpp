@@ -21,10 +21,28 @@ int exec(std::string filename){
     Console::changeDir(filename.substr(0,std::max(filename.rfind("/"),filename.rfind("\\"))));
     std::vector<std::shared_ptr<Parser::Definition>> deflist;
     Parser::parserProgress p(tokens);
+    //get imports
+    std::vector<std::string> imports({"default"});
+    while(p.isKeyword(KEYWORD_IMPORT)){
+        do{
+            if(p.isSymbol(SYMBOL_SEMICOLON)){
+                continue;
+            }else if(p.isSymbol(SYMBOL_MULTIPLY)){
+                imports.push_back("*");
+            }else if(std::shared_ptr<Lexer::WordToken> tk=std::static_pointer_cast<Lexer::WordToken>(p.isType(Lexer::TOKEN_TYPE_WORD))){
+                imports.push_back(tk->get_literal());
+            }else{
+                throw MyExcept::NoMatchException(p.get_line(),"expected library name, got '"+p.get_nothrow_nonull()->get_literal()+"'");
+            }
+        }while(p.isSymbol(SYMBOL_COMMA));
+        if(!p.isSymbol(SYMBOL_SEMICOLON)){
+            throw MyExcept::NoMatchException(p.get_nothrow_nonull()->line,"expected ';', got '"+p.get_nothrow_nonull()->get_literal()+"'");
+        }
+    }
     while(p.get_nothrow()!=nullptr){
         deflist.push_back(std::make_shared<Parser::Definition>(p));
     }
-    Interpreter::DefaultFrame dframe(deflist,{"*"});
+    Interpreter::DefaultFrame dframe(deflist,imports);
     std::shared_ptr<Interpreter::ExecFrame> eframe(std::make_shared<Interpreter::ExecFrame>(nullptr,&dframe));
     std::shared_ptr<Interpreter::Function> entrypoint(eframe->get_function("main",{}));
     std::vector<std::shared_ptr<Interpreter::Value>> fn_args;

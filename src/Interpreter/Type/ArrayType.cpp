@@ -62,8 +62,12 @@ bool ArrayType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> o){
     }
 }
 
-bool ArrayType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return is(self,other);
+bool ArrayType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> o){
+    if(auto other=std::dynamic_pointer_cast<ArrayType>(o)){
+        return (CHECKPTR(other->type,AnyType)&&(other->size<0||other->size==size))||is(self,o);
+    } else {
+        return false;
+    }
 }
 
 std::shared_ptr<Value> ArrayType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){

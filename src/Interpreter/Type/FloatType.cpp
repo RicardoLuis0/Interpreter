@@ -42,7 +42,7 @@ bool FloatType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
 }
 
 bool FloatType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return CHECKPTR(other,UnsignedCharType)||CHECKPTR(other,UnsignedIntType)||CHECKPTR(other,CharType)||CHECKPTR(other,IntType)||is(self,other);
+    return CHECKPTR(other,UnsignedCharType)||CHECKPTR(other,UnsignedIntType)||CHECKPTR(other,CharType)||CHECKPTR(other,IntType)||Type::allows_implicit_cast(self,other);
 }
 
 std::shared_ptr<Value> FloatType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){

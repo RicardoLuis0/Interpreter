@@ -43,7 +43,7 @@ bool UnsignedCharType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other
 }
 
 bool UnsignedCharType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return CHECKPTR(other,UnsignedIntType)||CHECKPTR(other,CharType)||CHECKPTR(other,IntType)||CHECKPTR(other,FloatType)||is(self,other);
+    return CHECKPTR(other,UnsignedIntType)||CHECKPTR(other,CharType)||CHECKPTR(other,IntType)||CHECKPTR(other,FloatType)||Type::allows_implicit_cast(self,other);
 }
 
 std::shared_ptr<Value> UnsignedCharType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){

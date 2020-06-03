@@ -43,20 +43,20 @@ bool IntType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
 }
 
 bool IntType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return CHECKPTR(other,UnsignedCharType)||CHECKPTR(other,UnsignedIntType)||CHECKPTR(other,CharType)||CHECKPTR(other,FloatType)||is(self,other);
+    return CHECKPTR(other,UnsignedCharType)||CHECKPTR(other,UnsignedIntType)||CHECKPTR(other,CharType)||CHECKPTR(other,FloatType)||Type::allows_implicit_cast(self,other);
 }
 
 std::shared_ptr<Value> IntType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
     if(is(self->get_type(),other)){
         return self;
-	}else if(CHECKPTR(other,FloatType)){
-		return std::make_shared<FloatValue>(static_cast<float>(std::dynamic_pointer_cast<IntValue>(self)->get()));
-	}else if(CHECKPTR(other,CharType)){
-		return std::make_shared<CharValue>(static_cast<char>(std::dynamic_pointer_cast<IntValue>(self)->get()));
-	}else if(CHECKPTR(other,UnsignedCharType)){
-		return std::make_shared<UnsignedCharValue>(static_cast<unsigned char>(std::dynamic_pointer_cast<IntValue>(self)->get()));
-	}else if(CHECKPTR(other,UnsignedIntType)){
-		return std::make_shared<UnsignedIntValue>(static_cast<unsigned int>(std::dynamic_pointer_cast<IntValue>(self)->get()));
+    }else if(CHECKPTR(other,FloatType)){
+        return std::make_shared<FloatValue>(static_cast<float>(std::dynamic_pointer_cast<IntValue>(self)->get()));
+    }else if(CHECKPTR(other,CharType)){
+        return std::make_shared<CharValue>(static_cast<char>(std::dynamic_pointer_cast<IntValue>(self)->get()));
+    }else if(CHECKPTR(other,UnsignedCharType)){
+        return std::make_shared<UnsignedCharValue>(static_cast<unsigned char>(std::dynamic_pointer_cast<IntValue>(self)->get()));
+    }else if(CHECKPTR(other,UnsignedIntType)){
+        return std::make_shared<UnsignedIntValue>(static_cast<unsigned int>(std::dynamic_pointer_cast<IntValue>(self)->get()));
     }else{
         return Type::cast(self,other);//throws
     }

@@ -31,6 +31,7 @@ namespace Interpreter {
         bool is_const;
         friend class Expression;
     public:
+        static std::shared_ptr<Type> true_any_type(bool is_const=false);
         static std::shared_ptr<Type> any_type(bool is_const=false);
         static std::shared_ptr<Type> type_type(bool is_const=false);
         static std::shared_ptr<Type> void_type(bool is_const=false);
@@ -43,6 +44,7 @@ namespace Interpreter {
         static std::shared_ptr<Type> pointer_type(std::shared_ptr<Type> type,bool is_const=false);
         static std::shared_ptr<Type> from_vartype(class DefaultFrame * context,std::shared_ptr<Parser::VarType>);
     private:
+        static std::shared_ptr<Type> true_any_type_instance;
         static std::shared_ptr<Type> any_type_instance;
         static std::shared_ptr<Type> type_type_instance;
         static std::shared_ptr<Type> void_type_instance;
@@ -52,6 +54,7 @@ namespace Interpreter {
         static std::shared_ptr<Type> unsigned_int_type_instance;
         static std::shared_ptr<Type> float_type_instance;
         static std::shared_ptr<Type> string_type_instance;
+        static std::shared_ptr<Type> const_true_any_type_instance;
         static std::shared_ptr<Type> const_any_type_instance;
         static std::shared_ptr<Type> const_type_type_instance;
         static std::shared_ptr<Type> const_void_type_instance;

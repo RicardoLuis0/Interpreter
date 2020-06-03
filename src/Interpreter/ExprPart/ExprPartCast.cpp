@@ -1,5 +1,6 @@
 #include "Interpreter/ExprPartCast.h"
 #include "Interpreter/TypeValue.h"
+#include "Interpreter/TypeType.h"
 
 using namespace Interpreter;
 
@@ -8,7 +9,7 @@ ExprPartCast::ExprPartCast(std::shared_ptr<ExprPart> type,std::shared_ptr<ExprPa
 }
 
 std::shared_ptr<Type> ExprPartCast::get_type(){
-    return Type::any_type();
+    return Type::true_any_type();//TODO improve this
 }
 
 std::shared_ptr<Value> ExprPartCast::eval(ExecFrame * context){

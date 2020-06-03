@@ -25,10 +25,6 @@ bool StringType::is(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
     return CHECKPTR(other,StringType)||Type::is(self,other);
 }
 
-bool StringType::allows_implicit_cast(std::shared_ptr<Type> self,std::shared_ptr<Type> other){
-    return is(self,other);
-}
-
 std::shared_ptr<Value> StringType::cast(std::shared_ptr<Value> self,std::shared_ptr<Type> other){
     if(is(self->get_type(),other)){
         return self;
