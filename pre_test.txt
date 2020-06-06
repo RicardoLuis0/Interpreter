@@ -1,3 +1,0 @@
-#include "pre_include_test.txt"
-
-6767sz809u
