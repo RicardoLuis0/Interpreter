@@ -2,6 +2,7 @@
 #include "Interpreter/IntValue.h"
 #include "Interpreter/TypeValue.h"
 
+
 using namespace Interpreter;
 
 ExprPartIs::ExprPartIs(std::shared_ptr<ExprPart> type,std::shared_ptr<ExprPart> value):type_param(type),param(value){

@@ -2,6 +2,7 @@
 #define Value_H
 
 #include <memory>
+#include <stdexcept>
 #include "Printf/ValueContainer.h"
 
 namespace Interpreter {

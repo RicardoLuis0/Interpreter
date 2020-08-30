@@ -15,6 +15,7 @@
 
 #include <unordered_map>
 #include <memory>
+#include <stdexcept>
 
 namespace Interpreter{
     struct fnparam_vec_hash{

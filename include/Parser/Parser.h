@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <stdexcept>
 #include "Lexer/Token.h"
 #include "Lexer/SymbolToken.h"
 #include "Lexer/KeywordToken.h"
