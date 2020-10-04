@@ -6,7 +6,8 @@ int wrap(int val,int min,int max){
     return val;
 }
 
-void print_board(int[3][3] board,int x,int y,string pre,string post){
+void print_board(int[3][3] board,int x,int y,
+                 string pre,string post){
     cls();
     print(pre);
     print("+-+-+-+\n");
@@ -44,16 +45,20 @@ void print_board(int[3][3] board,int x,int y,string pre,string post){
 
 int checkwin(int[3][3] &board){
     for(int i=0;i<3;i++){
-        if(board[i][0]!=0&&board[i][0]==board[i][1]&&board[i][1]==board[i][2]){
+        if(board[i][0]!=0&&board[i][0]==board[i][1]
+           &&board[i][1]==board[i][2]){
             return board[i][0];
         }
-        if(board[0][i]!=0&&board[0][i]==board[1][i]&&board[1][i]==board[2][i]){
+        if(board[0][i]!=0&&board[0][i]==board[1][i]
+           &&board[1][i]==board[2][i]){
             return board[0][i];
         }
     }
-    if(board[0][0]!=0&&board[0][0]==board[1][1]&&board[1][1]==board[2][2]){
+    if(board[0][0]!=0&&board[0][0]==board[1][1]
+       &&board[1][1]==board[2][2]){
         return board[0][0];
-    }else if(board[0][2]!=0&&board[0][2]==board[1][1]&&board[1][1]==board[2][0]){
+    }else if(board[0][2]!=0&&board[0][2]==board[1][1]
+             &&board[1][1]==board[2][0]){
         return board[0][2];
     }else{
         int is_tie=1;
@@ -67,9 +72,11 @@ int checkwin(int[3][3] &board){
     return 0;
 }
 
-void player_turn(int[3][3] &board,int &x,int &y,int num,string name){
+void player_turn(int[3][3] &board,int &x,int &y,
+                 int num,string name){
     while(true){
-        print_board(board,x,y,name+"'s Turn\n","\nMake your move...");
+        print_board(board,x,y,name+"'s Turn\n",
+                    "\nMake your move...");
         int c=getch_wasd();
         if(c=='W'||c=='w'){
             y=wrap(y-1,0,2);
@@ -124,10 +131,12 @@ void computer_turn_hard(int[3][3] &board){
         board[lose_x][lose_y]=2;
         return;
     }
-    computer_turn_easy(board);//if no immediate wins or losses, play randomly
+    computer_turn_easy(board);
+    //if no immediate wins or losses, play randomly
 }
 
-void game_loop(int computer,int difficulty,string player1,string player2){
+void game_loop(int computer,int difficulty,
+               string player1,string player2){
     string winmsg(int num){
         if(num==1){
             return player1+" Wins!\n";
@@ -161,12 +170,14 @@ void game_loop(int computer,int difficulty,string player1,string player2){
         }
         int cw=checkwin(board);
         if(cw!=0){
-            print_board(board,-1,-1,winmsg(cw),"\nPress any Key...");
+            print_board(board,-1,-1,winmsg(cw),
+                        "\nPress any Key...");
             getch();
             return;
         }
         if(!computer){
-            print_board(board,-1,-1,name+"'s Turn Is Over\n","\nPress any Key...");
+            print_board(board,-1,-1,name+"'s Turn Is Over\n",
+                        "\nPress any Key...");
             getch();
         }
     }

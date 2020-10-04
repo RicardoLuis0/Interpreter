@@ -5,7 +5,8 @@ int turn;
 
 void print_board(){
     cls();
-    print("TicTacToe\n---\nPlayer "+to_string(turn)+"'s Turn\n+---+\n");
+    print("TicTacToe\n---\nPlayer "+to_string(turn)+
+          "'s Turn\n+---+\n");
     for(int i=0;i<3;i++){
         print("|");
         for(int j=0;j<3;j++){
@@ -25,16 +26,20 @@ void print_board(){
 
 int checkwin(){
     for(int i=0;i<3;i++){
-        if(board[i][0]!=0&&board[i][0]==board[i][1]&&board[i][1]==board[i][2]){
+        if(board[i][0]!=0&&board[i][0]==board[i][1]
+           &&board[i][1]==board[i][2]){
             return board[i][0];
         }
-        if(board[0][i]!=0&&board[0][i]==board[1][i]&&board[1][i]==board[2][i]){
+        if(board[0][i]!=0&&board[0][i]==board[1][i]
+           &&board[1][i]==board[2][i]){
             return board[0][i];
         }
     }
-    if(board[0][0]!=0&&board[0][0]==board[1][1]&&board[1][1]==board[2][2]){
+    if(board[0][0]!=0&&board[0][0]==board[1][1]
+       &&board[1][1]==board[2][2]){
         return board[0][0];
-    }else if(board[0][2]!=0&&board[0][2]==board[1][1]&&board[1][1]==board[2][0]){
+    }else if(board[0][2]!=0&&board[0][2]==board[1][1]
+             &&board[1][1]==board[2][0]){
         return board[0][2];
     }else{
         int is_tie=1;
@@ -54,9 +59,9 @@ print("Welcome to TicTacToe, Press any key to begin...");
 getch();
 
 while(true){
-	//play game
-	turn=1;
-	
+    //play game
+    turn=1;
+    
     int last_invalid=0;
     int do_loop=1;
     while(do_loop){
@@ -83,10 +88,11 @@ while(true){
                 if(check==3){
                     msg="Tie!\nPress any key...\n";
                 }else{
-                    msg="Player "+to_string(check)+" wins\nPress any key...\n";
+                    msg="Player "+to_string(check)+
+                        " wins\nPress any key...\n";
                 }
                 print(msg);
-				getch();
+                getch();
             }
             if(turn==1){
                 turn=2;
@@ -97,24 +103,22 @@ while(true){
             last_invalid=1;
         }
     }
-	
-	
-	//check for re-play
-	while(true){
-		print("Play again?(Y/N)\n");
-		int c=getch();
-		if(c=='Y'||c=='y'){
-			break;//exit loop
-		}else if(c=='N'||c=='n'){
-			return 0;//exit game
-		}
-	}
-	//clear the board
-	for(int i=0;i<3;i++){
-		for(int j=0;j<3;j++){
-			board[i][j]=0;
-		}
-	}
+    //check for re-play
+    while(true){
+        print("Play again?(Y/N)\n");
+        int c=getch();
+        if(c=='Y'||c=='y'){
+            break;//exit loop
+        }else if(c=='N'||c=='n'){
+            return 0;//exit game
+        }
+    }
+    //clear the board
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            board[i][j]=0;
+        }
+    }
 }
 
 return 0;
