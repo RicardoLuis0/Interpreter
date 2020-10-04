@@ -1,53 +1,9 @@
 import io;
 
-void pause(){
-    getch();
-}
-
-void game_main_print(int choice){
-    cls();
-    print("TicTacToe by Ricardo\n\n");
-    if(choice==0){
-        print("> vs Computer\n- vs Player\n- Exit\n");
-    }else if(choice==1){
-        print("- vs Computer\n> vs Player\n- Exit\n");
-    }else if(choice==2){
-        print("- vs Computer\n- vs Player\n> Exit\n");
-    }
-}
-
-void wrap(int &val,int min,int max){
+int wrap(int val,int min,int max){
     if(val<min)val=max;
     if(val>max)val=min;
-}
-
-int main(){
-    int choice=0;
-    while(true){
-        game_main_print(choice);
-        int c=getch();
-        if(c=='W'||c=='w'){
-            if(choice==0){
-                choice=2;
-            }else{
-                choice--;
-            }
-        }else if(c=='S'||c=='s'){
-            if(choice==2){
-                choice=0;
-            }else{
-                choice++;
-            }
-        }else if(c=='\r'||c=='\n'||c=='e'||c=='E'){
-            if(choice==0){
-                game(true);
-            }else if(choice==1){
-                game(false);
-            }else if(choice==2){
-                return 0;
-            }
-        }
-    }
+    return val;
 }
 
 void print_board(int[3][3] board,int x,int y,string pre,string post){
@@ -111,13 +67,67 @@ int checkwin(int[3][3] &board){
     return 0;
 }
 
+void player_turn(int[3][3] &board,int &x,int &y,int num,string name){
+    while(true){
+        print_board(board,x,y,name+"'s Turn\n","\nMake your move...");
+        int c=getch_wasd();
+        if(c=='W'||c=='w'){
+            y=wrap(y-1,0,2);
+        }else if(c=='A'||c=='a'){
+            x=wrap(x-1,0,2);
+        }else if(c=='D'||c=='d'){
+            x=wrap(x+1,0,2);
+        }else if(c=='S'||c=='s'){
+            y=wrap(y+1,0,2);
+        }else if(c=='\r'||c=='\n'||c=='e'||c=='E'){
+            if(board[x][y]==0){
+                board[x][y]=num;
+                return;
+            }
+        }
+    }
+}
 
-void game(int computer){
-    int[3][3] board;
-    int turn;
-    int difficulty;
-    string player1;
-    string player2;
+void computer_turn_easy(int[3][3] &board){//random
+    while(true){
+        int x=rand()%3;
+        int y=rand()%3;
+        if(board[x][y]==0){
+            board[x][y]=2;
+            return;
+        }
+    }
+}
+
+void computer_turn_hard(int[3][3] &board){
+    int lose_x=-1;
+    int lose_y=-1;
+    for(int y=0;y<3;y++){//find winning/losing moves
+        for(int x=0;x<3;x++){
+            if(board[x][y]==0){
+                board[x][y]=2;//check for wins
+                int res=checkwin(board);
+                if(res==2)return;//win
+                if(lose_x==-1){
+                    board[x][y]=1;//check for losses
+                    res=checkwin(board);
+                    if(res==1){
+                        lose_x=x;
+                        lose_y=y;
+                    }
+                }
+                board[x][y]=0;
+            }
+        }
+    }
+    if(lose_x!=-1){//if would lose, try to prevent it
+        board[lose_x][lose_y]=2;
+        return;
+    }
+    computer_turn_easy(board);//if no immediate wins or losses, play randomly
+}
+
+void game_loop(int computer,int difficulty,string player1,string player2){
     string winmsg(int num){
         if(num==1){
             return player1+" Wins!\n";
@@ -127,7 +137,45 @@ void game(int computer){
             return "It's a Tie!\n";
         }
     }
+    int[3][3] board;
     int p1x,p1y,p2x,p2y;
+    int turn=true;
+    while(true){
+        string name;
+        if(turn){
+            name=player1;
+            player_turn(board,p1x,p1y,1,player1);
+            turn=false;
+        }else{
+            name=player2;
+            if(computer){
+                if(difficulty==1){
+                    computer_turn_easy(board);
+                }else{
+                    computer_turn_hard(board);
+                }
+            }else{
+                player_turn(board,p2x,p2y,2,player2);
+            }
+            turn=true;
+        }
+        int cw=checkwin(board);
+        if(cw!=0){
+            print_board(board,-1,-1,winmsg(cw),"\nPress any Key...");
+            getch();
+            return;
+        }
+        if(!computer){
+            print_board(board,-1,-1,name+"'s Turn Is Over\n","\nPress any Key...");
+            getch();
+        }
+    }
+}
+
+void game(int computer){
+    string player1;
+    string player2;
+    int difficulty;
     if(computer){
         print("Player's Name: ");
         player1=getline();
@@ -149,117 +197,42 @@ void game(int computer){
         print("Player 2's Name: ");
         player2=getline();
     }
-    int tick=1;
-    while(true){
-        string name;
-        if(tick==1){
-            name=player1;
-            player_turn(board,p1x,p1y,1,player1);
-            tick=2;
-        }else if(tick==2){
-            name=player2;
-            if(computer){
-                if(difficulty==1){
-                    computer_turn_easy(board);
-                }else{
-                    computer_turn_hard(board);
-                }
-            }else{
-                player_turn(board,p2x,p2y,2,player2);
-            }
-            tick=1;
-        }
-        int cw=checkwin(board);
-        if(cw!=0){
-            print_board(board,-1,-1,winmsg(cw),"\nPress any Key...");
-            pause();
-            return;
-        }
-        if(!computer){
-            print_board(board,-1,-1,name+"'s Turn Is Over\n","\nPress any Key...");
-            pause();
-        }
-    }
+    game_loop(computer,difficulty,player1,player2);
 }
 
-void player_turn(int[3][3] &board,int &x,int &y,int num,string name){
+void main(){
+    int choice=0;
     while(true){
-        print_board(board,x,y,name+"'s Turn\n","\nMake your move...");
-        int c=getch();
+        cls();
+        print("TicTacToe by Ricardo\n\n");
+        if(choice==0){
+            print("> vs Computer\n- vs Player\n- Exit\n");
+        }else if(choice==1){
+            print("- vs Computer\n> vs Player\n- Exit\n");
+        }else if(choice==2){
+            print("- vs Computer\n- vs Player\n> Exit\n");
+        }
+        int c=getch_wasd();
         if(c=='W'||c=='w'){
-            y--;
-            wrap(y,0,2);
-        }else if(c=='A'||c=='a'){
-            x--;
-            wrap(x,0,2);
-        }else if(c=='D'||c=='d'){
-            x++;
-            wrap(x,0,2);
+            if(choice==0){
+                choice=2;
+            }else{
+                choice--;
+            }
         }else if(c=='S'||c=='s'){
-            y++;
-            wrap(y,0,2);
+            if(choice==2){
+                choice=0;
+            }else{
+                choice++;
+            }
         }else if(c=='\r'||c=='\n'||c=='e'||c=='E'){
-            if(board[x][y]==0){
-                board[x][y]=num;
+            if(choice==0){
+                game(true);
+            }else if(choice==1){
+                game(false);
+            }else if(choice==2){
                 return;
             }
         }
     }
-}
-
-void computer_turn_easy(int[3][3] &board){//random
-    while(true){
-        int x=rand()%3;
-        int y=rand()%3;
-        if(board[x][y]==0){
-            board[x][y]=2;
-            return;
-        }
-    }
-}
-
-int computer_turn_hard_part(int[3][3] &board){
-    int lose_x=-1;
-    int lose_y=-1;
-    for(int y=0;y<3;y++){//find winning/losing moves
-        for(int x=0;x<3;x++){
-            if(board[x][y]==0){
-                board[x][y]=2;//check for wins
-                int res=checkwin(board);
-                if(res==2)return 1;//win
-                if(lose_x==-1){
-                    board[x][y]=1;//check for losses
-                    res=checkwin(board);
-                    if(res==1){
-                        lose_x=x;
-                        lose_y=y;
-                    }
-                }
-                board[x][y]=0;
-            }
-        }
-    }
-    if(lose_x!=-1){//if would lose, try to prevent it
-        board[lose_x][lose_y]=2;
-        return 1;
-    }
-    return 0;
-}
-
-void computer_turn_hard(int[3][3] &board){
-    if(!computer_turn_hard_part(board))computer_turn_easy(board);//if no immediate wins or losses, play randomly
-}
-
-int max(int a,int b){
-    if(a>=b){
-        return a;
-    }
-    return b;
-}
-
-int min(int a,int b){
-    if(a<=b){
-        return a;
-    }
-    return b;
 }
