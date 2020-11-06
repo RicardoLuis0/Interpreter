@@ -21,3 +21,5 @@ TestRelease/
 *.cd
 *.xps
 *.png
+build/
+__pycache__/
