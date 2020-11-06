@@ -121,7 +121,9 @@ std::string Interpreter::valueToString(std::shared_ptr<Value> val){
     }
 }
 
-namespace Interpreter {
+namespace LangStdLib {
+
+    using namespace Interpreter;
 
     struct prepare_printf_out{
         std::string fmt;
@@ -1042,6 +1044,8 @@ namespace Interpreter {
 
 }
 
+using namespace LangStdLib;
+
 void Interpreter::import_min(DefaultFrame * d){
     import(d,"default");
 }
@@ -1052,56 +1056,56 @@ void Interpreter::import(DefaultFrame * d,std::string library){
     }else if(library=="default"){
         if(!d->is_library_imported("default")){
             d->imported_libraries.push_back("default");
-            d->register_function(std::make_shared<Interpreter::printvals>());
-            d->register_function(std::make_shared<Interpreter::print>());
-            d->register_function(std::make_shared<Interpreter::rand>());
+            d->register_function(std::make_shared<LangStdLib::printvals>());
+            d->register_function(std::make_shared<LangStdLib::print>());
+            d->register_function(std::make_shared<LangStdLib::rand>());
             //these next functions should be moved to methods/static methods when possible
-            d->register_function(std::make_shared<Interpreter::array_size>());
-            d->register_function(std::make_shared<Interpreter::get_type_name>());
-            d->register_function(std::make_shared<Interpreter::to_string>());
-            d->register_function(std::make_shared<Interpreter::stoi>());
-            d->register_function(std::make_shared<Interpreter::stof>());
+            d->register_function(std::make_shared<LangStdLib::array_size>());
+            d->register_function(std::make_shared<LangStdLib::get_type_name>());
+            d->register_function(std::make_shared<LangStdLib::to_string>());
+            d->register_function(std::make_shared<LangStdLib::stoi>());
+            d->register_function(std::make_shared<LangStdLib::stof>());
         }
     }else if(library=="vector"){
         if(!d->is_library_imported("vector")){
-            d->register_function(std::make_shared<Interpreter::push_front>());
-            d->register_function(std::make_shared<Interpreter::push_back>());
-            d->register_function(std::make_shared<Interpreter::pop_front>());
-            d->register_function(std::make_shared<Interpreter::pop_back>());
-            d->register_function(std::make_shared<Interpreter::peek_front>());
-            d->register_function(std::make_shared<Interpreter::peek_back>());
-            d->register_function(std::make_shared<Interpreter::resize>());
+            d->register_function(std::make_shared<LangStdLib::push_front>());
+            d->register_function(std::make_shared<LangStdLib::push_back>());
+            d->register_function(std::make_shared<LangStdLib::pop_front>());
+            d->register_function(std::make_shared<LangStdLib::pop_back>());
+            d->register_function(std::make_shared<LangStdLib::peek_front>());
+            d->register_function(std::make_shared<LangStdLib::peek_back>());
+            d->register_function(std::make_shared<LangStdLib::resize>());
         }
     }else if(library=="io"){
         if(!d->is_library_imported("io")){
             d->imported_libraries.push_back("io");
-            d->register_function(std::make_shared<Interpreter::printf>());
-            d->register_function(std::make_shared<Interpreter::putchar>());
-            d->register_function(std::make_shared<Interpreter::getline>());
-            d->register_function(std::make_shared<Interpreter::cls>());
-            d->register_function(std::make_shared<Interpreter::getch>());
-            d->register_function(std::make_shared<Interpreter::getch_wasd>());
-            d->register_function(std::make_shared<Interpreter::sleep>());
-            d->register_function(std::make_shared<Interpreter::kbhit>());
+            d->register_function(std::make_shared<LangStdLib::printf>());
+            d->register_function(std::make_shared<LangStdLib::putchar>());
+            d->register_function(std::make_shared<LangStdLib::getline>());
+            d->register_function(std::make_shared<LangStdLib::cls>());
+            d->register_function(std::make_shared<LangStdLib::getch>());
+            d->register_function(std::make_shared<LangStdLib::getch_wasd>());
+            d->register_function(std::make_shared<LangStdLib::sleep>());
+            d->register_function(std::make_shared<LangStdLib::kbhit>());
         }
     }else if(library=="file"){
         if(!d->is_library_imported("file")){
             d->imported_libraries.push_back("file");
-            d->register_function(std::make_shared<Interpreter::fopen>());
-            d->register_function(std::make_shared<Interpreter::fclose>());
-            d->register_function(std::make_shared<Interpreter::fputs>());
-            d->register_function(std::make_shared<Interpreter::fputs_len>());
-            d->register_function(std::make_shared<Interpreter::fprintf>());
-            d->register_function(std::make_shared<Interpreter::fgetc>());
-            d->register_function(std::make_shared<Interpreter::fgets>());
-            d->register_function(std::make_shared<Interpreter::fseek>());
-            d->register_function(std::make_shared<Interpreter::fseek_end>());
-            d->register_function(std::make_shared<Interpreter::ftell>());
+            d->register_function(std::make_shared<LangStdLib::fopen>());
+            d->register_function(std::make_shared<LangStdLib::fclose>());
+            d->register_function(std::make_shared<LangStdLib::fputs>());
+            d->register_function(std::make_shared<LangStdLib::fputs_len>());
+            d->register_function(std::make_shared<LangStdLib::fprintf>());
+            d->register_function(std::make_shared<LangStdLib::fgetc>());
+            d->register_function(std::make_shared<LangStdLib::fgets>());
+            d->register_function(std::make_shared<LangStdLib::fseek>());
+            d->register_function(std::make_shared<LangStdLib::fseek_end>());
+            d->register_function(std::make_shared<LangStdLib::ftell>());
         }
     }else if(library=="str"){
         if(!d->is_library_imported("str")){
             d->imported_libraries.push_back("str");
-            d->register_function(std::make_shared<Interpreter::sprintf>());
+            d->register_function(std::make_shared<LangStdLib::sprintf>());
         }
     }else{
         throw std::runtime_error("unknown library '"+library+"'");
