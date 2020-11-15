@@ -196,7 +196,7 @@ def get_files(folder,out_folder,tmp_folder,compiler_exts,nolink,linker):#must be
                     compiler=compiler_exts[ext];
                     src=path+"/"+file
                     out_dir=os.path.relpath(path,f)
-                    if dir == ".":
+                    if out_dir == ".":
                         out_dir=out_folder
                     else:
                         out_dir=out_folder+"/"+out_dir
