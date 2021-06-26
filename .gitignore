@@ -23,3 +23,6 @@ TestRelease/
 *.png
 build/
 __pycache__/
+.build/
+.deps/
+.RBuild
