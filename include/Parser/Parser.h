@@ -36,6 +36,5 @@ namespace Parser{
         parserProgress& operator++();
         parserProgress& operator++(int);
     };
-    void parse(const std::vector<std::shared_ptr<Lexer::Token>> &data);
 }
 #endif // PARSER_H

@@ -8,6 +8,7 @@
 namespace Lexer{
     class TokenMatcher {
         public:
+            virtual ~TokenMatcher()=default;
             virtual bool partialMatch(std::string input)=0;
             virtual bool fullMatch(std::string input)=0;
             virtual std::shared_ptr<Token> makeMatch(int line,std::string input)=0;

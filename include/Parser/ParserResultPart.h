@@ -9,6 +9,7 @@ namespace Parser{
     public:
         ParserResultPart();
         ParserResultPart(int line_start,int line_end);
+        virtual ~ParserResultPart()=default;
         virtual std::string getSource(int indent)=0;
         virtual void print(int depth)=0;
         int line_start;

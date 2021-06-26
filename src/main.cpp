@@ -24,7 +24,7 @@
 
 #include "preprocessor.h"
 
-int simple_exec_string(std::string filename,std::string &data,int argc,char ** argv,int offset,int str_offset=0){
+static int simple_exec_string(std::string filename,std::string &data,int argc,char ** argv,int offset,int str_offset=0){
     if(str_offset)data=data.substr(str_offset);
     Lexer::Lexer lexer(base_symbols,base_keywords);
     std::vector<std::shared_ptr<Lexer::Token>> tokens(lexer.tokenize_from_string(filename,data));
@@ -72,7 +72,7 @@ int simple_exec_string(std::string filename,std::string &data,int argc,char ** a
     throw std::runtime_error("Internal error");
 }
 
-int simple_exec(std::string filename,int argc,char ** argv,int offset){
+static int simple_exec(std::string filename,int argc,char ** argv,int offset){
     std::string data;
     read_file(filename,data);
     if(data.substr(0,8)=="#simple\n"){
@@ -83,7 +83,7 @@ int simple_exec(std::string filename,int argc,char ** argv,int offset){
     }
 }
 
-int exec(std::string filename,int argc,char ** argv){
+static int exec(std::string filename,int argc,char ** argv){
     std::string data;
     read_file(filename,data);
     if(data.substr(0,8)=="#simple\n"){
@@ -169,7 +169,7 @@ constexpr char unescape(char c){
     }
 }
 
-int test_exec(){
+static int test_exec(){
     std::string filename;
     std::vector<std::shared_ptr<Parser::Definition>> deflist;
     Lexer::Lexer lexer(base_symbols,base_keywords);

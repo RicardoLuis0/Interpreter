@@ -8,6 +8,8 @@
 namespace Printf {
     class ValueContainer {
         virtual void dummy();
+    public:
+        virtual ~ValueContainer()=default;
     };
     std::shared_ptr<ValueContainer> as_vcp(std::shared_ptr<ValueContainer>);
     std::shared_ptr<ValueContainer> as_vcp(float);

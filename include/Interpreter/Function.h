@@ -10,6 +10,7 @@
 namespace Interpreter {
     class Function {
         public:
+            virtual ~Function()=default;
             virtual std::string get_name()=0;
             virtual inline int get_line(){
                 return 0;

@@ -10,6 +10,7 @@ namespace Interpreter {
     };
     class LineResult {
         public:
+            virtual ~LineResult()=default;
             virtual LineResultAction_t getAction()=0;
     };
 }

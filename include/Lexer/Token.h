@@ -9,6 +9,7 @@ namespace Lexer{
             const int line;
             const token_type_t type;
             Token(int line,token_type_t type);
+            virtual ~Token()=default;
             virtual const std::string get_literal() const =0;
             virtual const std::string get_formatted() const =0;
     };

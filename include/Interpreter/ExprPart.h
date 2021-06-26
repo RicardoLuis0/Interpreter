@@ -9,6 +9,7 @@
 namespace Interpreter {
     class ExprPart {
         public:
+            virtual ~ExprPart()=default;
             virtual std::shared_ptr<Type> get_type()=0;
             virtual std::shared_ptr<Value> get_dummy_type();
             virtual std::shared_ptr<Value> eval(ExecFrame * context)=0;

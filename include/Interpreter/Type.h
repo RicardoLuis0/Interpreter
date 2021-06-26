@@ -12,6 +12,7 @@ namespace Interpreter {
     class Type {
     public:
         Type(bool is_const=false);
+        virtual ~Type()=default;
         virtual std::shared_ptr<Type> change_const(std::shared_ptr<Type> self,bool new_const)=0;
         virtual std::string get_name()=0;
         virtual bool get_const();

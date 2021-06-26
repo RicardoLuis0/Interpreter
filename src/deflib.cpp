@@ -284,7 +284,7 @@ namespace LangStdLib {
             return "getline";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::string_type();
         }
 
@@ -307,7 +307,7 @@ namespace LangStdLib {
             return "stoi";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::int_type();
         }
 
@@ -332,7 +332,7 @@ namespace LangStdLib {
             return "stof";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::float_type();
         }
 
@@ -356,7 +356,7 @@ namespace LangStdLib {
             return "to_string";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::string_type();
         }
 
@@ -390,7 +390,7 @@ namespace LangStdLib {
             return "cls";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::void_type();
         }
 
@@ -411,7 +411,7 @@ namespace LangStdLib {
             return "getch";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::int_type();
         }
 
@@ -431,7 +431,7 @@ namespace LangStdLib {
             return "getch_wasd";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::int_type();
         }
 
@@ -451,7 +451,7 @@ namespace LangStdLib {
             return "putchar";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::void_type();
         }
 
@@ -472,7 +472,7 @@ namespace LangStdLib {
             return "array_size";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::int_type();
         }
 
@@ -492,7 +492,7 @@ namespace LangStdLib {
             return "get_type_name";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::string_type();
         }
 
@@ -526,7 +526,7 @@ namespace LangStdLib {
             return "fopen";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::pointer_type(Type::void_type());
         }
 
@@ -545,7 +545,7 @@ namespace LangStdLib {
             return "fclose";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::void_type();
         }
 
@@ -568,7 +568,7 @@ namespace LangStdLib {
             return "fputs";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::int_type();
         }
 
@@ -593,7 +593,7 @@ namespace LangStdLib {
             return "fputs";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::int_type();
         }
 
@@ -653,7 +653,7 @@ namespace LangStdLib {
             return "fgetc";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::char_type();
         }
 
@@ -678,7 +678,7 @@ namespace LangStdLib {
             return "fgets";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::string_type();
         }
 
@@ -708,7 +708,7 @@ namespace LangStdLib {
             return "fseek";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::void_type();
         }
 
@@ -733,7 +733,7 @@ namespace LangStdLib {
             return "fseek";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::void_type();
         }
 
@@ -758,7 +758,7 @@ namespace LangStdLib {
             return "ftell";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::int_type();
         }
 
@@ -783,7 +783,7 @@ namespace LangStdLib {
             return "rand";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::int_type();
         }
 
@@ -803,7 +803,7 @@ namespace LangStdLib {
             return "push_front";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::void_type();
         }
 
@@ -830,7 +830,7 @@ namespace LangStdLib {
             return "push_back";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::void_type();
         }
 
@@ -857,7 +857,7 @@ namespace LangStdLib {
             return "pop_front";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::true_any_type();
         }
 
@@ -886,7 +886,7 @@ namespace LangStdLib {
             return "pop_back";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::true_any_type();
         }
 
@@ -915,7 +915,7 @@ namespace LangStdLib {
             return "peek_front";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::true_any_type();
         }
 
@@ -942,7 +942,7 @@ namespace LangStdLib {
             return "peek_back";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::true_any_type();
         }
 
@@ -969,7 +969,7 @@ namespace LangStdLib {
             return "resize";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::void_type();
         }
 
@@ -1007,7 +1007,7 @@ namespace LangStdLib {
             return "sleep";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::void_type();
         }
 
@@ -1028,7 +1028,7 @@ namespace LangStdLib {
             return "kbhit";
         }
 
-        std::shared_ptr<Type> get_type(){
+        std::shared_ptr<Type> get_type() override {
             return Type::int_type();
         }
 

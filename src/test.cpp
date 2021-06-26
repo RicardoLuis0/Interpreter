@@ -13,7 +13,7 @@
 #include "Interpreter/ExecFrame.h"
 #include "Interpreter/IntValue.h"
 
-int exec(std::string filename){
+static int exec(std::string filename){
     std::string data;
     read_file(filename,data);
     Lexer::Lexer lexer(base_symbols,base_keywords);
