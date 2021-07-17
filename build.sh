@@ -25,19 +25,24 @@ else
     if [ $need_run = true ]; then
         echo "Building RBuild"
         
-        if command -v ./.RBuild &> /dev/null
+        if command -v ./.deps/RBuild/build/lin/release/bin/RBuild &> /dev/null
         then
             cd .deps/RBuild
             ./build.sh
-            cp build/lin/release/bin/RBuild ../../.RBuild
             cd ../..
         else
             cd .deps/RBuild
             ./build.sh
             ./build.sh
-            cp build/lin/release/bin/RBuild ../../.RBuild
             cd ../..
         fi
+    fi
+    set +e
+    command -v ./.RBuild &> /dev/null
+    ok=$?
+    set -e
+    if [ $ok ]; then
+        ln -srf .deps/RBuild/build/lin/release/bin/RBuild .RBuild
     fi
 fi
 
