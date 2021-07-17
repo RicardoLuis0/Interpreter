@@ -1,5 +1,6 @@
 #include "deflib.h"
 #include <iostream>
+#include <map>
 #include "Interpreter/Function.h"
 #include "Parser/VarType.h"
 #include "Interpreter/TypeValue.h"
@@ -797,6 +798,89 @@ namespace LangStdLib {
 
     };
 
+    class Map_Value : public AnyValue {
+        public:
+            std::map<std::string,std::shared_ptr<Value>> map;
+            Map_Value(){
+                
+            }
+    };
+
+    class new_map : public Function {
+
+        std::string get_name() override {
+            return "new_map";
+        }
+
+        std::shared_ptr<Type> get_type() override {
+            return Type::pointer_type(Type::void_type());
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
+            return std::make_shared<PointerValue>(std::dynamic_pointer_cast<PointerType>(Type::pointer_type(Type::void_type())),std::make_shared<Map_Value>());
+        }
+
+    };
+    
+    class map_set : public Function {
+
+        std::string get_name() override {
+            return "map_set";
+        }
+
+        std::shared_ptr<Type> get_type() override {
+            return Type::void_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::pointer_type(Type::void_type()),"map"},{Type::string_type(),"key"},{Type::true_any_type(),"val"}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
+            std::shared_ptr<Map_Value> map(std::dynamic_pointer_cast<Map_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value()));
+            if(!map){
+                throw std::runtime_error("invalid types for map_insert, first argument must be map");
+            }
+            map->map[std::dynamic_pointer_cast<StringValue>(args[1])->get()]=args[2];
+            return nullptr;
+        }
+        
+    };
+    
+    class map_get : public Function {
+
+        std::string get_name() override {
+            return "map_get";
+        }
+
+        std::shared_ptr<Type> get_type() override {
+            return Type::true_any_type();
+        }
+
+        std::vector<FunctionParameter> get_parameters() override {
+            return {{Type::true_any_type(),"map"},{Type::string_type(),"key"}};
+        }
+
+        std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
+            std::shared_ptr<Map_Value> map(std::dynamic_pointer_cast<Map_Value>(std::dynamic_pointer_cast<PointerValue>(args[0])->get_value()));
+            if(!map){
+                throw std::runtime_error("invalid types for map_insert, first argument must be map");
+            }
+            std::shared_ptr<StringValue> key(std::dynamic_pointer_cast<StringValue>(args[1]));
+            auto value=map->map.find(key->get());
+            if(value!=map->map.end()){
+                return value->second;
+            }else{
+                throw std::runtime_error("invalid map key '"+key->get()+"'");
+            }
+        }
+        
+    };
+
     class push_front : public Function{
 
         std::string get_name() override {
@@ -1075,6 +1159,12 @@ void Interpreter::import(DefaultFrame * d,std::string library){
             d->register_function(std::make_shared<LangStdLib::peek_front>());
             d->register_function(std::make_shared<LangStdLib::peek_back>());
             d->register_function(std::make_shared<LangStdLib::resize>());
+        }
+    }else if(library=="map"){
+        if(!d->is_library_imported("map")){
+            d->register_function(std::make_shared<LangStdLib::new_map>());
+            d->register_function(std::make_shared<LangStdLib::map_set>());
+            d->register_function(std::make_shared<LangStdLib::map_get>());
         }
     }else if(library=="io"){
         if(!d->is_library_imported("io")){

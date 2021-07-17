@@ -1,0 +1,15 @@
+import map;
+import io;
+
+ptr<void> mktest(){
+    ptr<void> map=new_map();
+    map_set(map,"int",123);
+    map_set(map,"str","456");
+    return map;
+}
+
+int main(){
+    ptr<void> map=mktest();
+    printf("int:%{},\nstr:%{}",map_get(map,"int"),map_get(map,"str"));
+    return 0;
+}
