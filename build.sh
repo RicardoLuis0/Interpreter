@@ -28,14 +28,13 @@ else
         if command -v ./.RBuild &> /dev/null
         then
             cd .deps/RBuild
-            ../../.RBuild --file=RBuild.json
+            ./build.sh
             cp build/lin/release/bin/RBuild ../../.RBuild
             cd ../..
         else
             cd .deps/RBuild
             ./build.sh
-            cp build/lin/release/bin/RBuild ../../.RBuild
-            ../../.RBuild --file=RBuild.json
+            ./build.sh
             cp build/lin/release/bin/RBuild ../../.RBuild
             cd ../..
         fi
