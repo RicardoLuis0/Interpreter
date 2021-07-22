@@ -509,6 +509,9 @@ namespace LangStdLib {
     class FILE_Value : public AnyValue {
         public:
             FILE_Value(std::string filename,int mode):FILE_Value(::fopen(filename.c_str(),mode?"w":"r")){
+                if(!f){
+                    throw std::runtime_error("");
+                }
             }
             FILE_Value(FILE * fp):f(fp){
             }
@@ -536,7 +539,11 @@ namespace LangStdLib {
         }
 
         std::shared_ptr<Value> call(ExecFrame *,std::vector<std::shared_ptr<Value>> args) override {
-            return std::make_shared<PointerValue>(std::dynamic_pointer_cast<PointerType>(Type::pointer_type(Type::void_type())),std::make_shared<FILE_Value>(std::dynamic_pointer_cast<StringValue>(args[0])->get().c_str(),std::dynamic_pointer_cast<IntValue>(args[1])->get()));
+            try{
+                return std::make_shared<PointerValue>(std::dynamic_pointer_cast<PointerType>(Type::pointer_type(Type::void_type())),std::make_shared<FILE_Value>(std::dynamic_pointer_cast<StringValue>(args[0])->get().c_str(),std::dynamic_pointer_cast<IntValue>(args[1])->get()));
+            }catch(...){
+                return std::make_shared<PointerValue>(std::dynamic_pointer_cast<PointerType>(Type::pointer_type(Type::void_type())),nullptr);
+            }
         }
 
     };
